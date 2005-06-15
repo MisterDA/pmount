@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount 0.5\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-04-04 17:31+0200\n"
+"POT-Creation-Date: 2005-04-08 14:53+0200\n"
 "PO-Revision-Date: 2004-12-29 17:56+0100\n"
 "Last-Translator: Martin Pitt <martin.pitt@canonical.com>\n"
 "Language-Team: German <de@li.org>\n"
@@ -55,7 +55,6 @@ msgstr ""
 "  Sperrt weitere pmount-Aufrufe für <Gerät> bis es wieder entsperrt\n"
 "  wird. <pid> gibt die ID des Prozesses an, der die Sperre hält.  Dies\n"
 "  ermöglicht das Sperren eines Gerätes von mehreren unabhängigen\n"
-"  Prozessen und vermeidet unendliche Sperren von abgestürzten\n"
 "  Prozessen (Sperren von nichtexistierenden Prozessen werden gelöscht\n"
 "  bevor eine Einbindung versucht wird).\n"
 "\n"
@@ -80,6 +79,8 @@ msgid ""
 "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
 "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
 "                in an UTF-8 locale, otherwise mount default)\n"
+"  -u <umask>  : use specified umask instead of the default (only for\n"
+"                file sytems which actually support umask setting)\n"
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
@@ -91,96 +92,104 @@ msgstr ""
 "  -t <fs>     : Verwende Dateisystem <fs> (Default: automatisch)\n"
 "  -c <charset>: Verwende angegebenen Zeichensatz (Default: 'utf8' in\n"
 "                einer UTF-8 Umgebung, ansonsten mount-Default)\n"
+"  -u <umask>  : Verwende angegebene umask anstatt dem Default (nur für\n"
+"                Dateisysteme, die umask unterstützen)\n"
 "  -d, --debug : Debug-Ausgaben aktivieren (gibt sehr viel aus)\n"
 "  -h, --help  : Hilfetext anzeigen und erfolgreich beenden"
 
-#: pmount.c:120
+#: pmount.c:123
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 msgstr ""
 "Fehler: make_mountpoint_name: Ungültiges Gerät %s (muss in /dev/ sein)\n"
 
-#: pmount.c:126
+#: pmount.c:133
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Fehler: Label darf nicht leer sein\n"
 
-#: pmount.c:130
+#: pmount.c:137
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Fehler: Label ist zu lang\n"
 
-#: pmount.c:134
+#: pmount.c:142
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Fehler: Label darf nicht das Zeichen '/' enthalten\n"
 
-#: pmount.c:141
+#: pmount.c:149
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Fehler: Gerätname zu lang\n"
 
-#: pmount.c:171 pumount.c:98
+#: pmount.c:179 pumount.c:98
 msgid "Error: could not drop all uid privileges"
 msgstr "Fehler: konnte nicht alle User-ID Privilegien aufgeben"
 
-#: pmount.c:176 pmount.c:270
+#: pmount.c:184 pmount.c:287
 msgid "Error: could not execute mount"
 msgstr "Fehler: konnte mount nicht ausführen"
 
-#: pmount.c:212
+#: pmount.c:222
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr "Interner Fehler: mount_attempt: gegebener Dateisystem-Name ist NULL\n"
 
-#: pmount.c:218
+#: pmount.c:228
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Fehler: Ungültiges Dateisystem '%s'\n"
 
-#: pmount.c:242
+# c-format
+#: pmount.c:234
+#, c-format
+msgid "Error: invalid umask %s\n"
+msgstr "Fehler: ungültige umask '%s'\n"
+
+#: pmount.c:259
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Fehler: ungültiger Zeichensatzname '%s'\n"
 
-#: pmount.c:258 pumount.c:124
+#: pmount.c:275 pumount.c:124
 msgid "Error: could not raise to full root uid privileges"
 msgstr "Fehler: konnte nicht zu vollen root-UID-Privilegien wechseln"
 
-#: pmount.c:274
+#: pmount.c:291
 msgid "Error: could not wait for executed mount process"
 msgstr "Fehler: konnte nicht auf ausgeführten mount-Prozess warten"
 
-#: pmount.c:347
+#: pmount.c:367
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr ""
 "Fehler: kann nicht für PID %u sperren, dieser Prozess existiert nicht\n"
 
-#: pmount.c:361
+#: pmount.c:381
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Fehler: konnte PID-Lock-Datei %s nicht anlegen: %s\n"
 
-#: pmount.c:401
+#: pmount.c:421
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Fehler: konnte PID-Lock-Datei %s nicht löschen: %s\n"
 
-#: pmount.c:417
+#: pmount.c:437
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Fehler: do_unlock: konnte Lock-Verzeichnis nicht entfernen"
 
-#: pmount.c:509 pumount.c:181
+#: pmount.c:531 pumount.c:181
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Fehler: Dieses programm muss als setuid root installiert sein\n"
 
-#: pmount.c:542 pumount.c:201
+#: pmount.c:566 pumount.c:201
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Interner Fehler: getopt_long() lieferte unbekannten Wert zurück\n"
 
-#: pmount.c:580
+#: pmount.c:604
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -189,20 +198,20 @@ msgstr ""
 "Warnung: Gerät %s wird schon in /etc/fstab verwaltet, angegebenes Label wird "
 "ignoriert\n"
 
-#: pmount.c:589 pumount.c:237
+#: pmount.c:613 pumount.c:246
 msgid "Error: could not determine real path of the device"
 msgstr "Error: konnte echten Pfad des Gerätes nicht bestimmen"
 
-#: pmount.c:595 pumount.c:243
+#: pmount.c:619 pumount.c:252
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Fehler: ungültiges Gerät %s (muss in /dev/ sein)\n"
 
-#: pmount.c:635
+#: pmount.c:661
 msgid "Error: could not delete mount point"
 msgstr "Fehler: konnte Mount-Verzeichnis nicht löschen"
 
-#: pmount.c:656
+#: pmount.c:682
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Interner Fehler: Modus %i nicht behandelt.\n"
@@ -369,44 +378,44 @@ msgstr "Fehler: Speicher voll\n"
 msgid "Error: could not create directory"
 msgstr "Fehler: konnte Verzeichnis nicht anlegen"
 
-#: utils.c:122
+#: utils.c:123
 msgid "Error: could not create stamp file in directory"
 msgstr "Fehler: konnte Markierungs-Datei in Verzeichnis nicht anlegen"
 
-#: utils.c:129
+#: utils.c:131
 #, c-format
 msgid "Error: %s is not a directory\n"
 msgstr "Fehler: %s ist kein Verzeichnis\n"
 
-#: utils.c:149
+#: utils.c:151
 msgid "Error: could not open directory"
 msgstr "Fehler: konnte Verzeichnis nicht öffnen"
 
-#: utils.c:158
+#: utils.c:160
 #, c-format
 msgid "Error: directory %s is not empty\n"
 msgstr "Fehler: Verzeichnis %s ist nicht leer\n"
 
-#: utils.c:210
+#: utils.c:212
 #, c-format
 msgid "Error: '%s' is not a valid number\n"
 msgstr "Fehler: '%s' ist keine gültige Zahl\n"
 
-#: utils.c:252
+#: utils.c:254
 msgid "Internal error: could not change to effective uid root"
 msgstr "Interner Fehler: konnte nicht zur effektiven UID von root wechseln"
 
-#: utils.c:261
+#: utils.c:263
 msgid "Internal error: could not change effective user uid to real user id"
 msgstr ""
 "Interner Fehler: konnte effektive Benutzer-UID nicht zu realer Benutzer-UID "
 "wechseln"
 
-#: utils.c:270
+#: utils.c:272
 msgid "Internal error: could not change to effective gid root"
 msgstr "Interner Fehler: konnte nicht zur effektiven GID von root wechseln"
 
-#: utils.c:279
+#: utils.c:281
 msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
 "Interner Fehler: konnte effektive Benutzer-GID nicht zu realer Benutzer-GID "

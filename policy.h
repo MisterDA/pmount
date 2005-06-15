@@ -17,6 +17,7 @@
 #define MEDIADIR "/media/"
 #define DEVDIR "/dev/"
 #define LOCKDIR "/var/lock/pmount/"
+#define WHITELIST "/etc/pmount.allow"
 
 #define MEDIA_STRING_SIZE MAX_LABEL_SIZE + sizeof( MEDIADIR )
 
@@ -64,6 +65,11 @@ int device_mounted( const char* device, int expect, char* mntpt );
  * Check whether device is removable.
  */
 int device_removable( const char* device );
+
+/**
+ * Check whether device is whitelisted in /etc/pmount.allow
+ */
+int device_whitelisted( const char* device );
 
 /**
  * Check whether device is locked.

@@ -89,7 +89,7 @@ read_number_colon_number( const char* file, unsigned char* first, unsigned char*
 }
 
 int
-assert_dir( const char* dir )
+assert_dir( const char* dir, int create_stamp )
 {
     int result;
     struct stat st;
@@ -108,21 +108,23 @@ assert_dir( const char* dir )
             return -1;
         }
 
-        /* create stamp file to indicate that the directory should be removed
-         * again at unmounting */
-        snprintf( stampfname, sizeof( stampfname ), "%s/%s", dir, CREATED_DIR_STAMP );
+        if( create_stamp ) {
+            /* create stamp file to indicate that the directory should be removed
+             * again at unmounting */
+            snprintf( stampfname, sizeof( stampfname ), "%s/%s", dir, CREATED_DIR_STAMP );
 
-        get_root();
-        get_groot();
-        stampfile = open( stampfname, O_CREAT|O_WRONLY|O_EXCL, 0600 );
-        drop_groot();
-        drop_root();
+            get_root();
+            get_groot();
+            stampfile = open( stampfname, O_CREAT|O_WRONLY|O_EXCL, 0600 );
+            drop_groot();
+            drop_root();
 
-        if( stampfile < 0 ) {
-            perror( _("Error: could not create stamp file in directory") );
-            return -1;
+            if( stampfile < 0 ) {
+                perror( _("Error: could not create stamp file in directory") );
+                return -1;
+            }
+            close( stampfile );
         }
-        close( stampfile );
     } else {
         /* exists, check that it is a directory */
         if( !S_ISDIR( st.st_mode ) ) {
@@ -203,7 +205,7 @@ parse_unsigned( const char* s, int exitcode )
         return 0;
 
     errno = 0;
-    result = strtol( s, &endptr, 10 );
+    result = strtol( s, &endptr, 0 );
     if( *endptr == 0 && errno == 0 && result > 0 )
         return (unsigned) result;
 

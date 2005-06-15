@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-04-04 17:31+0200\n"
+"POT-Creation-Date: 2005-04-08 14:15+0200\n"
 "PO-Revision-Date: 2005-02-21 17:57+0000\n"
 "Last-Translator: Aloriel <jorge.gonzalez.gonzalez@hispalinux.es>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -68,6 +68,7 @@ msgstr ""
 "  Quita el bloqueo del proceso <pid> al <dispositivo>.\n"
 
 #: pmount.c:67
+#, fuzzy
 msgid ""
 "Options:\n"
 "  -a, --async : mount <device> with the 'async' option (default: 'sync')\n"
@@ -76,6 +77,8 @@ msgid ""
 "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
 "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
 "                in an UTF-8 locale, otherwise mount default)\n"
+"  -u <umask>  : use specified umask instead of the default (only for\n"
+"                file sytems which actually support umask setting)\n"
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
@@ -94,100 +97,107 @@ msgstr ""
 "  -d, --debug : habilita salida de depuración (muy verbosa)\n"
 "  -h, --help  : escribir mensaje de ayuda y salir"
 
-#: pmount.c:120
+#: pmount.c:123
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 msgstr ""
 "Error: make_mountpoint_name: el dispositivo %s no es válido (ha de estar en /"
 "dev/)\n"
 
-#: pmount.c:126
+#: pmount.c:133
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Error: la etiqueta no puede estar vacia\n"
 
-#: pmount.c:130
+#: pmount.c:137
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Error: etiqueta es demasiado larga\n"
 
-#: pmount.c:134
+#: pmount.c:142
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Error: no se puede poner '/' en el nombre de la etiqueta\n"
 
-#: pmount.c:141
+#: pmount.c:149
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Error: el nombre de dispositivo es demasiado largo\n"
 
-#: pmount.c:171 pumount.c:98
+#: pmount.c:179 pumount.c:98
 #, fuzzy
 msgid "Error: could not drop all uid privileges"
 msgstr "Error: no se han podido soltar todos los privilegios de uid"
 
-#: pmount.c:176 pmount.c:270
+#: pmount.c:184 pmount.c:287
 msgid "Error: could not execute mount"
 msgstr "Error: no se ha podido ejecutar el montaje"
 
-#: pmount.c:212
+#: pmount.c:222
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr ""
 "Error interno: mount_attempt: el nombre del sistema de archivos dado es "
 "NULO\n"
 
-#: pmount.c:218
+#: pmount.c:228
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Error: el nombre del sistema de ficheros '%s' no es válido\n"
 
-#: pmount.c:242
+#: pmount.c:234
+#, fuzzy, c-format
+msgid "Error: invalid umask %s\n"
+msgstr ""
+"Error: el nombre del juego de caracteres '%s' no es válido\n"
+"\n"
+
+#: pmount.c:259
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr ""
 "Error: el nombre del juego de caracteres '%s' no es válido\n"
 "\n"
 
-#: pmount.c:258 pumount.c:124
+#: pmount.c:275 pumount.c:124
 #, fuzzy
 msgid "Error: could not raise to full root uid privileges"
 msgstr "Error: no se han podido alcanzar privilegios de uid root completos"
 
-#: pmount.c:274
+#: pmount.c:291
 msgid "Error: could not wait for executed mount process"
 msgstr ""
 "Error: no se ha podido esperar a que se ejecutara el proceso de montaje"
 
-#: pmount.c:347
+#: pmount.c:367
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "Error: no se puede bloquear para el pid %u, este proceso no existe\n"
 
-#: pmount.c:361
+#: pmount.c:381
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Error: no se ha podido crear el fichero de bloqueo del pid %s: %s\n"
 
-#: pmount.c:401
+#: pmount.c:421
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Error: no se ha podido eliminar el fichero de bloqueo del pid %s: %s\n"
 
-#: pmount.c:417
+#: pmount.c:437
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Error: do_unlock: no se ha podido eliminar el directorio de bloqueo"
 
-#: pmount.c:509 pumount.c:181
+#: pmount.c:531 pumount.c:181
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Error este programa necesita ser instalado como super usuario (root)\n"
 
-#: pmount.c:542 pumount.c:201
+#: pmount.c:566 pumount.c:201
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Error interno: getopt_long() retornó un valor desconocido\n"
 
-#: pmount.c:580
+#: pmount.c:604
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -196,20 +206,20 @@ msgstr ""
 "ADVERTENCIA: el dispositivo %s está actualmente manejado por /etc/fstab, la "
 "etiqueta proporcionada se ha ignorado\n"
 
-#: pmount.c:589 pumount.c:237
+#: pmount.c:613 pumount.c:246
 msgid "Error: could not determine real path of the device"
 msgstr "Error: no es posible determinar la ubicación real del dispositivo"
 
-#: pmount.c:595 pumount.c:243
+#: pmount.c:619 pumount.c:252
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Error: el dispositivo %s es invalido (debe estar en /dev/)\n"
 
-#: pmount.c:635
+#: pmount.c:661
 msgid "Error: could not delete mount point"
 msgstr "Error: no es posible borrar el punto de montaje"
 
-#: pmount.c:656
+#: pmount.c:682
 #, fuzzy, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Error interno: %i del modo, no manejado.\n"
@@ -368,48 +378,48 @@ msgstr "Error: sin memoria\n"
 msgid "Error: could not create directory"
 msgstr "Error: no es posible crear el directorio"
 
-#: utils.c:122
+#: utils.c:123
 #, fuzzy
 msgid "Error: could not create stamp file in directory"
 msgstr "Error:  no es posible crear el 'archivo stamp' en el directorio"
 
-#: utils.c:129
+#: utils.c:131
 #, c-format
 msgid "Error: %s is not a directory\n"
 msgstr "Error: %s no es un directorio\n"
 
-#: utils.c:149
+#: utils.c:151
 msgid "Error: could not open directory"
 msgstr "Error: no es posible abrir el directorio"
 
-#: utils.c:158
+#: utils.c:160
 #, c-format
 msgid "Error: directory %s is not empty\n"
 msgstr "Error: el directorio %s no está vacío\n"
 
-#: utils.c:210
+#: utils.c:212
 #, c-format
 msgid "Error: '%s' is not a valid number\n"
 msgstr "Error: '%s' no es un número válido\n"
 
-#: utils.c:252
+#: utils.c:254
 #, fuzzy
 msgid "Internal error: could not change to effective uid root"
 msgstr "Error interno: no es posible cambiar a root uid"
 
-#: utils.c:261
+#: utils.c:263
 #, fuzzy
 msgid "Internal error: could not change effective user uid to real user id"
 msgstr ""
 "Error interno: no es posible cambiar desde el uid de usuario a id real de "
 "usuario"
 
-#: utils.c:270
+#: utils.c:272
 #, fuzzy
 msgid "Internal error: could not change to effective gid root"
 msgstr "Error interno: no es posible cambiar a root gid"
 
-#: utils.c:279
+#: utils.c:281
 #, fuzzy
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Error interno: no es posible cambiar desde gid al gid real"

@@ -29,6 +29,7 @@ install: all install-mo
 	install -o root -g root -m 644 -D ./pmount.1 $(DESTDIR)/$(PREFIX)/share/man/man1/pmount.1
 	install -o root -g root -m 644 -D ./pumount.1 $(DESTDIR)/$(PREFIX)/share/man/man1/pumount.1
 	install -o root -g root -m 644 -D ./pmount-hal.1 $(DESTDIR)/$(PREFIX)/share/man/man1/pmount-hal.1
+	install -o root -g root -m 644 -D ./pmount.allow $(DESTDIR)/etc/pmount.allow
 
 uninstall: uninstall-mo
 	rm -f $(DESTDIR)/$(PREFIX)/bin/pmount $(DESTDIR)/$(PREFIX)/bin/pumount $(DESTDIR)/$(PREFIX)/bin/pmount-hal
@@ -45,8 +46,8 @@ clean:
 	rm -f pmount pumount pmount-hal $(pmount_OBJ) $(pumount_OBJ) $(pmount_hal_OBJ)
 
 updatepo:
-	xgettext -k_ -o po/template.pot --copyright-holder "Martin Pitt" --msgid-bugs-address="martin.pitt@canonical.com" *.c
-	for f in po/*.po; do echo -n "updating $$f "; msgmerge -U $$f po/template.pot; done
+	xgettext -k_ -o po/pmount.pot --copyright-holder "Martin Pitt" --msgid-bugs-address="martin.pitt@canonical.com" *.c
+	for f in po/*.po; do echo -n "updating $$f "; msgmerge -U $$f po/pmount.pot; done
 
 # dependencies
 policy.o: policy.h utils.h

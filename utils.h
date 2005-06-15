@@ -28,11 +28,11 @@ char* strreplace( const char* s, char from, char to );
 
 /**
  * If dir already exists, check that it is a directory; if it does not exist,
- * create it and put a stamp file into it (so that it will be removed again on
- * unmounting).
+ * create it. If create_stamp is true, put a stamp file into it (so that it
+ * will be removed again on unmounting).
  * @return 0 on success, -1 on error (message is printed in this case)
  */
-int assert_dir( const char* dir );
+int assert_dir( const char* dir, int create_stamp );
 
 /**
  * Assert that given directory is empty.

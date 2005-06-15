@@ -71,6 +71,8 @@ usage( const char* exename )
     "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
     "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
     "                in an UTF-8 locale, otherwise mount default)\n"
+    "  -u <umask>  : use specified umask instead of the default (only for\n"
+    "                file sytems which actually support umask setting)\n"
     "  -d, --debug : enable debug output (very verbose)\n"
     "  -h, --help  : print help message and exit successfuly") );
 }
@@ -85,7 +87,7 @@ check_mount_policy( const char* device, const char* mntpt )
 {
     int result = device_valid( device ) &&
         !device_mounted( device, 0, NULL ) &&
-        device_removable( device ) &&
+        ( device_whitelisted( device ) || device_removable( device ) ) &&
         !device_locked( device ) &&
         mntpt_valid( mntpt ) &&
         !mntpt_mounted( mntpt, 0 );
@@ -114,6 +116,7 @@ make_mountpoint_name( const char* device, const char* label, char* mntpt,
         size_t mntpt_size )
 {
     char* d;
+    int media_dir_len = strlen( MEDIADIR );
 
     /* does the device start with DEVDIR? */
     if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) { 
@@ -122,6 +125,10 @@ make_mountpoint_name( const char* device, const char* label, char* mntpt,
     }
 
     if( label ) {
+        /* ignore a leading MEDIADIR */
+        if( !strncmp( label, MEDIADIR, media_dir_len ) )
+            label += media_dir_len;
+
         if( !*label ) {
             fprintf( stderr, _("Error: label must not be empty\n") );
             return -1;
@@ -130,6 +137,7 @@ make_mountpoint_name( const char* device, const char* label, char* mntpt,
             fprintf( stderr, _("Error: label too long\n") );
             return -1;
         }
+
         if( strchr( label, '/' ) ) {
             fprintf( stderr, _("Error: '/' must not occur in label name\n") );
             return -1;
@@ -189,12 +197,14 @@ do_mount_fstab( const char* device )
  * @param exec if not 0, the device will be mounted with 'exec'
  * @param iocharset charset to use for file name conversion; NULL for mount
  *        default
+ * @param umask User specified umask (NULL for default)
  * @param suppress_errors: if true, stderr is redirected to /dev/null
  * @return exit status of mount, or -1 on failure.
  */
 int
 do_mount( const char* device, const char* mntpt, const char* fsname, int async,
-        int noatime, int exec, const char* iocharset, int suppress_errors )
+        int noatime, int exec, const char* iocharset, const char* umask, 
+        int suppress_errors )
 {
     int status;
     int devnull;
@@ -219,6 +229,12 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
         exit( E_ARGS );
     }
 
+    /* validate user specified umask */
+    if( umask && parse_unsigned( umask, E_ARGS ) > 0777 ) {
+        fprintf( stderr, _("Error: invalid umask %s\n"), umask );
+        exit ( E_ARGS );
+    }
+
     /* assemble option string */
     *ugid_opt = *umask_opt = *iocharset_opt = 0;
     if( fs->support_ugid )
@@ -226,7 +242,8 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
                 getuid(), getgid() );
 
     if( fs->umask )
-        snprintf( umask_opt, sizeof( umask_opt ), ",umask=%s", fs->umask );
+        snprintf( umask_opt, sizeof( umask_opt ), ",umask=%s", 
+                umask ? umask : fs->umask );
 
     if( async )
         sync_opt = ",async";
@@ -295,11 +312,12 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
  * @param exec if not 0, the device will be mounted with 'exec'
  * @param iocharset charset to use for file name conversion; NULL for mount
  *        default
+ * @param umask User specified umask (NULL for default)
  * @return last return value of do_mount (i. e. 0 on success, != 0 on error)
  */
 int
 do_mount_auto( const char* device, const char* mntpt, int async, 
-        int noatime, int exec, const char* iocharset )
+        int noatime, int exec, const char* iocharset, const char* umask )
 {
     const struct FS* fs;
     int nostderr = 1;
@@ -309,13 +327,15 @@ do_mount_auto( const char* device, const char* mntpt, int async,
         /* don't suppress stderr if we try the last possible fs */
         if( (fs+1)->fsname == NULL )
             nostderr = 0;
-        result = do_mount( device, mntpt, fs->fsname, async, noatime, exec, iocharset, nostderr );
+        result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
+                iocharset, umask, nostderr );
         if( result == 0 )
             break;
 
 	/* sometimes VFAT fails when using iocharset; try again without */
 	if( iocharset )
-	    result = do_mount( device, mntpt, fs->fsname, async, noatime, exec, NULL, nostderr );
+	    result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
+                    NULL, umask, nostderr );
         if( result == 0 )
             break;
     }
@@ -334,12 +354,12 @@ do_lock( const char* device, pid_t pid )
     char lockfilepath[PATH_MAX];
     int pidlock;
 
-    if( assert_dir( LOCKDIR ) )
+    if( assert_dir( LOCKDIR, 0 ) )
         return -1;
 
     make_lockdir_name( device, lockdirpath, sizeof( lockdirpath ) );
 
-    if( assert_dir( lockdirpath ) )
+    if( assert_dir( lockdirpath, 0 ) )
         return -1;
 
     /* only allow to create locks for existing pids, to prevent DOS attacks */
@@ -481,6 +501,7 @@ main( int argc, char** argv )
     int exec = 0;
     const char* use_fstype = NULL;
     const char* iocharset = NULL;
+    const char* umask = NULL;
     int result;
 
     enum { MOUNT, LOCK, UNLOCK } mode = MOUNT;
@@ -490,12 +511,13 @@ main( int argc, char** argv )
         { "help", 0, NULL, 'h'},
         { "debug", 0, NULL, 'd'},
         { "lock", 0, NULL, 'l'},
-        { "unlock", 0, NULL, 'u'},
+        { "unlock", 0, NULL, 'L'},
         { "async", 0, NULL, 'a' },
         { "noatime", 0, NULL, 'A' },
         { "exec", 0, NULL, 'e' },
         { "type", 1, NULL, 't' },
         { "charset", 1, NULL, 'c' },
+        { "umask", 1, NULL, 'u' },
         { NULL, 0, NULL, 0}
     };
 
@@ -515,7 +537,7 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdeluaAt:c:", long_opts, NULL ) ) {
+        switch( option = getopt_long( argc, argv, "+hdelLaAt:c:u:", long_opts, NULL ) ) {
             case -1:  break;          /* end of arguments */
             case ':':
             case '?': return E_ARGS;  /* unknown argument */
@@ -526,7 +548,7 @@ main( int argc, char** argv )
 
             case 'l': mode = LOCK; break;
 
-            case 'u': mode = UNLOCK; break;
+            case 'L': mode = UNLOCK; break;
 
             case 'a': async = 1; break;
 
@@ -537,6 +559,8 @@ main( int argc, char** argv )
             case 't': use_fstype = optarg; break;
 
             case 'c': iocharset = optarg; break;
+
+            case 'u': umask = optarg; break;
 
             default:
                 fprintf( stderr, _("Internal error: getopt_long() returned unknown value\n") );
@@ -625,9 +649,11 @@ main( int argc, char** argv )
 
             /* off we go */
             if( use_fstype )
-                result = do_mount( device, mntpt, use_fstype, async, noatime, exec, iocharset, 0 );
+                result = do_mount( device, mntpt, use_fstype, async, noatime,
+                        exec, iocharset, umask, 0 );
             else
-                result = do_mount_auto( device, mntpt, async, noatime, exec, iocharset ); 
+                result = do_mount_auto( device, mntpt, async, noatime, exec,
+                        iocharset, umask ); 
 
             if( result ) {
                 /* mount failed, delete the mount point again */

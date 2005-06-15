@@ -1,3 +1,13 @@
+0.8
+---
+- unbreak locking, this created ".created_by_pmount" stamps in the
+  locking directories
+- accept pumount by label name
+- accept pmount by mount path (only in /media)
+- added --umask option
+- renamed template.pot to pmount.pot to match translation domain
+- support a whitelist in /etc/pmount.allow
+
 0.7.2
 -----
 - updated translations from Rosetta: ca, es_ES

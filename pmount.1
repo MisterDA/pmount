@@ -92,7 +92,8 @@ and the directory is empty
 .IP \(bu
 .I device
 is removable (USB or FireWire device, or \fB/sys/block/\fIdrive\fB/removable\fR
-is 1)
+is 1) or whitelisted in
+.B /etc/pmount.allow\fR.
 .IP \(bu
 .I device
 is not locked
@@ -130,7 +131,7 @@ determined if this option is not given.
 
 .TP
 .B \-c \fIcharset\fR, \fB\-\-charset \fIcharset
-use given I/O character set (default: 
+Use given I/O character set (default: 
 .B utf8 
 if called in an UTF-8 locale, otherwise mount default). This
 corresponds with the mount option
@@ -140,12 +141,25 @@ support setting the character set (see
 (8) for details).
 
 .TP
+.B \-u \fIumask\fR, \fB\-\-umask \fIumask\fR
+Use specified umask instead of the default one. For UDF, the default
+is '007', for VFAT and NTFS the default is '077'. This value is
+ignored for file systems which do not support setting an umask.
+
+.TP
 .B \-h, \-\-help
 Print a help message and exit successfully.
 
 .TP
 .B \-d, \-\-debug
 Enable verbose debug messages.
+
+.SH FILES
+
+.TP
+.B /etc/pmount.allow
+List of devices (one device per line) which are additionally permitted
+for pmounting.
 
 .SH SEE ALSO
 

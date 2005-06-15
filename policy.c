@@ -21,6 +21,7 @@
 #include <libintl.h>
 #include <sys/stat.h>
 #include <sysfs/libsysfs.h>
+#include <regex.h>
 
 /*************************************************************************
  *
@@ -380,6 +381,50 @@ device_removable( const char* device )
     return removable;
 }
 
+int
+device_whitelisted( const char* device )
+{
+    FILE* fwl;
+    char line[1024];
+    char *d;
+    regex_t re;
+    regmatch_t match[3];
+
+    fwl = fopen( WHITELIST, "r" );
+    if( !fwl )
+        return 0;
+
+    if( regcomp( &re, "^[[:space:]]*([a-zA-Z0-9/_+\\-\\.]+)[[:space:]]*(#.*)?$", REG_EXTENDED ) ) {
+        fprintf( stderr, "Internal error: device_whitelisted(): could not compile regex\n" );
+        exit( -1 );
+    }
+
+    debug( "device_whitelist: checking " WHITELIST "...\n" );
+
+    while( fgets( line, sizeof( line ), fwl ) ) {
+        /* ignore lines which are too long */
+        if( strlen( line ) == sizeof( line ) - 1 ) {
+            debug ("ignoring invalid oversized line\n");
+            continue;
+        }
+
+       if (!regexec (&re, line, 3, match, 0)) {
+           line[match[1].rm_eo] = 0;
+           d = line+match[1].rm_so;
+           debug( "comparing %s against whitelisted '%s'\n", device, d);
+           if( !strcmp( d, device ) ) {
+               debug( "device_whitlisted(): match, returning 1\n" );
+               fclose( fwl );
+               return 1;
+           }
+       }
+    }
+
+    fclose( fwl );
+   debug( "device_whitlisted(): nothing matched, returning 0\n" );
+    return 0;
+}
+
 int 
 device_locked( const char* device )
 {
@@ -398,7 +443,7 @@ device_locked( const char* device )
 int
 mntpt_valid( const char* mntpt ) 
 {
-    return !assert_dir( mntpt ) && !assert_emptydir( mntpt );
+    return !assert_dir( mntpt, 1 ) && !assert_emptydir( mntpt );
 }
 
 int
