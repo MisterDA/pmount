@@ -1,0 +1,97 @@
+Introduction
+============
+pmount is a wrapper around the standard mount program which permits normal
+users to mount removable devices without a matching /etc/fstab entry. This
+provides a robust basis for automounting frameworks like GNOME's Utopia project
+and confines the amount of code that runs as root to a minimum.
+
+Usage
+=====
+$ pmount <device> [<label>]
+
+This will mount <device> to a directory below /media if policy is met (see
+below). If <label> is given, the mount point will be /media/<label>, otherwise
+it will be /media/<device>.
+
+The device will be mounted with the following flags: 
+atime,nodev,exec,noauto,nosuid,user,rw.
+
+Please see the manpage pmount(1) for available options.
+
+$ pumount [-l] <device>
+
+This will umount <device> if a similar policy is met. -l does a lazy unmount,
+see umount(8).
+
+Policy
+======
+The mount will succeed if all of the following conditions are met:
+
+- <device> is a block device in /dev/
+- <device> is not handled by /etc/fstab (if it is, pmount calls 
+  '/bin/mount <device>' to handle this transparently; supplying a label is not
+  allowed in this case)
+- <device> is not already mounted according to /etc/mtab and /proc/mounts
+- if the mount point already exists, there is no device already mounted at it
+  and the directory is empty 
+- <device> is removable (i. e. on USB or FireWire bus, or
+  /sys/block/drive/removable == 1)
+- <device> is not locked (see below)
+
+The umount will succeed if all of the following conditions are met:
+
+- <device> is a block device in /dev/ if -l is not supplied
+- <device> is not handled by /etc/fstab (if it is, pmount calls
+  '/bin/umount <device>' to handle this transparently)
+- <device> is mounted according to /etc/mtab and /proc/mounts with the calling
+  user's uid
+- mount point is in /media
+
+Algorithm
+=========
+pmount:
+
+1. check if device is already in fstab; if so, drop all privileges (root user
+   id) and execute 'mount <device>'
+2. check if policy is met
+3. determine mount point:
+   - label given: check that there are no / in it
+   - label not given: label = device name with '/' replaced by '_'
+4. if mount point does not exist, create it; if it exists, check that it is
+   an empty directory
+5. execute mount command with a list of file systems that support specifying
+   uid and gid (vfat,udf,iso9660,hfsplus,hfs)
+6. if that failed, execute mount command with file systems that don't support
+   uid and gid (ext3,ext2,reiserfs,xfs,jfs)
+
+pumount:
+
+1. check if device is already in fstab; if so, drop all privileges (root user
+   id) and execute 'umount [-l] <device>'
+2. check if policy is met
+3. find out the mount point
+4. execute umount program
+5. delete the mount point
+
+Locking
+=======
+Some applications like CD burners modify a raw device which must not be mounted
+while the burning process is in progress. To prevent automatic mounting, pmount
+offers a locking mechanism:
+
+  pmount --lock <device> <pid>
+
+will prevent the pmounting of <device> until it is unlocked again using
+
+  pmount --unlock <device> <pid>
+
+This is implemented using lock directories in /var/lock/pmount; this directory
+can be configured with the LOCKDIR macro in policy.h.
+
+A lock is always assigned to a particular process <pid>; this allows to lock a
+device by several processes.
+
+During mount, the list of process-specific locks is cleaned, i. e. all locks
+whose associated process does not exist any more are removed. This prevents
+forgotten indefinite locks from crashed programs.
+

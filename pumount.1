@@ -1,0 +1,68 @@
+.TH pumount 1 "August 27, 2004" "Martin Pitt"
+
+.SH NAME
+pumount \- umount arbitrary hotpluggable devices as normal user
+
+.SH SYNOPSIS
+
+.B pumount
+[
+.I options
+]
+.I device
+
+.SH DESCRIPTION
+
+pumount is a wrapper around the standard umount program which permits normal
+users to umount removable devices without a matching /etc/fstab entry. 
+
+.B pumount
+expects the
+.I device
+as its only argument. This will umount 
+.I device
+from a directory below /media if policy is met (see below). 
+
+.SH OPTIONS
+
+.TP
+.B \-l, \-\-lazy
+Lazy unmount. Detach the filesystem from the filesystem hierarchy now,
+and cleanup all references to the filesystem as soon as it is not busy
+anymore.  (Requires kernel 2.4.11 or later.)
+
+.TP
+.B \-h, \-\-help
+Print a help message and exit successfully.
+
+.TP
+.B \-d, \-\-debug
+Enable verbose debug messages.
+
+.SH POLICY
+
+The umount will succeed if all of the following conditions are met:
+
+.IP \(bu 2
+.I device
+is a block device in /dev/ (it does not need to exist if
+.B \-l
+is supplied)
+.IP \(bu 
+.I device
+is not in /etc/fstab (if it is, pmount executes \fB umount \fI device\fR as the
+calling user to handle this transparently)
+.IP \(bu
+.I device
+is mounted according to /etc/mtab and /proc/mounts with the calling user's uid
+.IP \(bu
+mount point is in /media
+
+.SH SEE ALSO
+
+.BR pmount (1),
+.BR umount (8)
+
+.SH AUTHOR
+.B pmount
+is developed by Martin Pitt <martin.pitt@canonical.com>.

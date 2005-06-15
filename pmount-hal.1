@@ -1,0 +1,39 @@
+.TH pmount-hal 1 "November 15, 2004" "Martin Pitt"
+
+.SH NAME
+pmount-hal \- HAL-aware wrapper around pmount
+
+.SH SYNOPSIS
+
+.B pmount-hal
+.I udi
+[
+.I pmount options
+]
+
+.SH DESCRIPTION
+
+.B pmount
+("policy mount") is a wrapper around the standard mount program which
+permits normal users to mount removable devices without a matching /etc/fstab
+entry.
+
+.B pmount-hal 
+extends pmount by making it work together with hal (Hardware Abstration Layer).
+.B pmount-hal
+will ask hal about values for certain mount flags (like
+.B noatime\fR and \fBasync\fR) and the prefered mount point name and
+pass it to
+.B pmount\fR, thus respecting the configured device storage policy.
+
+The first parameter (\fIudi\fR) must be the HAL UDI of the device to
+be mounted. All further parameters are passed to pmount unchanged.
+
+.SH SEE ALSO
+
+.BR pmount (1),
+.BR hald (8),
+
+.SH AUTHOR
+.B pmount 
+is developed by Martin Pitt <martin.pitt@canonical.com>.

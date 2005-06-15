@@ -1,0 +1,132 @@
+0.5.1
+-----
+- pmount: do not allow empty media labels; this allowed to mount a
+  device directly under /media if /media was empty
+
+0.5
+---
+- use stamp files to mark directories created by pmount and only
+  remove a mount point directory if it contains a stamp file
+- use the given device name as default mount point name instead of the
+  symlink-resolved one
+- i18n support
+- added German translation
+
+0.4.4
+-----
+- pmount-hal: resolve symlinks before checking mount point directories
+- use umask "077" instead of "007" for VFAT and NTFS volumes; this allows e. g.
+  to use ssh keys on USB sticks
+- if a mount with given iocharset fails, try again without; there were reports
+  of failed vfat mounts when giving iocharset
+
+0.4.3
+-----
+- pmount-hal: when checking for already existing mount points, also
+  accept existing, but empty directories (if nothing is mounted at
+  them)
+
+0.4.2
+-----
+- pumount: allow to unmount any device if called as root
+
+0.4.1
+-----
+- consistently use the realpath() of devices for all operations but
+  transparent mount fallback
+
+0.4
+---
+- pmount: added --noatime option
+- Makefile: support PREFIX
+- Makefile: install manapges, too
+- Makefile: add uninstall target
+- added pmount-hal (incl. manpage)
+
+0.3
+---
+- pmount: added option -a/--async for asynchronous mounting
+- pmount: added option -t for selecting a file system
+- added NTFS support
+- pmount: added option -c/--charset for selecting the iocharset;
+  default to 'utf8' when pmount is executed in an UTF-8 locale,
+  otherwise default to mount default
+- pmount: do not fail if a device is handled in /etc/fstab, but a
+  label is supplied; merely print a warning
+
+0.2.2
+-----
+- mount CD-ROM file systems without umask parameter (this does not work)
+- added and documented dynamic debug option -d, use dynamic debug output
+  everywhere
+- pumount: now use getopt_long() for option parsing, added -d and -h
+
+0.2.1
+-----
+- version 0.2 was not published, had a major policy hole: in some cases it
+  allowed to mount partitions on fixed disks
+- policy.c: rewrote find_sysfs_device() to check minor device number, too
+
+0.2 [DO NOT USE]
+----------------
+- major refactorization to clean up the code
+- consolidated error return codes
+- pmount: added --lock/--unlock commands
+- device is regarded as removable also if /sys/block/drive/removable is 1
+- mount devices with umask=007
+
+0.1
+---
+- fixed /dev/ path checking: now use the real path of the device node, not the
+  path supplied on the command line
+- pmount: don't try to mount all file systems with the uid and gid options,
+  this does not work on ext3, ext2, reiserfs, xfs, and jfs; try two separate
+  mount commands now
+- pumount: added option -l to support lazy unmounting
+- pumount: changed policy: 
+  * device must be mounted by the same uid that attempts to pumount
+  * device node does not need to exist and be removeable any more (because the
+    device node cannot be checked any more if device was already ripped out)
+
+0.0.8
+-----
+- use root privileges also for checking that the existing mount point is empty,
+  since normal user might not be allowed to read the directory
+
+0.0.7
+-----
+- replaced all str[n]cat() and str[n]cpy() with snprintf() calls; thanks to
+  Matt Zimmerman for the patch
+
+0.0.6
+-----
+- added support for CD-ROM file systems (udf and iso9660)
+- require mount points to be empty before mount
+
+0.0.5
+-----
+- now also handle devices in /etc/fstab, transparently call mount/umount in
+  this case
+
+0.0.4
+-----
+- drop effective user id to normal user until root is really needed
+- added proper online help
+- added manpages
+
+0.0.3
+-----
+- pumount: added similar suid check 
+- pumount: delete mount point after umounting
+- determine real path of devices before checking them
+- pmount: mount with proper uid and gid options
+
+0.0.2
+-----
+- pmount: added check if really suid, print an error if not
+- pmount: set the real user id to root before executing mount (mount
+  refuses to mount a device if real uid != root)
+
+0.0.1
+-----
+- initial release

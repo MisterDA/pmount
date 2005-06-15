@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# check if the given directory can be used as a mount point (not existing or
+# not empty and not mounted)
+valid_mountpoint() {
+    P=$(readlink -nf "$1")
+    [ ! -e "$P" ] && return 0 || true
+    [ -d "$P" ] || return 1
+    [ -z "$(ls "$P")" ] || return 1
+
+    # check if something is already mounted at this directory 
+    if /bin/mount | grep -q "$P"; then
+        return 1;
+    fi
+    return 0
+}
+
+# Check valid arguments
+UDI=$1
+shift || {
+    PROG=`basename $0`
+    cat << EOF
+$PROG - pmount wrapper that uses HAL to get some additional information
+
+Usage: $PROG <hal UDI> [pmount options]
+
+This will mount the device described by the given UDI using pmount. The 
+volume storage policy and desired label will be read out from hal and 
+passed to pmount.
+EOF
+    exit 0
+}
+
+# dummy call to check whether hal is running
+if ! hal-get-property --udi "$UDI" --key info.udi > /dev/null 2>/dev/null; then
+    echo "Error: invalid UDI, or hald is not running" >&2
+    exit 1
+fi
+
+# read out device and policy
+
+DEVICE=`hal-get-property --udi "$UDI" --key block.device 2>/dev/null`
+if [ $? != "0" ]; then
+    echo "Error: given UDI is not a mountable volume" >&2
+    exit 2
+fi
+
+SYNC=`hal-get-property --udi "$UDI" --key volume.policy.mount_option.sync 2>/dev/null`
+NOATIME=`hal-get-property --udi "$UDI" --key volume.policy.mount_option.noatime 2>/dev/null`
+LABEL=`hal-get-property --udi "$UDI" --key volume.policy.desired_mount_point 2>/dev/null`
+
+# assemble OPTIONS string
+unset OPTIONS
+
+if [ "$SYNC" = "false" ]; then
+    OPTIONS="$OPTIONS --async"
+fi
+
+if [ "$NOATIME" = "true" ]; then
+    OPTIONS="$OPTIONS --noatime"
+fi
+
+# do we have a label?
+if [ "$LABEL" ]; then
+    # label mountpoint already present?
+    if ! valid_mountpoint "/media/$LABEL"; then
+        n=1
+        until valid_mountpoint "/media/$LABEL-$n"; do
+            ((n=n+1))
+        done
+        LABEL="$LABEL-$n"
+    fi
+
+    exec pmount $OPTIONS "$@" "$DEVICE" "$LABEL"
+    exit 1
+fi
+
+# no label given
+exec pmount $OPTIONS "$@" "$DEVICE"
+

@@ -1,0 +1,150 @@
+.TH pmount 1 "August 27, 2004" "Martin Pitt"
+
+.SH NAME
+pmount \- mount arbitrary hotpluggable devices as normal user
+
+.SH SYNOPSIS
+
+.B pmount
+[
+.I options
+]
+.I device
+
+.B pmount
+[
+.I options
+]
+.I device label
+
+.B pmount \-\-lock
+[
+.I options
+]
+.I device pid
+
+.B pmount \-\-unlock
+[
+.I options
+]
+.I device pid
+
+.SH DESCRIPTION
+
+pmount ("policy mount") is a wrapper around the standard mount program which
+permits normal users to mount removable devices without a matching /etc/fstab
+entry.
+
+.B pmount
+is invoked like this:
+
+.B pmount
+.I device 
+[
+.I label
+]
+
+This will mount 
+.I device
+to a directory below /media if policy is met (see below). If 
+.I label
+is given, the mount point will be /media/label, otherwise it will be
+/media/device.
+
+The device will be mounted with the following flags: 
+sync,atime,nodev,exec,noauto,nosuid,user,rw
+
+Some applications like CD burners modify a raw device which must not be mounted
+while the burning process is in progress. To prevent automatic mounting, pmount
+offers a locking mechanism:
+.B pmount \-\-lock 
+.I device pid
+will prevent the pmounting of 
+.I device
+until it is unlocked again using 
+.B pmount \-\-unlock 
+.I device pid\fR. The process id 
+.I pid
+assigns the lock to a particular process; this allows to lock a device by
+several processes.
+
+During mount, the list of locks is cleaned, i. e. all locks whose associated
+process does not exist any more are removed. This prevents forgotten indefinite
+locks from crashed programs.
+
+.SH POLICY
+
+The mount will succeed if all of the following conditions are met:
+
+.IP \(bu 2
+.I device
+is a block device in /dev/
+.IP \(bu 
+.I device
+is not in /etc/fstab (if it is, pmount executes \fB mount \fI device\fR as the
+calling user to handle this transparently)
+.IP \(bu
+.I device
+is not already mounted according to /etc/mtab and /proc/mounts
+.IP \(bu
+if the mount point already exists, there is no device already mounted at it
+and the directory is empty 
+.IP \(bu
+.I device
+is removable (USB or FireWire device, or \fB/sys/block/\fIdrive\fB/removable\fR
+is 1)
+.IP \(bu
+.I device
+is not locked
+
+.SH OPTIONS
+
+.TP
+.B \-a, \-\-async
+Mount the device with the 
+.B async
+option, i. e. with write caching. Default is 
+.B sync
+(write-through) for safety reasons. With this option, write
+operations are much faster, but since users tend to rip out their USB drives
+without proper unmounting, you should use this option with care.
+
+.TP
+.B \-A, \-\-noatime
+Mount the device with the 
+.B noatime
+option. Default is 
+.B atime\fR. 
+
+.TP
+.B \-t \fIfilesystem\fR, \fB\-\-type \fIfilesystem
+Mount as specified file system type. The file system type is automatically
+determined if this option is not given.
+
+.TP
+.B \-c \fIcharset\fR, \fB\-\-charset \fIcharset
+use given I/O character set (default: 
+.B utf8 
+if called in an UTF-8 locale, otherwise mount default). This
+corresponds with the mount option
+.B iocharset\fR. This option is ignored for file systems that do not
+support setting the character set (see
+.B mount
+(8) for details).
+
+.TP
+.B \-h, \-\-help
+Print a help message and exit successfully.
+
+.TP
+.B \-d, \-\-debug
+Enable verbose debug messages.
+
+.SH SEE ALSO
+
+.BR pumount (1),
+.BR mount (8)
+
+.SH AUTHOR
+.B pmount 
+is developed by Martin Pitt <martin.pitt@canonical.com>.
