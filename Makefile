@@ -8,7 +8,7 @@ pmount_OBJ = pmount.o policy.o utils.o fs.o
 pumount_OBJ = pumount.o policy.o utils.o
 pmount_hal_OBJ = pmount-hal.o policy.o utils.o
 
-all: pmount pumount pmount-hal
+all: pmount pumount pmount-hal po/pmount.pot
 
 pmount: $(pmount_OBJ)
 	$(CC) $(LDFLAGS) $^ $(LIBS) -o $@
@@ -43,11 +43,16 @@ uninstall-mo:
 	for f in po/*.po; do P="$(DESTDIR)/$(PREFIX)/share/locale/$$(basename $${f%.po})/LC_MESSAGES/"; rm -f "$$P/pmount.mo"; rmdir -p --ignore-fail-on-non-empty "$$P"; done
 
 clean:
-	rm -f pmount pumount pmount-hal $(pmount_OBJ) $(pumount_OBJ) $(pmount_hal_OBJ)
+	rm -f pmount pumount pmount-hal $(pmount_OBJ) $(pumount_OBJ) $(pmount_hal_OBJ) po/pmount.pot
 
-updatepo:
+po/pmount.pot:
 	xgettext -k_ -o po/pmount.pot --copyright-holder "Martin Pitt" --msgid-bugs-address="martin.pitt@canonical.com" *.c
+
+updatepo: po/pmount.pot
 	for f in po/*.po; do echo -n "updating $$f "; msgmerge -U $$f po/pmount.pot; done
+
+dist: clean
+	find ! -path '*{arch}*' ! -path '*.arch-ids*' ! -name .| tar cT - | gzip -9 > "../pmount_$(shell head -n 1 CHANGES).tar.gz"
 
 # dependencies
 policy.o: policy.h utils.h

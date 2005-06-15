@@ -1,3 +1,14 @@
+0.9
+---
+- pmount-hal: ported to new hal 0.5 and dbus 0.32 API
+- integrate cryptsetup (with LUKS extension) if device is encrypted
+  with dmcrypt and LUKS metadata
+- pmount: mount vfat with shortname=winnt option
+- pmount-hal: use volume.policy.mount_filesystem instead of
+  volume.fstype
+- always build the POT file, delete it on "make clean"
+- Makefile: added "dist" target
+
 0.8
 ---
 - unbreak locking, this created ".created_by_pmount" stamps in the

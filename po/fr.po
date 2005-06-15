@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-04-08 14:15+0200\n"
+"POT-Creation-Date: 2005-05-11 10:52+0200\n"
 "PO-Revision-Date: 2005-04-02 22:34+0000\n"
 "Last-Translator: Nicolas Velin <nsv@fr.st>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1\n"
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
 
-#: pmount.c:50
+#: pmount.c:47
 #, c-format
 msgid ""
 "Usage:\n"
@@ -41,7 +41,7 @@ msgstr ""
 "  Si le point de montage n'existe pas, il sera créé.\n"
 "\n"
 
-#: pmount.c:57
+#: pmount.c:54
 #, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
@@ -61,7 +61,7 @@ msgstr ""
 "  tenter un montage).\n"
 "\n"
 
-#: pmount.c:64
+#: pmount.c:61
 #, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
@@ -71,7 +71,7 @@ msgstr ""
 "%s --unlock <périphérique> <pid>\n"
 "  Retire le verrou sur le <périphérique> pour le processus <pid>.\n"
 
-#: pmount.c:67
+#: pmount.c:64
 #, fuzzy
 msgid ""
 "Options:\n"
@@ -83,6 +83,9 @@ msgid ""
 "                in an UTF-8 locale, otherwise mount default)\n"
 "  -u <umask>  : use specified umask instead of the default (only for\n"
 "                file sytems which actually support umask setting)\n"
+" --passphrase <file>\n"
+"                read passphrase from file instead of the terminal\n"
+"                (only for LUKS encrypted devices)\n"
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
@@ -129,73 +132,70 @@ msgstr "Erreur : '/' ne doit pas apparaitre dans un nom de label\n"
 msgid "Error: device name too long\n"
 msgstr "Erreur : nom du périphérique trop long\n"
 
-#: pmount.c:179 pumount.c:98
+#: pmount.c:210
+#, fuzzy, c-format
+msgid "Error: could not decrypt device (wrong passphrase?)\n"
+msgstr "Erreur : n'a pas pu créer de répertoire"
+
+#: pmount.c:233 pumount.c:97
 msgid "Error: could not drop all uid privileges"
 msgstr "Erreur : impossible de révoquer tous les privilèges"
 
-#: pmount.c:184 pmount.c:287
+#: pmount.c:238
 msgid "Error: could not execute mount"
 msgstr "Erreur : impossible d'exécuter mount"
 
-#: pmount.c:222
+#: pmount.c:274
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr ""
 "Erreur interne : mount_attempt : le nom du système de fichiers est NULL\n"
 
-#: pmount.c:228
+#: pmount.c:280
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Erreur : nom de système de fichiers invalide '%s'\n"
 
-#: pmount.c:234
+#: pmount.c:286
 #, fuzzy, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Erreur : nom de jeu de caractères invalide '%s'\n"
 
-#: pmount.c:259
+#: pmount.c:311
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Erreur : nom de jeu de caractères invalide '%s'\n"
 
-#: pmount.c:275 pumount.c:124
-msgid "Error: could not raise to full root uid privileges"
-msgstr "Erreur : impossible d'obtenir les privilèges complets de l'uid root"
-
-#: pmount.c:291
-msgid "Error: could not wait for executed mount process"
-msgstr "Erreur : impossible d'attendre pour exécuter les processus de montage"
-
-#: pmount.c:367
+#: pmount.c:389
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr ""
 "Erreur : ne peut pas verrouiller pour le pid %u, ce processus n'existe pas\n"
 
-#: pmount.c:381
+#: pmount.c:403
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Erreur : ne peut créer le fichier de verrou de pid  %s: %s\n"
 
-#: pmount.c:421
+#: pmount.c:443
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Erreur : ne peut ôter le fichier de verrou pid %s:%s\n"
 
-#: pmount.c:437
+#: pmount.c:459
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Erreur : do_unlock: ne peut ôter le verrou du répertoire"
 
-#: pmount.c:531 pumount.c:181
+#: pmount.c:556 pumount.c:173
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Erreur : ce programme a besoin d'être installé en suid root\n"
 
-#: pmount.c:566 pumount.c:201
+#: pmount.c:593 pumount.c:193
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Erreur interne : getopt_long() a retourné une valeur inconnue\n"
 
-#: pmount.c:604
+#: pmount.c:631
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -204,21 +204,21 @@ msgstr ""
 "Avertissement : le périphérique %s est déjà pris en charge par /etc/fstab, "
 "l'étiquette fournie est ignorée\n"
 
-#: pmount.c:613 pumount.c:246
+#: pmount.c:640 pumount.c:238
 msgid "Error: could not determine real path of the device"
 msgstr ""
 "Erreur : n'a pas pu déterminer le véritable chemin d'accès à ce périphérique"
 
-#: pmount.c:619 pumount.c:252
+#: pmount.c:646 pumount.c:244
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Erreur : périphérique invalide %s (doit être dans /dev/)\n"
 
-#: pmount.c:661
+#: pmount.c:692
 msgid "Error: could not delete mount point"
 msgstr "Erreur : n'a pas pu détruire le point de montage"
 
-#: pmount.c:682
+#: pmount.c:713
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Erreur interne : le mode %i n'est pas pris en charge.\n"
@@ -248,88 +248,88 @@ msgstr ""
 msgid "Error: could not execute pmount\n"
 msgstr "Erreur: impossible d'exécuter pmount\n"
 
-#: pmount-hal.c:169
-#, c-format
-msgid "Error: could not connect to hal\n"
+#: pmount-hal.c:172
+#, fuzzy, c-format
+msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Erreur : impossible de se connecter à hal\n"
 
-#: pmount-hal.c:175
-#, c-format
-msgid "Error: given UDI does not exist\n"
-msgstr "Erreur : l'UDI fourni n'existe pas\n"
+#: pmount-hal.c:193
+#, fuzzy, c-format
+msgid "Error: UDI '%s' does not exist\n"
+msgstr "Erreur : le périphérique %s n'existe pas\n"
 
-#: pmount-hal.c:182
+#: pmount-hal.c:200
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Erreur : L'UDI fourni n'est pas un volume montable\n"
 
-#: policy.c:79
+#: policy.c:80
 msgid "Error: could not get status of device"
 msgstr "Erreur : n'a pas pu obtenir l'état du périphérique"
 
-#: policy.c:90
+#: policy.c:91
 msgid "Error: could not get sysfs directory\n"
 msgstr "Erreur : n'a pas trouver le répertoire sysfs\n"
 
-#: policy.c:97
+#: policy.c:98
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "Erreur : n'a pas pu ouvrir <sysfs dir>/block/"
 
-#: policy.c:128
+#: policy.c:129
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Erreur : n'a pas pu ouvrir <sysfs dir>/block/<device>/"
 
-#: policy.c:228
+#: policy.c:229
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Erreur : le périphérique %s n'existe pas\n"
 
-#: policy.c:233
+#: policy.c:234
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Erreur : %s n'est pas un périphérique de bloc\n"
 
-#: policy.c:251 policy.c:307
+#: policy.c:252 policy.c:308
 msgid "Error: could not open fstab-type file"
 msgstr "Erreur : n'a pas  pu ouvrir le fichier fstab-type"
 
-#: policy.c:338
+#: policy.c:339
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Erreur : le périphérique %s est déja monté sur %s\n"
 
-#: policy.c:340
+#: policy.c:341
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Erreur : le périphérique %s n'est pas monté\n"
 
-#: policy.c:342
+#: policy.c:343
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Erreur : le périphérique %s n'a pas été monté par vous\n"
 
-#: policy.c:378
+#: policy.c:379
 #, fuzzy, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Erreur : le périphérique %s n'est pas amovible"
 
-#: policy.c:393
+#: policy.c:438
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Erreur : le périphérique %s est vérrouillé\n"
 
-#: policy.c:411
+#: policy.c:456
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Erreur : le répertoire %s contient déja un système de fichiers\n"
 
-#: policy.c:413
+#: policy.c:458
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr ""
 "Erreur : le répertoire %s ne contient pas de systême de fichiers monté\n"
 
-#: pumount.c:42
+#: pumount.c:41
 #, c-format
 msgid ""
 "Usage:\n"
@@ -357,79 +357,75 @@ msgstr ""
 "  -d, --debug : autorise l'affichage des messages de debug (très verbeux)\n"
 "  -h, --help : affiche ce message d'aide et termine avec succès\n"
 
-#: pumount.c:72
+#: pumount.c:71
 msgid "Internal error: could not determine mount point\n"
 msgstr "Erreur interne : n'a pas pu déterminer le point de montage\n"
 
-#: pumount.c:78
+#: pumount.c:77
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Erreur : le point de montage %s n'est pas sous %s\n"
 
-#: pumount.c:108 pumount.c:136
+#: pumount.c:107
 msgid "Error: could not execute umount"
 msgstr "Erreur : n'a pas pu exécuter umount"
 
-#: pumount.c:140
-msgid "Error: could not wait for executed umount process"
-msgstr "Erreur : n'a pas pu attendre pour exécuter le processus de démontage"
-
-#: pumount.c:148
+#: pumount.c:128
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "Erreur : échec de umount\n"
 
-#: utils.c:51
+#: utils.c:52
 #, c-format
 msgid "Error: out of memory\n"
 msgstr "Erreur : plus de mémoire disponible\n"
 
-#: utils.c:107
+#: utils.c:108
 msgid "Error: could not create directory"
 msgstr "Erreur : n'a pas pu créer de répertoire"
 
-#: utils.c:123
+#: utils.c:124
 #, fuzzy
 msgid "Error: could not create stamp file in directory"
 msgstr "Erreur : n'a pas pu créer un fichier estampillé dans le répertoire"
 
-#: utils.c:131
+#: utils.c:132
 #, c-format
 msgid "Error: %s is not a directory\n"
 msgstr "Erreur : %s n'est pas un répertoire\n"
 
-#: utils.c:151
+#: utils.c:152
 msgid "Error: could not open directory"
 msgstr "Erreur : ne peut pas ouvrir le répertoire"
 
-#: utils.c:160
+#: utils.c:161
 #, c-format
 msgid "Error: directory %s is not empty\n"
 msgstr "Erreur : le répertoire %s n'est pas vide\n"
 
-#: utils.c:212
+#: utils.c:213
 #, c-format
 msgid "Error: '%s' is not a valid number\n"
 msgstr "Erreur : '%s' n'est pas un nombre valide\n"
 
-#: utils.c:254
+#: utils.c:255
 #, fuzzy
 msgid "Internal error: could not change to effective uid root"
 msgstr "Erreur interne : n'a pas pu changer pour l'uid effectif de root "
 
-#: utils.c:263
+#: utils.c:264
 #, fuzzy
 msgid "Internal error: could not change effective user uid to real user id"
 msgstr ""
 "Erreur interne : n'a pas pu changer de l'uid effectif pour le véritable id "
 "de l'utilisateur"
 
-#: utils.c:272
+#: utils.c:273
 #, fuzzy
 msgid "Internal error: could not change to effective gid root"
 msgstr "Erreur interne : n'a pas pu changer pour le gid effectif de root"
 
-#: utils.c:281
+#: utils.c:282
 #, fuzzy
 msgid "Internal error: could not change effective group id to real group id"
 msgstr ""

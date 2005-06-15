@@ -15,6 +15,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <dirent.h>
 #include <errno.h>
 #include <unistd.h>
@@ -283,3 +284,67 @@ drop_groot()
     }
 }
 
+int 
+spawn( int options, const char* path, ... )
+{
+    int devnull;
+    int status;
+    char* argv[1024];
+    unsigned argv_size = 0, i;
+    va_list args;
+
+    /* copy varargs to array */
+    va_start( args, path );
+    for(;;) {
+        if( argv_size >= sizeof( argv ) ) {
+            fprintf( stderr, "Internal error: spawn(): too many arguments\n" );
+            exit( 100 );
+        }
+
+        if( ( argv[argv_size++] = va_arg( args, char* ) ) == NULL )
+            break;
+    }
+    va_end( args );
+
+    if( enable_debug ) {
+        printf( "spawn(): executing %s", path );
+        for( i = 0; i < argv_size; ++i )
+            printf( " '%s'", argv[i] );
+        printf( "\n" );
+    }
+
+    if( !fork() ) {
+        if( options & SPAWN_EROOT )
+            get_root();
+        if( options & SPAWN_RROOT )
+            if( setreuid( 0, -1 ) ) {
+                perror( "Error: could not raise to full root uid privileges" );
+                exit( 100 );
+            }
+
+        devnull = open( "/dev/null", O_WRONLY );
+        if( devnull > 0 ) {
+            if( options & SPAWN_NO_STDOUT )
+                dup2( devnull, 1 );
+            if( options & SPAWN_NO_STDERR )
+                dup2( devnull, 2 );
+        }
+
+        execv( path, argv );
+        exit( -1 );
+    } else {
+        if( wait( &status ) < 0 ) {
+            perror( "Error: could not wait for executed subprocess" );
+            exit( 100 );
+        }
+    }
+
+    if( !WIFEXITED( status ) ) {
+        fprintf( stderr, "Internal error: spawn(): process did not return a status" );
+        exit( 100 );
+    }
+
+    status = WEXITSTATUS( status );
+    debug( "spawn(): %s terminated with status %i\n", path, status );
+    return status;
+}

@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <sys/wait.h>
 #include <limits.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -27,8 +26,6 @@
 #include "fs.h"
 #include "policy.h"
 #include "utils.h"
-
-#define MOUNTPROG "/bin/mount"
 
 /* error codes */
 const int E_ARGS = 1;
@@ -73,6 +70,9 @@ usage( const char* exename )
     "                in an UTF-8 locale, otherwise mount default)\n"
     "  -u <umask>  : use specified umask instead of the default (only for\n"
     "                file sytems which actually support umask setting)\n"
+    " --passphrase <file>\n"
+    "                read passphrase from file instead of the terminal\n"
+    "                (only for LUKS encrypted devices)\n"
     "  -d, --debug : enable debug output (very verbose)\n"
     "  -h, --help  : print help message and exit successfuly") );
 }
@@ -165,6 +165,60 @@ make_mountpoint_name( const char* device, const char* label, char* mntpt,
 }
 
 /**
+ * Check whether the given device is encrypted using dmcrypt with LUKS
+ * metadata; if so, call cryptsetup to setup the device.
+ * @param device raw device name
+ * @param decrypted buffer for decrypted device; if device is unencrypted,
+ *        this will be set to device
+ * @param decrypted_size size of the "decrypted" buffer
+ * @param password_file file to read the password from (NULL means prompt)
+ */
+void
+luks_decrypt( const char* device, char* decrypted, int decrypted_size, 
+        const char* password_file )
+{
+    int status;
+    char* label;
+
+    /* check if encrypted */
+    status = spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+            CRYPTSETUP, CRYPTSETUP, "isLuks", device, NULL );
+    if( status != 0 ) {
+        /* just return device */
+        debug( "device is not LUKS encrypted, or cryptsetup with LUKS support is not installed\n" );
+        snprintf( decrypted, decrypted_size, "%s", device );
+        return;
+    }
+
+    /* generate device label */
+    label = strreplace( device, '/', '_' );
+
+    /* open LUKS device */
+    if( password_file )
+        status = spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+                CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
+                password_file, device, label, NULL );
+    else
+        status = spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+                CRYPTSETUP, CRYPTSETUP, "luksOpen", device, label, NULL );
+
+    if( status == 0 ) {
+        /* yes, we have a LUKS device */
+        snprintf( decrypted, decrypted_size, "/dev/mapper/%s", label );
+    } else {
+        if( status == 1 ) {
+            fprintf( stderr, _("Error: could not decrypt device (wrong passphrase?)\n") );
+            exit( E_POLICY );
+        } else {
+            fprintf( stderr, "Internal error: cryptsetup luksOpen failed" );
+            exit( E_INTERNAL );
+        }
+    }
+
+    free( label );
+}
+
+/**
  * Drop all privileges and exec 'mount device'. Does not return on success, if
  * it returns, MOUNTPROG could not be executed.
  */
@@ -206,8 +260,6 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
         int noatime, int exec, const char* iocharset, const char* umask, 
         int suppress_errors )
 {
-    int status;
-    int devnull;
     const struct FS* fs;
     char ugid_opt[100];
     char umask_opt[100];
@@ -266,39 +318,9 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
             fs->options, sync_opt, atime_opt, exec_opt, ugid_opt, umask_opt, iocharset_opt );
 
     /* go for it */
-    debug( "attempting mount: executing '%s %s %s %s %s %s %s'\n", MOUNTPROG,
-                "-t", fsname, "-o", options, device, mntpt );
-
-    if( !fork() ) {
-        get_root();
-        if( setreuid( 0, 0 ) ) {
-            perror( _("Error: could not raise to full root uid privileges") );
-            exit( 100 );
-        }
-
-        if( suppress_errors ) {
-            /* try to reroute stderr to /dev/null to suppress error messages */
-            devnull = open( "/dev/null", O_WRONLY );
-            if( devnull > 0 )
-                dup2( devnull, 2 );
-        }
-
-        execl( MOUNTPROG, MOUNTPROG, "-t", fsname, "-o", options, device, mntpt, NULL );
-        perror( _("Error: could not execute mount") );
-        exit( E_EXECMOUNT );
-    } else {
-        if( wait( &status ) < 0 ) {
-            perror( _("Error: could not wait for executed mount process") );
-            exit( E_EXECMOUNT );
-        }
-    }
-
-    debug( "mount attempt terminated with status %i\n", status );
-
-    if( WIFEXITED( status ) )
-        return WEXITSTATUS( status );
-    else
-        return -1;
+    return spawn( SPAWN_EROOT | SPAWN_RROOT | (suppress_errors ? SPAWN_NO_STDERR : 0 ),
+             MOUNTPROG, MOUNTPROG, "-t", fsname, "-o", options, device, mntpt,
+             NULL );
 }
 
 /**
@@ -494,6 +516,7 @@ main( int argc, char** argv )
     char *devarg = NULL, *arg2 = NULL;
     char mntpt[MEDIA_STRING_SIZE];
     char device[PATH_MAX], mntptdev[PATH_MAX];
+    char decrypted_device[PATH_MAX];
     const char* fstab_device;
     int is_real_path = 0;
     int async = 0;
@@ -502,6 +525,7 @@ main( int argc, char** argv )
     const char* use_fstype = NULL;
     const char* iocharset = NULL;
     const char* umask = NULL;
+    const char* passphrase = NULL;
     int result;
 
     enum { MOUNT, LOCK, UNLOCK } mode = MOUNT;
@@ -518,6 +542,7 @@ main( int argc, char** argv )
         { "type", 1, NULL, 't' },
         { "charset", 1, NULL, 'c' },
         { "umask", 1, NULL, 'u' },
+        { "passphrase", 1, NULL, 'p' },
         { NULL, 0, NULL, 0}
     };
 
@@ -561,6 +586,8 @@ main( int argc, char** argv )
             case 'c': iocharset = optarg; break;
 
             case 'u': umask = optarg; break;
+
+            case 'p': passphrase = optarg; break;
 
             default:
                 fprintf( stderr, _("Internal error: getopt_long() returned unknown value\n") );
@@ -647,12 +674,16 @@ main( int argc, char** argv )
             if( check_mount_policy( device, mntpt )  )
                 return E_POLICY;
 
+            /* check for encrypted device */
+            luks_decrypt( device, decrypted_device, sizeof( decrypted_device ),
+                    passphrase ); 
+
             /* off we go */
             if( use_fstype )
-                result = do_mount( device, mntpt, use_fstype, async, noatime,
+                result = do_mount( decrypted_device, mntpt, use_fstype, async, noatime,
                         exec, iocharset, umask, 0 );
             else
-                result = do_mount_auto( device, mntpt, async, noatime, exec,
+                result = do_mount_auto( decrypted_device, mntpt, async, noatime, exec,
                         iocharset, umask ); 
 
             if( result ) {

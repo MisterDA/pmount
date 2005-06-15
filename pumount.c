@@ -17,11 +17,10 @@
 #include <limits.h>
 #include <getopt.h>
 #include <libintl.h>
+#include <sys/stat.h>
 
 #include "policy.h"
 #include "utils.h"
-
-#define UMOUNTPROG "/bin/umount"
 
 /* error codes */
 const int E_ARGS = 1;
@@ -118,38 +117,29 @@ do_umount( const char* device, int do_lazy )
 {
     int status;
 
-    if( !fork() ) {
-        get_root();
-        if( setreuid( 0, 0 ) ) {
-            perror( _("Error: could not raise to full root uid privileges") );
-            exit( 100 );
-        }
+    if( do_lazy )
+        status = spawn( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG, "-l",
+                device, NULL );
+    else
+        status = spawn( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG,
+                device, NULL );
 
-        if( do_lazy ) {
-            debug( "Executing command: %s -l %s\n", UMOUNTPROG, device );
-            execl( UMOUNTPROG, UMOUNTPROG, "-l", device, NULL );
-        } else {
-            debug( "Executing command: %s %s\n", UMOUNTPROG, device );
-            execl( UMOUNTPROG, UMOUNTPROG, device, NULL );
-        }
-
-        perror( _("Error: could not execute umount") );
-        exit( E_EXECUMOUNT );
-    } else {
-        if( wait( &status ) < 0 ) {
-            perror( _("Error: could not wait for executed umount process") );
-            return -1;
-        }
-    }
-
-    debug( "umount program terminated with status %i\n", status );
-
-    if( !WIFEXITED( status ) || WEXITSTATUS( status ) != 0 ) {
+    if( status != 0 ) {
         fprintf( stderr, _("Error: umount failed\n") );
         return -1;
     }
 
     return 0;
+}
+
+/**
+ * Check whether device is mapped through cryptsetup, and release it if so.
+ */
+void
+release_encrypted( const char* device )
+{
+    spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, CRYPTSETUP, CRYPTSETUP,
+            "luksClose", device, NULL );
 }
 
 /**
@@ -160,8 +150,10 @@ main( int argc, char** argv )
 {
     char device[PATH_MAX], mntptdev[PATH_MAX], path[PATH_MAX];
     const char* fstab_device;
+    char* dmlabel;
     int is_real_path = 0;
     int do_lazy = 0;
+    struct stat st;
 
     int  option;
     static struct option long_opts[] = {
@@ -253,12 +245,24 @@ main( int argc, char** argv )
         return E_DEVICE;
     }
 
+    /* check if we have a dmcrypt device */
+    dmlabel = strreplace( device, '/', '_' );
+    snprintf( path, sizeof( path ), "/dev/mapper/%s", dmlabel );
+    free( dmlabel );
+    if( !stat( path, &st ) ) {
+        snprintf( device, sizeof( device ), "%s", path );
+        debug( "Unmounting mapped device %s instead.\n", device );
+    }
+
     if( check_umount_policy( device, do_lazy ) )
         return E_POLICY;
 
     /* go for it */
     if( do_umount( device, do_lazy ) )
         return E_EXECUMOUNT;
+
+    /* release LUKS device, if appropriate */
+    release_encrypted( device );
 
     /* delete mount point */
     remove_pmount_mntpt( mntpt );

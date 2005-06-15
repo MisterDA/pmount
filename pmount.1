@@ -35,6 +35,12 @@ pmount ("policy mount") is a wrapper around the standard mount program which
 permits normal users to mount removable devices without a matching /etc/fstab
 entry.
 
+pmount also supports encrypted devices which use dm-crypt and have
+LUKS metadata. If a LUKS-capable
+.B cryptsetup
+is installed, pmount will use it to decrypt the device first and mount
+the mapped unencrypted device instead.
+
 .B pmount
 is invoked like this:
 
@@ -145,6 +151,13 @@ support setting the character set (see
 Use specified umask instead of the default one. For UDF, the default
 is '007', for VFAT and NTFS the default is '077'. This value is
 ignored for file systems which do not support setting an umask.
+
+.TP
+.B \-\-passphrase \fIfile
+If the device is encrypted (dm-crypt with LUKS metadata), read the
+passphrase from specified
+.I file
+instead of prompting at the terminal.
 
 .TP
 .B \-h, \-\-help

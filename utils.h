@@ -106,5 +106,21 @@ void get_groot();
  */
 void drop_groot();
 
+/* spawn() options */
+#define SPAWN_EROOT 0x01
+#define SPAWN_RROOT 0x02
+#define SPAWN_NO_STDOUT 0x04
+#define SPAWN_NO_STDERR 0x08
+
+/**
+ * Synchronously spawn a subprocess and return its exit status.
+ * @param options Combination of SPAWN_* flags
+ * @param path Path to program to be executed
+ * @param ... NULL terminated argument list (including argv[0]!)
+ * @return The exit status of the program, or -1 if the program could not be
+ *         executed.
+ */
+int spawn( int options, const char* path, ... );
+
 #endif /* __utils_h */
 

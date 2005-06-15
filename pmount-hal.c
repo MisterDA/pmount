@@ -145,6 +145,8 @@ int
 main( int argc, const char** argv ) 
 {
     LibHalContext *hal_ctx;
+    DBusError error;
+    DBusConnection *dbus_conn;
     dbus_bool_t sync = TRUE, noatime = FALSE;
     const char* udi;
     char* device = NULL;
@@ -164,34 +166,57 @@ main( int argc, const char** argv )
     udi = argv[1];
 
     /* initialize hal connection */
-    hal_ctx = hal_initialize( NULL, FALSE );
+    dbus_error_init( &error );
+    dbus_conn = dbus_bus_get( DBUS_BUS_SYSTEM, &error );
+    if( dbus_conn == NULL ) {
+        fprintf( stderr, _("Error: could not connect to dbus: %s: %s\n"), error.name, error.message );
+        return 1;
+    }
+
+    hal_ctx = libhal_ctx_new();
     if( !hal_ctx ) {
-        fprintf( stderr, _("Error: could not connect to hal\n") );
+        fprintf( stderr, "Error: libhal_ctx_new\n" );
+        return 1;
+    }
+
+    if( !libhal_ctx_set_dbus_connection( hal_ctx, dbus_conn ) ) {
+        fprintf( stderr, "Error: libhal_ctx_set_dbus_connection: %s: %s\n", error.name, error.message );
+        return 1;
+    }
+    if( !libhal_ctx_init( hal_ctx, &error ) ) {
+        fprintf(  stderr, "Error: libhal_ctx_init: %s: %s\n", error.name, error.message );
         return 1;
     }
 
     /* get all interesting properties */
-    if( !hal_device_exists( hal_ctx, udi ) ) {
-        fprintf( stderr, _("Error: given UDI does not exist\n") );
+    if( !libhal_device_exists( hal_ctx, udi, &error ) ) {
+        fprintf( stderr, _("Error: UDI '%s' does not exist\n"), udi );
         return 1;
     }
 
-    if( hal_device_property_exists( hal_ctx, udi, "block.device" ) )
-        device = hal_device_get_property_string( hal_ctx, udi, "block.device" );
+    if( libhal_device_property_exists( hal_ctx, udi, "block.device", &error ) )
+        device = libhal_device_get_property_string( hal_ctx, udi, "block.device", &error );
     if( !device ) {
         fprintf( stderr, _("Error: given UDI is not a mountable volume\n") );
         return 1;
     }
 
-    if( hal_device_property_exists( hal_ctx, udi, "volume.policy.desired_mount_point" ) )
-        label = hal_device_get_property_string( hal_ctx, udi, "volume.policy.desired_mount_point" );
-    if( hal_device_property_exists( hal_ctx, udi, "volume.fstype" ) )
-        fstype = hal_device_get_property_string( hal_ctx, udi, "volume.fstype" );
-    if( hal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.sync" ) )
-        sync = hal_device_get_property_bool( hal_ctx, udi, "volume.policy.mount_option.sync" );
-    if( hal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.noatime" ) )
-        noatime = hal_device_get_property_bool( hal_ctx, udi, "volume.policy.mount_option.noatime" );
+    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.desired_mount_point", &error ) )
+        label = libhal_device_get_property_string( hal_ctx, udi, "volume.policy.desired_mount_point", &error );
+    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_filesystem", &error ) )
+        fstype = libhal_device_get_property_string( hal_ctx, udi, "volume.policy.mount_filesystem", &error );
+    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.sync", &error ) )
+        sync = libhal_device_get_property_bool( hal_ctx, udi, "volume.policy.mount_option.sync", &error );
+    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.noatime", &error ) )
+        noatime = libhal_device_get_property_bool( hal_ctx, udi, "volume.policy.mount_option.noatime", &error );
 
+    /* shut down hal connection */
+    libhal_ctx_shutdown( hal_ctx, &error );
+    libhal_ctx_free( hal_ctx );
+    dbus_connection_disconnect( dbus_conn );
+    dbus_connection_unref( dbus_conn );
+
+    /* go */
     exec_pmount( device, fstype, label, sync, noatime, argc-2, argv+2 );
 
     return 0;

@@ -115,7 +115,7 @@ find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize 
                     dev, devdirname, (unsigned) sysmajor, (unsigned) sysminor );
 
         if( sysmajor == devmajor ) {
-            debug( "find_sysfs_device: major device numbers match");
+            debug( "find_sysfs_device: major device numbers match\n");
 
             /* if dev is a partition, check that there is a subdir that matches
              * the partition */
