@@ -107,14 +107,16 @@ is not locked
 .SH OPTIONS
 
 .TP
-.B \-a, \-\-async
+.B \-s, \-\-sync
 Mount the device with the 
-.B async
-option, i. e. with write caching. Default is 
 .B sync
-(write-through) for safety reasons. With this option, write
-operations are much faster, but since users tend to rip out their USB drives
-without proper unmounting, you should use this option with care.
+option, i. e. without write caching. Default is 
+.B async
+(write-back). With this option, write operations are much slower and
+due to the massive increase of updates of inode/FAT structures, flash
+devices may suffer heavily if you write large files. This option is
+intended to make it safe to just rip out USB drives without proper
+unmounting.
 
 .TP
 .B \-A, \-\-noatime

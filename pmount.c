@@ -62,7 +62,7 @@ usage( const char* exename )
     "  Remove the lock on <device> for process <pid> again.\n\n"),
         exename);
     puts( _("Options:\n"
-    "  -a, --async : mount <device> with the 'async' option (default: 'sync')\n"
+    "  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
     "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
     "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
     "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
@@ -519,7 +519,7 @@ main( int argc, char** argv )
     char decrypted_device[PATH_MAX];
     const char* fstab_device;
     int is_real_path = 0;
-    int async = 0;
+    int async = 1;
     int noatime = 0;
     int exec = 0;
     const char* use_fstype = NULL;
@@ -536,7 +536,7 @@ main( int argc, char** argv )
         { "debug", 0, NULL, 'd'},
         { "lock", 0, NULL, 'l'},
         { "unlock", 0, NULL, 'L'},
-        { "async", 0, NULL, 'a' },
+        { "sync", 0, NULL, 's' },
         { "noatime", 0, NULL, 'A' },
         { "exec", 0, NULL, 'e' },
         { "type", 1, NULL, 't' },
@@ -562,7 +562,7 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdelLaAt:c:u:", long_opts, NULL ) ) {
+        switch( option = getopt_long( argc, argv, "+hdelLsAt:c:u:", long_opts, NULL ) ) {
             case -1:  break;          /* end of arguments */
             case ':':
             case '?': return E_ARGS;  /* unknown argument */
@@ -575,7 +575,7 @@ main( int argc, char** argv )
 
             case 'L': mode = UNLOCK; break;
 
-            case 'a': async = 1; break;
+            case 's': async = 0; break;
 
             case 'A': noatime = 1; break;
 

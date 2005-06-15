@@ -1,3 +1,8 @@
+0.9.1
+-----
+- Makefile: fix "make dist" tarball generation
+- pmount: use async by default to not destroy flash memory
+
 0.9
 ---
 - pmount-hal: ported to new hal 0.5 and dbus 0.32 API

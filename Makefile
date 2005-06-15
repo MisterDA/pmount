@@ -2,6 +2,7 @@ LIBS=-lsysfs
 CFLAGS?=-Wall -W -O2
 HAL_CFLAGS=$(shell pkg-config hal --cflags)
 HAL_LDFLAGS=$(shell pkg-config hal --libs)
+VERSION=$(shell head -n 1 CHANGES)
 PREFIX?=/usr/local
 
 pmount_OBJ = pmount.o policy.o utils.o fs.o
@@ -52,7 +53,9 @@ updatepo: po/pmount.pot
 	for f in po/*.po; do echo -n "updating $$f "; msgmerge -U $$f po/pmount.pot; done
 
 dist: clean
-	find ! -path '*{arch}*' ! -path '*.arch-ids*' ! -name .| tar cT - | gzip -9 > "../pmount_$(shell head -n 1 CHANGES).tar.gz"
+	mkdir ../pmount-$(VERSION)
+	find -type f ! -path '*{arch}*' ! -path '*.arch-ids*' ! -name . | cpio -pd ../pmount-$(VERSION)
+	cd ..; tar cv pmount-$(VERSION) | gzip -9 > "pmount-$(VERSION).tar.gz"; rm -r pmount-$(VERSION)
 
 # dependencies
 policy.o: policy.h utils.h

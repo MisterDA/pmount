@@ -121,8 +121,8 @@ void exec_pmount( const char* device, const char* fstype, const char* label,
         argv[argc++] = fstype;
     }
 
-    if( !sync )
-        argv[argc++] = "--async";
+    if( sync )
+        argv[argc++] = "--sync";
     if( noatime )
         argv[argc++] = "--noatime";
 
@@ -147,7 +147,7 @@ main( int argc, const char** argv )
     LibHalContext *hal_ctx;
     DBusError error;
     DBusConnection *dbus_conn;
-    dbus_bool_t sync = TRUE, noatime = FALSE;
+    dbus_bool_t sync = FALSE, noatime = FALSE;
     const char* udi;
     char* device = NULL;
     char* label = NULL;
