@@ -48,6 +48,7 @@ fi
 SYNC=`hal-get-property --udi "$UDI" --key volume.policy.mount_option.sync 2>/dev/null`
 NOATIME=`hal-get-property --udi "$UDI" --key volume.policy.mount_option.noatime 2>/dev/null`
 LABEL=`hal-get-property --udi "$UDI" --key volume.policy.desired_mount_point 2>/dev/null`
+FSTYPE=`hal-get-property --udi "$UDI" --key volume.fstype 2>/dev/null | cut -f 1 -d\ `
 
 # assemble OPTIONS string
 unset OPTIONS
@@ -58,6 +59,10 @@ fi
 
 if [ "$NOATIME" = "true" ]; then
     OPTIONS="$OPTIONS --noatime"
+fi
+
+if [ "$FSTYPE" ]; then
+    OPTIONS="$OPTIONS -t $FSTYPE"
 fi
 
 # do we have a label?

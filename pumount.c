@@ -158,7 +158,7 @@ do_umount( const char* device, int do_lazy )
 int
 main( int argc, char** argv )
 {
-    char device[PATH_MAX];
+    char device[PATH_MAX], mntptdev[PATH_MAX];
     const char* fstab_device;
     int is_real_path = 0;
     int do_lazy = 0;
@@ -207,6 +207,12 @@ main( int argc, char** argv )
     if( optind + 1 != argc ) {
         usage( argv[0] );
         return E_ARGS;
+    }
+
+    /* if we got a mount point, convert it to a device */
+    if( fstab_has_mntpt( "/proc/mounts", argv[optind], mntptdev, sizeof(mntptdev) ) ) {
+        debug( "resolved mount point %s to device %s\n", argv[optind], mntptdev );
+        argv[optind] = mntptdev;
     }
 
     /* get real path, if possible */

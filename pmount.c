@@ -466,7 +466,7 @@ main( int argc, char** argv )
 {
     char *devarg = NULL, *arg2 = NULL;
     char mntpt[MEDIA_STRING_SIZE];
-    char device[PATH_MAX];
+    char device[PATH_MAX], mntptdev[PATH_MAX];
     const char* fstab_device;
     int is_real_path = 0;
     int async = 0;
@@ -544,6 +544,12 @@ main( int argc, char** argv )
     if( !devarg || ( mode != MOUNT && !arg2 ) || argc > optind+2 ) {
         usage( argv[0] );
         return E_ARGS;
+    }
+
+    /* if we got a mount point, convert it to a device */
+    if( fstab_has_mntpt( "/etc/fstab", devarg, mntptdev, sizeof(mntptdev) ) ) {
+        debug( "resolved mount point %s to device %s\n", devarg, mntptdev );
+        devarg = mntptdev;
     }
 
     /* get real path, if possible */

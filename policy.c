@@ -289,10 +289,19 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
 }
 
 int
-fstab_has_mntpt( const char* fname, const char* mntpt )
+fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t device_size )
 {
     FILE* f;
     struct mntent *entry;
+    char realmntptbuf[PATH_MAX];
+    char fstabmntptbuf[PATH_MAX];
+    const char* realmntpt, *fstabmntpt;
+
+    /* resolve symlinks, if possible */
+    if( realpath( mntpt, realmntptbuf ) )
+        realmntpt = realmntptbuf;
+    else
+        realmntpt = mntpt;
 
     if( !( f = fopen( fname, "r" ) ) ) {
         perror( _("Error: could not open fstab-type file") );
@@ -300,7 +309,15 @@ fstab_has_mntpt( const char* fname, const char* mntpt )
     }
 
     while( ( entry = getmntent( f ) ) != NULL ) {
-        if( !strcmp( entry->mnt_dir, mntpt ) ) {
+        /* resolve symlinks, if possible */
+        if( realpath( entry->mnt_dir, fstabmntptbuf ) )
+            fstabmntpt = fstabmntptbuf;
+        else
+            fstabmntpt = entry->mnt_dir;
+
+        if( !strcmp( fstabmntpt, realmntpt ) ) {
+            if( device )
+                snprintf( device, device_size, "%s", entry->mnt_fsname );
             endmntent( f );
             return 1;
         }
@@ -387,8 +404,8 @@ mntpt_valid( const char* mntpt )
 int
 mntpt_mounted( const char* mntpt, int expect )
 {
-    int mounted = fstab_has_mntpt( "/etc/mtab", mntpt ) ||
-                  fstab_has_mntpt( "/proc/mounts", mntpt );
+    int mounted = fstab_has_mntpt( "/etc/mtab", mntpt, NULL, 0 ) ||
+                  fstab_has_mntpt( "/proc/mounts", mntpt, NULL, 0 );
 
     if( mounted && !expect )
         fprintf( stderr, _("Error: directory %s already contains a mounted file system\n"), mntpt );

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-01-05 12:09+0100\n"
+"POT-Creation-Date: 2005-01-27 00:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,27 +145,27 @@ msgstr ""
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr ""
 
-#: pmount.c:563
+#: pmount.c:569
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
 "ignored\n"
 msgstr ""
 
-#: pmount.c:572 pumount.c:231
+#: pmount.c:578 pumount.c:237
 msgid "Error: could not determine real path of the device"
 msgstr ""
 
-#: pmount.c:578 pumount.c:237
+#: pmount.c:584 pumount.c:243
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr ""
 
-#: pmount.c:619
+#: pmount.c:625
 msgid "Error: could not delete mount point"
 msgstr ""
 
-#: pmount.c:641
+#: pmount.c:647
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr ""
@@ -196,41 +196,41 @@ msgstr ""
 msgid "Error: %s is not a block device\n"
 msgstr ""
 
-#: policy.c:251 policy.c:298
+#: policy.c:251 policy.c:307
 msgid "Error: could not open fstab-type file"
 msgstr ""
 
-#: policy.c:321
+#: policy.c:338
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr ""
 
-#: policy.c:323
+#: policy.c:340
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr ""
 
-#: policy.c:325
+#: policy.c:342
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr ""
 
-#: policy.c:361
+#: policy.c:378
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr ""
 
-#: policy.c:376
+#: policy.c:393
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr ""
 
-#: policy.c:394
+#: policy.c:411
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr ""
 
-#: policy.c:396
+#: policy.c:413
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr ""

@@ -34,6 +34,18 @@
 const char* fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid );
 
 /**
+ * Check whether a fstab-type file (fstab, /etc/mtab or /proc/mounts)
+ * contains a mount point. Exits the program if file could not be opened.
+ * @param fname file of the fstab-type file to check
+ * @param mntpt mount point path to scan for (this gets symlink-resolved)
+ * @param device if not NULL and returning 1, this will be filled with the
+ *        corresponding device
+ * @param device_size size of the device buffer
+ * @return 1 if mount point was found, 0 if not found
+ */
+int fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t device_size );
+
+/**
  * Check whether given device is valid: it must exist and be a block device.
  */
 int device_valid( const char* device );

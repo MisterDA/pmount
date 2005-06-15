@@ -1,3 +1,13 @@
+0.6
+---
+- pmount-hal: use hal-supplied file system type (if present) to speed up
+  mounting and to avoid bogus error messages in kernel log
+- mount vfat with 'quiet' option
+- support pmount/pumount'ing mount points
+- added Catalan translation, thanks to Eduard Duran
+- added Spanish translation, thanks to Gustavo de Lama and Jorge
+  González González
+
 0.5.1
 -----
 - pmount: do not allow empty media labels; this allowed to mount a
