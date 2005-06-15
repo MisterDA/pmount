@@ -20,6 +20,7 @@
 #include <libhal.h>
 
 #include "policy.h"
+#include "fs.h"
 
 /* gettext abbreviation */
 #define _(String) gettext(String)
@@ -203,8 +204,14 @@ main( int argc, const char** argv )
 
     if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.desired_mount_point", &error ) )
         label = libhal_device_get_property_string( hal_ctx, udi, "volume.policy.desired_mount_point", &error );
-    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_filesystem", &error ) )
+    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_filesystem", &error ) ) {
         fstype = libhal_device_get_property_string( hal_ctx, udi, "volume.policy.mount_filesystem", &error );
+        /* ignore invalid file systems */
+        if (fstype && !get_fs_info(fstype)) {
+            free (fstype);
+            fstype = NULL;
+        }
+    }
     if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.sync", &error ) )
         sync = libhal_device_get_property_bool( hal_ctx, udi, "volume.policy.mount_option.sync", &error );
     if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.noatime", &error ) )

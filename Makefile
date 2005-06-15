@@ -7,7 +7,7 @@ PREFIX?=/usr/local
 
 pmount_OBJ = pmount.o policy.o utils.o fs.o
 pumount_OBJ = pumount.o policy.o utils.o
-pmount_hal_OBJ = pmount-hal.o policy.o utils.o
+pmount_hal_OBJ = pmount-hal.o policy.o utils.o fs.o
 
 all: pmount pumount pmount-hal po/pmount.pot
 
