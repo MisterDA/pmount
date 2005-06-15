@@ -1,3 +1,8 @@
+0.7.2
+-----
+- updated translations from Rosetta: ca, es_ES
+- added new translations from Rosetta: cs, es, fr, hr, it_IT, nb
+
 0.7.1
 -----
 - pmount-hal: consider a directory empty if it only contains a

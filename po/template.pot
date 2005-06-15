@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-02-03 15:01+0100\n"
+"POT-Creation-Date: 2005-04-04 17:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -182,21 +182,21 @@ msgid ""
 "read out from hal and passed to pmount."
 msgstr ""
 
-#: pmount-hal.c:139
+#: pmount-hal.c:140
 msgid "Error: could not execute pmount\n"
 msgstr ""
 
-#: pmount-hal.c:168
+#: pmount-hal.c:169
 #, c-format
 msgid "Error: could not connect to hal\n"
 msgstr ""
 
-#: pmount-hal.c:174
+#: pmount-hal.c:175
 #, c-format
 msgid "Error: given UDI does not exist\n"
 msgstr ""
 
-#: pmount-hal.c:181
+#: pmount-hal.c:182
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr ""

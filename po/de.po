@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount 0.5\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-02-03 15:01+0100\n"
+"POT-Creation-Date: 2005-04-04 17:31+0200\n"
 "PO-Revision-Date: 2004-12-29 17:56+0100\n"
 "Last-Translator: Martin Pitt <martin.pitt@canonical.com>\n"
 "Language-Team: German <de@li.org>\n"
@@ -226,21 +226,21 @@ msgstr ""
 "der bevorzugte Name werden von hal gelesen und pmount als Optionen \n"
 "überreicht."
 
-#: pmount-hal.c:139
+#: pmount-hal.c:140
 msgid "Error: could not execute pmount\n"
 msgstr "Fehler: konnte pmount nicht ausführen\n"
 
-#: pmount-hal.c:168
+#: pmount-hal.c:169
 #, c-format
 msgid "Error: could not connect to hal\n"
 msgstr "Fehler: konnte nicht zu hal verbinden\n"
 
-#: pmount-hal.c:174
+#: pmount-hal.c:175
 #, c-format
 msgid "Error: given UDI does not exist\n"
 msgstr "Fehler: angegebene UDI existiert nicht\n"
 
-#: pmount-hal.c:181
+#: pmount-hal.c:182
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Fehler: angegebene UDI ist kein einbindbares Gerät\n"

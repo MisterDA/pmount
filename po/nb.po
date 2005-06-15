@@ -1,15 +1,16 @@
-# Catalan translation for mount removable devices as normal user
+# Bokmål, Norwegian translation for pmount
 # Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
-# This file is distributed under the same license as the mount removable devices as normal user package.
+# This file is distributed under the same license as the pmount package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: mount removable devices as normal user\n"
+"Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
 "POT-Creation-Date: 2005-04-04 17:31+0200\n"
-"PO-Revision-Date: 2005-02-12 01:18+0000\n"
-"Last-Translator: Jordi Vilalta <jvprat@wanadoo.es>\n"
-"Language-Team: Catalan <ca@li.org>\n"
+"PO-Revision-Date: 2005-03-31 10:35+0000\n"
+"Last-Translator: Sigurd Gartmann <sigurd-ubuntu@brogar.org>\n"
+"Language-Team: Bokmål, Norwegian <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,15 +31,15 @@ msgid ""
 "  If the mount point does not exist, it will be created.\n"
 "\n"
 msgstr ""
-"Ús:\n"
+"Bruk:\n"
 "\n"
-"%s [opcions] <dispositiu> [<etiqueta>]\n"
+"%s [valg] <enhet> [<etikett>]\n"
 "\n"
-"  Monta <dispositiu> al directori sota %s si es compleixen\n"
-"  els requeriments (vegeu pmount(1) per més detalls). Si es dóna <etiqueta>, "
-"el punt de muntatge\n"
-"  serà %s/<etiqueta>, en cas contrari, serà %s<dispositiu>.\n"
-"  Si el punt de muntatge no existeix, es crearà.\n"
+"  Monter <enhet> til en katalog under %s hvis krav er tilfredsstilt\n"
+"  (se pmount(1) for mer). Hvis <etikett> er oppgitt, vil\n"
+"  monteringspunktet bli %s/<etikett>, ellers vil det bli\n"
+"  %s/<enhet>. Hvis monteringspunktet ikke finnes, vil det \n"
+"  bli opprettet.\n"
 "\n"
 
 #: pmount.c:57
@@ -51,15 +52,12 @@ msgid ""
 "  processes (nonexistant pids are cleaned before attempting a mount).\n"
 "\n"
 msgstr ""
-"%s --lock <dispositiu> <pid>\n"
-"  Prevén més pmounts del <dispositiu> fins que no es desbloqui altra vegada. "
-"<pid>\n"
-"  especifica l'identificador del procés al qual actua el blocatge. Això "
-"permet bloquejar un dispositiu\n"
-"  per diversos processos independents i evita bloquejos indefinits de "
-"processos\n"
-"  fallits (pids no existents es netegen abans d'intentar montar-los).\n"
-"\n"
+"%s --lock <enhet> <pid>\n"
+"  Forhindrer videre pmount-monteringer av <enhet> helt til den\n"
+"  blir låst opp igjen. <pid> er hvilken prosess id låsen holdes\n"
+"  for. Dette gjør det mulig å låse en enhet av flere uavhengige\n"
+"  prosesser, og unngår uendelig låsing av krasjede prosesser\n"
+"  (pids som ikke finnes blir ryddet før forsøk på en montering).\n"
 
 #: pmount.c:64
 #, c-format
@@ -68,8 +66,8 @@ msgid ""
 "  Remove the lock on <device> for process <pid> again.\n"
 "\n"
 msgstr ""
-"%s --unlock <dispositiu> <pid>\n"
-"  Remou el blocatge al <dispositiu> per processar <pid> altra vegada.\n"
+"%s --unlock <enhet> <pid>\n"
+"  Fjerner låsen på <enhet> for prosess <pid>.\n"
 "\n"
 
 #: pmount.c:67
@@ -84,106 +82,99 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
-"Opcions:\n"
-"  -a, --async : monta <dispositiu> amb l'opció 'async' (per defecte: "
-"'sync')\n"
-"  --noatime   : monta <dispositiu> amb l'opció 'noatime' (per defecte: "
-"'atime')\n"
-"  -e, --exec  : monta <dispositiu> amb l'opció 'exec' (per defecte: "
-"'noexec')\n"
-"  -t <fs>     : monta com a tipus de sistema de fitxers <fs> (per defecte: "
-"autodetectat)\n"
-"  -c <charset>: usa el joc de caràcters I/O donat (per defecte: 'utf8' si es "
-"crida\n"
-"                des d'una locale UTF-8, si no es monta per defecte)\n"
-"  -d, --debug : habilita la sortida en mode depuració (molt detalladament)\n"
-"  -h, --help  : imprimeix el missatge d'ajuda i surt exitosament"
+"Valg:\n"
+"  -a, --async : monterer <enhet> med «async»-valget (standard: «sync»)\n"
+"  --noatime : monterer <enhet> med «noatime»-valget (standard: «atime»)\n"
+"  -e, --exec : monterer <enhet> med «exec»-valget (standard: «noexec»)\n"
+"  -t <fs> : monterer som filsystemtype <fs> (standard: velger automatisk)\n"
+"  -c <tegnsett> : bruk gitt I/O-tegnsett (standard: utf8 i\n"
+"                 UTF-8-locale, ellers monteringsstandard)\n"
+"  -d, --debug : skriv debuginformasjon (veldig mye)\n"
+"  -h, --help : skriv hjelpemelding og avslutt med suksess"
 
 #: pmount.c:120
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
-msgstr ""
-"Error: make_mountpoint_name: dispositiu %s invàlid (ha d'estar a /dev/)\n"
+msgstr "Feil: make_mountpoint_name: ugyldig enhet %s (må finnes i /dev/)\n"
 
 #: pmount.c:126
 #, c-format
 msgid "Error: label must not be empty\n"
-msgstr "Error: l'etiqueta no pot estar buida\n"
+msgstr "Feil: etiketten kan ikke være blank\n"
 
 #: pmount.c:130
 #, c-format
 msgid "Error: label too long\n"
-msgstr "Error: etiqueta massa llarga\n"
+msgstr "Feil: Etiketten er for lang\n"
 
 #: pmount.c:134
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
-msgstr "Error: '/' no ha d'estar al nom de l'etiqueta\n"
+msgstr "Feil: Etiketter kan ikke inneholde «/»\n"
 
 #: pmount.c:141
 #, c-format
 msgid "Error: device name too long\n"
-msgstr "Error: nom de dispositiu massa llarg\n"
+msgstr "Feil: Navnet på enheten er for langt\n"
 
 #: pmount.c:171 pumount.c:98
 msgid "Error: could not drop all uid privileges"
-msgstr "Error: no es poden eliminar tots els privilegis uid"
+msgstr "Feil: Kunne ikke fjerne alle uid-rettigheter"
 
 #: pmount.c:176 pmount.c:270
 msgid "Error: could not execute mount"
-msgstr "Error: no es pot executar mount"
+msgstr "Feil: Kunne ikke kjøre mount"
 
 #: pmount.c:212
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
-msgstr "error intern: mount_attempt: el sistema de fitxers donat és NULL\n"
+msgstr "Intern feil: mount_attempt: Filsystemnavnet er NULL\n"
 
 #: pmount.c:218
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
-msgstr "Error: el nom %s de sistema de fitxers és invàlid\n"
+msgstr "Feil: Ugyldig filsystemnavn «%s»\n"
 
 #: pmount.c:242
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
-msgstr "Error: el nom %s del joc de caràcters és invàlid\n"
+msgstr "Feil: Ugyldig tegnsettnavn «%s»\n"
 
 #: pmount.c:258 pumount.c:124
 msgid "Error: could not raise to full root uid privileges"
-msgstr "Error: no s'han pogut donar tots els privilegis uid de super-usuari"
+msgstr "Feil: Kunne ikke øke til fullstendige root-uid-rettigheter"
 
 #: pmount.c:274
 msgid "Error: could not wait for executed mount process"
-msgstr "Error: no s'ha pogut esperar per processos de muntatge executats"
+msgstr "Feil: Kunne ikke vente på startet mounting"
 
 #: pmount.c:347
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
-msgstr "Error: no s'ha pogut blocar el pid  %u. Aquest procés no existeix\n"
+msgstr "Feil: Kan ikke låse for %u, siden denne prosessen ikke finnes\n"
 
 #: pmount.c:361
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
-msgstr "Error: no s'ha pogut crear un blocatge del pid del fitxer %s: %s\n"
+msgstr "Feil: Kunne ikke opprette pid-låsfil %s: %s\n"
 
 #: pmount.c:401
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
-msgstr "Error: no s'ha pogut remoure el blocatge del pid del fitxer %s: %s\n"
+msgstr "Feil: Kunne ikke fjerne pid-låsfil %s: %s\n"
 
 #: pmount.c:417
 msgid "Error: do_unlock: could not remove lock directory"
-msgstr "Error: do_unlock: no s'ha pogut remoure el blocatge del directori"
+msgstr "Feil: du_unlock: Kunne ikke fjerne låskatalog"
 
 #: pmount.c:509 pumount.c:181
 msgid "Error: this program needs to be installed suid root\n"
-msgstr ""
-"Error: aquest programa necessita ser instal·lar amb suid de super-usuari\n"
+msgstr "Feil: Dette programmet må være installert suid root\n"
 
 #: pmount.c:542 pumount.c:201
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
-msgstr "error intern: getopt_long() ha retornat un valor desconegut\n"
+msgstr "Intern feil: getopt_long() returnerte ukjent verdi\n"
 
 #: pmount.c:580
 #, c-format
@@ -191,26 +182,26 @@ msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
 "ignored\n"
 msgstr ""
-"Avís: el dispositiu %s ja és gestionat per /etc/fstab, s'ignorarà l'etiqueta "
-"donada\n"
+"Advarsel: Enheten «%s» håndteres allerede i /etc/fstab, ny etikett blir "
+"ignorert\n"
 
 #: pmount.c:589 pumount.c:237
 msgid "Error: could not determine real path of the device"
-msgstr "Error: no s'ha pogut determinar el camí real del dispositiu"
+msgstr "Feil: Kunne ikke bestemme den ordentlige stien for denne enheten"
 
 #: pmount.c:595 pumount.c:243
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
-msgstr "Error: dispositiu %s invàlid (ha d'estar a /dev/)\n"
+msgstr "Feil: Ugyldig enhet %s (må være i /dev/)\n"
 
 #: pmount.c:635
 msgid "Error: could not delete mount point"
-msgstr "Error: no s'ha pogut eliminar el punt de muntatge"
+msgstr "Feil: Kunne ikke slette monteringspunkt"
 
 #: pmount.c:656
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
-msgstr "error intern: el mode %i no s'ha gestionat.\n"
+msgstr "Intern feil: modus %i er blir ikke håndtert.\n"
 
 #: pmount-hal.c:29
 msgid ""
@@ -222,97 +213,97 @@ msgid ""
 "file system type, the volume storage policy and the desired label will be\n"
 "read out from hal and passed to pmount."
 msgstr ""
-"pmount-hal - executa pmount amb informació addicional de hal\n"
+"pmount-hal - kjør pmount med tilleggsinformasjon fra hal\n"
 "\n"
-"Ús: pmount-hal <UDI de hal> [opcions de pmount]\n"
+"Bruk: pmount-hal <hal UDI> [pmount-valg]\n"
 "\n"
-"Aquesta comanda monta el dispositiu descrit per l'UDI donat utilitzant\n"
-"pmount. El tipus de sistema de fitxers, la política d'emmagatzematge del\n"
-"volum i l'etiqueta desitjada es llegiran de hal i es passaran a pmount."
+"Denne kommandoen monterer enheten beskrevet av den oppgitte UDI-en ved bruk "
+"av «pmount». Filsystemtypen, volumlagringspolitikk og ønsket etikett vil bli "
+"lest ut fra «hal» og gitt til «pmount»."
 
 #: pmount-hal.c:140
 msgid "Error: could not execute pmount\n"
-msgstr "Error: no s'ha pogut executar pmount\n"
+msgstr "Feil: Kunne ikke kjøre pmount\n"
 
 #: pmount-hal.c:169
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not connect to hal\n"
-msgstr "Error, no es pot obrir el directori"
+msgstr "Feil: Kunne ikke koble til hal\n"
 
 #: pmount-hal.c:175
 #, c-format
 msgid "Error: given UDI does not exist\n"
-msgstr "Error: l'UDI donat no existeix\n"
+msgstr "Feil: Oppgitt UDI finnes ikke\n"
 
 #: pmount-hal.c:182
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
-msgstr "Error: l'UDI donat no és un volum montable\n"
+msgstr "Feil: Oppgitt UDI er ikke en monterbar enhet\n"
 
 #: policy.c:79
 msgid "Error: could not get status of device"
-msgstr "Error: no s'ha pogut aconseguir l'estat del dispositiu"
+msgstr "Feil: Kunne ikke få status fra enhet"
 
 #: policy.c:90
 msgid "Error: could not get sysfs directory\n"
-msgstr "Error: no s'ha pogut aconseguir el directori sysfs\n"
+msgstr "Feil: Kunne ikke hente sysfs-katalog\n"
 
 #: policy.c:97
 msgid "Error: could not open <sysfs dir>/block/"
-msgstr "Error: no s'ha pogut obrir <sysfs dir>/block/"
+msgstr "Feil: Kunne ikke åpne <sysfs-katalog>/block/"
 
 #: policy.c:128
 msgid "Error: could not open <sysfs dir>/block/<device>/"
-msgstr "Error: no s'ha pogut obrir <sysfs dir>/block/<dispsitiu>/"
+msgstr "Feil: Kunne ikke åpne <sysfs-kat>/block/<enhet>/"
 
 #: policy.c:228
 #, c-format
 msgid "Error: device %s does not exist\n"
-msgstr "Error: el dispositiu %s no existeix\n"
+msgstr "Feil: Enhet %s finnes ikke\n"
 
 #: policy.c:233
 #, c-format
 msgid "Error: %s is not a block device\n"
-msgstr "Error: %s no és un dispositiu de blocs\n"
+msgstr "Feil: %s er ikke en blokkenhet\n"
 
 #: policy.c:251 policy.c:307
 msgid "Error: could not open fstab-type file"
-msgstr "Error: no s'ha pogut obrir el fitxer de tipus fstab"
+msgstr "Feil: Kunne ikke åpne fstab-fil"
 
 #: policy.c:338
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
-msgstr "Error: el dispositiu %s ja està montat a %s\n"
+msgstr "Feil: Enheten «%s» er allerede montert på «%s»\n"
 
 #: policy.c:340
 #, c-format
 msgid "Error: device %s is not mounted\n"
-msgstr "Error: el dispositiu %s no està montat\n"
+msgstr "Feil: Enheten «%s» er ikke montert\n"
 
 #: policy.c:342
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
-msgstr "Error: el dispositiu %s no ha estat montat per tu\n"
+msgstr "Feil: Enheten %s ble ikke montert av deg\n"
 
 #: policy.c:378
 #, c-format
 msgid "Error: device %s is not removable\n"
-msgstr "Error: el dispositiu %s no es pot remoure\n"
+msgstr "Feil: Enheten «%s» kan ikke fjernes\n"
 
 #: policy.c:393
 #, c-format
 msgid "Error: device %s is locked\n"
-msgstr "Error: el dispositiu %s està blocat\n"
+msgstr "Feil: Enheten «%s» er låst\n"
 
 #: policy.c:411
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
-msgstr "Error: el directori %s ja conté un sistema de fitxers montat\n"
+msgstr "Feil: Katalogen «%s» inneholder allerede et montert filsystem\n"
 
 #: policy.c:413
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
-msgstr "Error: el directori %s no conté un sistema de fitxers montat\n"
+msgstr "Feil: Katalogen «%s» inneholder ikke et montert filsystem\n"
 
 #: pumount.c:42
 #, c-format
@@ -330,89 +321,84 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly\n"
 msgstr ""
-"Ús:\n"
+"Bruk\n"
 "\n"
-"%s [opcions] <dispositiu>\n"
-"  Umount <dispositiu> des d'un directori sota %s si es compleixen els\n"
-"  requeriments (vegeu pumount(1) per més detalls). El directori del punt de "
-"montatge\n"
-"  s'elimina després\n"
+"%s [valg] <enhet>\n"
+"  Avmonter <enhet> fra en katalog under %s hvis krav er\n"
+"  tilfredsstilt (se pumount(1) for mer). Monteringspunktkatalogen\n"
+"  blir fjernet etterpå.\n"
 "\n"
-"Opcions:\n"
-"  -l, --lazy : umount mandrosament, vegeu umount(8)\n"
-"  -d, --debug : habilita la sortida de depuració (molt detalladament)\n"
-"  -h, --help : imprimeix el missatge d'ajuda i surt exitosament\n"
+"Valg:\n"
+"  -l, --lazy : lat umount, se umount(8)\n"
+"  -d, --debug :  skriv debuginformasjon (veldig mye)\n"
+"  -h, --help : skriv hjelpemelding og avslutt med suksess\n"
 
 #: pumount.c:72
 msgid "Internal error: could not determine mount point\n"
-msgstr "Error intern: no s'ha pogut determinar el punt de montatge\n"
+msgstr "Intern feil: Kunne ikke bestemme monteringspunkt\n"
 
 #: pumount.c:78
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
-msgstr "Error: el punt de montatge %s no és a sota %s\n"
+msgstr "Feil: Monteringspunktet «%s» er ikke under «%s»\n"
 
 #: pumount.c:108 pumount.c:136
 msgid "Error: could not execute umount"
-msgstr "Error: no s'ha pogut executar umount"
+msgstr "Feil: Kunne ikke kjøre umount"
 
 #: pumount.c:140
 msgid "Error: could not wait for executed umount process"
-msgstr "Error no s'ha pogut esperar els processos d'umount executats"
+msgstr "Feil: Kunne ikke vente på startet avmonteringsprosess"
 
 #: pumount.c:148
 #, c-format
 msgid "Error: umount failed\n"
-msgstr "Error: ha fallat umount\n"
+msgstr "Feil: Avmontering feilet\n"
 
 #: utils.c:51
 #, c-format
 msgid "Error: out of memory\n"
-msgstr "Error: fora de memòria\n"
+msgstr "Feil: Ikke mer minne\n"
 
 #: utils.c:107
 msgid "Error: could not create directory"
-msgstr "Error: no es pot crear el directori"
+msgstr "Feil: Kunne ikke opprette katalog"
 
 #: utils.c:122
 msgid "Error: could not create stamp file in directory"
-msgstr "Error: no es pot crear fitxer de marca al directori"
+msgstr "Feil: Kunne ikke opprette stempelfil i katalog"
 
 #: utils.c:129
 #, c-format
 msgid "Error: %s is not a directory\n"
-msgstr "Error: %s no és un directori\n"
+msgstr "Feil. «%s» er ikke en katalog\n"
 
 #: utils.c:149
 msgid "Error: could not open directory"
-msgstr "Error, no es pot obrir el directori"
+msgstr "Feil: Kunne ikke åpne katalog"
 
 #: utils.c:158
 #, c-format
 msgid "Error: directory %s is not empty\n"
-msgstr "Error: el directori %s no és buit\n"
+msgstr "Feil: Katalogen «%s» er ikke tom\n"
 
 #: utils.c:210
 #, c-format
 msgid "Error: '%s' is not a valid number\n"
-msgstr "Error: '%s' no és un número vàlid\n"
+msgstr "Feil: «%s» er ikke et gyldig tall\n"
 
 #: utils.c:252
 msgid "Internal error: could not change to effective uid root"
-msgstr "Error intern: no s'ha pogut canviar a uid de superusuari efectiva"
+msgstr "Intern feil: Kunne ikke endre til effektiv uid root"
 
 #: utils.c:261
 msgid "Internal error: could not change effective user uid to real user id"
-msgstr ""
-"Error intern: no s'ha pogut canviar uid d'usuari efectiva a identificació "
-"d'usuari real"
+msgstr "Intern feil: kunne ikke endre effektiv bruker-uid til ekte bruker-id"
 
 #: utils.c:270
 msgid "Internal error: could not change to effective gid root"
-msgstr "Error intern: no s'ha pogut canviar a gid superusuari efectiu"
+msgstr "Intern feil: Kunne ikke endre til effektiv gid root"
 
 #: utils.c:279
 msgid "Internal error: could not change effective group id to real group id"
-msgstr ""
-"Error intern: no s'ha pogut canviar l'identificació de grup efectiva a una "
-"identificació real de grup"
+msgstr "Intern feil: Kunne ikke endre effektiv gruppe-id til ekte grouppe-id"
