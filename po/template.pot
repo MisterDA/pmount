@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-01-27 00:36+0100\n"
+"POT-Creation-Date: 2005-02-03 15:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,7 @@ msgid ""
 "Options:\n"
 "  -a, --async : mount <device> with the 'async' option (default: 'sync')\n"
 "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+"  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
 "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
 "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
 "                in an UTF-8 locale, otherwise mount default)\n"
@@ -61,113 +62,143 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
 
-#: pmount.c:119
+#: pmount.c:120
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 msgstr ""
 
-#: pmount.c:125
+#: pmount.c:126
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr ""
 
-#: pmount.c:129
+#: pmount.c:130
 #, c-format
 msgid "Error: label too long\n"
 msgstr ""
 
-#: pmount.c:133
+#: pmount.c:134
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr ""
 
-#: pmount.c:140
+#: pmount.c:141
 #, c-format
 msgid "Error: device name too long\n"
 msgstr ""
 
-#: pmount.c:170 pumount.c:98
+#: pmount.c:171 pumount.c:98
 msgid "Error: could not drop all uid privileges"
 msgstr ""
 
-#: pmount.c:175 pmount.c:264
+#: pmount.c:176 pmount.c:270
 msgid "Error: could not execute mount"
 msgstr ""
 
-#: pmount.c:209
+#: pmount.c:212
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr ""
 
-#: pmount.c:215
+#: pmount.c:218
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr ""
 
-#: pmount.c:236
+#: pmount.c:242
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr ""
 
-#: pmount.c:252 pumount.c:124
+#: pmount.c:258 pumount.c:124
 msgid "Error: could not raise to full root uid privileges"
 msgstr ""
 
-#: pmount.c:268
+#: pmount.c:274
 msgid "Error: could not wait for executed mount process"
 msgstr ""
 
-#: pmount.c:340
+#: pmount.c:347
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr ""
 
-#: pmount.c:354
+#: pmount.c:361
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr ""
 
-#: pmount.c:394
+#: pmount.c:401
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr ""
 
-#: pmount.c:410
+#: pmount.c:417
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr ""
 
-#: pmount.c:500 pumount.c:181
+#: pmount.c:509 pumount.c:181
 msgid "Error: this program needs to be installed suid root\n"
 msgstr ""
 
-#: pmount.c:531 pumount.c:201
+#: pmount.c:542 pumount.c:201
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr ""
 
-#: pmount.c:569
+#: pmount.c:580
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
 "ignored\n"
 msgstr ""
 
-#: pmount.c:578 pumount.c:237
+#: pmount.c:589 pumount.c:237
 msgid "Error: could not determine real path of the device"
 msgstr ""
 
-#: pmount.c:584 pumount.c:243
+#: pmount.c:595 pumount.c:243
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr ""
 
-#: pmount.c:625
+#: pmount.c:635
 msgid "Error: could not delete mount point"
 msgstr ""
 
-#: pmount.c:647
+#: pmount.c:656
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
+msgstr ""
+
+#: pmount-hal.c:29
+msgid ""
+"pmount-hal - execute pmount with additional information from hal\n"
+"\n"
+"Usage: pmount-hal <hal UDI> [pmount options]\n"
+"\n"
+"This command mounts the device described by the given UDI using pmount. The\n"
+"file system type, the volume storage policy and the desired label will be\n"
+"read out from hal and passed to pmount."
+msgstr ""
+
+#: pmount-hal.c:139
+msgid "Error: could not execute pmount\n"
+msgstr ""
+
+#: pmount-hal.c:168
+#, c-format
+msgid "Error: could not connect to hal\n"
+msgstr ""
+
+#: pmount-hal.c:174
+#, c-format
+msgid "Error: given UDI does not exist\n"
+msgstr ""
+
+#: pmount-hal.c:181
+#, c-format
+msgid "Error: given UDI is not a mountable volume\n"
 msgstr ""
 
 #: policy.c:79

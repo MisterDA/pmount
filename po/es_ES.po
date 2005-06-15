@@ -2,13 +2,11 @@
 # Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
 # This file is distributed under the same license as the mount removable devices as normal user package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-01-27 00:36+0100\n"
+"POT-Creation-Date: 2005-02-03 15:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Spanish (Spain) <es_ES@li.org>\n"
@@ -72,6 +70,7 @@ msgid ""
 "Options:\n"
 "  -a, --async : mount <device> with the 'async' option (default: 'sync')\n"
 "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+"  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
 "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
 "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
 "                in an UTF-8 locale, otherwise mount default)\n"
@@ -81,105 +80,107 @@ msgstr ""
 "Opciones:\n"
 "  -a, --async : montar <dispositivo> con la opción 'async' (por defecto: "
 "'sync')\n"
-"  --noatime : montar <dispositivo> con la opción 'noatime' (por defecto: "
+"  --noatime   : montar <dispositivo> con la opción 'noatime' (por defecto: "
 "'atime')\n"
-"  -t <fs> : montar como sistema de ficheros tipo <fs> (por defecto: "
+"  -e, --exec  : montar <dispositivo> con la opción 'exec' (por defecto: "
+"'noexec')\n"
+"  -t <fs>     : montar como sistema de ficheros tipo <fs> (por defecto: "
 "autodetectado)\n"
 "  -c <charset>: usar el juego de caracteres E/S dado (por defecto: 'utf8' si "
 "se llama\n"
 "                en un local UTF-8, si no, el defecto de montaje)\n"
 "  -d, --debug : habilita salida de depuración (muy verbosa)\n"
-"  -h, --help : escribir mensaje de ayuda y salir bien"
+"  -h, --help  : escribir mensaje de ayuda y salir bien"
 
-#: pmount.c:119
+#: pmount.c:120
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 msgstr ""
 "Error: make_mountpoint_name: el dispositivo %s no es válido (ha de estar en /"
 "dev/)\n"
 
-#: pmount.c:125
+#: pmount.c:126
 #, fuzzy, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Error: el directorio %s no está vacío\n"
 
-#: pmount.c:129
+#: pmount.c:130
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Error: etiqueta demasiado larga\n"
 
-#: pmount.c:133
+#: pmount.c:134
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Error: no se puede poner '/' en el nombre de la etiqueta\n"
 
-#: pmount.c:140
+#: pmount.c:141
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Error: nombre de dispositivo demasiado largo\n"
 
-#: pmount.c:170 pumount.c:98
+#: pmount.c:171 pumount.c:98
 msgid "Error: could not drop all uid privileges"
 msgstr "Error: no se han podido soltar todos los privilegios de uid"
 
-#: pmount.c:175 pmount.c:264
+#: pmount.c:176 pmount.c:270
 msgid "Error: could not execute mount"
 msgstr "Error: no se ha podido ejecutar el montaje"
 
-#: pmount.c:209
+#: pmount.c:212
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr ""
 "Error interno: mount_attempt: el nombre del sistema de ficheros es NULL\n"
 
-#: pmount.c:215
+#: pmount.c:218
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Error: el nombre del sistema de ficheros '%s' no es válido\n"
 
-#: pmount.c:236
+#: pmount.c:242
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Error: el nombre del juego de caracteres '%s' no es válido\n"
 
-#: pmount.c:252 pumount.c:124
+#: pmount.c:258 pumount.c:124
 msgid "Error: could not raise to full root uid privileges"
 msgstr "Error: no se han podido alcanzar privilegios de uid root completos"
 
-#: pmount.c:268
+#: pmount.c:274
 msgid "Error: could not wait for executed mount process"
 msgstr ""
 "Error: no se ha podido esperar a que se ejecutara el proceso de montaje"
 
-#: pmount.c:340
+#: pmount.c:347
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "Error: no se puede bloquear para el pid %u, este proceso no existe\n"
 
-#: pmount.c:354
+#: pmount.c:361
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Error: no se ha podido crear el fichero de bloqueo del pid %s: %s\n"
 
-#: pmount.c:394
+#: pmount.c:401
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Error: no se ha podido eliminar el fichero de bloqueo del pid %s: %s\n"
 
-#: pmount.c:410
+#: pmount.c:417
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Error: do_unlock: no se ha podido eliminar el directorio de bloqueo"
 
-#: pmount.c:500 pumount.c:181
+#: pmount.c:509 pumount.c:181
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Error: este programa hay que instalarlo suid root\n"
 
-#: pmount.c:531 pumount.c:201
+#: pmount.c:542 pumount.c:201
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Error interno: getopt_long() ha devuelto un valor desconocido\n"
 
-#: pmount.c:569
+#: pmount.c:580
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -188,23 +189,53 @@ msgstr ""
 "Aviso: el dispositivo %s ya se gestiona en /etc/fstab, la etiqueta "
 "proporcionada será ignorada\n"
 
-#: pmount.c:578 pumount.c:237
+#: pmount.c:589 pumount.c:237
 msgid "Error: could not determine real path of the device"
 msgstr "Error: no se ha podido determinar la ruta real del dispositivo"
 
-#: pmount.c:584 pumount.c:243
+#: pmount.c:595 pumount.c:243
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Error: el dispositivo %s no vale (ha de estar en /dev/)\n"
 
-#: pmount.c:625
+#: pmount.c:635
 msgid "Error: could not delete mount point"
 msgstr "Error: no se ha podido borrar el punto de montaje"
 
-#: pmount.c:647
+#: pmount.c:656
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Error interno: %i es un modo no gestionado.\n"
+
+#: pmount-hal.c:29
+msgid ""
+"pmount-hal - execute pmount with additional information from hal\n"
+"\n"
+"Usage: pmount-hal <hal UDI> [pmount options]\n"
+"\n"
+"This command mounts the device described by the given UDI using pmount. The\n"
+"file system type, the volume storage policy and the desired label will be\n"
+"read out from hal and passed to pmount."
+msgstr ""
+
+#: pmount-hal.c:139
+msgid "Error: could not execute pmount\n"
+msgstr ""
+
+#: pmount-hal.c:168
+#, fuzzy, c-format
+msgid "Error: could not connect to hal\n"
+msgstr "Error: no se ha podido abrir el directorio"
+
+#: pmount-hal.c:174
+#, c-format
+msgid "Error: given UDI does not exist\n"
+msgstr ""
+
+#: pmount-hal.c:181
+#, c-format
+msgid "Error: given UDI is not a mountable volume\n"
+msgstr ""
 
 #: policy.c:79
 msgid "Error: could not get status of device"

@@ -1,11 +1,14 @@
 LIBS=-lsysfs
 CFLAGS?=-Wall -W -O2
+HAL_CFLAGS=$(shell pkg-config hal --cflags)
+HAL_LDFLAGS=$(shell pkg-config hal --libs)
 PREFIX?=/usr/local
 
 pmount_OBJ = pmount.o policy.o utils.o fs.o
 pumount_OBJ = pumount.o policy.o utils.o
+pmount_hal_OBJ = pmount-hal.o policy.o utils.o
 
-all: pmount pumount
+all: pmount pumount pmount-hal
 
 pmount: $(pmount_OBJ)
 	$(CC) $(LDFLAGS) $^ $(LIBS) -o $@
@@ -13,7 +16,13 @@ pmount: $(pmount_OBJ)
 pumount: $(pumount_OBJ)
 	$(CC) $(LDFLAGS) $^ $(LIBS) -o $@
 
-install: pmount pumount install-mo
+pmount-hal.o: pmount-hal.c
+	$(CC) -c $(CFLAGS) $(HAL_CFLAGS) $<
+
+pmount-hal: $(pmount_hal_OBJ)
+	$(CC) $(LDFLAGS) $(HAL_LDFLAGS) $^ $(LIBS) -o $@
+
+install: all install-mo
 	install -o root -g root -m 4755 -D ./pmount $(DESTDIR)/$(PREFIX)/bin/pmount
 	install -o root -g root -m 4755 -D ./pumount $(DESTDIR)/$(PREFIX)/bin/pumount
 	install -o root -g root -m 755 -D ./pmount-hal $(DESTDIR)/$(PREFIX)/bin/pmount-hal
@@ -33,7 +42,7 @@ uninstall-mo:
 	for f in po/*.po; do P="$(DESTDIR)/$(PREFIX)/share/locale/$$(basename $${f%.po})/LC_MESSAGES/"; rm -f "$$P/pmount.mo"; rmdir -p --ignore-fail-on-non-empty "$$P"; done
 
 clean:
-	rm -f pmount pumount $(pmount_OBJ) $(pumount_OBJ)
+	rm -f pmount pumount pmount-hal $(pmount_OBJ) $(pumount_OBJ) $(pmount_hal_OBJ)
 
 updatepo:
 	xgettext -k_ -o po/template.pot --copyright-holder "Martin Pitt" --msgid-bugs-address="martin.pitt@canonical.com" *.c
@@ -45,4 +54,5 @@ pmount.o: policy.h utils.h fs.h
 pumount.o: policy.h utils.h
 utils.o: utils.h
 fs.o: fs.h
+pmount-hal.o: policy.h
 

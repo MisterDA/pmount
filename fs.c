@@ -19,17 +19,17 @@
  * to command line options.
  */
 static struct FS supported_fs[] = {
-    { "udf", "rw,nosuid,exec,nodev,user", 1, "007", 1 },
-    { "iso9660", "rw,nosuid,exec,nodev,user", 1, NULL, 0 },
-    { "vfat", "rw,nosuid,exec,nodev,user,quiet", 1, "077", 1 },
-    { "ntfs", "ro,nosuid,exec,nodev,user", 1, "077", 1 },
-    { "hfsplus", "rw,nosuid,exec,nodev,user", 1, NULL, 0 },
-    { "hfs", "rw,nosuid,exec,nodev,user", 1, NULL, 0 },
-    { "ext3", "rw,nodev,exec,noauto,nosuid,user", 0, NULL, 0 },
-    { "ext2", "rw,nodev,exec,noauto,nosuid,user", 0, NULL, 0 },
-    { "reiserfs", "rw,nodev,exec,noauto,nosuid,user", 0, NULL, 0 },
-    { "xfs", "rw,nodev,exec,noauto,nosuid,user", 0, NULL, 0 },
-    { "jfs", "rw,nodev,exec,noauto,nosuid,user", 0, NULL, 0 },
+    { "udf", "rw,nosuid,nodev,user", 1, "007", 1 },
+    { "iso9660", "rw,nosuid,nodev,user", 1, NULL, 0 },
+    { "vfat", "rw,nosuid,nodev,user,quiet", 1, "077", 1 },
+    { "ntfs", "ro,nosuid,nodev,user", 1, "077", 1 },
+    { "hfsplus", "rw,nosuid,nodev,user", 1, NULL, 0 },
+    { "hfs", "rw,nosuid,nodev,user", 1, NULL, 0 },
+    { "ext3", "rw,nodev,noauto,nosuid,user", 0, NULL, 0 },
+    { "ext2", "rw,nodev,noauto,nosuid,user", 0, NULL, 0 },
+    { "reiserfs", "rw,nodev,noauto,nosuid,user", 0, NULL, 0 },
+    { "xfs", "rw,nodev,noauto,nosuid,user", 0, NULL, 0 },
+    { "jfs", "rw,nodev,noauto,nosuid,user", 0, NULL, 0 },
     { NULL, NULL, 0, NULL, 0}
 };
 

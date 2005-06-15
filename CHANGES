@@ -1,3 +1,8 @@
+0.7
+---
+- support --exec/-e option
+- rewrote pmount-hal in C, now it runs 10 times faster
+
 0.6
 ---
 - pmount-hal: use hal-supplied file system type (if present) to speed up

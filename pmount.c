@@ -67,6 +67,7 @@ usage( const char* exename )
     puts( _("Options:\n"
     "  -a, --async : mount <device> with the 'async' option (default: 'sync')\n"
     "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+    "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
     "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
     "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
     "                in an UTF-8 locale, otherwise mount default)\n"
@@ -185,6 +186,7 @@ do_mount_fstab( const char* device )
  * @param async if not 0, the device will be mounted with 'async' (i. e. write
  *        caching)
  * @param noatime if not 0, the device will be mounted with 'noatime'
+ * @param exec if not 0, the device will be mounted with 'exec'
  * @param iocharset charset to use for file name conversion; NULL for mount
  *        default
  * @param suppress_errors: if true, stderr is redirected to /dev/null
@@ -192,7 +194,7 @@ do_mount_fstab( const char* device )
  */
 int
 do_mount( const char* device, const char* mntpt, const char* fsname, int async,
-        int noatime, const char* iocharset, int suppress_errors )
+        int noatime, int exec, const char* iocharset, int suppress_errors )
 {
     int status;
     int devnull;
@@ -202,6 +204,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     char iocharset_opt[100];
     const char* sync_opt = ",sync";
     const char* atime_opt = ",atime";
+    const char* exec_opt = ",noexec";
     char options[1000];
 
     /* check and retrieve option information for requested file system */
@@ -231,6 +234,9 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     if( noatime )
         atime_opt = ",noatime";
 
+    if( exec )
+        exec_opt = ",exec";
+
     if( iocharset && fs->support_iocharset ) {
         if( !is_word_str( iocharset ) ) {
             fprintf( stderr, _("Error: invalid charset name '%s'\n"), iocharset );
@@ -239,8 +245,8 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
         snprintf( iocharset_opt, sizeof( iocharset_opt ), ",iocharset=%s", iocharset );
     }
 
-    snprintf( options, sizeof( options ), "%s%s%s%s%s%s", 
-            fs->options, sync_opt, atime_opt, ugid_opt, umask_opt, iocharset_opt );
+    snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s", 
+            fs->options, sync_opt, atime_opt, exec_opt, ugid_opt, umask_opt, iocharset_opt );
 
     /* go for it */
     debug( "attempting mount: executing '%s %s %s %s %s %s %s'\n", MOUNTPROG,
@@ -286,13 +292,14 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
  * @param async if not 0, the device will be mounted with 'async' (i. e. write
  *        caching)
  * @param noatime if not 0, the device will be mounted with 'noatime'
+ * @param exec if not 0, the device will be mounted with 'exec'
  * @param iocharset charset to use for file name conversion; NULL for mount
  *        default
  * @return last return value of do_mount (i. e. 0 on success, != 0 on error)
  */
 int
 do_mount_auto( const char* device, const char* mntpt, int async, 
-        int noatime, const char* iocharset )
+        int noatime, int exec, const char* iocharset )
 {
     const struct FS* fs;
     int nostderr = 1;
@@ -302,13 +309,13 @@ do_mount_auto( const char* device, const char* mntpt, int async,
         /* don't suppress stderr if we try the last possible fs */
         if( (fs+1)->fsname == NULL )
             nostderr = 0;
-        result = do_mount( device, mntpt, fs->fsname, async, noatime, iocharset, nostderr );
+        result = do_mount( device, mntpt, fs->fsname, async, noatime, exec, iocharset, nostderr );
         if( result == 0 )
             break;
 
 	/* sometimes VFAT fails when using iocharset; try again without */
 	if( iocharset )
-	    result = do_mount( device, mntpt, fs->fsname, async, noatime, NULL, nostderr );
+	    result = do_mount( device, mntpt, fs->fsname, async, noatime, exec, NULL, nostderr );
         if( result == 0 )
             break;
     }
@@ -471,6 +478,7 @@ main( int argc, char** argv )
     int is_real_path = 0;
     int async = 0;
     int noatime = 0;
+    int exec = 0;
     const char* use_fstype = NULL;
     const char* iocharset = NULL;
     int result;
@@ -485,6 +493,7 @@ main( int argc, char** argv )
         { "unlock", 0, NULL, 'u'},
         { "async", 0, NULL, 'a' },
         { "noatime", 0, NULL, 'A' },
+        { "exec", 0, NULL, 'e' },
         { "type", 1, NULL, 't' },
         { "charset", 1, NULL, 'c' },
         { NULL, 0, NULL, 0}
@@ -506,7 +515,7 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdluaAt:c:", long_opts, NULL ) ) {
+        switch( option = getopt_long( argc, argv, "+hdeluaAt:c:", long_opts, NULL ) ) {
             case -1:  break;          /* end of arguments */
             case ':':
             case '?': return E_ARGS;  /* unknown argument */
@@ -522,6 +531,8 @@ main( int argc, char** argv )
             case 'a': async = 1; break;
 
             case 'A': noatime = 1; break;
+
+            case 'e': exec = 1; break;
 
             case 't': use_fstype = optarg; break;
 
@@ -614,18 +625,16 @@ main( int argc, char** argv )
 
             /* off we go */
             if( use_fstype )
-                result = do_mount( device, mntpt, use_fstype, async, noatime, iocharset, 0 );
+                result = do_mount( device, mntpt, use_fstype, async, noatime, exec, iocharset, 0 );
             else
-                result = do_mount_auto( device, mntpt, async, noatime, iocharset ); 
+                result = do_mount_auto( device, mntpt, async, noatime, exec, iocharset ); 
 
             if( result ) {
-
                 /* mount failed, delete the mount point again */
                 if( remove_pmount_mntpt( mntpt ) ) {
                     perror( _("Error: could not delete mount point") );
                     return -1;
                 }
-
                 return E_EXECMOUNT;
             }
 
