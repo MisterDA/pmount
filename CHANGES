@@ -1,3 +1,9 @@
+0.7.1
+-----
+- pmount-hal: consider a directory empty if it only contains a
+  .created-by-pmount file; this makes it work with unmounting using
+  umount instead of pumount
+
 0.7
 ---
 - support --exec/-e option

@@ -43,6 +43,7 @@ int empty_dir( const char* dirname )
 
     while ( ( dirent = readdir( dir ) ) ) {
         if( strcmp( dirent->d_name, "." ) && 
+            strcmp( dirent->d_name, ".created_by_pmount" ) && 
             strcmp( dirent->d_name, ".." ) ) {
             closedir( dir );
             return 0;
