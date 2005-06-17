@@ -1,8 +1,12 @@
 Development
 -----------
+- Switched version control to bazaar-ng (http://www.bazaar-ng.org);
+  publicly accessible branch is at
+  http://people.ubuntu.com/~pitti/bzr/pmount/
 - pmount-hal: ignore invalid file systems, autodetect in this case
 - Mark JFS and iso9660 as iocharset-capable
 - pmount-hal: read volume.policy.mount_option.umask from hal.
+- Fix "make dist" to work properly with the bazaar-ng metadata
 
 0.9.1
 -----

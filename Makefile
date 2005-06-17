@@ -54,7 +54,7 @@ updatepo: po/pmount.pot
 
 dist: clean
 	mkdir ../pmount-$(VERSION)
-	find -type f ! -path '*{arch}*' ! -path '*.arch-ids*' ! -name . | cpio -pd ../pmount-$(VERSION)
+	find -type f ! -path '*.bzr*' ! -name . | cpio -pd ../pmount-$(VERSION)
 	cd ..; tar cv pmount-$(VERSION) | gzip -9 > "pmount-$(VERSION).tar.gz"; rm -r pmount-$(VERSION)
 
 # dependencies
