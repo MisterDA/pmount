@@ -2,6 +2,7 @@ Development
 -----------
 - pmount-hal: ignore invalid file systems, autodetect in this case
 - Mark JFS and iso9660 as iocharset-capable
+- pmount-hal: read volume.policy.mount_option.umask from hal.
 
 0.9.1
 -----

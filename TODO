@@ -1,5 +1,4 @@
 - pmount: support mounting as a different gid
 - pmount-hal: mount by device label
-- pmount-hal: read out volume.policy.mount_option.gid and
-  volume.policy.mount_option.umask from hal
+- pmount-hal: read out volume.policy.mount_option.gid from hal
 - support UDF and DVD-RAMs

@@ -108,9 +108,10 @@ void get_free_label( const char* label, char* result, size_t result_size )
 }
 
 void exec_pmount( const char* device, const char* fstype, const char* label,
-        dbus_bool_t sync, dbus_bool_t noatime, int addargc, const char* const* addargv ) 
+        dbus_bool_t sync, dbus_bool_t noatime, const char* umask, int addargc,
+        const char* const* addargv ) 
 {
-    const char** argv = (const char**) calloc( sizeof( const char* ), addargc+10 );
+    const char** argv = (const char**) calloc( sizeof( const char* ), addargc+12 );
     int argc = 0;
     char freelabel[PATH_MAX];
     int i;
@@ -126,6 +127,11 @@ void exec_pmount( const char* device, const char* fstype, const char* label,
         argv[argc++] = "--sync";
     if( noatime )
         argv[argc++] = "--noatime";
+
+    if( umask ) {
+        argv[argc++] = "--umask";
+        argv[argc++] = umask;
+    }
 
     for( i = 0; i < addargc; ++i )
         argv[argc++] = addargv[i];
@@ -153,6 +159,7 @@ main( int argc, const char** argv )
     char* device = NULL;
     char* label = NULL;
     char* fstype = NULL;
+    char *umask = NULL;
 
     /* initialize locale */
     setlocale( LC_ALL, "" );
@@ -216,6 +223,8 @@ main( int argc, const char** argv )
         sync = libhal_device_get_property_bool( hal_ctx, udi, "volume.policy.mount_option.sync", &error );
     if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.noatime", &error ) )
         noatime = libhal_device_get_property_bool( hal_ctx, udi, "volume.policy.mount_option.noatime", &error );
+    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.umask", &error ) )
+        umask = libhal_device_get_property_string( hal_ctx, udi, "volume.policy.mount_option.umask", &error );
 
     /* shut down hal connection */
     libhal_ctx_shutdown( hal_ctx, &error );
@@ -224,7 +233,7 @@ main( int argc, const char** argv )
     dbus_connection_unref( dbus_conn );
 
     /* go */
-    exec_pmount( device, fstype, label, sync, noatime, argc-2, argv+2 );
+    exec_pmount( device, fstype, label, sync, noatime, umask, argc-2, argv+2 );
 
     return 0;
 }
