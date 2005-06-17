@@ -1,5 +1,5 @@
-Development
------------
+0.9.2
+-----
 - Switched version control to bazaar-ng (http://www.bazaar-ng.org);
   publicly accessible branch is at
   http://people.ubuntu.com/~pitti/bzr/pmount/
