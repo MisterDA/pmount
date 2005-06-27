@@ -645,13 +645,21 @@ main( int argc, char** argv )
             /* check for encrypted device */
             enum decrypt_status decrypt = luks_decrypt( device,
                     decrypted_device, sizeof( decrypted_device ), passphrase ); 
-            if( decrypt == DECRYPT_FAILED ) {
-                fprintf( stderr, _("Error: could not decrypt device (wrong passphrase?)\n") );
-                exit( E_POLICY );
-            }
-            if( decrypt == DECRYPT_EXISTS ) {
-                fprintf( stderr, _("Error: mapped device already exists\n") );
-                exit( E_POLICY );
+
+            switch (decrypt) {
+                case DECRYPT_FAILED:
+                    fprintf( stderr, _("Error: could not decrypt device (wrong passphrase?)\n") );
+                    exit( E_POLICY );
+                case DECRYPT_EXISTS:
+                    fprintf( stderr, _("Error: mapped device already exists\n") );
+                    exit( E_POLICY );
+                case DECRYPT_OK:
+                case DECRYPT_NOTENCRYPTED:
+                    break;
+                default:
+                    fprintf( stderr, "Internal error: unhandled decrypt_status %i\n", 
+                        (int) decrypt);
+                    exit( E_INTERNAL );
             }
 
             /* off we go */
