@@ -107,6 +107,16 @@ is not locked
 .SH OPTIONS
 
 .TP
+.B \-r, \-\-read-only
+Force the device to be mounted read only. If neither \-r nor \-w is
+specified, the kernel will choose an appropriate default.
+
+.TP
+.B \-w, \-\-read-write
+Force the device to be mounted read/write. If neither \-r nor \-w is
+specified, the kernel will choose an appropriate default.
+
+.TP
 .B \-s, \-\-sync
 Mount the device with the 
 .B sync

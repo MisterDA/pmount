@@ -63,6 +63,8 @@ usage( const char* exename )
     "  Remove the lock on <device> for process <pid> again.\n\n"),
         exename);
     puts( _("Options:\n"
+    "  -r          : force <device> to be mounted read-only\n"
+    "  -w          : force <device> to be mounted read-write\n"
     "  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
     "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
     "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
@@ -196,6 +198,7 @@ do_mount_fstab( const char* device )
  *        caching)
  * @param noatime if not 0, the device will be mounted with 'noatime'
  * @param exec if not 0, the device will be mounted with 'exec'
+ * @param force_write 1 for forced r/w, 0 for forced r/o, -1 for kernel default
  * @param iocharset charset to use for file name conversion; NULL for mount
  *        default
  * @param umask User specified umask (NULL for default)
@@ -204,8 +207,8 @@ do_mount_fstab( const char* device )
  */
 int
 do_mount( const char* device, const char* mntpt, const char* fsname, int async,
-        int noatime, int exec, const char* iocharset, const char* umask, 
-        int suppress_errors )
+        int noatime, int exec, int force_write, const char* iocharset, const
+        char* umask, int suppress_errors )
 {
     const struct FS* fs;
     char ugid_opt[100];
@@ -214,6 +217,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     const char* sync_opt = ",sync";
     const char* atime_opt = ",atime";
     const char* exec_opt = ",noexec";
+    const char* access_opt = NULL;
     char options[1000];
 
     /* check and retrieve option information for requested file system */
@@ -253,6 +257,13 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     if( exec )
         exec_opt = ",exec";
 
+    if( force_write == 0 )
+        access_opt = ",ro";
+    else if( force_write == 1 )
+        access_opt = ",rw";
+    else
+        access_opt = "";
+
     if( iocharset && fs->support_iocharset ) {
         if( !is_word_str( iocharset ) ) {
             fprintf( stderr, _("Error: invalid charset name '%s'\n"), iocharset );
@@ -261,8 +272,9 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
         snprintf( iocharset_opt, sizeof( iocharset_opt ), ",iocharset=%s", iocharset );
     }
 
-    snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s", 
-            fs->options, sync_opt, atime_opt, exec_opt, ugid_opt, umask_opt, iocharset_opt );
+    snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s", 
+            fs->options, sync_opt, atime_opt, exec_opt, access_opt, ugid_opt,
+            umask_opt, iocharset_opt );
 
     /* go for it */
     return spawn( SPAWN_EROOT | SPAWN_RROOT | (suppress_errors ? SPAWN_NO_STDERR : 0 ),
@@ -279,6 +291,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
  *        caching)
  * @param noatime if not 0, the device will be mounted with 'noatime'
  * @param exec if not 0, the device will be mounted with 'exec'
+ * @param force_write 1 for forced r/w, 0 for forced r/o, -1 for kernel default
  * @param iocharset charset to use for file name conversion; NULL for mount
  *        default
  * @param umask User specified umask (NULL for default)
@@ -286,7 +299,8 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
  */
 int
 do_mount_auto( const char* device, const char* mntpt, int async, 
-        int noatime, int exec, const char* iocharset, const char* umask )
+        int noatime, int exec, int force_write, const char* iocharset, 
+        const char* umask )
 {
     const struct FS* fs;
     int nostderr = 1;
@@ -297,14 +311,14 @@ do_mount_auto( const char* device, const char* mntpt, int async,
         if( (fs+1)->fsname == NULL )
             nostderr = 0;
         result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-                iocharset, umask, nostderr );
+                force_write, iocharset, umask, nostderr );
         if( result == 0 )
             break;
 
 	/* sometimes VFAT fails when using iocharset; try again without */
 	if( iocharset )
 	    result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-                    NULL, umask, nostderr );
+                    force_write, NULL, umask, nostderr );
         if( result == 0 )
             break;
     }
@@ -469,6 +483,7 @@ main( int argc, char** argv )
     int async = 1;
     int noatime = 0;
     int exec = 0;
+    int force_write = -1; /* 0: ro, 1: rw, -1: default */
     const char* use_fstype = NULL;
     const char* iocharset = NULL;
     const char* umask = NULL;
@@ -490,6 +505,8 @@ main( int argc, char** argv )
         { "charset", 1, NULL, 'c' },
         { "umask", 1, NULL, 'u' },
         { "passphrase", 1, NULL, 'p' },
+        { "read-only", 0, NULL, 'r' },
+        { "read-write", 0, NULL, 'w' },
         { NULL, 0, NULL, 0}
     };
 
@@ -509,7 +526,7 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdelLsAt:c:u:", long_opts, NULL ) ) {
+        switch( option = getopt_long( argc, argv, "+hdelLsArwt:c:u:", long_opts, NULL ) ) {
             case -1:  break;          /* end of arguments */
             case ':':
             case '?': return E_ARGS;  /* unknown argument */
@@ -535,6 +552,10 @@ main( int argc, char** argv )
             case 'u': umask = optarg; break;
 
             case 'p': passphrase = optarg; break;
+
+            case 'r': force_write = 0; break;
+
+            case 'w': force_write = 1; break;
 
             default:
                 fprintf( stderr, _("Internal error: getopt_long() returned unknown value\n") );
@@ -636,10 +657,10 @@ main( int argc, char** argv )
             /* off we go */
             if( use_fstype )
                 result = do_mount( decrypted_device, mntpt, use_fstype, async, noatime,
-                        exec, iocharset, umask, 0 );
+                        exec, force_write, iocharset, umask, 0 );
             else
                 result = do_mount_auto( decrypted_device, mntpt, async, noatime, exec,
-                        iocharset, umask ); 
+                        force_write, iocharset, umask ); 
 
             if( result ) {
                 if( decrypt == DECRYPT_OK )
