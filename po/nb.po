@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-05-18 13:47+0200\n"
+"POT-Creation-Date: 2005-06-27 15:00+0200\n"
 "PO-Revision-Date: 2005-03-31 10:35+0000\n"
 "Last-Translator: Sigurd Gartmann <sigurd-ubuntu@brogar.org>\n"
 "Language-Team: Bokmål, Norwegian <nb@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1\n"
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
 
-#: pmount.c:47
+#: pmount.c:48
 #, c-format
 msgid ""
 "Usage:\n"
@@ -42,7 +42,7 @@ msgstr ""
 "  bli opprettet.\n"
 "\n"
 
-#: pmount.c:54
+#: pmount.c:55
 #, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
@@ -59,7 +59,7 @@ msgstr ""
 "  prosesser, og unngår uendelig låsing av krasjede prosesser\n"
 "  (pids som ikke finnes blir ryddet før forsøk på en montering).\n"
 
-#: pmount.c:61
+#: pmount.c:62
 #, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
@@ -70,10 +70,12 @@ msgstr ""
 "  Fjerner låsen på <enhet> for prosess <pid>.\n"
 "\n"
 
-#: pmount.c:64
+#: pmount.c:65
 #, fuzzy
 msgid ""
 "Options:\n"
+"  -r          : force <device> to be mounted read-only\n"
+"  -w          : force <device> to be mounted read-write\n"
 "  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
 "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
 "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
@@ -92,99 +94,95 @@ msgstr ""
 "  -s, --sync  : monterer <enhet> med «sync»-valget (standard: «async»)\n"
 "  --noatime   : monterer <enhet> med «noatime»-valget (standard: «atime»)\n"
 "  -e, --exec  : monterer <enhet> med «exec»-valget (standard: «noexec»)\n"
-"  -t <fs>     : monterer som filsystemtype <fs> (standard: velger automatisk)\n"
+"  -t <fs>     : monterer som filsystemtype <fs> (standard: velger "
+"automatisk)\n"
 "  -c <tegnsett>: bruk gitt I/O-tegnsett (standard: utf8 i\n"
 "                UTF-8-locale, ellers monteringsstandard)\n"
 "  -d, --debug : skriv debuginformasjon (veldig mye)\n"
 "  -h, --help  : skriv hjelpemelding og avslutt med suksess"
 
-#: pmount.c:123
+#: pmount.c:126
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 msgstr "Feil: make_mountpoint_name: ugyldig enhet %s (må finnes i /dev/)\n"
 
-#: pmount.c:133
+#: pmount.c:136
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Feil: etiketten kan ikke være blank\n"
 
-#: pmount.c:137
+#: pmount.c:140
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Feil: Etiketten er for lang\n"
 
-#: pmount.c:142
+#: pmount.c:145
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Feil: Etiketter kan ikke inneholde «/»\n"
 
-#: pmount.c:149
+#: pmount.c:152
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Feil: Navnet på enheten er for langt\n"
 
-#: pmount.c:210
-#, fuzzy, c-format
-msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr "Feil: Kunne ikke opprette katalog"
-
-#: pmount.c:233 pumount.c:97
+#: pmount.c:182 pumount.c:97
 msgid "Error: could not drop all uid privileges"
 msgstr "Feil: Kunne ikke fjerne alle uid-rettigheter"
 
-#: pmount.c:238
+#: pmount.c:187
 msgid "Error: could not execute mount"
 msgstr "Feil: Kunne ikke kjøre mount"
 
-#: pmount.c:274
+#: pmount.c:225
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr "Intern feil: mount_attempt: Filsystemnavnet er NULL\n"
 
-#: pmount.c:280
+#: pmount.c:231
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Feil: Ugyldig filsystemnavn «%s»\n"
 
-#: pmount.c:286
+#: pmount.c:237
 #, fuzzy, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Feil: Ugyldig tegnsettnavn «%s»\n"
 
-#: pmount.c:311
+#: pmount.c:269
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Feil: Ugyldig tegnsettnavn «%s»\n"
 
-#: pmount.c:389
+#: pmount.c:350
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "Feil: Kan ikke låse for %u, siden denne prosessen ikke finnes\n"
 
-#: pmount.c:403
+#: pmount.c:364
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Feil: Kunne ikke opprette pid-låsfil %s: %s\n"
 
-#: pmount.c:443
+#: pmount.c:404
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Feil: Kunne ikke fjerne pid-låsfil %s: %s\n"
 
-#: pmount.c:459
+#: pmount.c:420
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Feil: du_unlock: Kunne ikke fjerne låskatalog"
 
-#: pmount.c:556 pumount.c:173
+#: pmount.c:520 pumount.c:161
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Feil: Dette programmet må være installert suid root\n"
 
-#: pmount.c:593 pumount.c:193
+#: pmount.c:561 pumount.c:181
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Intern feil: getopt_long() returnerte ukjent verdi\n"
 
-#: pmount.c:631
+#: pmount.c:599
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -193,25 +191,35 @@ msgstr ""
 "Advarsel: Enheten «%s» håndteres allerede i /etc/fstab, ny etikett blir "
 "ignorert\n"
 
-#: pmount.c:640 pumount.c:238
+#: pmount.c:608 pumount.c:226
 msgid "Error: could not determine real path of the device"
 msgstr "Feil: Kunne ikke bestemme den ordentlige stien for denne enheten"
 
-#: pmount.c:646 pumount.c:244
+#: pmount.c:614 pumount.c:232
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Feil: Ugyldig enhet %s (må være i /dev/)\n"
 
-#: pmount.c:692
+#: pmount.c:651
+#, fuzzy, c-format
+msgid "Error: could not decrypt device (wrong passphrase?)\n"
+msgstr "Feil: Kunne ikke opprette katalog"
+
+#: pmount.c:654
+#, fuzzy, c-format
+msgid "Error: mapped device already exists\n"
+msgstr "Feil: Enheten «%s» er allerede montert på «%s»\n"
+
+#: pmount.c:679
 msgid "Error: could not delete mount point"
 msgstr "Feil: Kunne ikke slette monteringspunkt"
 
-#: pmount.c:713
+#: pmount.c:700
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Intern feil: modus %i er blir ikke håndtert.\n"
 
-#: pmount-hal.c:29
+#: pmount-hal.c:30
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
@@ -229,21 +237,21 @@ msgstr ""
 "av «pmount». Filsystemtypen, volumlagringspolitikk og ønsket etikett vil bli "
 "lest ut fra «hal» og gitt til «pmount»."
 
-#: pmount-hal.c:140
+#: pmount-hal.c:147
 msgid "Error: could not execute pmount\n"
 msgstr "Feil: Kunne ikke kjøre pmount\n"
 
-#: pmount-hal.c:172
+#: pmount-hal.c:180
 #, fuzzy, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Feil: Kunne ikke koble til hal\n"
 
-#: pmount-hal.c:193
+#: pmount-hal.c:201
 #, fuzzy, c-format
 msgid "Error: UDI '%s' does not exist\n"
 msgstr "Feil: Enhet %s finnes ikke\n"
 
-#: pmount-hal.c:200
+#: pmount-hal.c:208
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Feil: Oppgitt UDI er ikke en monterbar enhet\n"
