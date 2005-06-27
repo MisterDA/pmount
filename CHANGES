@@ -4,6 +4,7 @@ Development
 - pmount: print a proper error message if mapped device already exists
 - pmount: do not explicitly mount with "rw" or "ro" options since the
   default usually does the right thing
+- pmount: add -r and -w switches
 
 0.9.2
 -----
