@@ -21,6 +21,7 @@
 
 #include "policy.h"
 #include "utils.h"
+#include "luks.h"
 
 /* error codes */
 const int E_ARGS = 1;
@@ -130,16 +131,6 @@ do_umount( const char* device, int do_lazy )
     }
 
     return 0;
-}
-
-/**
- * Check whether device is mapped through cryptsetup, and release it if so.
- */
-void
-release_encrypted( const char* device )
-{
-    spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, CRYPTSETUP, CRYPTSETUP,
-            "luksClose", device, NULL );
 }
 
 /**
@@ -262,7 +253,7 @@ main( int argc, char** argv )
         return E_EXECUMOUNT;
 
     /* release LUKS device, if appropriate */
-    release_encrypted( device );
+    luks_release( device );
 
     /* delete mount point */
     remove_pmount_mntpt( mntpt );

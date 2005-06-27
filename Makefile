@@ -5,8 +5,8 @@ HAL_LDFLAGS=$(shell pkg-config hal --libs)
 VERSION=$(shell head -n 1 CHANGES)
 PREFIX?=/usr/local
 
-pmount_OBJ = pmount.o policy.o utils.o fs.o
-pumount_OBJ = pumount.o policy.o utils.o
+pmount_OBJ = pmount.o policy.o utils.o fs.o luks.o
+pumount_OBJ = pumount.o policy.o utils.o luks.o
 pmount_hal_OBJ = pmount-hal.o policy.o utils.o fs.o
 
 all: pmount pumount pmount-hal po/pmount.pot
@@ -59,8 +59,8 @@ dist: clean
 
 # dependencies
 policy.o: policy.h utils.h
-pmount.o: policy.h utils.h fs.h
-pumount.o: policy.h utils.h
+pmount.o: policy.h utils.h fs.h luks.h
+pumount.o: policy.h utils.h luks.h
 utils.o: utils.h
 fs.o: fs.h
 pmount-hal.o: policy.h

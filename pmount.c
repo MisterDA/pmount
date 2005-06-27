@@ -26,6 +26,7 @@
 #include "fs.h"
 #include "policy.h"
 #include "utils.h"
+#include "luks.h"
 
 /* error codes */
 const int E_ARGS = 1;
@@ -162,60 +163,6 @@ make_mountpoint_name( const char* device, const char* label, char* mntpt,
 
     debug( "mount point to be used: %s\n", mntpt );
     return 0;
-}
-
-/**
- * Check whether the given device is encrypted using dmcrypt with LUKS
- * metadata; if so, call cryptsetup to setup the device.
- * @param device raw device name
- * @param decrypted buffer for decrypted device; if device is unencrypted,
- *        this will be set to device
- * @param decrypted_size size of the "decrypted" buffer
- * @param password_file file to read the password from (NULL means prompt)
- */
-void
-luks_decrypt( const char* device, char* decrypted, int decrypted_size, 
-        const char* password_file )
-{
-    int status;
-    char* label;
-
-    /* check if encrypted */
-    status = spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
-            CRYPTSETUP, CRYPTSETUP, "isLuks", device, NULL );
-    if( status != 0 ) {
-        /* just return device */
-        debug( "device is not LUKS encrypted, or cryptsetup with LUKS support is not installed\n" );
-        snprintf( decrypted, decrypted_size, "%s", device );
-        return;
-    }
-
-    /* generate device label */
-    label = strreplace( device, '/', '_' );
-
-    /* open LUKS device */
-    if( password_file )
-        status = spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
-                CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
-                password_file, device, label, NULL );
-    else
-        status = spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
-                CRYPTSETUP, CRYPTSETUP, "luksOpen", device, label, NULL );
-
-    if( status == 0 ) {
-        /* yes, we have a LUKS device */
-        snprintf( decrypted, decrypted_size, "/dev/mapper/%s", label );
-    } else {
-        if( status == 1 ) {
-            fprintf( stderr, _("Error: could not decrypt device (wrong passphrase?)\n") );
-            exit( E_POLICY );
-        } else {
-            fprintf( stderr, "Internal error: cryptsetup luksOpen failed" );
-            exit( E_INTERNAL );
-        }
-    }
-
-    free( label );
 }
 
 /**
@@ -675,8 +622,12 @@ main( int argc, char** argv )
                 return E_POLICY;
 
             /* check for encrypted device */
-            luks_decrypt( device, decrypted_device, sizeof( decrypted_device ),
-                    passphrase ); 
+            enum decrypt_status decrypt = luks_decrypt( device,
+                    decrypted_device, sizeof( decrypted_device ), passphrase ); 
+            if (decrypt == DECRYPT_FAILED) {
+                fprintf( stderr, _("Error: could not decrypt device (wrong passphrase?)\n") );
+                exit( E_POLICY );
+            }
 
             /* off we go */
             if( use_fstype )
