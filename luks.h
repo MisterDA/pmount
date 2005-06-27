@@ -13,7 +13,8 @@
 
 #include <stdlib.h>
 
-enum decrypt_status {DECRYPT_OK, DECRYPT_NOTENCRYPTED, DECRYPT_FAILED};
+enum decrypt_status {DECRYPT_OK, DECRYPT_NOTENCRYPTED, DECRYPT_FAILED,
+    DECRYPT_EXISTS};
 
 /**
  * Check whether the given device is encrypted using dmcrypt with LUKS
@@ -23,8 +24,6 @@ enum decrypt_status {DECRYPT_OK, DECRYPT_NOTENCRYPTED, DECRYPT_FAILED};
  *        this will be set to device
  * @param decrypted_size size of the "decrypted" buffer
  * @param password_file file to read the password from (NULL means prompt)
- * @return 0 if successfully decrypted, 1 if not encrypted, or 2 if decryption
- *         failed.
  */
 enum decrypt_status luks_decrypt( const char* device, char* decrypted, 
         int decrypted_size, const char* password_file );

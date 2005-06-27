@@ -628,6 +628,10 @@ main( int argc, char** argv )
                 fprintf( stderr, _("Error: could not decrypt device (wrong passphrase?)\n") );
                 exit( E_POLICY );
             }
+            if( decrypt == DECRYPT_EXISTS ) {
+                fprintf( stderr, _("Error: mapped device already exists\n") );
+                exit( E_POLICY );
+            }
 
             /* off we go */
             if( use_fstype )

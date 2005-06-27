@@ -21,7 +21,8 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
 {
     int status;
     char* label;
-    enum decrypt_status result = DECRYPT_NOTENCRYPTED;
+    enum decrypt_status result;
+    struct stat st;
 
     /* check if encrypted */
     status = spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
@@ -30,11 +31,15 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
         /* just return device */
         debug( "device is not LUKS encrypted, or cryptsetup with LUKS support is not installed\n" );
         snprintf( decrypted, decrypted_size, "%s", device );
-        return result;
+        return DECRYPT_NOTENCRYPTED;
     }
 
     /* generate device label */
     label = strreplace( device, '/', '_' );
+    snprintf( decrypted, decrypted_size, "/dev/mapper/%s", label );
+
+    if( !stat( decrypted, &st) )
+        return DECRYPT_EXISTS;
 
     /* open LUKS device */
     if( password_file )
@@ -45,17 +50,14 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
         status = spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
                 CRYPTSETUP, CRYPTSETUP, "luksOpen", device, label, NULL );
 
-    if( status == 0 ) {
+    if( status == 0 )
         /* yes, we have a LUKS device */
-        snprintf( decrypted, decrypted_size, "/dev/mapper/%s", label );
         result = DECRYPT_OK;
-    } else {
-        if( status == 1 ) {
-            result = DECRYPT_FAILED;
-        } else {
-            fprintf( stderr, "Internal error: cryptsetup luksOpen failed" );
-            exit( 100 );
-        }
+    else if( status == 1 )
+        result = DECRYPT_FAILED;
+    else {
+        fprintf( stderr, "Internal error: cryptsetup luksOpen failed" );
+        exit( 100 );
     }
 
     free( label );
