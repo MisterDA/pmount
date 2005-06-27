@@ -17,7 +17,6 @@
 #include <limits.h>
 #include <getopt.h>
 #include <libintl.h>
-#include <sys/stat.h>
 
 #include "policy.h"
 #include "utils.h"
