@@ -141,10 +141,8 @@ main( int argc, char** argv )
 {
     char device[PATH_MAX], mntptdev[PATH_MAX], path[PATH_MAX];
     const char* fstab_device;
-    char* dmlabel;
     int is_real_path = 0;
     int do_lazy = 0;
-    struct stat st;
 
     int  option;
     static struct option long_opts[] = {
@@ -237,13 +235,8 @@ main( int argc, char** argv )
     }
 
     /* check if we have a dmcrypt device */
-    dmlabel = strreplace( device, '/', '_' );
-    snprintf( path, sizeof( path ), "/dev/mapper/%s", dmlabel );
-    free( dmlabel );
-    if( !stat( path, &st ) ) {
-        snprintf( device, sizeof( device ), "%s", path );
+    if( luks_get_mapped_device( device, device, sizeof( device ) ) )
         debug( "Unmounting mapped device %s instead.\n", device );
-    }
 
     if( check_umount_policy( device, do_lazy ) )
         return E_POLICY;

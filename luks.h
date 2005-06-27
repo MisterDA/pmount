@@ -11,6 +11,8 @@
 #ifndef __luks_h
 #define __luks_h
 
+#include <stdlib.h>
+
 enum decrypt_status {DECRYPT_OK, DECRYPT_NOTENCRYPTED, DECRYPT_FAILED};
 
 /**
@@ -31,5 +33,13 @@ enum decrypt_status luks_decrypt( const char* device, char* decrypted,
  * Check whether device is mapped through cryptsetup, and release it if so.
  */
 void luks_release( const char* device );
+
+/**
+ * Check whether the given real device has been mapped to a dmcrypt device. If
+ * so, return the mapped device in mapped_device and return 1, otherwise return
+ * 0.
+ */
+int luks_get_mapped_device( const char* device, char* mapped_device, 
+        size_t mapped_device_size );
 
 #endif /* !defined( __luks_h) */

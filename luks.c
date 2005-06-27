@@ -12,6 +12,8 @@
 #include "utils.h"
 #include "policy.h"
 #include <stdio.h>
+#include <limits.h>
+#include <sys/stat.h>
 
 enum decrypt_status
 luks_decrypt( const char* device, char* decrypted, int decrypted_size, 
@@ -67,3 +69,18 @@ luks_release( const char* device )
             "luksClose", device, NULL );
 }
 
+int 
+luks_get_mapped_device( const char* device, char* mapped_device, 
+        size_t mapped_device_size )
+{
+    char path[PATH_MAX];
+    char* dmlabel = strreplace( device, '/', '_' );
+    struct stat st;
+    snprintf( path, sizeof( path ), "/dev/mapper/%s", dmlabel );
+    free( dmlabel );
+    if( !stat( path, &st ) ) {
+        snprintf( mapped_device, mapped_device_size, "%s", path );
+        return 1;
+    } else
+        return 0;
+}
