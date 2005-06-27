@@ -1,5 +1,5 @@
-Development
------------
+0.9.3
+-----
 - pmount: close an already opened LUKS device if mount failed
 - pmount: print a proper error message if mapped device already exists
 - pmount: do not explicitly mount with "rw" or "ro" options since the
