@@ -624,7 +624,7 @@ main( int argc, char** argv )
             /* check for encrypted device */
             enum decrypt_status decrypt = luks_decrypt( device,
                     decrypted_device, sizeof( decrypted_device ), passphrase ); 
-            if (decrypt == DECRYPT_FAILED) {
+            if( decrypt == DECRYPT_FAILED ) {
                 fprintf( stderr, _("Error: could not decrypt device (wrong passphrase?)\n") );
                 exit( E_POLICY );
             }
@@ -638,6 +638,9 @@ main( int argc, char** argv )
                         iocharset, umask ); 
 
             if( result ) {
+                if( decrypt == DECRYPT_OK )
+                    luks_release( decrypted_device );
+
                 /* mount failed, delete the mount point again */
                 if( remove_pmount_mntpt( mntpt ) ) {
                     perror( _("Error: could not delete mount point") );
