@@ -1,3 +1,8 @@
+Development
+-----------
+- policy.c: print out meaningful error message if compiling the
+  regular expression fails
+
 0.9.3
 -----
 - pmount: close an already opened LUKS device if mount failed

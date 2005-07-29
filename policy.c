@@ -389,13 +389,17 @@ device_whitelisted( const char* device )
     char *d;
     regex_t re;
     regmatch_t match[3];
+    int result;
+    const char* whitelist_regex = "^[[:space:]]*([a-zA-Z0-9/_+\\-\\.]+)[[:space:]]*(#.*)?$";
 
     fwl = fopen( WHITELIST, "r" );
     if( !fwl )
         return 0;
 
-    if( regcomp( &re, "^[[:space:]]*([a-zA-Z0-9/_+\\-\\.]+)[[:space:]]*(#.*)?$", REG_EXTENDED ) ) {
-        fprintf( stderr, "Internal error: device_whitelisted(): could not compile regex\n" );
+    result = regcomp( &re, whitelist_regex, REG_EXTENDED );
+    if( result ) {
+        regerror( result, &re, line, sizeof( line ) );
+        fprintf( stderr, "Internal error: device_whitelisted(): could not compile regex: %s\n", line );
         exit( -1 );
     }
 
