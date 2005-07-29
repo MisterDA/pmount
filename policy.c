@@ -122,7 +122,7 @@ find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize 
             if( sysminor != devminor ) {
                 int found_part = 0;
                 
-                debug( "find_sysfs_device: minor device numbers do not match, checking partitions...");
+                debug( "find_sysfs_device: minor device numbers do not match, checking partitions...\n");
 
                 partdir = opendir( devdirname );
                 if( !partdir ) {

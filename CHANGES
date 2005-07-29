@@ -1,3 +1,7 @@
+Development
+-----------
+- pmount: Fix forgotten line break in debug output.
+
 0.9.4
 -----
 - policy.c: print out meaningful error message if compiling the
