@@ -1,5 +1,5 @@
-Development
------------
+0.9.4
+-----
 - policy.c: print out meaningful error message if compiling the
   regular expression fails
 - policy.c: fix regular expression to work with all locales
