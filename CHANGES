@@ -2,6 +2,7 @@ Development
 -----------
 - policy.c: print out meaningful error message if compiling the
   regular expression fails
+- policy.c: fix regular expression to work with all locales
 
 0.9.3
 -----
