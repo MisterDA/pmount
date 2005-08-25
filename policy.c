@@ -40,14 +40,26 @@ int
 find_bus_ancestry( struct sysfs_device* dev, char** buses ) {
     char **i;
 
-    if( !dev || !buses )
+    if( !buses ) {
+        debug ( "find_bus_ancestry: no buses to check, fail\n" );
         return 0;
-
-    for( i = buses; *i; ++i ) {
-        if( !strcmp( dev->bus, *i ) )
-            return 1;
     }
 
+    if( !dev ) {
+        debug ( "find_bus_ancestry: dev == NULL, fail\n" );
+        return 0;
+    }
+
+    for( i = buses; *i; ++i ) {
+        if( !strcmp( dev->bus, *i ) ) {
+            debug ( "find_bus_ancestry: device %s (path %s, bus %s) matches query, success\n", 
+                    dev->name, dev->path, dev->bus );
+            return 1;
+        }
+    }
+
+    debug ( "find_bus_ancestry: device %s (path %s, bus %s) does not match, trying parent\n", 
+            dev->name, dev->path, dev->bus );
     return find_bus_ancestry( sysfs_get_device_parent( dev ), buses );
 }
 
