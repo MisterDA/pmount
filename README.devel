@@ -1,0 +1,22 @@
+Notes for pmount development
+============================
+
+pmount is developed using the "bazaar-ng" revision control system
+(http://www.bazaar-ng.org). You can get the current development tree
+with
+
+  bzr branch http://people.ubuntu.com/~pitti/bzr/pmount/
+
+and start to do your own modifications in your local branch. If you
+publish this branch somewhere (copy or rsync it to a public
+webserver), your changes can easily be merged back into the main
+development tree.
+
+New releases will frequently appear at
+
+  http://www.piware.de/projects/
+
+
+
+Martin Pitt
+martin.pitt@ubuntu.com

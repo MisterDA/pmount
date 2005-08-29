@@ -1,7 +1,8 @@
 Development
 -----------
-- pmount: Fix forgotten line break in debug output.
+- pmount: Fix forgotten line break in debug output
 - pmount: improve debugging of removability detection
+- add README.devel with some VCS explanations
 
 0.9.4
 -----
