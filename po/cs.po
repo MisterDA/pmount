@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-06-27 15:00+0200\n"
+"POT-Creation-Date: 2005-09-15 17:06+0200\n"
 "PO-Revision-Date: 2005-02-10 15:15+0000\n"
 "Last-Translator: Vlastimil Skacel <skacel@svtech.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
 
-#: pmount.c:48
+#: pmount.c:49
 #, c-format
 msgid ""
 "Usage:\n"
@@ -42,7 +42,7 @@ msgstr ""
 "  <zařízení>. Jestliže připojovací bod neexistuje, \n"
 "  bude vytvořen.\n"
 
-#: pmount.c:55
+#: pmount.c:56
 #, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
@@ -59,7 +59,7 @@ msgstr ""
 "  uzamčení havarovanými procesy (neexistující pid jsou smazány\n"
 "  před mount)\n"
 
-#: pmount.c:62
+#: pmount.c:63
 #, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
@@ -70,7 +70,7 @@ msgstr ""
 "  Odstranit znovu zámek na <device> pro proces <pid>.\n"
 "\n"
 
-#: pmount.c:65
+#: pmount.c:66
 #, fuzzy
 msgid ""
 "Options:\n"
@@ -100,89 +100,89 @@ msgstr ""
 "  -d, --debug : povolit ladící výstupy (mnoho hlášek)\n"
 "  -h, --help : vypíše nápovědu a ukončí se "
 
-#: pmount.c:126
+#: pmount.c:127
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 msgstr "Chyba: make_mount_name: neplatné zařízení %s (musí být v /dev/)\n"
 
-#: pmount.c:136
+#: pmount.c:137
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Chyba: jméno nesmí být prázdné\n"
 
-#: pmount.c:140
+#: pmount.c:141
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Chyba: Příliš dlouhé jméno\n"
 
-#: pmount.c:145
+#: pmount.c:146
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Chyba:'/' se nesmí vyskytovat ve jméně\n"
 
-#: pmount.c:152
+#: pmount.c:153
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Chyba: příliš dlouhé jméno zařízení\n"
 
-#: pmount.c:182 pumount.c:97
+#: pmount.c:183 pumount.c:98
 msgid "Error: could not drop all uid privileges"
 msgstr "Chyba: nelze zapsat všechna uid oprávnění"
 
-#: pmount.c:187
+#: pmount.c:188
 #, fuzzy
 msgid "Error: could not execute mount"
 msgstr "Chyba: nelze spustit mount"
 
-#: pmount.c:225
+#: pmount.c:227
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr "Vnitřní chyba: mount_attempmt: předané jméno souboru je NULL\n"
 
-#: pmount.c:231
+#: pmount.c:233
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Chyba: špatné jméno souborového systému '%s'\n"
 
-#: pmount.c:237
+#: pmount.c:239
 #, fuzzy, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Chyba: špatné jméno znakové sady '%s'\n"
 
-#: pmount.c:269
+#: pmount.c:271
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Chyba: špatné jméno znakové sady '%s'\n"
 
-#: pmount.c:350
+#: pmount.c:352
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "Chyba: nelze zamknout pro pid %u, tento proces neexistuje\n"
 
-#: pmount.c:364
+#: pmount.c:366
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Chyba: nelze vytvořit pid zamykací soubor %s:%s\n"
 
-#: pmount.c:404
+#: pmount.c:406
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Chyba: nelze odstranit pid zamykací soubor %s: %s\n"
 
-#: pmount.c:420
+#: pmount.c:422
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Chyba: do_unlock: nelze odstranit uzamčení adresáře"
 
-#: pmount.c:520 pumount.c:161
+#: pmount.c:522 pumount.c:162
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Chyba: tento program je potřeba instalovat jako root\n"
 
-#: pmount.c:561 pumount.c:181
+#: pmount.c:563 pumount.c:182
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Vnitřní chyba: getopt_long() vrátil neznámou hodnotu\n"
 
-#: pmount.c:599
+#: pmount.c:601
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -191,35 +191,42 @@ msgstr ""
 "Varování: zařízení %s je již řízeno s /etc/fstab, dodané jméno bude "
 "ignorováno\n"
 
-#: pmount.c:608 pumount.c:226
+#: pmount.c:610 pumount.c:227
 msgid "Error: could not determine real path of the device"
 msgstr "Chyba: nelze určit opravdovou cestu k zařízení"
 
-#: pmount.c:614 pumount.c:232
+#: pmount.c:616 pumount.c:233
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Chyba: neplatné zařízení %s (musí být v /dev/)\n"
 
-#: pmount.c:651
+#: pmount.c:654
 #, fuzzy, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr "Chyba: nelze vytvořit adresář"
 
-#: pmount.c:654
+#: pmount.c:657
 #, fuzzy, c-format
 msgid "Error: mapped device already exists\n"
 msgstr "Chyba: zařízení %s je jíž připojeno na %s\n"
 
-#: pmount.c:679
+#: pmount.c:671
+#, c-format
+msgid ""
+"Error: could not lock the mount directory. Another pmount is probably "
+"running for this mount point.\n"
+msgstr ""
+
+#: pmount.c:695
 msgid "Error: could not delete mount point"
 msgstr "Chyba: nelze smazat bod připojení"
 
-#: pmount.c:700
+#: pmount.c:716
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Vnitřní chyba: mód %i není obsluhován.\n"
 
-#: pmount-hal.c:30
+#: pmount-hal.c:31
 #, fuzzy
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
@@ -238,91 +245,86 @@ msgstr ""
 "souborů, chování diskové jednotky and požadovaný název budou\n"
 "přečteny z halu a zaslány pmountu."
 
-#: pmount-hal.c:147
+#: pmount-hal.c:159
 msgid "Error: could not execute pmount\n"
 msgstr "Chyba: nelze spusit pmount\n"
 
-#: pmount-hal.c:180
+#: pmount-hal.c:192
 #, fuzzy, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Chyba: nelze se připojit na hal\n"
 
-#: pmount-hal.c:201
-#, fuzzy, c-format
-msgid "Error: UDI '%s' does not exist\n"
-msgstr "Chyba: zařízení %s neexistuje\n"
-
-#: pmount-hal.c:208
+#: pmount-hal.c:214
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Chyba: dané UDI neni připojitelné zařízení\n"
 
-#: policy.c:80
+#: policy.c:92
 msgid "Error: could not get status of device"
 msgstr "Chyba: nelze zjistit stav zařízení"
 
-#: policy.c:91
+#: policy.c:103
 msgid "Error: could not get sysfs directory\n"
 msgstr "Chyba: nelze získat sysfs adresář\n"
 
-#: policy.c:98
+#: policy.c:110
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "Chyba: nelze otevřít <sysfs adresář>/block/"
 
-#: policy.c:129
+#: policy.c:141
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Chyba: nelze otevřít <sysfs adresář>/block/<device>/"
 
-#: policy.c:229
+#: policy.c:241
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Chyba: zařízení %s neexistuje\n"
 
-#: policy.c:234
+#: policy.c:246
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Chyba: %s není blokové zařízení\n"
 
-#: policy.c:252 policy.c:308
+#: policy.c:264 policy.c:320
 msgid "Error: could not open fstab-type file"
 msgstr "Chyba: nelze otevřít soubor fstab-type"
 
-#: policy.c:339
+#: policy.c:351
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Chyba: zařízení %s je jíž připojeno na %s\n"
 
-#: policy.c:341
+#: policy.c:353
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Chyba: zařízení %s není připojeno\n"
 
-#: policy.c:343
+#: policy.c:355
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Chyba: zařízení %s nepřipojils ty\n"
 
-#: policy.c:379
+#: policy.c:391
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Chyba: zařízení %s není vyjímatelné\n"
 
-#: policy.c:438
+#: policy.c:454
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Chyba: zařízení %s je zamčeno\n"
 
-#: policy.c:456
+#: policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Chyba: adresář %s již obsahuje připojený souborový systém\n"
 
-#: policy.c:458
+#: policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Chyba: adresář %s neobsahuje připojený souborový systém\n"
 
-#: pumount.c:41
+#: pumount.c:42
 #, c-format
 msgid ""
 "Usage:\n"
@@ -350,20 +352,20 @@ msgstr ""
 "  -d, --debug : povolit ladící výstupy (velmi ukecané)\n"
 "  -h, --help : vytiskne nápovědu a ukončí se\n"
 
-#: pumount.c:71
+#: pumount.c:72
 msgid "Internal error: could not determine mount point\n"
 msgstr "Vnitřní chyba: nelze určit bod připojení\n"
 
-#: pumount.c:77
+#: pumount.c:78
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Chyba: připojovací bod %s není pod %s\n"
 
-#: pumount.c:107
+#: pumount.c:108
 msgid "Error: could not execute umount"
 msgstr "Chyba: nelze spustit umount"
 
-#: pumount.c:128
+#: pumount.c:129
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "Chyba: umount selhal\n"
@@ -420,3 +422,7 @@ msgstr "Vnitřní chyba: nelze změnit na skutečné gid roota"
 #, fuzzy
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Vnitřní chyba: nelze změnit id skutečné skupiny na id pravé skupiny"
+
+#, fuzzy
+#~ msgid "Error: UDI '%s' does not exist\n"
+#~ msgstr "Chyba: zařízení %s neexistuje\n"
