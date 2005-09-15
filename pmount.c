@@ -646,7 +646,8 @@ main( int argc, char** argv )
 
             /* check for encrypted device */
             enum decrypt_status decrypt = luks_decrypt( device,
-                    decrypted_device, sizeof( decrypted_device ), passphrase ); 
+                    decrypted_device, sizeof( decrypted_device ), passphrase,
+                    force_write == 0 ? 1 : 0 ); 
 
             switch (decrypt) {
                 case DECRYPT_FAILED:

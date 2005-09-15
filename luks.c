@@ -17,7 +17,7 @@
 
 enum decrypt_status
 luks_decrypt( const char* device, char* decrypted, int decrypted_size, 
-        const char* password_file )
+        const char* password_file, int readonly )
 {
     int status;
     char* label;
@@ -43,12 +43,22 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
 
     /* open LUKS device */
     if( password_file )
-        status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
-                CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
-                password_file, device, label, NULL );
+        if( readonly == 1 )
+            status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+                    CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
+                    password_file, "--readonly", device, label, NULL );
+        else
+            status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+                    CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
+                    password_file, device, label, NULL );
     else
-        status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
-                CRYPTSETUP, CRYPTSETUP, "luksOpen", device, label, NULL );
+        if( readonly == 1 )
+            status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+                    CRYPTSETUP, CRYPTSETUP, "--readonly", "luksOpen",
+                    device, label, NULL );
+        else
+            status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+                    CRYPTSETUP, CRYPTSETUP, "luksOpen", device, label, NULL );
 
     if( status == 0 )
         /* yes, we have a LUKS device */

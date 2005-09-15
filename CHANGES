@@ -10,6 +10,8 @@ Development
 - pmount-hal: convert to use libhal-storage for better abstraction
 - pmount-hal: if volume file system does not exist, fall back to
   storage file system
+- pmount: Make read-only encrypted devices work; thanks to Sören
+  Köpping for the patch
 
 0.9.4
 -----
