@@ -36,6 +36,7 @@ const int E_POLICY = 4;
 const int E_EXECMOUNT = 5;
 const int E_UNLOCK = 6;
 const int E_PID = 7;
+const int E_LOCKED = 8;
 const int E_INTERNAL = 100;
 
 /**
@@ -190,7 +191,8 @@ do_mount_fstab( const char* device )
 /**
  * Raise to full privileges and call mount with given file system. Exits the
  * program immediately if MOUNTPROG cannot be executed or the given file system
- * is invalid.
+ * is invalid. NOTE: This function must not exit() since it is called in a
+ * lock-unlock-block.
  * @param device device node to mount
  * @param mntpt desired mount point
  * @param fsname file system name (mount option -t)
@@ -223,19 +225,19 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     /* check and retrieve option information for requested file system */
     if( !fsname) {
         fprintf( stderr, _("Internal error: mount_attempt: given file system name is NULL\n") );
-        exit( E_INTERNAL );
+        return -1;
     }
 
     fs = get_fs_info( fsname );
     if( !fs ) {
         fprintf( stderr, _("Error: invalid file system name '%s'\n"), fsname );
-        exit( E_ARGS );
+        return -1;
     }
 
     /* validate user specified umask */
     if( umask && parse_unsigned( umask, E_ARGS ) > 0777 ) {
         fprintf( stderr, _("Error: invalid umask %s\n"), umask );
-        exit ( E_ARGS );
+        return -1;
     }
 
     /* assemble option string */
@@ -267,7 +269,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     if( iocharset && fs->support_iocharset ) {
         if( !is_word_str( iocharset ) ) {
             fprintf( stderr, _("Error: invalid charset name '%s'\n"), iocharset );
-            exit( E_ARGS );
+            return -1;
         }
         snprintf( iocharset_opt, sizeof( iocharset_opt ), ",iocharset=%s", iocharset );
     }
@@ -319,7 +321,7 @@ do_mount_auto( const char* device, const char* mntpt, int async,
 	if( iocharset )
 	    result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
                     force_write, NULL, umask, nostderr );
-        if( result == 0 )
+        if( result <= 0 )
             break;
     }
     return result;
@@ -662,6 +664,14 @@ main( int argc, char** argv )
                     exit( E_INTERNAL );
             }
 
+            /* lock the mount directory */
+            debug( "locking mount point directory\n" );
+            if( lock_dir( mntpt ) < 0) {
+                fprintf( stderr, _("Error: could not lock the mount directory. Another pmount is probably running for this mount point.\n"));
+                exit( E_LOCKED );
+            }
+            debug( "mount point directory locked\n" );
+
             /* off we go */
             if( use_fstype )
                 result = do_mount( decrypted_device, mntpt, use_fstype, async, noatime,
@@ -669,6 +679,11 @@ main( int argc, char** argv )
             else
                 result = do_mount_auto( decrypted_device, mntpt, async, noatime, exec,
                         force_write, iocharset, umask ); 
+
+            /* unlock the mount point again */
+            debug( "unlocking mount point directory\n" );
+            unlock_dir( mntpt );
+            debug( "mount point directory unlocked\n" );
 
             if( result ) {
                 if( decrypt == DECRYPT_OK )

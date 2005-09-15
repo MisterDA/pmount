@@ -3,6 +3,8 @@ Development
 - pmount: Fix forgotten line break in debug output
 - pmount: improve debugging of removability detection
 - add README.devel with some VCS explanations
+- pmount: atomically lock the mount point to avoid races with parallel
+  pmount instances, and thus double-mounts to the same directory
 
 0.9.4
 -----

@@ -348,3 +348,71 @@ spawn( int options, const char* path, ... )
     debug( "spawn(): %s terminated with status %i\n", path, status );
     return status;
 }
+
+/**
+ * Internal function to determine lock file path for a given directory. The
+ * returned string points to static memory and must not be free()'d.
+ */
+static
+char*
+get_dir_lockfile( const char* dir )
+{
+    static char name[PATH_MAX];
+    static const char template[] = "/var/lock/pmount_%s";
+    char *dir_fname;
+
+    if( strlen( dir ) >= sizeof( name ) - sizeof( template ))
+        return NULL;
+    dir_fname = strreplace( dir, '/', '_' );
+    snprintf( name, sizeof( name ), template, dir_fname );
+    free (dir_fname );
+    return name;
+}
+
+int
+lock_dir( const char* dir ) {
+    int f;
+    char* lockfile = get_dir_lockfile( dir );
+    if( !lockfile )
+        return -1; /* name too long */
+
+    get_root();
+    f = creat( lockfile, 0600);
+    drop_root();
+    if (f < 0) {
+        perror( "lock_dir(): creat" );
+        return -1;
+    }
+
+    if( lockf( f, F_TLOCK, 0 ) == 0 )
+        return 0;
+
+    if (errno != EAGAIN)
+        perror( "lock_dir(): lockf" );
+    return -1;
+}
+
+void
+unlock_dir( const char* dir ) {
+    int f;
+    char* lockfile = get_dir_lockfile( dir );
+    if( !lockfile )
+        return; /* name too long */
+
+    get_root();
+    f = open( lockfile, O_WRONLY);
+    drop_root();
+    if( f < 0 ) {
+        if( errno != ENOENT )
+            perror( "unlock_dir(): open" );
+        return;
+    }
+
+    if( lockf( f, F_ULOCK, 0 ) != 0 )
+        perror( "unlock_dir(): lockf" );
+
+    get_root();
+    unlink( lockfile );
+    drop_root();
+}
+

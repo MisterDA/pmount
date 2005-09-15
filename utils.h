@@ -54,6 +54,19 @@ int is_dir( const char* path );
 int remove_pmount_mntpt( const char *path );
 
 /**
+ * Put a lock on the given mount point directory to avoid race conditions with
+ * parallel pmount instances.
+ * @return 0 on success, -1 if the directory is already locked by another
+ *         pmount instance.
+ */
+int lock_dir( const char* dir );
+
+/**
+ * Unlock a directory that was locked by lock_dir().
+ */
+void unlock_dir (const char* dir );
+
+/**
  * Read two numbers (separated by colon) from given file and return them in
  * first and second; allowed range is 0 to 255.
  * @return 0 on success, -1 on error
