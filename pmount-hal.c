@@ -21,6 +21,7 @@
 
 #include "policy.h"
 #include "fs.h"
+#include "utils.h"
 
 /* gettext abbreviation */
 #define _(String) gettext(String)
@@ -143,9 +144,21 @@ void exec_pmount( const char* device, const char* fstype, const char* label,
     }
     argv[argc] = NULL;
 
-    execvp( argv[0], (char *const *) argv );
-    fputs( _("Error: could not execute pmount\n"), stderr );
-    exit( 1 );
+    /* execute pmount with a new free label until we don't run into a LOCKED
+     * condition any more */
+    for (;;) {
+        int result = spawnv( SPAWN_SEARCHPATH, argv[0], (char *const *) argv );
+        if( result == 0 )
+            break;
+        if( result == 8 ) {
+            /* we can into a race condition with a parallel pmount, try again */
+            sleep( 1 );
+            get_free_label( label, freelabel, sizeof( freelabel ) );
+            continue;
+        }
+        fputs( _("Error: could not execute pmount\n"), stderr );
+        exit( 1 );
+    }
 }
 
 int

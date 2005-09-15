@@ -5,6 +5,8 @@ Development
 - add README.devel with some VCS explanations
 - pmount: atomically lock the mount point to avoid races with parallel
   pmount instances, and thus double-mounts to the same directory
+- pmount-hal: gracefully handle pmount failures due to locked mount
+  points
 
 0.9.4
 -----
