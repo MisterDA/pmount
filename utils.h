@@ -124,6 +124,7 @@ void drop_groot();
 #define SPAWN_RROOT 0x02
 #define SPAWN_NO_STDOUT 0x04
 #define SPAWN_NO_STDERR 0x08
+#define SPAWN_SEARCHPATH 0x10
 
 /**
  * Synchronously spawn a subprocess and return its exit status.

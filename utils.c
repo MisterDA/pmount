@@ -330,7 +330,10 @@ spawn( int options, const char* path, ... )
                 dup2( devnull, 2 );
         }
 
-        execv( path, argv );
+        if( options & SPAWN_SEARCHPATH )
+            execvp( path, argv );
+        else
+            execv( path, argv );
         exit( -1 );
     } else {
         if( wait( &status ) < 0 ) {
