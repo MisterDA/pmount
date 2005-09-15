@@ -7,6 +7,9 @@ Development
   pmount instances, and thus double-mounts to the same directory
 - pmount-hal: gracefully handle pmount failures due to locked mount
   points
+- pmount-hal: convert to use libhal-storage for better abstraction
+- pmount-hal: if volume file system does not exist, fall back to
+  storage file system
 
 0.9.4
 -----

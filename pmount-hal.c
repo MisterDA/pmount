@@ -17,7 +17,7 @@
 #include <sys/stat.h>
 #include <locale.h>
 #include <libintl.h>
-#include <libhal.h>
+#include <libhal-storage.h>
 
 #include "policy.h"
 #include "fs.h"
@@ -167,11 +167,10 @@ main( int argc, const char** argv )
     LibHalContext *hal_ctx;
     DBusError error;
     DBusConnection *dbus_conn;
+    LibHalVolume* volume;
+    LibHalDrive* drive;
     dbus_bool_t sync = FALSE, noatime = FALSE;
-    const char* udi;
-    char* device = NULL;
-    char* label = NULL;
-    char* fstype = NULL;
+    const char* udi, *drive_udi;
     char *umask = NULL;
 
     /* initialize locale */
@@ -209,29 +208,40 @@ main( int argc, const char** argv )
         return 1;
     }
 
-    /* get all interesting properties */
-    if( !libhal_device_exists( hal_ctx, udi, &error ) ) {
-        fprintf( stderr, _("Error: UDI '%s' does not exist\n"), udi );
-        return 1;
-    }
-
-    if( libhal_device_property_exists( hal_ctx, udi, "block.device", &error ) )
-        device = libhal_device_get_property_string( hal_ctx, udi, "block.device", &error );
-    if( !device ) {
+    /* get volume and drive */
+    volume = libhal_volume_from_udi( hal_ctx, udi );
+    if( !volume ) {
         fprintf( stderr, _("Error: given UDI is not a mountable volume\n") );
         return 1;
     }
 
-    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.desired_mount_point", &error ) )
-        label = libhal_device_get_property_string( hal_ctx, udi, "volume.policy.desired_mount_point", &error );
-    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_filesystem", &error ) ) {
-        fstype = libhal_device_get_property_string( hal_ctx, udi, "volume.policy.mount_filesystem", &error );
-        /* ignore invalid file systems */
-        if (fstype && !get_fs_info(fstype)) {
-            free (fstype);
-            fstype = NULL;
-        }
+    drive_udi = libhal_volume_get_storage_device_udi( volume );
+    if( !drive_udi ) {
+        fprintf( stderr, "Internal error: volume has no associated storage device\n");
+        return 1;
     }
+    drive = libhal_drive_from_udi( hal_ctx, drive_udi );
+
+    /* get device */
+    const char* device = libhal_volume_get_device_file( volume );
+    if( !device ) {
+        fprintf( stderr, "Internal error: UDI has no associated device\n" );
+        return 1;
+    }
+
+    /* get label */
+    const char* label = libhal_volume_policy_get_desired_mount_point( drive, volume, NULL );
+    const char* fstype = libhal_volume_policy_get_mount_fs( drive, volume, NULL );
+    if( !fstype ) {
+        /* fall back to storage device's fstype */
+        fstype = libhal_drive_policy_get_mount_fs( drive, NULL );
+    }
+    /* ignore invalid file systems */
+    if (fstype && !get_fs_info(fstype)) {
+        fstype = NULL;
+    }
+
+    /* mount options */
     if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.sync", &error ) )
         sync = libhal_device_get_property_bool( hal_ctx, udi, "volume.policy.mount_option.sync", &error );
     if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.noatime", &error ) )

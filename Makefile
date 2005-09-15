@@ -1,7 +1,7 @@
 LIBS=-lsysfs
 CFLAGS?=-Wall -W -O2
-HAL_CFLAGS=$(shell pkg-config hal --cflags)
-HAL_LDFLAGS=$(shell pkg-config hal --libs)
+HAL_CFLAGS=$(shell pkg-config hal-storage --cflags)
+HAL_LDFLAGS=$(shell pkg-config hal-storage --libs)
 VERSION=$(shell head -n 1 CHANGES)
 PREFIX?=/usr/local
 
