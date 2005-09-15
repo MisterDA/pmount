@@ -285,19 +285,17 @@ drop_groot()
 }
 
 int 
-spawn( int options, const char* path, ... )
+spawnl( int options, const char* path, ... )
 {
-    int devnull;
-    int status;
     char* argv[1024];
-    unsigned argv_size = 0, i;
+    unsigned argv_size = 0;
     va_list args;
 
     /* copy varargs to array */
     va_start( args, path );
     for(;;) {
         if( argv_size >= sizeof( argv ) ) {
-            fprintf( stderr, "Internal error: spawn(): too many arguments\n" );
+            fprintf( stderr, "Internal error: spawnl(): too many arguments\n" );
             exit( 100 );
         }
 
@@ -306,9 +304,19 @@ spawn( int options, const char* path, ... )
     }
     va_end( args );
 
+    return spawnv( options, path, argv );
+}
+
+int 
+spawnv( int options, const char* path, char *const argv[] )
+{
+    int devnull;
+    int status;
+    int i;
+
     if( enable_debug ) {
-        printf( "spawn(): executing %s", path );
-        for( i = 0; i < argv_size; ++i )
+        printf( "spawnv(): executing %s", path );
+        for( i = 0; argv[i]; ++i )
             printf( " '%s'", argv[i] );
         printf( "\n" );
     }

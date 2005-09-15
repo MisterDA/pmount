@@ -134,7 +134,17 @@ void drop_groot();
  * @return The exit status of the program, or -1 if the program could not be
  *         executed.
  */
-int spawn( int options, const char* path, ... );
+int spawnl( int options, const char* path, ... );
+
+/**
+ * Synchronously spawn a subprocess and return its exit status.
+ * @param options Combination of SPAWN_* flags
+ * @param path Path to program to be executed
+ * @param argv NULL terminated argument vector (including argv[0]!)
+ * @return The exit status of the program, or -1 if the program could not be
+ *         executed.
+ */
+int spawnv( int options, const char* path, char *const argv[] );
 
 #endif /* __utils_h */
 

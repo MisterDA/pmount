@@ -25,7 +25,7 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
     struct stat st;
 
     /* check if encrypted */
-    status = spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+    status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
             CRYPTSETUP, CRYPTSETUP, "isLuks", device, NULL );
     if( status != 0 ) {
         /* just return device */
@@ -43,11 +43,11 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
 
     /* open LUKS device */
     if( password_file )
-        status = spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+        status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
                 CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
                 password_file, device, label, NULL );
     else
-        status = spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+        status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
                 CRYPTSETUP, CRYPTSETUP, "luksOpen", device, label, NULL );
 
     if( status == 0 )
@@ -67,7 +67,7 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
 void
 luks_release( const char* device )
 {
-    spawn( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, CRYPTSETUP, CRYPTSETUP,
+    spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, CRYPTSETUP, CRYPTSETUP,
             "luksClose", device, NULL );
 }
 

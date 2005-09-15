@@ -279,7 +279,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
             umask_opt, iocharset_opt );
 
     /* go for it */
-    return spawn( SPAWN_EROOT | SPAWN_RROOT | (suppress_errors ? SPAWN_NO_STDERR : 0 ),
+    return spawnl( SPAWN_EROOT | SPAWN_RROOT | (suppress_errors ? SPAWN_NO_STDERR : 0 ),
              MOUNTPROG, MOUNTPROG, "-t", fsname, "-o", options, device, mntpt,
              NULL );
 }

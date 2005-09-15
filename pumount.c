@@ -119,10 +119,10 @@ do_umount( const char* device, int do_lazy )
     int status;
 
     if( do_lazy )
-        status = spawn( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG, "-l",
+        status = spawnl( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG, "-l",
                 device, NULL );
     else
-        status = spawn( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG,
+        status = spawnl( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG,
                 device, NULL );
 
     if( status != 0 ) {
