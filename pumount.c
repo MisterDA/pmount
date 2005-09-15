@@ -17,6 +17,7 @@
 #include <limits.h>
 #include <getopt.h>
 #include <libintl.h>
+#include <locale.h>
 
 #include "policy.h"
 #include "utils.h"
