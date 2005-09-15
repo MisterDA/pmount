@@ -3,7 +3,6 @@
 # Copyright (C) 2004 Martin Pitt
 # This file is distributed under the same license as the PACKAGE package.
 # Martin Pitt <martin.pitt@canonical.com>, 2004.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount 0.5\n"
@@ -55,6 +54,7 @@ msgstr ""
 "  Sperrt weitere pmount-Aufrufe für <Gerät> bis es wieder entsperrt\n"
 "  wird. <pid> gibt die ID des Prozesses an, der die Sperre hält.  Dies\n"
 "  ermöglicht das Sperren eines Gerätes von mehreren unabhängigen\n"
+"  Prozessen und vermeidet unendliche Sperren von abgestürzten\n"
 "  Prozessen (Sperren von nichtexistierenden Prozessen werden gelöscht\n"
 "  bevor eine Einbindung versucht wird).\n"
 "\n"
@@ -89,23 +89,6 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
-"Optionen:\n"
-"  -r          : Binde <Gerät> im Nur-Lesen-Modus ein\n"
-"  -w          : Binde <Gerät> im Lese-/Schreib-Modus ein\n"
-"  -s, --sync  : Binde <Gerät> mit der Option 'sync' ein (Default: 'async')\n"
-"  --noatime   : Binde <Gerät> mit der Option 'noatime' ein (Default: "
-"'atime')\n"
-"  -e, --exec  : Binde <Gerät> mit der Option 'exec' ein (Default: 'noexec')\n"
-"  -t <fs>     : Verwende Dateisystem <fs> (Default: automatisch)\n"
-"  -c <charset>: Verwende angegebenen Zeichensatz (Default: 'utf8' in\n"
-"                einer UTF-8 Umgebung, ansonsten mount-Default)\n"
-"  -u <umask>  : Verwende angegebene umask anstatt dem Default (nur für\n"
-"                Dateisysteme, die umask unterstützen)\n"
-" --passphrase <file>\n"
-"                Das Passwort von eine Datei lesen anstatt es einzutippen\n"
-"                (nur für LUKS-verschlüsselte Geräte)\n"
-"  -d, --debug : Debug-Ausgaben aktivieren (gibt sehr viel aus)\n"
-"  -h, --help  : Hilfetext anzeigen und erfolgreich beenden"
 
 #: pmount.c:127
 #, c-format
@@ -151,11 +134,10 @@ msgstr "Interner Fehler: mount_attempt: gegebener Dateisystem-Name ist NULL\n"
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Fehler: Ungültiges Dateisystem '%s'\n"
 
-# c-format
 #: pmount.c:239
 #, c-format
 msgid "Error: invalid umask %s\n"
-msgstr "Fehler: ungültige umask '%s'\n"
+msgstr ""
 
 #: pmount.c:271
 #, c-format
@@ -212,12 +194,12 @@ msgstr "Fehler: ungültiges Gerät %s (muss in /dev/ sein)\n"
 #: pmount.c:654
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr "Fehler: Konnte Gerät nicht entschlüsseln\n"
+msgstr ""
 
 #: pmount.c:657
 #, c-format
 msgid "Error: mapped device already exists\n"
-msgstr "Fehler: device-mapper-Gerät existiert schon\n"
+msgstr "Fehler: device-mapper Gerät existiert schon\n"
 
 #: pmount.c:671
 #, c-format
@@ -225,9 +207,6 @@ msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
-"Fehler: Konnte Sperre auf Mount-Verzeichnis nicht bekommen. Eine "
-"andere pmount-Instanz läuft wahrscheinlich gerade für dieses "
-"Verzeichnis.\n"
 
 #: pmount.c:695
 msgid "Error: could not delete mount point"
@@ -264,7 +243,7 @@ msgstr "Fehler: konnte pmount nicht ausführen\n"
 #: pmount-hal.c:192
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
-msgstr "Fehler: konnte nicht mit dbus verbinden: %s: %s\n"
+msgstr ""
 
 #: pmount-hal.c:214
 #, c-format

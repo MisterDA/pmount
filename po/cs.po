@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the mount removable devices as normal user package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
@@ -41,6 +42,7 @@ msgstr ""
 "  zadáno,   připojovací bod bude %s/<jméno>, jinak to bude%s\n"
 "  <zařízení>. Jestliže připojovací bod neexistuje, \n"
 "  bude vytvořen.\n"
+"\n"
 
 #: pmount.c:56
 #, c-format
@@ -58,6 +60,7 @@ msgstr ""
 "  zařízení několika nezávislými procesy a zabrání nekonečnému\n"
 "  uzamčení havarovanými procesy (neexistující pid jsou smazány\n"
 "  před mount)\n"
+"\n"
 
 #: pmount.c:63
 #, c-format
@@ -71,7 +74,6 @@ msgstr ""
 "\n"
 
 #: pmount.c:66
-#, fuzzy
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -90,15 +92,6 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
-"Volby:\n"
-"  -s, --sync  : připojit <zařízení> s volbou 'sync' (výchozí je:'async')\n"
-"  --noatime : připojit <zařízení> s volbou 'noatime' (výchozí je:'atime')\n"
-"  -e, --exec : připojit <zařízení> s volbou 'exec' (výchozí je: 'noexec')\n"
-"  -t <fs> : připojit jako souborový systém <fs> (výchozí: autodetected)\n"
-"  -c <charset>: použít danou znakovou sadu (výchozí: 'utf8' jestliže je\n"
-"                v nějakém lokálním UTF-8 , jinak výchozí pro mount)\n"
-"  -d, --debug : povolit ladící výstupy (mnoho hlášek)\n"
-"  -h, --help : vypíše nápovědu a ukončí se "
 
 #: pmount.c:127
 #, c-format
@@ -145,9 +138,9 @@ msgid "Error: invalid file system name '%s'\n"
 msgstr "Chyba: špatné jméno souborového systému '%s'\n"
 
 #: pmount.c:239
-#, fuzzy, c-format
+#, c-format
 msgid "Error: invalid umask %s\n"
-msgstr "Chyba: špatné jméno znakové sady '%s'\n"
+msgstr "Chyba: neplatná umask %s\n"
 
 #: pmount.c:271
 #, c-format
@@ -201,9 +194,9 @@ msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Chyba: neplatné zařízení %s (musí být v /dev/)\n"
 
 #: pmount.c:654
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr "Chyba: nelze vytvořit adresář"
+msgstr ""
 
 #: pmount.c:657
 #, fuzzy, c-format
@@ -250,9 +243,9 @@ msgid "Error: could not execute pmount\n"
 msgstr "Chyba: nelze spusit pmount\n"
 
 #: pmount-hal.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
-msgstr "Chyba: nelze se připojit na hal\n"
+msgstr "Chyba: nelze se připojit k dbus: %s: %s\n"
 
 #: pmount-hal.c:214
 #, c-format
@@ -403,26 +396,26 @@ msgid "Error: '%s' is not a valid number\n"
 msgstr "Chyba: '%s' není platné číslo\n"
 
 #: utils.c:255
-#, fuzzy
 msgid "Internal error: could not change to effective uid root"
 msgstr "Vnitřní chyba: nelze změnit úspěšně na uid roota"
 
 #: utils.c:264
 #, fuzzy
 msgid "Internal error: could not change effective user uid to real user id"
-msgstr ""
-"Vnitřní chyba: nelze změnit skutečné uživatelské id na pravé uživatelské id"
+msgstr "Vnitřní chyba: nelze změnit užívané id na pravé uživatelské id"
 
 #: utils.c:273
-#, fuzzy
 msgid "Internal error: could not change to effective gid root"
 msgstr "Vnitřní chyba: nelze změnit na skutečné gid roota"
 
 #: utils.c:282
-#, fuzzy
 msgid "Internal error: could not change effective group id to real group id"
-msgstr "Vnitřní chyba: nelze změnit id skutečné skupiny na id pravé skupiny"
+msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupiny"
+
 
 #, fuzzy
-#~ msgid "Error: UDI '%s' does not exist\n"
-#~ msgstr "Chyba: zařízení %s neexistuje\n"
+
+
+
+
+

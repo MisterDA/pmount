@@ -12,6 +12,7 @@ Development
   storage file system
 - pmount: Make read-only encrypted devices work; thanks to Sören
   Köpping for the patch
+- updated translations with latest Rosetta data
 
 0.9.4
 -----

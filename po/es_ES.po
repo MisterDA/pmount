@@ -2,6 +2,7 @@
 # Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
 # This file is distributed under the same license as the mount removable devices as normal user package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
@@ -38,6 +39,7 @@ msgstr ""
 "  requisitos de seguridad (ver detalles en pmount(1)). Si se pone\n"
 "  <etiqueta>, el punto de montaje será %s/<etiqueta>, si no, será\n"
 "  %s<dispositivo>. Si el punto de montaje no existe, se creará.\n"
+"\n"
 
 #: pmount.c:56
 #, c-format
@@ -55,6 +57,7 @@ msgstr ""
 "  bloquear un dispositivo a varios procesos independendientes evitando\n"
 "  bloqueos indefinidos por procesos caídos (los pids inexistentes se\n"
 "  limpian antes de intentar un montaje).\n"
+"\n"
 
 #: pmount.c:63
 #, c-format
@@ -65,9 +68,9 @@ msgid ""
 msgstr ""
 "%s --unlock <dispositivo> <pid>\n"
 "  Quita el bloqueo del proceso <pid> al <dispositivo>.\n"
+"\n"
 
 #: pmount.c:66
-#, fuzzy
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -86,20 +89,6 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
-"Opciones:\n"
-"  -s, --sync  : montar <dispositivo> con la opción 'sync' (por defecto: "
-"'async')\n"
-"  --noatime   : montar <dispositivo> con la opción 'noatime' (por defecto: "
-"'atime')\n"
-"  -e, --exec  : montar <dispositivo> con la opción 'exec' (por defecto: "
-"'noexec')\n"
-"  -t <fs>     : montar como sistema de ficheros tipo <fs> (por defecto: "
-"autodetectado)\n"
-"  -c <charset>: usar el juego de caracteres E/S dado (por defecto: 'utf8' si "
-"se llama\n"
-"                en un local UTF-8, si no, el defecto de montaje)\n"
-"  -d, --debug : habilita salida de depuración (muy verbosa)\n"
-"  -h, --help  : escribir mensaje de ayuda y salir"
 
 #: pmount.c:127
 #, c-format
@@ -149,9 +138,9 @@ msgid "Error: invalid file system name '%s'\n"
 msgstr "Error: el nombre del sistema de ficheros '%s' no es válido\n"
 
 #: pmount.c:239
-#, fuzzy, c-format
+#, c-format
 msgid "Error: invalid umask %s\n"
-msgstr "Error: el nombre del juego de caracteres '%s' no es válido\n"
+msgstr "Error: umask %s invalida\n"
 
 #: pmount.c:271
 #, c-format
@@ -205,9 +194,9 @@ msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Error: el dispositivo %s no vale (ha de estar en /dev/)\n"
 
 #: pmount.c:654
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr "Error: no se ha podido crear el directorio"
+msgstr ""
 
 #: pmount.c:657
 #, fuzzy, c-format
@@ -254,9 +243,9 @@ msgid "Error: could not execute pmount\n"
 msgstr "Error: no se pudo ejecutar pmount\n"
 
 #: pmount-hal.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
-msgstr "Error: no se ha podido abrir el directorio\n"
+msgstr "Error: no es posible conectar con dbus: %s: %s\n"
 
 #: pmount-hal.c:214
 #, c-format
@@ -428,6 +417,9 @@ msgstr ""
 "Error interno: no se ha podido cambiar del id de grupo efectivo al id de "
 "grupo real"
 
-#, fuzzy
-#~ msgid "Error: UDI '%s' does not exist\n"
-#~ msgstr "Error: el dispositivo %s no existe\n"
+
+
+
+
+
+

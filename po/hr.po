@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the pmount package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
@@ -74,7 +75,6 @@ msgstr ""
 "\n"
 
 #: pmount.c:66
-#, fuzzy
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -93,19 +93,6 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
-"Opcije:\n"
-"  -s, --sync  : montiraj <device> sa 'sync' opcijom (predodređeno: 'async')\n"
-"  --noatime   : montiraj <device> sa 'noatime' opcijom (predodređeno: "
-"'atime')\n"
-"  -e, --exec  : montiraj <device> sa 'exec' opcijom (predodređeno: "
-"'noexec')\n"
-"  -t <fs>     : montiraj kao datotečni sustav <fs> vrste (predodređeno: "
-"samodetektirano)\n"
-"  -c <charset>: upotrebi dani I/O skup znakova (predodređeno: 'utf8' ako je "
-"pozvano\n"
-"                u jednoj UTF-8 lokali, inače montiraj predodređeno)\n"
-"  -d, --debug : aktiviraj debug izlaz (jako riječito)\n"
-"  -h, --help  : ispiši pomoćnu poruku i uspješno izađi"
 
 #: pmount.c:127
 #, c-format
@@ -151,9 +138,9 @@ msgid "Error: invalid file system name '%s'\n"
 msgstr "Greška: nevažeće ime datotečnog sustava '%s'\n"
 
 #: pmount.c:239
-#, fuzzy, c-format
+#, c-format
 msgid "Error: invalid umask %s\n"
-msgstr "Greška: nevažeće ime charseta '%s'\n"
+msgstr ""
 
 #: pmount.c:271
 #, c-format
@@ -207,9 +194,9 @@ msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Greška: nevažeći uređaj %s (mora biti u /dev/)\n"
 
 #: pmount.c:654
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr "Greška: Nisam mogla kreirati direktorij"
+msgstr ""
 
 #: pmount.c:657
 #, fuzzy, c-format
@@ -256,9 +243,9 @@ msgid "Error: could not execute pmount\n"
 msgstr "Greška: ne mogu izvršiti pmount\n"
 
 #: pmount-hal.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
-msgstr "Greška: ne mogu se spojiti na hal\n"
+msgstr ""
 
 #: pmount-hal.c:214
 #, c-format
@@ -428,6 +415,8 @@ msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
 "Unutarnja greška: nisam mogla promjeniti efektivnu grupu u realni id grupe"
 
-#, fuzzy
-#~ msgid "Error: UDI '%s' does not exist\n"
-#~ msgstr "Greška: uređaj %s ne postoji\n"
+
+
+
+
+

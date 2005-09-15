@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the pmount package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
@@ -40,10 +41,6 @@ msgstr ""
 "  il punto di mount sarà %s/<etichetta>, altrimenti %s<dispositivo>.\n"
 "  Se il punto di mount non esiste verrà creato.\n"
 "\n"
-"\n"
-"\n"
-"  \n"
-"\n"
 
 #: pmount.c:56
 #, c-format
@@ -63,6 +60,7 @@ msgstr ""
 "  ed evita lock illimitati da parte di processi andati in crash (id di "
 "processi\n"
 "  non esistenti sono ripuliti prima di tentare un mount).\n"
+"\n"
 
 #: pmount.c:63
 #, c-format
@@ -76,7 +74,6 @@ msgstr ""
 "\n"
 
 #: pmount.c:66
-#, fuzzy
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -95,22 +92,6 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
-"Opzioni:\n"
-"  -s, --sync  : monta <dispositivo> con l'opzione 'sync' (predefinito: "
-"'async)\n"
-"  --noatime   : monta <dispositivo> con l'opzione 'noatime' (predefinito: "
-"'atime')\n"
-"  -e, --exec  : monta <dispositivo> con l'opzione 'exec' (predefinito: "
-"'noexec')\n"
-"  -t <fs>     : monta come un file system di tipo <fs> (predefinito: "
-"rilevato\n"
-"                automaticamente)\n"
-"  -c <charset>: usa il set di caratteri di I/O fornito (predefinito: 'utf8' "
-"se\n"
-"                invocato in una locale UTF-8, altrimenti il predefinito di "
-"mount)\n"
-"  -d, --debug : abilita l'output di debug (molto prolisso)\n"
-"  -h, --help  : stampa il messaggio di aiuto ed esce con successo"
 
 #: pmount.c:127
 #, c-format
@@ -141,7 +122,7 @@ msgstr "Errore: nome del dispositivo troppo lungo\n"
 
 #: pmount.c:183 pumount.c:98
 msgid "Error: could not drop all uid privileges"
-msgstr ""
+msgstr "Errore: non è possibile eliminare tutti i privilegi uid"
 
 #: pmount.c:188
 msgid "Error: could not execute mount"
@@ -158,9 +139,9 @@ msgid "Error: invalid file system name '%s'\n"
 msgstr "Errore: file system '%s' non valido\n"
 
 #: pmount.c:239
-#, fuzzy, c-format
+#, c-format
 msgid "Error: invalid umask %s\n"
-msgstr "Errore: set di caratteri '%s' non valido\n"
+msgstr "Errore: umask non valida %s\n"
 
 #: pmount.c:271
 #, c-format
@@ -176,16 +157,16 @@ msgstr ""
 #: pmount.c:366
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
-msgstr ""
+msgstr "Errore: non riesco a creare il lock file per questo pid: %s: %s\n"
 
 #: pmount.c:406
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
-msgstr ""
+msgstr "Errore: non riesco a rimuovere il lock file per questo pid: %s: %s\n"
 
 #: pmount.c:422
 msgid "Error: do_unlock: could not remove lock directory"
-msgstr ""
+msgstr "Errore: do_unlock: non riesco a rimuovere la directory di lock"
 
 #: pmount.c:522 pumount.c:162
 msgid "Error: this program needs to be installed suid root\n"
@@ -216,9 +197,9 @@ msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Errore: dispositivo %s non valido (deve trovarsi in /dev)\n"
 
 #: pmount.c:654
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr "Errore: impossibile creare la directory"
+msgstr ""
 
 #: pmount.c:657
 #, fuzzy, c-format
@@ -239,7 +220,7 @@ msgstr "Errore: impossibile cancellare il punto di mount"
 #: pmount.c:716
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
-msgstr ""
+msgstr "Errore interno: modalità %i non gestibile.\n"
 
 #: pmount-hal.c:31
 msgid ""
@@ -264,9 +245,9 @@ msgid "Error: could not execute pmount\n"
 msgstr "Errore: impossibile eseguire pmount\n"
 
 #: pmount-hal.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
-msgstr "Errore: impossibile eseguire la connessione ad hal\n"
+msgstr ""
 
 #: pmount-hal.c:214
 #, c-format
@@ -301,7 +282,7 @@ msgstr "Errore: %s non è un dispositivo a blocchi\n"
 
 #: policy.c:264 policy.c:320
 msgid "Error: could not open fstab-type file"
-msgstr ""
+msgstr "Errore: impossibile aprire il file di tipo fstab"
 
 #: policy.c:351
 #, c-format
@@ -391,11 +372,11 @@ msgstr "Errore: memoria esaurita\n"
 
 #: utils.c:108
 msgid "Error: could not create directory"
-msgstr "Errore: impossibile creare la directory"
+msgstr "Errore: impossibile creare la directory\n"
 
 #: utils.c:124
 msgid "Error: could not create stamp file in directory"
-msgstr ""
+msgstr "Errore: non riesco a creare file stamp nella directory"
 
 #: utils.c:132
 #, c-format
@@ -418,20 +399,24 @@ msgstr "Errore: '%s' non è un numero valido\n"
 
 #: utils.c:255
 msgid "Internal error: could not change to effective uid root"
-msgstr ""
+msgstr "Errore interno: non riesco a ottenere una uid effettiva di root"
 
 #: utils.c:264
 msgid "Internal error: could not change effective user uid to real user id"
 msgstr ""
+"Errore interno: non riesco a porre l'uid effettiva uguale a quella reale"
 
 #: utils.c:273
 msgid "Internal error: could not change to effective gid root"
-msgstr ""
+msgstr "Errore interno: non riesco a ottenere una gid effettiva di root"
 
 #: utils.c:282
 msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
+"Errore interno: non riesco a porre il gid effettivo uguale a quello reale"
 
-#, fuzzy
-#~ msgid "Error: UDI '%s' does not exist\n"
-#~ msgstr "Errore: il dispositivo %s non esiste\n"
+
+
+
+
+

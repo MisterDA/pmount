@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the pmount package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
@@ -58,6 +59,7 @@ msgstr ""
 "  for. Dette gjør det mulig å låse en enhet av flere uavhengige\n"
 "  prosesser, og unngår uendelig låsing av krasjede prosesser\n"
 "  (pids som ikke finnes blir ryddet før forsøk på en montering).\n"
+"\n"
 
 #: pmount.c:63
 #, c-format
@@ -71,7 +73,6 @@ msgstr ""
 "\n"
 
 #: pmount.c:66
-#, fuzzy
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -90,16 +91,6 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
-"Valg:\n"
-"  -s, --sync  : monterer <enhet> med «sync»-valget (standard: «async»)\n"
-"  --noatime   : monterer <enhet> med «noatime»-valget (standard: «atime»)\n"
-"  -e, --exec  : monterer <enhet> med «exec»-valget (standard: «noexec»)\n"
-"  -t <fs>     : monterer som filsystemtype <fs> (standard: velger "
-"automatisk)\n"
-"  -c <tegnsett>: bruk gitt I/O-tegnsett (standard: utf8 i\n"
-"                UTF-8-locale, ellers monteringsstandard)\n"
-"  -d, --debug : skriv debuginformasjon (veldig mye)\n"
-"  -h, --help  : skriv hjelpemelding og avslutt med suksess"
 
 #: pmount.c:127
 #, c-format
@@ -145,9 +136,9 @@ msgid "Error: invalid file system name '%s'\n"
 msgstr "Feil: Ugyldig filsystemnavn «%s»\n"
 
 #: pmount.c:239
-#, fuzzy, c-format
+#, c-format
 msgid "Error: invalid umask %s\n"
-msgstr "Feil: Ugyldig tegnsettnavn «%s»\n"
+msgstr ""
 
 #: pmount.c:271
 #, c-format
@@ -201,9 +192,9 @@ msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Feil: Ugyldig enhet %s (må være i /dev/)\n"
 
 #: pmount.c:654
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr "Feil: Kunne ikke opprette katalog"
+msgstr ""
 
 #: pmount.c:657
 #, fuzzy, c-format
@@ -249,9 +240,9 @@ msgid "Error: could not execute pmount\n"
 msgstr "Feil: Kunne ikke kjøre pmount\n"
 
 #: pmount-hal.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
-msgstr "Feil: Kunne ikke koble til hal\n"
+msgstr ""
 
 #: pmount-hal.c:214
 #, c-format
@@ -417,6 +408,8 @@ msgstr "Intern feil: Kunne ikke endre til effektiv gid root"
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Intern feil: Kunne ikke endre effektiv gruppe-id til ekte grouppe-id"
 
-#, fuzzy
-#~ msgid "Error: UDI '%s' does not exist\n"
-#~ msgstr "Feil: Enhet %s finnes ikke\n"
+
+
+
+
+

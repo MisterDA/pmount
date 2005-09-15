@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the mount removable devices as normal user package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
@@ -31,7 +32,7 @@ msgid ""
 "  If the mount point does not exist, it will be created.\n"
 "\n"
 msgstr ""
-"Usage:\n"
+"Usage :\n"
 "\n"
 "%s [options] <périphérique> [<label>]\n"
 "\n"
@@ -70,9 +71,9 @@ msgid ""
 msgstr ""
 "%s --unlock <périphérique> <pid>\n"
 "  Retire le verrou sur le <périphérique> pour le processus <pid>.\n"
+"\n"
 
 #: pmount.c:66
-#, fuzzy
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -91,27 +92,12 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
-"Options:\n"
-"  -s, --sync  : monte le <périphérique> avec l'option 'sync' (par défaut: "
-"'async')\n"
-"  -noatime : monte le <périphérique> avec l'option 'noatime' (par défaut: "
-"'atime')\n"
-"  -e, --exec : monte le <périphérique> avec l'option 'exec' (par défaut: "
-"'noexec')\n"
-"  -t <fs> : monte le système de fichier de type <fs> (par défaut: "
-"autodétecté)\n"
-"  -c <charset>: utilise le jeu de caractères <charset> pour les Entrées/"
-"Sorties\n"
-"                (par défaut: 'utf8' si la locale est une locale UTF-8, "
-"autrement celui par défaut de mount)\n"
-"  -d, --debug : active l'affichage de débogage (très verbeux)\n"
-"  -h, --help : affiche ce message d'aide et terminer avec succès"
 
 #: pmount.c:127
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 msgstr ""
-"Erreur : make_mountpoint_name: périphérique invalide %s (il doit être dans /"
+"Erreur : make_mountpoint_name : périphérique invalide %s (il doit être dans /"
 "dev/)\n"
 
 #: pmount.c:137
@@ -154,9 +140,9 @@ msgid "Error: invalid file system name '%s'\n"
 msgstr "Erreur : nom de système de fichiers invalide '%s'\n"
 
 #: pmount.c:239
-#, fuzzy, c-format
+#, c-format
 msgid "Error: invalid umask %s\n"
-msgstr "Erreur : nom de jeu de caractères invalide '%s'\n"
+msgstr "Erreur : umask %s invalide\n"
 
 #: pmount.c:271
 #, c-format
@@ -167,17 +153,18 @@ msgstr "Erreur : nom de jeu de caractères invalide '%s'\n"
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr ""
-"Erreur : ne peut pas verrouiller pour le pid %u, ce processus n'existe pas\n"
+"Erreur : impossible de verrouiller pour le pid %u, ce processus n'existe "
+"pas\n"
 
 #: pmount.c:366
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
-msgstr "Erreur : ne peut créer le fichier de verrou de pid  %s: %s\n"
+msgstr "Erreur : impossible de créer le fichier de verrou de pid %s : %s\n"
 
 #: pmount.c:406
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
-msgstr "Erreur : ne peut ôter le fichier de verrou pid %s:%s\n"
+msgstr "Erreur : impossible d'ôter le fichier de verrou pid %s : %s\n"
 
 #: pmount.c:422
 msgid "Error: do_unlock: could not remove lock directory"
@@ -204,7 +191,8 @@ msgstr ""
 #: pmount.c:610 pumount.c:227
 msgid "Error: could not determine real path of the device"
 msgstr ""
-"Erreur : n'a pas pu déterminer le véritable chemin d'accès à ce périphérique"
+"Erreur : impossible de déterminer le véritable chemin d'accès à ce "
+"périphérique"
 
 #: pmount.c:616 pumount.c:233
 #, c-format
@@ -212,9 +200,10 @@ msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Erreur : périphérique invalide %s (doit être dans /dev/)\n"
 
 #: pmount.c:654
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr "Erreur : n'a pas pu créer de répertoire"
+msgstr ""
+"Erreur ne peut pas décrypter le périphérique (mauvaise phrase secrète ?)\n"
 
 #: pmount.c:657
 #, fuzzy, c-format
@@ -230,7 +219,7 @@ msgstr ""
 
 #: pmount.c:695
 msgid "Error: could not delete mount point"
-msgstr "Erreur : n'a pas pu détruire le point de montage"
+msgstr "Erreur : impossible de détruire le point de montage"
 
 #: pmount.c:716
 #, c-format
@@ -247,7 +236,7 @@ msgid ""
 "file system type, the volume storage policy and the desired label will be\n"
 "read out from hal and passed to pmount."
 msgstr ""
-"pmount-hal - execute pmount avec les informations supplémentaires provenant "
+"pmount-hal - exécute pmount avec les informations supplémentaires provenant "
 "du hal\n"
 "\n"
 "Usage: pmount-hal <hal UDI> [options pmount]\n"
@@ -263,9 +252,9 @@ msgid "Error: could not execute pmount\n"
 msgstr "Erreur: impossible d'exécuter pmount\n"
 
 #: pmount-hal.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
-msgstr "Erreur : impossible de se connecter à hal\n"
+msgstr "Erreur : impossible de se connecter à dbus:%s : %s\n"
 
 #: pmount-hal.c:214
 #, c-format
@@ -278,15 +267,15 @@ msgstr "Erreur : n'a pas pu obtenir l'état du périphérique"
 
 #: policy.c:103
 msgid "Error: could not get sysfs directory\n"
-msgstr "Erreur : n'a pas trouver le répertoire sysfs\n"
+msgstr "Erreur : impossible de trouver le répertoire sysfs\n"
 
 #: policy.c:110
 msgid "Error: could not open <sysfs dir>/block/"
-msgstr "Erreur : n'a pas pu ouvrir <sysfs dir>/block/"
+msgstr "Erreur : impossible d'ouvrir <sysfs dir>/block/"
 
 #: policy.c:141
 msgid "Error: could not open <sysfs dir>/block/<device>/"
-msgstr "Erreur : n'a pas pu ouvrir <sysfs dir>/block/<device>/"
+msgstr "Erreur : impossible d'ouvrir <sysfs dir>/block/<device>/"
 
 #: policy.c:241
 #, c-format
@@ -300,7 +289,7 @@ msgstr "Erreur : %s n'est pas un périphérique de bloc\n"
 
 #: policy.c:264 policy.c:320
 msgid "Error: could not open fstab-type file"
-msgstr "Erreur : n'a pas  pu ouvrir le fichier fstab-type"
+msgstr "Erreur : impossible d'ouvrir le fichier fstab-type"
 
 #: policy.c:351
 #, c-format
@@ -318,25 +307,25 @@ msgid "Error: device %s was not mounted by you\n"
 msgstr "Erreur : le périphérique %s n'a pas été monté par vous\n"
 
 #: policy.c:391
-#, fuzzy, c-format
+#, c-format
 msgid "Error: device %s is not removable\n"
-msgstr "Erreur : le périphérique %s n'est pas amovible"
+msgstr "Erreur : le périphérique %s n'est pas amovible\n"
 
 #: policy.c:454
 #, c-format
 msgid "Error: device %s is locked\n"
-msgstr "Erreur : le périphérique %s est vérrouillé\n"
+msgstr "Erreur : le périphérique %s est verrouillé\n"
 
 #: policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
-msgstr "Erreur : le répertoire %s contient déja un système de fichiers\n"
+msgstr "Erreur : le répertoire %s contient déjà un système de fichiers\n"
 
 #: policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr ""
-"Erreur : le répertoire %s ne contient pas de systême de fichiers monté\n"
+"Erreur : le répertoire %s ne contient pas de système de fichiers monté\n"
 
 #: pumount.c:42
 #, c-format
@@ -358,7 +347,7 @@ msgstr ""
 "\n"
 "%s [options] <périphérique>\n"
 "  Démonte le <périphérique> du répertoire suivant %s si les droits sont\n"
-"  satisfaient ( voir pumount(1) pour les détails). Le répertoire du\n"
+"  satisfaits ( voir pumount(1) pour les détails). Le répertoire du\n"
 "  point de montage est supprimé après l'opération.\n"
 "\n"
 "Options:↵\n"
@@ -368,7 +357,7 @@ msgstr ""
 
 #: pumount.c:72
 msgid "Internal error: could not determine mount point\n"
-msgstr "Erreur interne : n'a pas pu déterminer le point de montage\n"
+msgstr "Erreur interne : impossible de déterminer le point de montage\n"
 
 #: pumount.c:78
 #, c-format
@@ -377,7 +366,7 @@ msgstr "Erreur : le point de montage %s n'est pas sous %s\n"
 
 #: pumount.c:108
 msgid "Error: could not execute umount"
-msgstr "Erreur : n'a pas pu exécuter umount"
+msgstr "Erreur : impossible d'exécuter umount"
 
 #: pumount.c:129
 #, c-format
@@ -391,12 +380,11 @@ msgstr "Erreur : plus de mémoire disponible\n"
 
 #: utils.c:108
 msgid "Error: could not create directory"
-msgstr "Erreur : n'a pas pu créer de répertoire"
+msgstr "Erreur : impossible de créer de répertoire"
 
 #: utils.c:124
-#, fuzzy
 msgid "Error: could not create stamp file in directory"
-msgstr "Erreur : n'a pas pu créer un fichier estampillé dans le répertoire"
+msgstr "Erreur : impossible de créer un fichier estampillé dans le répertoire"
 
 #: utils.c:132
 #, c-format
@@ -405,7 +393,7 @@ msgstr "Erreur : %s n'est pas un répertoire\n"
 
 #: utils.c:152
 msgid "Error: could not open directory"
-msgstr "Erreur : ne peut pas ouvrir le répertoire"
+msgstr "Erreur : impossible d'ouvrir le répertoire"
 
 #: utils.c:161
 #, c-format
@@ -418,29 +406,28 @@ msgid "Error: '%s' is not a valid number\n"
 msgstr "Erreur : '%s' n'est pas un nombre valide\n"
 
 #: utils.c:255
-#, fuzzy
 msgid "Internal error: could not change to effective uid root"
-msgstr "Erreur interne : n'a pas pu changer pour l'uid effectif de root "
+msgstr "Erreur interne : impossible de changer l'uid effectif de root"
 
 #: utils.c:264
-#, fuzzy
 msgid "Internal error: could not change effective user uid to real user id"
 msgstr ""
-"Erreur interne : n'a pas pu changer de l'uid effectif pour le véritable id "
+"Erreur interne : impossible de changer l'uid effectif pour le véritable id "
 "de l'utilisateur"
 
 #: utils.c:273
-#, fuzzy
 msgid "Internal error: could not change to effective gid root"
-msgstr "Erreur interne : n'a pas pu changer pour le gid effectif de root"
+msgstr "Erreur interne : impossible de changer pour le gid effectif de root"
 
 #: utils.c:282
-#, fuzzy
 msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
-"Erreur interne : n'a pas pu changer de l'id effectif de groupe pour le "
+"Erreur interne : impossible de changer de l'id effectif de groupe pour le "
 "véritable id du groupe"
 
-#, fuzzy
-#~ msgid "Error: UDI '%s' does not exist\n"
-#~ msgstr "Erreur : le périphérique %s n'existe pas\n"
+
+
+
+
+
+
