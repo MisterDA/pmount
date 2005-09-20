@@ -3,3 +3,4 @@
 - pmount-hal: read out volume.policy.mount_option.gid from hal
 - support for mounting images
 - support for mounting smb
+- add glob support to pmount.allow
