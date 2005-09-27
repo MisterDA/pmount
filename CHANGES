@@ -1,3 +1,7 @@
+Development
+-----------
+- pmount-hal: support device argument
+
 0.9.5
 -----
 - pmount: Fix forgotten line break in debug output

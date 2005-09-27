@@ -6,7 +6,7 @@ pmount-hal \- HAL-aware wrapper around pmount
 .SH SYNOPSIS
 
 .B pmount-hal
-.I udi
+.I device
 [
 .I pmount options
 ]
@@ -26,8 +26,9 @@ will ask hal about values for certain mount flags (like
 pass it to
 .B pmount\fR, thus respecting the configured device storage policy.
 
-The first parameter (\fIudi\fR) must be the HAL UDI of the device to
-be mounted. All further parameters are passed to pmount unchanged.
+The first parameter (\fIdevice\fR) must be the HAL UDI or the device
+node of the device to be mounted. All further parameters are passed to
+pmount unchanged.
 
 .SH SEE ALSO
 

@@ -29,10 +29,10 @@
 void help() {
     puts( _(
 "pmount-hal - execute pmount with additional information from hal\n\n"
-"Usage: pmount-hal <hal UDI> [pmount options]\n\n"
-"This command mounts the device described by the given UDI using pmount. The\n"
-"file system type, the volume storage policy and the desired label will be\n"
-"read out from hal and passed to pmount."));
+"Usage: pmount-hal <device> [pmount options]\n\n"
+"This command mounts the device described by the given device or UDI using\n"
+"pmount. The file system type, the volume storage policy and the desired label\n"
+"will be read out from hal and passed to pmount."));
 }
 
 int empty_dir( const char* dirname )
@@ -210,6 +210,14 @@ main( int argc, const char** argv )
 
     /* get volume and drive */
     volume = libhal_volume_from_udi( hal_ctx, udi );
+
+    if (!volume) {
+        /* try if parameter is a device file */
+        volume = libhal_volume_from_device_file( hal_ctx, udi );
+        if (volume)
+            udi = libhal_volume_get_udi (volume);
+    }
+
     if( !volume ) {
         fprintf( stderr, _("Error: given UDI is not a mountable volume\n") );
         return 1;
