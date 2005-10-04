@@ -1,6 +1,7 @@
 Development
 -----------
 - pmount-hal: support device argument
+- pmount manpage: fix default mount options inconsistency
 
 0.9.5
 -----
