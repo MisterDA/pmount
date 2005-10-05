@@ -109,10 +109,10 @@ void get_free_label( const char* label, char* result, size_t result_size )
 }
 
 void exec_pmount( const char* device, const char* fstype, const char* label,
-        dbus_bool_t sync, dbus_bool_t noatime, const char* umask, int addargc,
-        const char* const* addargv ) 
+        dbus_bool_t sync, dbus_bool_t noatime, dbus_bool_t exec, const char*
+        umask, int addargc, const char* const* addargv ) 
 {
-    const char** argv = (const char**) calloc( sizeof( const char* ), addargc+12 );
+    const char** argv = (const char**) calloc( sizeof( const char* ), addargc+13 );
     int argc = 0;
     char freelabel[PATH_MAX];
     int i;
@@ -128,6 +128,8 @@ void exec_pmount( const char* device, const char* fstype, const char* label,
         argv[argc++] = "--sync";
     if( noatime )
         argv[argc++] = "--noatime";
+    if( exec )
+        argv[argc++] = "--exec";
 
     if( umask ) {
         argv[argc++] = "--umask";
@@ -169,7 +171,7 @@ main( int argc, const char** argv )
     DBusConnection *dbus_conn;
     LibHalVolume* volume;
     LibHalDrive* drive;
-    dbus_bool_t sync = FALSE, noatime = FALSE;
+    dbus_bool_t sync = FALSE, noatime = FALSE, exec = FALSE;
     const char* udi, *drive_udi;
     char *umask = NULL;
 
@@ -250,12 +252,33 @@ main( int argc, const char** argv )
     }
 
     /* mount options */
-    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.sync", &error ) )
-        sync = libhal_device_get_property_bool( hal_ctx, udi, "volume.policy.mount_option.sync", &error );
-    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.noatime", &error ) )
-        noatime = libhal_device_get_property_bool( hal_ctx, udi, "volume.policy.mount_option.noatime", &error );
+    const char* options = libhal_volume_policy_get_mount_options ( drive, volume, NULL );
+    const char* s;
+    for( s = options; s; s = strchr( s, ',') ) {
+        ++s; /* skip comma */
+        if( !strncmp( s, "exec", 4 ) )
+            exec = TRUE;
+        else if( !strncmp( s, "noexec", 6 ) )
+            exec = FALSE;
+        else if( !strncmp( s, "atime", 5 ) )
+            noatime = FALSE;
+        else if( !strncmp( s, "noatime", 7 ) )
+            noatime = TRUE;
+        else if( !strncmp( s, "sync", 4 ) )
+            sync = TRUE;
+        else if( !strncmp( s, "async", 5 ) )
+            sync = FALSE;
+    }
+
+    /* umask is not covered by the HAL spec */
+    const char* computer_udi = "/org/freedesktop/Hal/devices/computer";
+
     if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.umask", &error ) )
         umask = libhal_device_get_property_string( hal_ctx, udi, "volume.policy.mount_option.umask", &error );
+    else if( libhal_device_property_exists( hal_ctx, drive_udi, "storage.policy.mount_option.umask", &error ) )
+        umask = libhal_device_get_property_string( hal_ctx, computer_udi, "storage.policy.mount_option.umask", &error );
+    else if( libhal_device_property_exists( hal_ctx, drive_udi, "storage.policy.default.mount_option.umask", &error ) )
+        umask = libhal_device_get_property_string( hal_ctx, computer_udi, "storage.policy.default.mount_option.umask", &error );
 
     /* shut down hal connection */
     libhal_ctx_shutdown( hal_ctx, &error );
@@ -264,7 +287,7 @@ main( int argc, const char** argv )
     dbus_connection_unref( dbus_conn );
 
     /* go */
-    exec_pmount( device, fstype, label, sync, noatime, umask, argc-2, argv+2 );
+    exec_pmount( device, fstype, label, sync, noatime, exec, umask, argc-2, argv+2 );
 
     return 0;
 }

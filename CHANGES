@@ -2,6 +2,8 @@ Development
 -----------
 - pmount-hal: support device argument
 - pmount manpage: fix default mount options inconsistency
+- pmount-hal: full support for HAL expored mount policy (including
+  global and per-drive policy, and the "exec" option)
 
 0.9.5
 -----
