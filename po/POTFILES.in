@@ -1,0 +1,9 @@
+# List of source files containing translatable strings.
+# Please keep this file in alphabetical order.
+[encoding: UTF-8]
+src/pmount.c
+src/pmount-hal.c
+src/policy.c
+src/pumount.c
+src/utils.c
+
