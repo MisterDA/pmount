@@ -374,7 +374,7 @@ msgstr "Errore: memoria esaurita\n"
 
 #: utils.c:108
 msgid "Error: could not create directory"
-msgstr "Errore: impossibile creare la directory\n"
+msgstr "Errore: impossibile creare la directory"
 
 #: utils.c:124
 msgid "Error: could not create stamp file in directory"
