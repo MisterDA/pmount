@@ -19,7 +19,7 @@ AC_CHECK_HEADER(sysfs/libsysfs.h,
 		[AC_MSG_ERROR([Missing sysfs library (install libsysfs-dev or similar?)])])],
 	[AC_MSG_ERROR([Missing /usr/include/sysfs/libsysfs.h (install libsysfs-dev or similar?)])])
 													   
-PKG_CHECK_MODULES(HAL, hal >= 0.5.2)
+PKG_CHECK_MODULES(HAL, hal >= 0.5.2 hal-storage >= 0.5.2)
 
 ALL_LINGUAS="ca cs de es_ES es fr hr it_IT nb"
 GETTEXT_PACKAGE="pmount"
