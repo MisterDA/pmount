@@ -207,7 +207,7 @@ parse_unsigned( const char* s, int exitcode )
 
     errno = 0;
     result = strtol( s, &endptr, 0 );
-    if( *endptr == 0 && errno == 0 && result > 0 )
+    if( *endptr == 0 && errno == 0 && result >= 0 )
         return (unsigned) result;
 
     fprintf( stderr, _("Error: '%s' is not a valid number\n"), s );

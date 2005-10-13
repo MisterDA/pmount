@@ -5,6 +5,7 @@ Development
 - pmount-hal: full support for HAL expored mount policy (including
   global and per-drive policy, and the "exec" option)
 - autotoolized build system, thanks to Aaron Bockover
+- pmount: fixed umask parsing, umask 000 works now
 
 0.9.5
 -----
