@@ -4,3 +4,4 @@
 - support for mounting images
 - support for mounting smb
 - add glob support to pmount.allow
+- use nls=utf8 for NTFS
