@@ -1,5 +1,5 @@
-Development
------------
+0.9.6
+-----
 - pmount-hal: support device argument
 - pmount manpage: fix default mount options inconsistency
 - pmount-hal: full support for HAL expored mount policy (including
