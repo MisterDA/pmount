@@ -6,6 +6,8 @@ Development
   global and per-drive policy, and the "exec" option)
 - autotoolized build system, thanks to Aaron Bockover
 - pmount: fixed umask parsing, umask 000 works now
+- pmount-hal: full support for storage devices to mount floppies and similar
+  devices
 
 0.9.5
 -----

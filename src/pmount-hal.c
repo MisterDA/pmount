@@ -166,13 +166,13 @@ void exec_pmount( const char* device, const char* fstype, const char* label,
 int
 main( int argc, const char** argv ) 
 {
+    const char *devarg;
     LibHalContext *hal_ctx;
     DBusError error;
     DBusConnection *dbus_conn;
     LibHalVolume* volume;
     LibHalDrive* drive;
     dbus_bool_t sync = FALSE, noatime = FALSE, exec = FALSE;
-    const char* udi, *drive_udi;
     char *umask = NULL;
 
     /* initialize locale */
@@ -185,7 +185,7 @@ main( int argc, const char** argv )
         return 0;
     }
 
-    udi = argv[1];
+    devarg = argv[1];
 
     /* initialize hal connection */
     dbus_error_init( &error );
@@ -210,49 +210,73 @@ main( int argc, const char** argv )
         return 1;
     }
 
-    /* get volume and drive */
-    volume = libhal_volume_from_udi( hal_ctx, udi );
-
-    if (!volume) {
-        /* try if parameter is a device file */
-        volume = libhal_volume_from_device_file( hal_ctx, udi );
-        if (volume)
-            udi = libhal_volume_get_udi (volume);
+    /* is devarg a proper device node? */
+    drive = libhal_drive_from_device_file( hal_ctx, devarg );
+    if( drive )
+        volume = libhal_volume_from_device_file( hal_ctx, devarg );
+    else {
+        /* is devarg a volume UDI? */
+        volume = libhal_volume_from_udi( hal_ctx, devarg );
+        if( volume )
+            drive = libhal_drive_from_udi( hal_ctx, libhal_volume_get_storage_device_udi( volume ) );
+        else
+            /* is devarg a storage UDI? */
+            drive = libhal_drive_from_udi( hal_ctx, devarg );
     }
 
-    if( !volume ) {
+    if( !drive ) {
         fprintf( stderr, _("Error: given UDI is not a mountable volume\n") );
         return 1;
     }
 
-    drive_udi = libhal_volume_get_storage_device_udi( volume );
-    if( !drive_udi ) {
-        fprintf( stderr, "Internal error: volume has no associated storage device\n");
-        return 1;
-    }
-    drive = libhal_drive_from_udi( hal_ctx, drive_udi );
-
     /* get device */
-    const char* device = libhal_volume_get_device_file( volume );
+    const char* device;
+    if( volume )
+        device = libhal_volume_get_device_file( volume );
+    else
+        device = libhal_drive_get_device_file( drive );
+
     if( !device ) {
         fprintf( stderr, "Internal error: UDI has no associated device\n" );
         return 1;
     }
 
+    debug( "drive: %s\nvolume: %s\ndevice: %s\n", libhal_drive_get_udi( drive ),
+            volume ? libhal_volume_get_udi( volume ) : "n/a", device );
+
     /* get label */
-    const char* label = libhal_volume_policy_get_desired_mount_point( drive, volume, NULL );
-    const char* fstype = libhal_volume_policy_get_mount_fs( drive, volume, NULL );
-    if( !fstype ) {
+    const char* label;
+    if( volume )
+       label = libhal_volume_policy_get_desired_mount_point( drive, volume, NULL );
+    else
+       label = libhal_drive_policy_get_desired_mount_point( drive, NULL );
+
+    debug( "label: %s\n", label );
+
+    /* get file system */
+    const char* fstype = NULL;
+    if( volume )
+       fstype = libhal_volume_policy_get_mount_fs( drive, volume, NULL );
+
+    if( !fstype )
         /* fall back to storage device's fstype */
-        fstype = libhal_drive_policy_get_mount_fs( drive, NULL );
-    }
+       fstype = libhal_drive_policy_get_mount_fs( drive, NULL );
+
     /* ignore invalid file systems */
     if (fstype && !get_fs_info(fstype)) {
         fstype = NULL;
     }
 
+    debug( "fstype: %s\n", fstype );
+
     /* mount options */
-    const char* options = libhal_volume_policy_get_mount_options ( drive, volume, NULL );
+    const char* options;
+    if( volume )
+       options = libhal_volume_policy_get_mount_options ( drive, volume, NULL );
+    else
+       options = libhal_drive_policy_get_mount_options ( drive, NULL );
+    debug( "options: %s\n", options );
+
     const char* s;
     for( s = options; s; s = strchr( s, ',') ) {
         ++s; /* skip comma */
@@ -273,12 +297,18 @@ main( int argc, const char** argv )
     /* umask is not covered by the HAL spec */
     const char* computer_udi = "/org/freedesktop/Hal/devices/computer";
 
-    if( libhal_device_property_exists( hal_ctx, udi, "volume.policy.mount_option.umask", &error ) )
-        umask = libhal_device_get_property_string( hal_ctx, udi, "volume.policy.mount_option.umask", &error );
-    else if( libhal_device_property_exists( hal_ctx, drive_udi, "storage.policy.mount_option.umask", &error ) )
-        umask = libhal_device_get_property_string( hal_ctx, computer_udi, "storage.policy.mount_option.umask", &error );
-    else if( libhal_device_property_exists( hal_ctx, drive_udi, "storage.policy.default.mount_option.umask", &error ) )
+    if( volume && libhal_device_property_exists( hal_ctx,
+                libhal_volume_get_udi( volume ), "volume.policy.mount_option.umask", &error ) )
+        umask = libhal_device_get_property_string( hal_ctx,
+                libhal_volume_get_udi( volume ), "volume.policy.mount_option.umask", &error );
+    else if( libhal_device_property_exists( hal_ctx, 
+                libhal_drive_get_udi( drive ), "storage.policy.mount_option.umask", &error ) )
+        umask = libhal_device_get_property_string( hal_ctx,
+                libhal_drive_get_udi( drive ), "storage.policy.mount_option.umask", &error );
+    else if( libhal_device_property_exists( hal_ctx, computer_udi, "storage.policy.default.mount_option.umask", &error ) )
         umask = libhal_device_get_property_string( hal_ctx, computer_udi, "storage.policy.default.mount_option.umask", &error );
+
+    debug( "umask: %s\n", umask );
 
     /* shut down hal connection */
     libhal_ctx_shutdown( hal_ctx, &error );
