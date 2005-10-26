@@ -21,7 +21,7 @@
 static struct FS supported_fs[] = {
     { "udf", "nosuid,nodev,user", 1, "007", 1 },
     { "iso9660", "nosuid,nodev,user", 1, NULL, 1 },
-    { "vfat", "nosuid,nodev,user,quiet,shortname=winnt", 1, "077", 1 },
+    { "vfat", "nosuid,nodev,user,quiet,shortname=mixed", 1, "077", 1 },
     { "ntfs", "nosuid,nodev,user", 1, "077", 1 },
     { "hfsplus", "nosuid,nodev,user", 1, NULL, 0 },
     { "hfs", "nosuid,nodev,user", 1, NULL, 0 },

@@ -1,3 +1,6 @@
+Development
+-----------
+- pmount: mount vfat with shortname=mixed option for better WinXP compatibility
 0.9.6
 -----
 - pmount-hal: support device argument
