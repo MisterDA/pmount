@@ -5,3 +5,5 @@
 - support for mounting smb
 - add glob support to pmount.allow
 - use nls=utf8 for NTFS
+- make location of external programs configurable
+- add --with-hal configure option
