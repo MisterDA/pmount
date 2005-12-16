@@ -124,12 +124,6 @@ make_mountpoint_name( const char* device, const char* label, char* mntpt,
     char* d;
     int media_dir_len = strlen( MEDIADIR );
 
-    /* does the device start with DEVDIR? */
-    if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) { 
-        fprintf( stderr, _("Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"), device ); 
-        return -1;
-    }
-
     if( label ) {
         /* ignore a leading MEDIADIR */
         if( !strncmp( label, MEDIADIR, media_dir_len ) )
@@ -157,7 +151,8 @@ make_mountpoint_name( const char* device, const char* label, char* mntpt,
         }
 
         /* chop the DEVDIR prefix */
-        device += sizeof( DEVDIR )-1;
+        if( !strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) )
+            device += sizeof( DEVDIR )-1;
 
         /* get rid of slashes */
         d = strreplace( device, '/', '_' );
@@ -612,8 +607,16 @@ main( int argc, char** argv )
 
     /* pmounted devices really have to be a proper local device */
     if( !is_real_path ) {
-        perror( _("Error: could not determine real path of the device") );
-        return E_DEVICE;
+        /* try to prepend '/dev' */
+        if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) { 
+            char d[PATH_MAX];
+            snprintf( d, sizeof( d ), "%s%s", DEVDIR, device );
+            if ( !realpath( d, device ) ) {
+                perror( _("Error: could not determine real path of the device") );
+                return E_DEVICE;
+            }
+            debug( "trying to prepend '" DEVDIR "' to device argument, now %s\n", device );
+        }
     }
 
     /* does the device start with DEVDIR? */
