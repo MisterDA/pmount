@@ -14,7 +14,7 @@ AM_PROG_LIBTOOL
 AC_PROG_INSTALL
 
 AC_CHECK_HEADER(sysfs/libsysfs.h,
-	[AC_CHECK_LIB(sysfs, sysfs_open_directory,
+	[AC_CHECK_LIB(sysfs, sysfs_open_attribute,
 		[LIBS="$LIBS -lsysfs"],
 		[AC_MSG_ERROR([Missing sysfs library (install libsysfs-dev or similar?)])])],
 	[AC_MSG_ERROR([Missing /usr/include/sysfs/libsysfs.h (install libsysfs-dev or similar?)])])

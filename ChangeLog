@@ -1,6 +1,7 @@
 Development
 -----------
 - pmount: mount vfat with shortname=mixed option for better WinXP compatibility
+- fix configure check to work with libsysfs versions 1.3 and 2.0
 
 0.9.6
 -----
