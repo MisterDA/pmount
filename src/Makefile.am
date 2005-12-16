@@ -11,13 +11,13 @@ bin_PROGRAMS = pmount-hal
 noinst_PROGRAMS = pmount pumount
 
 pmount_SOURCES = pmount.c
-pmount_LDADD = libpmount-util.a $(HAL_LIBS)
+pmount_LDADD = libpmount-util.a
 
 pmount_hal_SOURCES = pmount-hal.c
 pmount_hal_LDADD = libpmount-util.a $(HAL_LIBS)
 
 pumount_SOURCES = pumount.c
-pumount_LDADD = libpmount-util.a $(HAL_LIBS)
+pumount_LDADD = libpmount-util.a
 
 EXTRA_DIST = \
 	fs.h     \
