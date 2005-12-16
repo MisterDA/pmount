@@ -22,6 +22,7 @@
 #include "policy.h"
 #include "utils.h"
 #include "luks.h"
+#include "config.h"
 
 /* error codes */
 const int E_ARGS = 1;
@@ -44,9 +45,10 @@ usage( const char* exename )
     "  are met (see pumount(1) for details). The mount point directory is removed\n"
     "  afterwards.\n\n"
     "Options:\n"
-    "  -l, --lazy : umount lazily, see umount(8)\n"
+    "  -l, --lazy  : umount lazily, see umount(8)\n"
     "  -d, --debug : enable debug output (very verbose)\n"
-    "  -h, --help  : print help message and exit successfuly\n"),
+    "  -h, --help  : print help message and exit successfuly\n"
+    "  --version   : print version number and exit successfully\n"),
         exename, MEDIADIR );
 }
 
@@ -149,6 +151,7 @@ main( int argc, char** argv )
         { "help", 0, NULL, 'h'},
         { "debug", 0, NULL, 'd'},
         { "lazy", 0, NULL, 'l'},
+        { "version", 0, NULL, 'V' },
         { NULL, 0, NULL, 0}
     };
 
@@ -168,7 +171,7 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdlu", long_opts, NULL ) ) {
+        switch( option = getopt_long( argc, argv, "+hdluV", long_opts, NULL ) ) {
             case -1:        break;          /* end of arguments */
             case '?':        return E_ARGS;  /* unknown argument */
 
@@ -177,6 +180,8 @@ main( int argc, char** argv )
             case 'd':   enable_debug = 1; break;
 
             case 'l':        do_lazy = 1; break;
+
+            case 'V': puts(VERSION); return 0;
 
             default:
                 fprintf( stderr, _("Internal error: getopt_long() returned unknown value\n") );

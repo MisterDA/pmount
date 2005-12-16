@@ -27,6 +27,7 @@
 #include "policy.h"
 #include "utils.h"
 #include "luks.h"
+#include "config.h"
 
 /* error codes */
 const int E_ARGS = 1;
@@ -78,7 +79,8 @@ usage( const char* exename )
     "                read passphrase from file instead of the terminal\n"
     "                (only for LUKS encrypted devices)\n"
     "  -d, --debug : enable debug output (very verbose)\n"
-    "  -h, --help  : print help message and exit successfuly") );
+    "  -h, --help  : print help message and exit successfuly\n"
+    "  --version   : print version number and exit successfully") );
 }
 
 /**
@@ -509,6 +511,7 @@ main( int argc, char** argv )
         { "passphrase", 1, NULL, 'p' },
         { "read-only", 0, NULL, 'r' },
         { "read-write", 0, NULL, 'w' },
+        { "version", 0, NULL, 'V' },
         { NULL, 0, NULL, 0}
     };
 
@@ -528,7 +531,7 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdelLsArwt:c:u:", long_opts, NULL ) ) {
+        switch( option = getopt_long( argc, argv, "+hdelLsArwt:c:u:V", long_opts, NULL ) ) {
             case -1:  break;          /* end of arguments */
             case ':':
             case '?': return E_ARGS;  /* unknown argument */
@@ -558,6 +561,8 @@ main( int argc, char** argv )
             case 'r': force_write = 0; break;
 
             case 'w': force_write = 1; break;
+
+            case 'V': puts(VERSION); return 0;
 
             default:
                 fprintf( stderr, _("Internal error: getopt_long() returned unknown value\n") );
