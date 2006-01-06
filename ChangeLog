@@ -1,3 +1,7 @@
+Development
+-----------
+- Add reiser4 to the list of supported file systems.
+
 0.9.7
 -----
 - pmount: mount vfat with shortname=mixed option for better WinXP compatibility
