@@ -4,6 +4,7 @@ Development
 - pmount-hal: fall back to plain volume.fstype and volume.label hal properties
   if policy does not exist; this makes pmount work with hal 0.5.7 and above
 - pmount-hal: check for PMOUNT_DEBUG environment variable to enable debugging
+- pmount: allow mounting of mmc cards
 
 0.9.7
 -----
