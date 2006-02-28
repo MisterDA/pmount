@@ -3,6 +3,7 @@ Development
 - Add reiser4 to the list of supported file systems.
 - pmount-hal: fall back to plain volume.fstype and volume.label hal properties
   if policy does not exist; this makes pmount work with hal 0.5.7 and above
+- pmount-hal: check for PMOUNT_DEBUG environment variable to enable debugging
 
 0.9.7
 -----

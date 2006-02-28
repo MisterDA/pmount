@@ -187,6 +187,9 @@ main( int argc, const char** argv )
 
     devarg = argv[1];
 
+    if (getenv ("PMOUNT_DEBUG"))
+        enable_debug = 1;
+
     /* initialize hal connection */
     dbus_error_init( &error );
     dbus_conn = dbus_bus_get( DBUS_BUS_SYSTEM, &error );
