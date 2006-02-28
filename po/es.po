@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-09-27 16:25+0200\n"
+"POT-Creation-Date: 2005-09-15 21:26+0200\n"
 "PO-Revision-Date: 2005-02-21 17:57+0000\n"
 "Last-Translator: Aloriel <jorge.gonzalez.gonzalez@hispalinux.es>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -16,7 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
 
 #: pmount.c:49
@@ -72,6 +71,7 @@ msgstr ""
 "\n"
 
 #: pmount.c:66
+#, fuzzy
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -90,13 +90,36 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
+"Options:\n"
+"  -r : Forzar <dispositivo> a montarse de Solo-Lectura\n"
+"  -w : Forzar <dsipositivo> a montarse en modo lectura-escritura\n"
+"  -s, --sync : Montar <dispositivo> con la opción sync (Por defecto: "
+"'async')\n"
+"  --noatime : Montar <dispositvio> con la opción 'noatime'(Por defecto: "
+"'atime')\n"
+"  -e, --exec : Montar <dispositvio> con la opción 'exec' (Por Defecto: "
+"'noexec')\n"
+"  -t <fs> : Montar que el sistema de archivos <fs> (Por Defecto: "
+"autodetected)\n"
+"  -c <charset>: Utilizar el grupo de caracteres E/S dado (Por defecto: "
+"'utf8' si se especifica\n"
+"                se montará el indicado,de lo contrario se mostará el valor "
+"por defecto)\n"
+"  -u <umask> : Utilizar una umask especifica, en lugar del valor por defecto "
+"(solo para\n"
+"                sistemas de archivos que soporten las umask)\n"
+" --passphrase <file>\n"
+"                Contraseña de lectura de files en lugar de la terminal\n"
+"                (solo para dispositivos encriptados LUKS)\n"
+"  -d, --debug : Activar depuración (very verbose)\n"
+"  -h, --help : Muestra el mensaje de ayuda y de finalización correcta"
 
 #: pmount.c:127
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 msgstr ""
-"Error: make_mountpoint_name: el dispositivo %s no es válido (debe estar en /"
-"dev/)\n"
+"Error: make_mountpoint_name: el dispositivo %s no es válido (debe estar en "
+"/dev/)\n"
 
 #: pmount.c:137
 #, c-format
@@ -140,16 +163,14 @@ msgstr ""
 "Error: el nombre del sistema de ficheros o archivos '%s' no es válido\n"
 
 #: pmount.c:239
-#, fuzzy, c-format
+#, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Error: umask inválido %s\n"
 
 #: pmount.c:271
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
-msgstr ""
-"Error: el nombre del juego de caracteres '%s' no es válido\n"
-"\n"
+msgstr "Error: el nombre del juego de caracteres '%s' no es válido\n"
 
 #: pmount.c:352
 #, c-format
@@ -165,7 +186,8 @@ msgstr ""
 #: pmount.c:406
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
-msgstr "Error: no se ha podido eliminar el fichero de bloqueo del pid %s: %s\n"
+msgstr ""
+"Error: no se ha podido eliminar el fichero de bloqueo del pid %s: %s\n"
 
 #: pmount.c:422
 msgid "Error: do_unlock: could not remove lock directory"
@@ -173,7 +195,8 @@ msgstr "Error: do_unlock: no se ha podido eliminar el directorio de bloqueo"
 
 #: pmount.c:522 pumount.c:162
 msgid "Error: this program needs to be installed suid root\n"
-msgstr "Error este programa necesita ser instalado como super usuario (root)\n"
+msgstr ""
+"Error este programa necesita ser instalado como superusuario (root)\n"
 
 #: pmount.c:563 pumount.c:182
 #, c-format
@@ -202,11 +225,12 @@ msgstr "Error: el dispositivo %s es invalido (debe estar en /dev/)\n"
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr ""
+"Error: No es posible desencriptar el dispositivo (¿Contraseña Errónea?)\n"
 
 #: pmount.c:657
-#, fuzzy, c-format
+#, c-format
 msgid "Error: mapped device already exists\n"
-msgstr "Error: el dispositivo %s ya está montado como %s\n"
+msgstr "Error: Ya existe la unidad mapeada\n"
 
 #: pmount.c:671
 #, c-format
@@ -214,27 +238,27 @@ msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
+"Error: No es posible bloquear el punto de montaje. Probablemente esta siendo "
+"utilizado por otra aplicación.\n"
 
 #: pmount.c:695
 msgid "Error: could not delete mount point"
 msgstr "Error: no es posible borrar el punto de montaje"
 
 #: pmount.c:716
-#, fuzzy, c-format
+#, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Error interno: %i del modo, no manejado.\n"
 
 #: pmount-hal.c:31
-#, fuzzy
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
-"Usage: pmount-hal <device> [pmount options]\n"
+"Usage: pmount-hal <hal UDI> [pmount options]\n"
 "\n"
-"This command mounts the device described by the given device or UDI using\n"
-"pmount. The file system type, the volume storage policy and the desired "
-"label\n"
-"will be read out from hal and passed to pmount."
+"This command mounts the device described by the given UDI using pmount. The\n"
+"file system type, the volume storage policy and the desired label will be\n"
+"read out from hal and passed to pmount."
 msgstr ""
 "pmount-hal - ejecuta pmount con informacion adicional procedente de hal\n"
 "\n"
@@ -242,7 +266,7 @@ msgstr ""
 "\n"
 "Este comando monta usando pmount el dispositivo referido por UDI. El tipo de "
 "sistema de ficheros, la politica de almacenamiento del volumen y la etiqueta "
-"serán extraidas desde hal y pasadas a pmount"
+"deseada serán extraidas desde hal y pasadas a pmount"
 
 #: pmount-hal.c:159
 msgid "Error: could not execute pmount\n"
@@ -253,7 +277,7 @@ msgstr "Error: no se pudo ejecutar pmount\n"
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Error: no se puede conectar con dbus: %s: %s\n"
 
-#: pmount-hal.c:222
+#: pmount-hal.c:214
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Error: el UDI introducido no es un volúmen montable\n"
@@ -282,7 +306,7 @@ msgstr "Error: no existe el dispositivo %s\n"
 #: policy.c:246
 #, c-format
 msgid "Error: %s is not a block device\n"
-msgstr "Error: %s noes un dispositivo bloqueado\n"
+msgstr "Error: %s no es un dispositivo bloqueado\n"
 
 #: policy.c:264 policy.c:320
 msgid "Error: could not open fstab-type file"
@@ -316,7 +340,8 @@ msgstr "Error: el dispositivo %s está bloqueado\n"
 #: policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
-msgstr "Error: el directorio %s todavía tiene montado un sistema de archivos\n"
+msgstr ""
+"Error: el directorio %s todavía tiene montado un sistema de archivos\n"
 
 #: policy.c:474
 #, c-format
@@ -380,7 +405,6 @@ msgid "Error: could not create directory"
 msgstr "Error: no es posible crear el directorio"
 
 #: utils.c:124
-#, fuzzy
 msgid "Error: could not create stamp file in directory"
 msgstr "Error:  no es posible crear el 'archivo stamp' en el directorio"
 
@@ -420,3 +444,47 @@ msgstr "Error interno: no es posible cambiar a root gid"
 #: utils.c:282
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Error interno: no es posible cambiar desde gid al gid real"
+
+#~ msgid ""
+#~ "Options:\n"
+#~ "  -a, --async : mount <device> with the 'async' option (default: 'sync')\n"
+#~ "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+#~ "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
+#~ "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
+#~ "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
+#~ "                in an UTF-8 locale, otherwise mount default)\n"
+#~ "  -d, --debug : enable debug output (very verbose)\n"
+#~ "  -h, --help  : print help message and exit successfuly"
+#~ msgstr ""
+#~ "Opciones:\n"
+#~ "  -a, --async : montar <dispositivo> con la opción 'async' (por defecto: "
+#~ "'sync')\n"
+#~ "  --noatime   : montar <dispositivo> con la opción 'noatime' (por defecto: "
+#~ "'atime')\n"
+#~ "  -e, --exec  : montar <dispositivo> con la opción 'exec' (por defecto: "
+#~ "'noexec')\n"
+#~ "  -t <fs>     : montar como sistema de ficheros tipo <fs> (por defecto: "
+#~ "autodetectado)\n"
+#~ "  -c <charset>: usar el juego de caracteres E/S dado (por defecto: 'utf8' si "
+#~ "se llama\n"
+#~ "                en un local UTF-8, si no, el defecto de montaje)\n"
+#~ "  -d, --debug : habilita salida de depuración (muy verbosa)\n"
+#~ "  -h, --help  : escribir mensaje de ayuda y salir"
+
+#, fuzzy
+#~ msgid "Error: could not raise to full root uid privileges"
+#~ msgstr "Error: no se han podido alcanzar privilegios de uid root completos"
+
+#~ msgid "Error: could not wait for executed mount process"
+#~ msgstr "Error: no se puede esperar a la conclusión del proceso de montaje"
+
+#, c-format
+#~ msgid "Error: could not connect to hal\n"
+#~ msgstr "Error: no se pudo concectar con hal\n"
+
+#, c-format
+#~ msgid "Error: given UDI does not exist\n"
+#~ msgstr "Error: el UDI introducido no existe\n"
+
+#~ msgid "Error: could not wait for executed umount process"
+#~ msgstr "Error: no es posible esperar por el proceso umount ejecutado"

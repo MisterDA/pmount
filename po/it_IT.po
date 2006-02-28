@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-09-27 16:25+0200\n"
+"POT-Creation-Date: 2005-09-15 21:26+0200\n"
 "PO-Revision-Date: 2005-03-16 23:54+0000\n"
 "Last-Translator: Francesco Accattapà <callipeo@libero.it>\n"
 "Language-Team: Italian (Italy) <it_IT@li.org>\n"
@@ -16,7 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
 
 #: pmount.c:49
@@ -37,7 +36,7 @@ msgstr ""
 "%s [opzioni] <dispositivo> [<etichetta>]\n"
 "\n"
 "  Monta il <dispositivo> in una directory sotto %s se i requisiti \n"
-"  sono rispettati (vedere pmount(1) per dettagli). Se è data <etichetta>,\n"
+"  sono rispettati (vedere pmount(1) per i dettagli). Se è data <etichetta>,\n"
 "  il punto di mount sarà %s/<etichetta>, altrimenti %s<dispositivo>.\n"
 "  Se il punto di mount non esiste verrà creato.\n"
 "\n"
@@ -92,13 +91,38 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly"
 msgstr ""
+"Opzioni:\n"
+"  -r          : monta <dispositivo> in sola lettura\n"
+"  -w          : monta <dispositivo> in scrittura\n"
+"  -s, --sync  : monta <dispositivo> con l'opzione «sync» (predefinito: "
+"«async»)\n"
+"  --noatime   : monta <dispositivo> con l'opzione «noatime» (predefinito: "
+"«atime»)\n"
+"  -e, --exec  : monta <dispositivo> con l'opzione «exec» (predefinito: "
+"«noexec»)\n"
+"  -t <fs>     : monta usando <fs> come file system (predefinito: "
+"automatico)\n"
+"  -c <charset>: usa il set di caratteri fornito (predefinito: «utf8» se è "
+"in\n"
+"                uso una localizzazione UTF-8, oppure il valore predefinito "
+"di\n"
+"                mount)\n"
+"  -u <umask>  : usa l'umask specificata anziché quella predefinita (solo "
+"per\n"
+"                file system che permettono realmente di impostare l'umask\n"
+"  --passphrase <file>\n"
+"                legge la passphrase dal file anziché dal terminale (solo "
+"per\n"
+"                dispositivi cifrati con LUKS)\n"
+"  -d, --debug : abilita l'output di debug (molto prolisso)\n"
+"  -h, --help  : stampa il messaggio di aiuto ed esce con successo"
 
 #: pmount.c:127
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 msgstr ""
-"Errore: make_mountpoint_name: dispositivo %s non valido (deve essere in /"
-"dev/)\n"
+"Errore: make_mountpoint_name: dispositivo %s non valido (deve essere in "
+"/dev/)\n"
 
 #: pmount.c:137
 #, c-format
@@ -113,7 +137,7 @@ msgstr "Errore: etichetta troppo lunga\n"
 #: pmount.c:146
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
-msgstr "Errore: '/' non deve comparire nell'etichetta\n"
+msgstr "Errore: \"/\" non deve comparire nell'etichetta\n"
 
 #: pmount.c:153
 #, c-format
@@ -131,22 +155,23 @@ msgstr "Errore: impossibile eseguire mount"
 #: pmount.c:227
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
-msgstr "Errore interno: mount_attempt: il tipo di file system dato è NULL\n"
+msgstr ""
+"Errore interno: mount_attempt: il tipo di file system fornito è NULL\n"
 
 #: pmount.c:233
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
-msgstr "Errore: file system '%s' non valido\n"
+msgstr "Errore: file system «%s» non valido\n"
 
 #: pmount.c:239
 #, c-format
 msgid "Error: invalid umask %s\n"
-msgstr "Errore: umask non valida %s\n"
+msgstr "Errore: umask «%s» non valida\n"
 
 #: pmount.c:271
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
-msgstr "Errore: set di caratteri '%s' non valido\n"
+msgstr "Errore: set di caratteri «%s» non valido\n"
 
 #: pmount.c:352
 #, c-format
@@ -157,16 +182,16 @@ msgstr ""
 #: pmount.c:366
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
-msgstr "Errore: non riesco a creare il lock file per questo pid: %s: %s\n"
+msgstr "Errore: impossibile creare il lock file per questo pid: %s: %s\n"
 
 #: pmount.c:406
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
-msgstr "Errore: non riesco a rimuovere il lock file per questo pid: %s: %s\n"
+msgstr "Errore: impossibile rimuovere il lock file per questo pid: %s: %s\n"
 
 #: pmount.c:422
 msgid "Error: do_unlock: could not remove lock directory"
-msgstr "Errore: do_unlock: non riesco a rimuovere la directory di lock"
+msgstr "Errore: do_unlock: impossibile rimuovere la directory di lock"
 
 #: pmount.c:522 pumount.c:162
 msgid "Error: this program needs to be installed suid root\n"
@@ -189,7 +214,8 @@ msgstr ""
 
 #: pmount.c:610 pumount.c:227
 msgid "Error: could not determine real path of the device"
-msgstr "Errore: impossibile determinare il percorso effettivo del dispositivo"
+msgstr ""
+"Errore: impossibile determinare il percorso effettivo del dispositivo"
 
 #: pmount.c:616 pumount.c:233
 #, c-format
@@ -199,12 +225,12 @@ msgstr "Errore: dispositivo %s non valido (deve trovarsi in /dev)\n"
 #: pmount.c:654
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr ""
+msgstr "Errore: impossibile decifrare il dispositivo (passphrase errata?)\n"
 
 #: pmount.c:657
-#, fuzzy, c-format
+#, c-format
 msgid "Error: mapped device already exists\n"
-msgstr "Errore: il dispositivo %s è già montato in %s\n"
+msgstr "Errore: il dispositivo mappato esiste già\n"
 
 #: pmount.c:671
 #, c-format
@@ -212,6 +238,8 @@ msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
+"Errore: impossibile fare il lock della directory di mount. Probabilmente un "
+"altro pmount è in esecuzione per questo punto di mount.\n"
 
 #: pmount.c:695
 msgid "Error: could not delete mount point"
@@ -223,16 +251,14 @@ msgid "Internal error: mode %i not handled.\n"
 msgstr "Errore interno: modalità %i non gestibile.\n"
 
 #: pmount-hal.c:31
-#, fuzzy
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
-"Usage: pmount-hal <device> [pmount options]\n"
+"Usage: pmount-hal <hal UDI> [pmount options]\n"
 "\n"
-"This command mounts the device described by the given device or UDI using\n"
-"pmount. The file system type, the volume storage policy and the desired "
-"label\n"
-"will be read out from hal and passed to pmount."
+"This command mounts the device described by the given UDI using pmount. The\n"
+"file system type, the volume storage policy and the desired label will be\n"
+"read out from hal and passed to pmount."
 msgstr ""
 "pmount-hal - esegue pmount con informazioni aggiuntive provenienti da hal\n"
 "\n"
@@ -249,9 +275,9 @@ msgstr "Errore: impossibile eseguire pmount\n"
 #: pmount-hal.c:192
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
-msgstr ""
+msgstr "Errore: impossibile connettersi a dbus: %s: %s\n"
 
-#: pmount-hal.c:222
+#: pmount-hal.c:214
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Errore: lo UDI fornito non è un volume montabile\n"
@@ -378,7 +404,7 @@ msgstr "Errore: impossibile creare la directory"
 
 #: utils.c:124
 msgid "Error: could not create stamp file in directory"
-msgstr "Errore: non riesco a creare file stamp nella directory"
+msgstr "Errore: impossibile creare il file stamp nella directory"
 
 #: utils.c:132
 #, c-format
@@ -397,22 +423,22 @@ msgstr "Errore: la directory %s non è vuota\n"
 #: utils.c:213
 #, c-format
 msgid "Error: '%s' is not a valid number\n"
-msgstr "Errore: '%s' non è un numero valido\n"
+msgstr "Errore: «%s» non è un numero valido\n"
 
 #: utils.c:255
 msgid "Internal error: could not change to effective uid root"
-msgstr "Errore interno: non riesco a ottenere una uid effettiva di root"
+msgstr "Errore interno: impossibile ottenere un uid effettivo di root"
 
 #: utils.c:264
 msgid "Internal error: could not change effective user uid to real user id"
 msgstr ""
-"Errore interno: non riesco a porre l'uid effettiva uguale a quella reale"
+"Errore interno: impossibile porre l'uid effettivo uguale a quello reale"
 
 #: utils.c:273
 msgid "Internal error: could not change to effective gid root"
-msgstr "Errore interno: non riesco a ottenere una gid effettiva di root"
+msgstr "Errore interno: impossibile ottenere un gid effettivo di root"
 
 #: utils.c:282
 msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
-"Errore interno: non riesco a porre il gid effettivo uguale a quello reale"
+"Errore interno: impossibile porre il gid effettivo uguale a quello reale"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-09-27 16:25+0200\n"
+"POT-Creation-Date: 2005-09-15 21:26+0200\n"
 "PO-Revision-Date: 2005-03-15 21:19+0000\n"
 "Last-Translator: Daniel Aguayo <danner@mixmail.com>\n"
 "Language-Team: Spanish (Spain) <es_ES@li.org>\n"
@@ -15,7 +15,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
 
 #: pmount.c:49
@@ -51,7 +50,7 @@ msgid ""
 "  processes (nonexistant pids are cleaned before attempting a mount).\n"
 "\n"
 msgstr ""
-"%s --lock <dispositivo> <pid>↵\n"
+"%s --lock <dispositivo> <pid>\n"
 "  Previene posteriores montajes del <dispositivo> hasta que se desbloquee.\n"
 "  <pid> especifica el id del proceso que pone el bloqueo. Esto permite\n"
 "  bloquear un dispositivo a varios procesos independendientes evitando\n"
@@ -94,8 +93,8 @@ msgstr ""
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 msgstr ""
-"Error: make_mountpoint_name: el dispositivo %s no es válido (ha de estar en /"
-"dev/)\n"
+"Error: make_mountpoint_name: el dispositivo %s no es válido (ha de estar en "
+"/dev/)\n"
 
 #: pmount.c:137
 #, c-format
@@ -160,7 +159,8 @@ msgstr "Error: no se ha podido crear el fichero de bloqueo del pid %s: %s\n"
 #: pmount.c:406
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
-msgstr "Error: no se ha podido eliminar el fichero de bloqueo del pid %s: %s\n"
+msgstr ""
+"Error: no se ha podido eliminar el fichero de bloqueo del pid %s: %s\n"
 
 #: pmount.c:422
 msgid "Error: do_unlock: could not remove lock directory"
@@ -168,7 +168,8 @@ msgstr "Error: do_unlock: no se ha podido eliminar el directorio de bloqueo"
 
 #: pmount.c:522 pumount.c:162
 msgid "Error: this program needs to be installed suid root\n"
-msgstr "Error este programa necesita ser instalado como super usuario (root)\n"
+msgstr ""
+"Error este programa necesita ser instalado como super usuario (root)\n"
 
 #: pmount.c:563 pumount.c:182
 #, c-format
@@ -199,9 +200,9 @@ msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr ""
 
 #: pmount.c:657
-#, fuzzy, c-format
+#, fuzzy
 msgid "Error: mapped device already exists\n"
-msgstr "Error: el dispositivo %s ya está montado en %s\n"
+msgstr ""
 
 #: pmount.c:671
 #, c-format
@@ -220,16 +221,14 @@ msgid "Internal error: mode %i not handled.\n"
 msgstr "Error interno: %i es un modo no gestionado.\n"
 
 #: pmount-hal.c:31
-#, fuzzy
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
-"Usage: pmount-hal <device> [pmount options]\n"
+"Usage: pmount-hal <hal UDI> [pmount options]\n"
 "\n"
-"This command mounts the device described by the given device or UDI using\n"
-"pmount. The file system type, the volume storage policy and the desired "
-"label\n"
-"will be read out from hal and passed to pmount."
+"This command mounts the device described by the given UDI using pmount. The\n"
+"file system type, the volume storage policy and the desired label will be\n"
+"read out from hal and passed to pmount."
 msgstr ""
 "pmount-hal - ejecutar pmount con información adicional de hal\n"
 "\n"
@@ -249,7 +248,7 @@ msgstr "Error: no se pudo ejecutar pmount\n"
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Error: no es posible conectar con dbus: %s: %s\n"
 
-#: pmount-hal.c:222
+#: pmount-hal.c:214
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Error: el UDI introducido no es un volúmen montable\n"
@@ -317,7 +316,8 @@ msgstr "Error: el directorio %s ya tiene montado un sistema de ficheros\n"
 #: policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
-msgstr "Error: el directorio %s no tiene montado ningún sistema de ficheros\n"
+msgstr ""
+"Error: el directorio %s no tiene montado ningún sistema de ficheros\n"
 
 #: pumount.c:42
 #, c-format

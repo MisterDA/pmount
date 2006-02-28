@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-09-27 16:25+0200\n"
+"POT-Creation-Date: 2005-09-15 21:26+0200\n"
 "PO-Revision-Date: 2005-02-10 15:15+0000\n"
 "Last-Translator: Vlastimil Skacel <skacel@svtech.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -16,8 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
 
 #: pmount.c:49
@@ -194,14 +192,14 @@ msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Chyba: neplatné zařízení %s (musí být v /dev/)\n"
 
 #: pmount.c:654
-#, c-format
+#, fuzzy
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr ""
+msgstr "Chyba: nemohu dekódovat zařízení (špatné heslo?)\n"
 
 #: pmount.c:657
-#, fuzzy, c-format
+#, c-format
 msgid "Error: mapped device already exists\n"
-msgstr "Chyba: zařízení %s je jíž připojeno na %s\n"
+msgstr "Chyba: mapované zařízení již existuje\n"
 
 #: pmount.c:671
 #, c-format
@@ -224,12 +222,11 @@ msgstr "Vnitřní chyba: mód %i není obsluhován.\n"
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
-"Usage: pmount-hal <device> [pmount options]\n"
+"Usage: pmount-hal <hal UDI> [pmount options]\n"
 "\n"
-"This command mounts the device described by the given device or UDI using\n"
-"pmount. The file system type, the volume storage policy and the desired "
-"label\n"
-"will be read out from hal and passed to pmount."
+"This command mounts the device described by the given UDI using pmount. The\n"
+"file system type, the volume storage policy and the desired label will be\n"
+"read out from hal and passed to pmount."
 msgstr ""
 "pmount-hal - spusit pmount s přídavnými informacemi z halu\n"
 "\n"
@@ -248,7 +245,7 @@ msgstr "Chyba: nelze spusit pmount\n"
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Chyba: nelze se připojit k dbus: %s: %s\n"
 
-#: pmount-hal.c:222
+#: pmount-hal.c:214
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Chyba: dané UDI neni připojitelné zařízení\n"
@@ -412,3 +409,42 @@ msgstr "Vnitřní chyba: nelze změnit na skutečné gid roota"
 #: utils.c:282
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupiny"
+
+#, fuzzy
+#~ msgid ""
+#~ "Options:\n"
+#~ "  -a, --async : mount <device> with the 'async' option (default: 'sync')\n"
+#~ "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+#~ "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
+#~ "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
+#~ "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
+#~ "                in an UTF-8 locale, otherwise mount default)\n"
+#~ "  -d, --debug : enable debug output (very verbose)\n"
+#~ "  -h, --help  : print help message and exit successfuly"
+#~ msgstr ""
+#~ "Volby:\n"
+#~ "  -a, --async : připojit <zařízení> s volbou 'async' (výchozí je:'sync')\n"
+#~ "  --noatime : připojit <zařízení> s volbou 'noatime' (výchozí je:'atime')\n"
+#~ "  -e, --exec : připojit <zařízení> s volbou 'exec' (výchozí je: 'noexec')\n"
+#~ "  -t <fs> : připojit jako souborový systém <fs> (výchozí: autodetected)\n"
+#~ "  -c <charset>: použít danou znakovou sadu (výchozí: 'utf8' jestliže je\n"
+#~ "                v nějakém lokálním UTF-8 , jinak výchozí pro mount)\n"
+#~ "  -d, --debug : povolit ladící výstupy (mnoho hlášek)\n"
+#~ "  -h, --help : vypíše nápovědu a ukončí se"
+
+#~ msgid "Error: could not raise to full root uid privileges"
+#~ msgstr "Chyba: nelze získat plná práva superuživatele"
+
+#~ msgid "Error: could not wait for executed mount process"
+#~ msgstr "Chyba: nelze čekat na spuštěný proces připojení"
+
+#, c-format
+#~ msgid "Error: could not connect to hal\n"
+#~ msgstr "Chyba: nelze se připojit na hal\n"
+
+#, c-format
+#~ msgid "Error: given UDI does not exist\n"
+#~ msgstr "Chyba: dané UDI neexistuje\n"
+
+#~ msgid "Error: could not wait for executed umount process"
+#~ msgstr "Chyba: nelze čekat na spuštěný proces umount"

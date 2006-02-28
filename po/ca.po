@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-09-27 16:25+0200\n"
+"POT-Creation-Date: 2005-09-15 21:26+0200\n"
 "PO-Revision-Date: 2005-02-12 01:18+0000\n"
 "Last-Translator: Jordi Vilalta <jvprat@wanadoo.es>\n"
 "Language-Team: Catalan <ca@li.org>\n"
@@ -15,7 +15,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
 
 #: pmount.c:49
@@ -200,9 +199,9 @@ msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr ""
 
 #: pmount.c:657
-#, fuzzy, c-format
+#, c-format
 msgid "Error: mapped device already exists\n"
-msgstr "Error: el dispositiu %s ja està montat a %s\n"
+msgstr ""
 
 #: pmount.c:671
 #, c-format
@@ -221,16 +220,14 @@ msgid "Internal error: mode %i not handled.\n"
 msgstr "error intern: el mode %i no s'ha gestionat.\n"
 
 #: pmount-hal.c:31
-#, fuzzy
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
-"Usage: pmount-hal <device> [pmount options]\n"
+"Usage: pmount-hal <hal UDI> [pmount options]\n"
 "\n"
-"This command mounts the device described by the given device or UDI using\n"
-"pmount. The file system type, the volume storage policy and the desired "
-"label\n"
-"will be read out from hal and passed to pmount."
+"This command mounts the device described by the given UDI using pmount. The\n"
+"file system type, the volume storage policy and the desired label will be\n"
+"read out from hal and passed to pmount."
 msgstr ""
 "pmount-hal - executa pmount amb informació addicional de hal\n"
 "\n"
@@ -249,7 +246,7 @@ msgstr "Error: no s'ha pogut executar pmount\n"
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr ""
 
-#: pmount-hal.c:222
+#: pmount-hal.c:214
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Error: l'UDI donat no és un volum montable\n"
@@ -417,3 +414,46 @@ msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
 "Error intern: no s'ha pogut canviar l'identificació de grup efectiva a una "
 "identificació real de grup"
+
+#~ msgid ""
+#~ "Options:\n"
+#~ "  -a, --async : mount <device> with the 'async' option (default: 'sync')\n"
+#~ "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+#~ "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
+#~ "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
+#~ "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
+#~ "                in an UTF-8 locale, otherwise mount default)\n"
+#~ "  -d, --debug : enable debug output (very verbose)\n"
+#~ "  -h, --help  : print help message and exit successfuly"
+#~ msgstr ""
+#~ "Opcions:\n"
+#~ "  -a, --async : monta <dispositiu> amb l'opció 'async' (per defecte: "
+#~ "'sync')\n"
+#~ "  --noatime   : monta <dispositiu> amb l'opció 'noatime' (per defecte: "
+#~ "'atime')\n"
+#~ "  -e, --exec  : monta <dispositiu> amb l'opció 'exec' (per defecte: "
+#~ "'noexec')\n"
+#~ "  -t <fs>     : monta com a tipus de sistema de fitxers <fs> (per defecte: "
+#~ "autodetectat)\n"
+#~ "  -c <charset>: usa el joc de caràcters I/O donat (per defecte: 'utf8' si es "
+#~ "crida\n"
+#~ "                des d'una locale UTF-8, si no es monta per defecte)\n"
+#~ "  -d, --debug : habilita la sortida en mode depuració (molt detalladament)\n"
+#~ "  -h, --help  : imprimeix el missatge d'ajuda i surt exitosament"
+
+#~ msgid "Error: could not raise to full root uid privileges"
+#~ msgstr "Error: no s'han pogut donar tots els privilegis uid de super-usuari"
+
+#~ msgid "Error: could not wait for executed mount process"
+#~ msgstr "Error: no s'ha pogut esperar per processos de muntatge executats"
+
+#, fuzzy
+#~ msgid "Error: could not connect to hal\n"
+#~ msgstr "Error, no es pot obrir el directori\n"
+
+#, c-format
+#~ msgid "Error: given UDI does not exist\n"
+#~ msgstr "Error: l'UDI donat no existeix\n"
+
+#~ msgid "Error: could not wait for executed umount process"
+#~ msgstr "Error no s'ha pogut esperar els processos d'umount executats"
