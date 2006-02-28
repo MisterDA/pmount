@@ -251,6 +251,12 @@ main( int argc, const char** argv )
     else
        label = libhal_drive_policy_get_desired_mount_point( drive, NULL );
 
+    if( !label && libhal_device_property_exists( hal_ctx,
+                libhal_volume_get_udi( volume ), "volume.label", &error ) )
+        /* fall back to device label if there is no explicit policy */
+        label = libhal_device_get_property_string( hal_ctx,
+                libhal_volume_get_udi( volume ), "volume.label", &error );
+
     debug( "label: %s\n", label );
 
     /* get file system */
@@ -259,8 +265,14 @@ main( int argc, const char** argv )
        fstype = libhal_volume_policy_get_mount_fs( drive, volume, NULL );
 
     if( !fstype )
-        /* fall back to storage device's fstype */
+        /* fall back to storage device's fstype policy */
        fstype = libhal_drive_policy_get_mount_fs( drive, NULL );
+
+    if( !fstype && libhal_device_property_exists( hal_ctx,
+                libhal_volume_get_udi( volume ), "volume.fstype", &error ) )
+        /* fall back to plain fstype */
+        fstype = libhal_device_get_property_string( hal_ctx,
+                libhal_volume_get_udi( volume ), "volume.fstype", &error );
 
     /* ignore invalid file systems */
     if (fstype && !get_fs_info(fstype)) {
