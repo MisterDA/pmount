@@ -249,16 +249,24 @@ main( int argc, const char** argv )
 
     /* get label */
     const char* label;
-    if( volume )
+    if( volume ) {
        label = libhal_volume_policy_get_desired_mount_point( drive, volume, NULL );
-    else
+
+	if( !label && libhal_device_property_exists( hal_ctx,
+		    libhal_volume_get_udi( volume ), "volume.label", &error ) )
+	    /* fall back to device label if there is no explicit policy */
+	    label = libhal_device_get_property_string( hal_ctx,
+		    libhal_volume_get_udi( volume ), "volume.label", &error );
+    } else {
        label = libhal_drive_policy_get_desired_mount_point( drive, NULL );
 
-    if( !label && libhal_device_property_exists( hal_ctx,
-                libhal_volume_get_udi( volume ), "volume.label", &error ) )
-        /* fall back to device label if there is no explicit policy */
-        label = libhal_device_get_property_string( hal_ctx,
-                libhal_volume_get_udi( volume ), "volume.label", &error );
+	if( !label && libhal_device_property_exists( hal_ctx,
+		    libhal_drive_get_udi( drive ), "volume.label", &error ) )
+	    /* fall back to device label if there is no explicit policy */
+	    label = libhal_device_get_property_string( hal_ctx,
+		    libhal_drive_get_udi( drive ), "volume.label", &error );
+    }
+
 
     debug( "label: %s\n", label );
 
@@ -271,7 +279,7 @@ main( int argc, const char** argv )
         /* fall back to storage device's fstype policy */
        fstype = libhal_drive_policy_get_mount_fs( drive, NULL );
 
-    if( !fstype && libhal_device_property_exists( hal_ctx,
+    if( !fstype && volume && libhal_device_property_exists( hal_ctx,
                 libhal_volume_get_udi( volume ), "volume.fstype", &error ) )
         /* fall back to plain fstype */
         fstype = libhal_device_get_property_string( hal_ctx,
