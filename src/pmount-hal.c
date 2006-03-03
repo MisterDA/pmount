@@ -267,6 +267,8 @@ main( int argc, const char** argv )
 		    libhal_drive_get_udi( drive ), "volume.label", &error );
     }
 
+    if (!label || !*label)
+	label = "usbdisk";
 
     debug( "label: %s\n", label );
 
