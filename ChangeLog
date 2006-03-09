@@ -1,5 +1,5 @@
-Development
------------
+0.9.9
+-----
 - mention MMC devices in pmount man page
 - pmount-hal: fix crash for label-less volumes with hal 0.5.7
 - pmount-hal: fix handling of empty labels with hal 0.5.7
