@@ -304,7 +304,7 @@ main( int argc, const char** argv )
 
     const char* s;
     for( s = options; s; s = strchr( s, ',') ) {
-        ++s; /* skip comma */
+        while (*s == ',') ++s; /* skip comma */
         if( !strncmp( s, "exec", 4 ) )
             exec = TRUE;
         else if( !strncmp( s, "noexec", 6 ) )

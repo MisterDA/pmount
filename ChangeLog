@@ -1,3 +1,7 @@
+Development
+-----------
+- pmount-hal: fix parsing of hal's mount options
+
 0.9.9
 -----
 - mention MMC devices in pmount man page
