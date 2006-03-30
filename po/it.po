@@ -121,8 +121,8 @@ msgstr ""
 #, c-format
 msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 msgstr ""
-"Errore: make_mountpoint_name: dispositivo %s non valido (deve essere in "
-"/dev/)\n"
+"Errore: make_mountpoint_name: dispositivo %s non valido (deve essere in /"
+"dev/)\n"
 
 #: pmount.c:137
 #, c-format
@@ -155,8 +155,7 @@ msgstr "Errore: impossibile eseguire mount"
 #: pmount.c:227
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
-msgstr ""
-"Errore interno: mount_attempt: il tipo di file system fornito è NULL\n"
+msgstr "Errore interno: mount_attempt: il tipo di file system fornito è NULL\n"
 
 #: pmount.c:233
 #, c-format
@@ -214,8 +213,7 @@ msgstr ""
 
 #: pmount.c:610 pumount.c:227
 msgid "Error: could not determine real path of the device"
-msgstr ""
-"Errore: impossibile determinare il percorso effettivo del dispositivo"
+msgstr "Errore: impossibile determinare il percorso effettivo del dispositivo"
 
 #: pmount.c:616 pumount.c:233
 #, c-format
