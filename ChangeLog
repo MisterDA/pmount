@@ -1,3 +1,8 @@
+Development
+-----------
+- pmount: refuse to mount devices to a mount point that is already in
+  /etc/fstab
+
 0.9.10
 ------
 - pmount-hal: fix parsing of hal's mount options

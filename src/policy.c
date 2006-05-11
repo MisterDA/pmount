@@ -459,6 +459,10 @@ device_locked( const char* device )
 int
 mntpt_valid( const char* mntpt ) 
 {
+    if( fstab_has_mntpt( "/etc/fstab", mntpt, NULL, 0 ) ) {
+	fprintf( stderr, _("Error: mount point %s is already in /etc/fstab\n"), mntpt );
+	return 0;
+    }
     return !assert_dir( mntpt, 1 ) && !assert_emptydir( mntpt );
 }
 
