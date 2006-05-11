@@ -1,5 +1,5 @@
-Development
------------
+0.9.11
+------
 - pmount: refuse to mount devices to a mount point that is already in
   /etc/fstab
 - pmount-hal: Do not try mount non-fstab devices to fstab mountpoints
