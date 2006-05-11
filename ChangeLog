@@ -2,6 +2,7 @@ Development
 -----------
 - pmount-hal: fix parsing of hal's mount options
 - pmount-hal: directly call mount for devices in /etc/fstab
+- pmount-hal.1: document PMOUNT_DEBUG environment variable
 
 0.9.9
 -----
