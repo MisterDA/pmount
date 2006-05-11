@@ -21,7 +21,7 @@ AC_CHECK_HEADER(sysfs/libsysfs.h,
 													   
 PKG_CHECK_MODULES(HAL, hal >= 0.5.2 hal-storage >= 0.5.2)
 
-ALL_LINGUAS="ca cs de el en es et fr he hr hu id it ml nb nl no pa pl pt_BR ro ru sv yi zh_CN"
+ALL_LINGUAS="ca cs de el en es et fr he hr hu id it ml nb nl no pa pl pt_BR ro ru sv tl yi zh_CN"
 GETTEXT_PACKAGE="pmount"
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])

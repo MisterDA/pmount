@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
-"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2005-09-15 21:26+0200\n"
-"PO-Revision-Date: 2005-02-10 15:15+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-05-11 22:20+0200\n"
+"PO-Revision-Date: 2006-03-09 17:35+0000\n"
 "Last-Translator: Vlastimil Skacel <skacel@svtech.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Rosetta-Version: 0.1\n"
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
 
-#: pmount.c:49
+#: ../src/pmount.c:50
 #, c-format
 msgid ""
 "Usage:\n"
@@ -42,7 +42,7 @@ msgstr ""
 "  bude vytvořen.\n"
 "\n"
 
-#: pmount.c:56
+#: ../src/pmount.c:57
 #, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
@@ -60,7 +60,7 @@ msgstr ""
 "  před mount)\n"
 "\n"
 
-#: pmount.c:63
+#: ../src/pmount.c:64
 #, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
@@ -71,7 +71,7 @@ msgstr ""
 "  Odstranit znovu zámek na <device> pro proces <pid>.\n"
 "\n"
 
-#: pmount.c:66
+#: ../src/pmount.c:67
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -88,92 +88,88 @@ msgid ""
 "                read passphrase from file instead of the terminal\n"
 "                (only for LUKS encrypted devices)\n"
 "  -d, --debug : enable debug output (very verbose)\n"
-"  -h, --help  : print help message and exit successfuly"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully"
 msgstr ""
 
-#: pmount.c:127
-#, c-format
-msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
-msgstr "Chyba: make_mount_name: neplatné zařízení %s (musí být v /dev/)\n"
-
-#: pmount.c:137
+#: ../src/pmount.c:133
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Chyba: jméno nesmí být prázdné\n"
 
-#: pmount.c:141
+#: ../src/pmount.c:137
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Chyba: Příliš dlouhé jméno\n"
 
-#: pmount.c:146
+#: ../src/pmount.c:142
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Chyba:'/' se nesmí vyskytovat ve jméně\n"
 
-#: pmount.c:153
+#: ../src/pmount.c:149
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Chyba: příliš dlouhé jméno zařízení\n"
 
-#: pmount.c:183 pumount.c:98
+#: ../src/pmount.c:180 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
 msgstr "Chyba: nelze zapsat všechna uid oprávnění"
 
-#: pmount.c:188
+#: ../src/pmount.c:185
 #, fuzzy
 msgid "Error: could not execute mount"
 msgstr "Chyba: nelze spustit mount"
 
-#: pmount.c:227
+#: ../src/pmount.c:224
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr "Vnitřní chyba: mount_attempmt: předané jméno souboru je NULL\n"
 
-#: pmount.c:233
+#: ../src/pmount.c:230
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Chyba: špatné jméno souborového systému '%s'\n"
 
-#: pmount.c:239
+#: ../src/pmount.c:236
 #, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Chyba: neplatná umask %s\n"
 
-#: pmount.c:271
+#: ../src/pmount.c:268
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Chyba: špatné jméno znakové sady '%s'\n"
 
-#: pmount.c:352
+#: ../src/pmount.c:349
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "Chyba: nelze zamknout pro pid %u, tento proces neexistuje\n"
 
-#: pmount.c:366
+#: ../src/pmount.c:363
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Chyba: nelze vytvořit pid zamykací soubor %s:%s\n"
 
-#: pmount.c:406
+#: ../src/pmount.c:403
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Chyba: nelze odstranit pid zamykací soubor %s: %s\n"
 
-#: pmount.c:422
+#: ../src/pmount.c:419
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Chyba: do_unlock: nelze odstranit uzamčení adresáře"
 
-#: pmount.c:522 pumount.c:162
+#: ../src/pmount.c:520 ../src/pumount.c:165
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Chyba: tento program je potřeba instalovat jako root\n"
 
-#: pmount.c:563 pumount.c:182
+#: ../src/pmount.c:563 ../src/pumount.c:187
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Vnitřní chyba: getopt_long() vrátil neznámou hodnotu\n"
 
-#: pmount.c:601
+#: ../src/pmount.c:601
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -182,140 +178,138 @@ msgstr ""
 "Varování: zařízení %s je již řízeno s /etc/fstab, dodané jméno bude "
 "ignorováno\n"
 
-#: pmount.c:610 pumount.c:227
+#: ../src/pmount.c:615 ../src/pumount.c:232
 msgid "Error: could not determine real path of the device"
 msgstr "Chyba: nelze určit opravdovou cestu k zařízení"
 
-#: pmount.c:616 pumount.c:233
+#: ../src/pmount.c:624 ../src/pumount.c:238
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Chyba: neplatné zařízení %s (musí být v /dev/)\n"
 
-#: pmount.c:654
-#, fuzzy
+#: ../src/pmount.c:662
+#, fuzzy, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr "Chyba: nemohu dekódovat zařízení (špatné heslo?)\n"
 
-#: pmount.c:657
+#: ../src/pmount.c:665
 #, c-format
 msgid "Error: mapped device already exists\n"
 msgstr "Chyba: mapované zařízení již existuje\n"
 
-#: pmount.c:671
+#: ../src/pmount.c:679
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
 
-#: pmount.c:695
+#: ../src/pmount.c:703
 msgid "Error: could not delete mount point"
 msgstr "Chyba: nelze smazat bod připojení"
 
-#: pmount.c:716
+#: ../src/pmount.c:724
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Vnitřní chyba: mód %i není obsluhován.\n"
 
-#: pmount-hal.c:31
-#, fuzzy
+#: ../src/pmount-hal.c:31
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
-"Usage: pmount-hal <hal UDI> [pmount options]\n"
+"Usage: pmount-hal <device> [pmount options]\n"
 "\n"
-"This command mounts the device described by the given UDI using pmount. The\n"
-"file system type, the volume storage policy and the desired label will be\n"
-"read out from hal and passed to pmount."
+"This command mounts the device described by the given device or UDI using\n"
+"pmount. The file system type, the volume storage policy and the desired "
+"label\n"
+"will be read out from hal and passed to pmount."
 msgstr ""
-"pmount-hal - spusit pmount s přídavnými informacemi z halu\n"
-"\n"
-"Užití: pmount-hal <hal UDI> [pmount volby]\n"
-"\n"
-"Tento příkaz připojí zařízení popsané daným UDI používající pmount. Systém "
-"souborů, chování diskové jednotky and požadovaný název budou\n"
-"přečteny z halu a zaslány pmountu."
 
-#: pmount-hal.c:159
+#: ../src/pmount-hal.c:162
 msgid "Error: could not execute pmount\n"
 msgstr "Chyba: nelze spusit pmount\n"
 
-#: pmount-hal.c:192
+#: ../src/pmount-hal.c:204
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Chyba: nelze se připojit k dbus: %s: %s\n"
 
-#: pmount-hal.c:214
+#: ../src/pmount-hal.c:238
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Chyba: dané UDI neni připojitelné zařízení\n"
 
-#: policy.c:92
+#: ../src/policy.c:92
 msgid "Error: could not get status of device"
 msgstr "Chyba: nelze zjistit stav zařízení"
 
-#: policy.c:103
+#: ../src/policy.c:103
 msgid "Error: could not get sysfs directory\n"
 msgstr "Chyba: nelze získat sysfs adresář\n"
 
-#: policy.c:110
+#: ../src/policy.c:110
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "Chyba: nelze otevřít <sysfs adresář>/block/"
 
-#: policy.c:141
+#: ../src/policy.c:141
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Chyba: nelze otevřít <sysfs adresář>/block/<device>/"
 
-#: policy.c:241
+#: ../src/policy.c:241
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Chyba: zařízení %s neexistuje\n"
 
-#: policy.c:246
+#: ../src/policy.c:246
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Chyba: %s není blokové zařízení\n"
 
-#: policy.c:264 policy.c:320
+#: ../src/policy.c:264 ../src/policy.c:320
 msgid "Error: could not open fstab-type file"
 msgstr "Chyba: nelze otevřít soubor fstab-type"
 
-#: policy.c:351
+#: ../src/policy.c:351
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Chyba: zařízení %s je jíž připojeno na %s\n"
 
-#: policy.c:353
+#: ../src/policy.c:353
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Chyba: zařízení %s není připojeno\n"
 
-#: policy.c:355
+#: ../src/policy.c:355
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Chyba: zařízení %s nepřipojils ty\n"
 
-#: policy.c:391
+#: ../src/policy.c:391
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Chyba: zařízení %s není vyjímatelné\n"
 
-#: policy.c:454
+#: ../src/policy.c:454
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Chyba: zařízení %s je zamčeno\n"
 
-#: policy.c:472
+#: ../src/policy.c:463
+#, fuzzy, c-format
+msgid "Error: mount point %s is already in /etc/fstab\n"
+msgstr "Chyba: připojovací bod %s není pod %s\n"
+
+#: ../src/policy.c:476
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Chyba: adresář %s již obsahuje připojený souborový systém\n"
 
-#: policy.c:474
+#: ../src/policy.c:478
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Chyba: adresář %s neobsahuje připojený souborový systém\n"
 
-#: pumount.c:42
+#: ../src/pumount.c:43
 #, c-format
 msgid ""
 "Usage:\n"
@@ -327,95 +321,136 @@ msgid ""
 "  afterwards.\n"
 "\n"
 "Options:\n"
-"  -l, --lazy : umount lazily, see umount(8)\n"
+"  -l, --lazy  : umount lazily, see umount(8)\n"
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully\n"
 msgstr ""
-"Použití:\n"
-"\n"
-"%s [parametry] <zařízení>\n"
-"  Odpojenit <zařízení> z adresáře pod %s jestliže \n"
-"  jsou nastavená požadovná práva (podrobnosti viz pumount(1)). \n"
-"  Adresář připojovacího bodu je poté odstraněn.\n"
-"\n"
-"Parametry:\n"
-"  -l, --lazy : odpojit líně, viz umount(8)\n"
-"  -d, --debug : povolit ladící výstupy (velmi ukecané)\n"
-"  -h, --help : vytiskne nápovědu a ukončí se\n"
 
-#: pumount.c:72
+#: ../src/pumount.c:74
 msgid "Internal error: could not determine mount point\n"
 msgstr "Vnitřní chyba: nelze určit bod připojení\n"
 
-#: pumount.c:78
+#: ../src/pumount.c:80
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Chyba: připojovací bod %s není pod %s\n"
 
-#: pumount.c:108
+#: ../src/pumount.c:110
 msgid "Error: could not execute umount"
 msgstr "Chyba: nelze spustit umount"
 
-#: pumount.c:129
+#: ../src/pumount.c:131
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "Chyba: umount selhal\n"
 
-#: utils.c:52
+#: ../src/utils.c:52
 #, c-format
 msgid "Error: out of memory\n"
 msgstr "Chyba: nedostatek paměti\n"
 
-#: utils.c:108
+#: ../src/utils.c:108
 msgid "Error: could not create directory"
 msgstr "Chyba: nelze vytvořit adresář"
 
-#: utils.c:124
+#: ../src/utils.c:124
 msgid "Error: could not create stamp file in directory"
 msgstr "Chyba: nelze vytvořit soubor razítka v adresáři"
 
-#: utils.c:132
+#: ../src/utils.c:132
 #, c-format
 msgid "Error: %s is not a directory\n"
 msgstr "Chyba: %s není adresář\n"
 
-#: utils.c:152
+#: ../src/utils.c:152
 msgid "Error: could not open directory"
 msgstr "Chyba: nelze otevřít adresář"
 
-#: utils.c:161
+#: ../src/utils.c:161
 #, c-format
 msgid "Error: directory %s is not empty\n"
 msgstr "Chyba: adresář %s není prázdný\n"
 
-#: utils.c:213
+#: ../src/utils.c:213
 #, c-format
 msgid "Error: '%s' is not a valid number\n"
 msgstr "Chyba: '%s' není platné číslo\n"
 
-#: utils.c:255
+#: ../src/utils.c:255
 msgid "Internal error: could not change to effective uid root"
 msgstr "Vnitřní chyba: nelze změnit úspěšně na uid roota"
 
-#: utils.c:264
+#: ../src/utils.c:264
 #, fuzzy
 msgid "Internal error: could not change effective user uid to real user id"
 msgstr "Vnitřní chyba: nelze změnit užívané id na pravé uživatelské id"
 
-#: utils.c:273
+#: ../src/utils.c:273
 msgid "Internal error: could not change to effective gid root"
 msgstr "Vnitřní chyba: nelze změnit na skutečné gid roota"
 
-#: utils.c:282
+#: ../src/utils.c:282
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupiny"
+
+#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
+#~ msgstr "Chyba: make_mount_name: neplatné zařízení %s (musí být v /dev/)\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "pmount-hal - execute pmount with additional information from hal\n"
+#~ "\n"
+#~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
+#~ "\n"
+#~ "This command mounts the device described by the given UDI using pmount. "
+#~ "The\n"
+#~ "file system type, the volume storage policy and the desired label will "
+#~ "be\n"
+#~ "read out from hal and passed to pmount."
+#~ msgstr ""
+#~ "pmount-hal - spusit pmount s přídavnými informacemi z halu\n"
+#~ "\n"
+#~ "Užití: pmount-hal <hal UDI> [pmount volby]\n"
+#~ "\n"
+#~ "Tento příkaz připojí zařízení popsané daným UDI používající pmount. "
+#~ "Systém souborů, chování diskové jednotky and požadovaný název budou\n"
+#~ "přečteny z halu a zaslány pmountu."
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "\n"
+#~ "%s [options] <device>\n"
+#~ "  Umount <device> from a directory below %s if policy requirements\n"
+#~ "  are met (see pumount(1) for details). The mount point directory is "
+#~ "removed\n"
+#~ "  afterwards.\n"
+#~ "\n"
+#~ "Options:\n"
+#~ "  -l, --lazy : umount lazily, see umount(8)\n"
+#~ "  -d, --debug : enable debug output (very verbose)\n"
+#~ "  -h, --help  : print help message and exit successfuly\n"
+#~ msgstr ""
+#~ "Použití:\n"
+#~ "\n"
+#~ "%s [parametry] <zařízení>\n"
+#~ "  Odpojenit <zařízení> z adresáře pod %s jestliže \n"
+#~ "  jsou nastavená požadovná práva (podrobnosti viz pumount(1)). \n"
+#~ "  Adresář připojovacího bodu je poté odstraněn.\n"
+#~ "\n"
+#~ "Parametry:\n"
+#~ "  -l, --lazy : odpojit líně, viz umount(8)\n"
+#~ "  -d, --debug : povolit ladící výstupy (velmi ukecané)\n"
+#~ "  -h, --help : vytiskne nápovědu a ukončí se\n"
 
 #, fuzzy
 #~ msgid ""
 #~ "Options:\n"
 #~ "  -a, --async : mount <device> with the 'async' option (default: 'sync')\n"
-#~ "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
-#~ "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
+#~ "  --noatime   : mount <device> with the 'noatime' option (default: "
+#~ "'atime')\n"
+#~ "  -e, --exec  : mount <device> with the 'exec' option (default: "
+#~ "'noexec')\n"
 #~ "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
 #~ "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
 #~ "                in an UTF-8 locale, otherwise mount default)\n"
@@ -424,8 +459,10 @@ msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupin
 #~ msgstr ""
 #~ "Volby:\n"
 #~ "  -a, --async : připojit <zařízení> s volbou 'async' (výchozí je:'sync')\n"
-#~ "  --noatime : připojit <zařízení> s volbou 'noatime' (výchozí je:'atime')\n"
-#~ "  -e, --exec : připojit <zařízení> s volbou 'exec' (výchozí je: 'noexec')\n"
+#~ "  --noatime : připojit <zařízení> s volbou 'noatime' (výchozí "
+#~ "je:'atime')\n"
+#~ "  -e, --exec : připojit <zařízení> s volbou 'exec' (výchozí je: "
+#~ "'noexec')\n"
 #~ "  -t <fs> : připojit jako souborový systém <fs> (výchozí: autodetected)\n"
 #~ "  -c <charset>: použít danou znakovou sadu (výchozí: 'utf8' jestliže je\n"
 #~ "                v nějakém lokálním UTF-8 , jinak výchozí pro mount)\n"
@@ -438,11 +475,9 @@ msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupin
 #~ msgid "Error: could not wait for executed mount process"
 #~ msgstr "Chyba: nelze čekat na spuštěný proces připojení"
 
-#, c-format
 #~ msgid "Error: could not connect to hal\n"
 #~ msgstr "Chyba: nelze se připojit na hal\n"
 
-#, c-format
 #~ msgid "Error: given UDI does not exist\n"
 #~ msgstr "Chyba: dané UDI neexistuje\n"
 
