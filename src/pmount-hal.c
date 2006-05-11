@@ -190,6 +190,12 @@ main( int argc, const char** argv )
     if (getenv ("PMOUNT_DEBUG"))
         enable_debug = 1;
 
+    /* if this is an fstab device, use mount right away */
+    if( fstab_has_device( "/etc/fstab", devarg, NULL, NULL ) ) {
+	debug( "%s is in /etc/fstab, calling mount\n", devarg );
+	return spawnl( SPAWN_SEARCHPATH, "mount", "mount", devarg, NULL );
+    }
+
     /* initialize hal connection */
     dbus_error_init( &error );
     dbus_conn = dbus_bus_get( DBUS_BUS_SYSTEM, &error );

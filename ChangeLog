@@ -1,6 +1,7 @@
 Development
 -----------
 - pmount-hal: fix parsing of hal's mount options
+- pmount-hal: directly call mount for devices in /etc/fstab
 
 0.9.9
 -----
