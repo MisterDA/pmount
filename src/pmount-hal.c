@@ -81,6 +81,7 @@ int valid_mntpt( const char* mntpt )
         return 0;
 
     if( fstab_has_mntpt( "/proc/mounts", mntpt, NULL, 0 ) ||
+        fstab_has_mntpt( "/etc/fstab", mntpt, NULL, 0 ) ||
         fstab_has_mntpt( "/etc/mtab", mntpt, NULL, 0 ) )
         return 0;
 
