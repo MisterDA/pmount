@@ -402,7 +402,7 @@ device_whitelisted( const char* device )
     regex_t re;
     regmatch_t match[3];
     int result;
-    const char* whitelist_regex = "^[[:space:]]*([a-zA-Z0-9/_+.-]+)[[:space:]]*(#.*)?$";
+    const char* whitelist_regex = "^[[:space:]]*([[:alnum:]/_+.\-]+)[[:space:]]*(#.*)?$";
 
     fwl = fopen( WHITELIST, "r" );
     if( !fwl )
