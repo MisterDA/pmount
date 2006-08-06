@@ -282,6 +282,8 @@ main( int argc, const char** argv )
 
     if (!label || !*label)
 	label = "usbdisk";
+    else
+	label = strreplace(label, '/', '_');
 
     debug( "label: %s\n", label );
 

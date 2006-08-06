@@ -2,6 +2,7 @@ Development
 -----------
 - fix pmount.allow parsing regular expression (it failed in some ISO locales)
 - pmount-hal: honour iocharset mount option from hal policy
+- pmount-hal: replace slashes with underscores in label
 
 0.9.11
 ------
