@@ -1,6 +1,7 @@
 Development
 -----------
 - fix pmount.allow parsing regular expression (it failed in some ISO locales)
+- pmount-hal: honour iocharset mount option from hal policy
 
 0.9.11
 ------

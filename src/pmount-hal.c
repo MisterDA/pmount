@@ -111,9 +111,9 @@ void get_free_label( const char* label, char* result, size_t result_size )
 
 void exec_pmount( const char* device, const char* fstype, const char* label,
         dbus_bool_t sync, dbus_bool_t noatime, dbus_bool_t exec, const char*
-        umask, int addargc, const char* const* addargv ) 
+        umask, const char* iocharset, int addargc, const char* const* addargv ) 
 {
-    const char** argv = (const char**) calloc( sizeof( const char* ), addargc+13 );
+    const char** argv = (const char**) calloc( sizeof( const char* ), addargc+15 );
     int argc = 0;
     char freelabel[PATH_MAX];
     int i;
@@ -135,6 +135,11 @@ void exec_pmount( const char* device, const char* fstype, const char* label,
     if( umask ) {
         argv[argc++] = "--umask";
         argv[argc++] = umask;
+    }
+
+    if( iocharset ) {
+	argv[argc++] = "-c";
+	argv[argc++] = iocharset;
     }
 
     for( i = 0; i < addargc; ++i )
@@ -175,6 +180,7 @@ main( int argc, const char** argv )
     LibHalDrive* drive;
     dbus_bool_t sync = FALSE, noatime = FALSE, exec = FALSE;
     char *umask = NULL;
+    char *iocharset = NULL;
 
     /* initialize locale */
     setlocale( LC_ALL, "" );
@@ -324,6 +330,14 @@ main( int argc, const char** argv )
             sync = TRUE;
         else if( !strncmp( s, "async", 5 ) )
             sync = FALSE;
+	else if( !strncmp( s, "iocharset=", 10) ) {
+	    char *p;
+	    iocharset = strdup( s+10 );
+	    /* cut off after next comma */
+	    p = strchr( iocharset, ',' );
+	    if( p )
+		*p = 0;
+	}
     }
 
     /* umask is not covered by the HAL spec */
@@ -349,7 +363,7 @@ main( int argc, const char** argv )
     dbus_connection_unref( dbus_conn );
 
     /* go */
-    exec_pmount( device, fstype, label, sync, noatime, exec, umask, argc-2, argv+2 );
+    exec_pmount( device, fstype, label, sync, noatime, exec, umask, iocharset, argc-2, argv+2 );
 
     return 0;
 }
