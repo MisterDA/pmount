@@ -11,20 +11,13 @@
 #ifndef __policy_h
 #define __policy_h
 
+#include <config.h>
 #include <stdlib.h> /* for size_t */
 
 #define MAX_LABEL_SIZE 255
-#define MEDIADIR "/media/"
 #define DEVDIR "/dev/"
-#define LOCKDIR "/var/lock/pmount/"
-#define WHITELIST "/etc/pmount.allow"
 
 #define MEDIA_STRING_SIZE MAX_LABEL_SIZE + sizeof( MEDIADIR )
-
-/* external programs */
-#define MOUNTPROG "/bin/mount"
-#define UMOUNTPROG "/bin/umount"
-#define CRYPTSETUP "/sbin/cryptsetup"
 
 /**
  * Check whether a fstab-type file (fstab, /etc/mtab or /proc/mounts)

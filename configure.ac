@@ -19,6 +19,32 @@ AC_CHECK_HEADER(sysfs/libsysfs.h,
 		[AC_MSG_ERROR([Missing sysfs library (install libsysfs-dev or similar?)])])],
 	[AC_MSG_ERROR([Missing /usr/include/sysfs/libsysfs.h (install libsysfs-dev or similar?)])])
 
+# directory configuration
+AC_ARG_WITH(media-dir, 
+	AC_HELP_STRING([--with-media-dir=DIR], [Parent directory for mounts; MUST have trailing slash (default: /media/)]),
+	AC_DEFINE_UNQUOTED(MEDIADIR, "$withval", [directory for mounts]),
+	AC_DEFINE_UNQUOTED(MEDIADIR, "/media/", [directory for mounts]))
+AC_ARG_WITH(lock-dir, 
+	AC_HELP_STRING([--with-lock-dir=DIR], [Directory for mount locks (default: /var/lock/pmount)]),
+	AC_DEFINE_UNQUOTED(LOCKDIR, "$withval", [directory for locks]),
+	AC_DEFINE_UNQUOTED(LOCKDIR, "/var/lock/pmount", [directory for locks]))
+AC_ARG_WITH(whitelist, 
+	AC_HELP_STRING([--with-whitelist=PATH], [Path of whitelist configuration file (default: /etc/pmount.allow)]),
+	AC_DEFINE_UNQUOTED(WHITELIST, "$withval", [whitelist configuration file]),
+	AC_DEFINE_UNQUOTED(WHITELIST, "/var/lock/pmount", [whitelist configuration file]))
+AC_ARG_WITH(mount-prog, 
+	AC_HELP_STRING([--with-mount-prog=PATH], [Path to mount program (default: /bin/mount)]),
+	AC_DEFINE_UNQUOTED(MOUNTPROG, "$withval", [path to mount]),
+	AC_DEFINE_UNQUOTED(MOUNTPROG, "/bin/mount", [path to mount]))
+AC_ARG_WITH(umount-prog, 
+	AC_HELP_STRING([--with-umount-prog=PATH], [Path to umount program (default: /bin/umount)]),
+	AC_DEFINE_UNQUOTED(MOUNTPROG, "$withval", [path to umount]),
+	AC_DEFINE_UNQUOTED(UMOUNTPROG, "/bin/umount", [path to umount]))
+AC_ARG_WITH(cryptsetup-prog, 
+	AC_HELP_STRING([--with-cryptsetup-prog=PATH], [Path to cryptsetup program (default: /sbin/cryptsetup)]),
+	AC_DEFINE_UNQUOTED(CRYPTSETUP, "$withval", [path to cryptsetup]),
+	AC_DEFINE_UNQUOTED(CRYPTSETUP, "/sbin/cryptsetup", [path to cryptsetup]))
+
 AC_ARG_ENABLE(hal,
   AC_HELP_STRING([--enable-hal],[build pmount-hal frontend, if hal is available]),
   [case $enableval in
