@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount 0.5\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 22:20+0200\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2006-03-30 17:56+0200\n"
 "PO-Revision-Date: 2006-04-03 13:41+0000\n"
 "Last-Translator: Valery Kartel <droid@terem.kiev.ua>\n"
 "Language-Team: Russian\n"
@@ -42,7 +42,7 @@ msgstr ""
 "\n"
 
 #: ../src/pmount.c:57
-#, fuzzy, c-format
+#, fuzzy
 msgid ""
 "%s --lock <device> <pid>\n"
 "  Prevent further pmounts of <device> until it is unlocked again. <pid>\n"
@@ -226,16 +226,16 @@ msgid ""
 "will be read out from hal and passed to pmount."
 msgstr ""
 
-#: ../src/pmount-hal.c:162
+#: ../src/pmount-hal.c:161
 msgid "Error: could not execute pmount\n"
 msgstr "Ошибка: невозможно выполнить команду pmount\n"
 
-#: ../src/pmount-hal.c:204
+#: ../src/pmount-hal.c:197
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Ошибка: невозможно установить соединение с шиной dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:238
+#: ../src/pmount-hal.c:231
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Ошибка: указанный UDI - неприсоединяемое устройство\n"
@@ -295,17 +295,12 @@ msgstr "Ошибка: %s - несъемное устройство\n"
 msgid "Error: device %s is locked\n"
 msgstr "Ошибка: %s - заблокированное устройство\n"
 
-#: ../src/policy.c:463
-#, fuzzy, c-format
-msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr "Ошибка: точка присоединения %s не в %s\n"
-
-#: ../src/policy.c:476
+#: ../src/policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Ошибка: каталог %s уже содержит присоединенную файловую систему\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Ошибка: каталок %s не содержит присоединенной файловой системы\n"
@@ -401,10 +396,8 @@ msgstr "Внутренняя ошибка: невозможно изменить
 #~ "  -r          : force <device> to be mounted read-only\n"
 #~ "  -w          : force <device> to be mounted read-write\n"
 #~ "  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
-#~ "  --noatime   : mount <device> with the 'noatime' option (default: "
-#~ "'atime')\n"
-#~ "  -e, --exec  : mount <device> with the 'exec' option (default: "
-#~ "'noexec')\n"
+#~ "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+#~ "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
 #~ "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
 #~ "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
 #~ "                in an UTF-8 locale, otherwise mount default)\n"
@@ -417,23 +410,22 @@ msgstr "Внутренняя ошибка: невозможно изменить
 #~ "  -h, --help  : print help message and exit successfuly"
 #~ msgstr ""
 #~ "Параметры:\n"
-#~ "  -r          : Принудительно подключить <устройство> в режиме 'только "
-#~ "для чтения'\n"
+#~ "  -r          : Принудительно подключить <устройство> в режиме 'только для "
+#~ "чтения'\n"
 #~ "  -w          : Принудительно подключить <устройства> в режиме 'чтение и "
 #~ "запись'\n"
-#~ "  -s, --sync  : Подключить <устройство> с параметром 'синхронихзация "
-#~ "записи данных'\n"
+#~ "  -s, --sync  : Подключить <устройство> с параметром 'синхронихзация записи "
+#~ "данных'\n"
 #~ "                (по умолчанию: 'без синхронизации записи данных')\n"
 #~ "  --noatime   : Подключить <устройство> с параметром 'без метки времени "
 #~ "изменения'\n"
 #~ "                (по умолчанию: 'c меткой времени изменения')\n"
-#~ "  -e, --exec  : Подключить <устройство> с параметром 'запускать "
-#~ "программы'\n"
+#~ "  -e, --exec  : Подключить <устройство> с параметром 'запускать программы'\n"
 #~ "                (по умолчанию: 'не запускать программы')\n"
 #~ "  -t <fs>     : Указать тип файловой системы (по умолчанию: "
 #~ "автоопределение)\n"
-#~ "  -c <charset>: Указать кодовую таблицу ввода/вывода (по умолчанию: "
-#~ "'utf8' если\n"
+#~ "  -c <charset>: Указать кодовую таблицу ввода/вывода (по умолчанию: 'utf8' "
+#~ "если\n"
 #~ "                установлена локализация UTF-8, в противном случае - "
 #~ "текущую)\n"
 #~ "  -u <umask>  : Указать инверсную маску доступа к данным (только для "
@@ -442,25 +434,22 @@ msgstr "Внутренняя ошибка: невозможно изменить
 #~ " --passphrase <file>\n"
 #~ "                Прочитать пароль из указанного файла, а не с терминала\n"
 #~ "                (только для LUKS-зашифрованных устройств)\n"
-#~ "  -d, --debug : Разрешить вывод отладочной информации (очень "
-#~ "информативно)\n"
-#~ "  -h, --help  : Вывод данного текста подсказки и успешное завершение "
-#~ "работы"
+#~ "  -d, --debug : Разрешить вывод отладочной информации (очень информативно)\n"
+#~ "  -h, --help  : Вывод данного текста подсказки и успешное завершение работы"
 
+#, c-format
 #~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 #~ msgstr ""
-#~ "Ошибка: make_mountpoint_name: некорректное имя устройства %s (должно быть "
-#~ "в /dev/)\n"
+#~ "Ошибка: make_mountpoint_name: некорректное имя устройства %s (должно быть в "
+#~ "/dev/)\n"
 
 #~ msgid ""
 #~ "pmount-hal - execute pmount with additional information from hal\n"
 #~ "\n"
 #~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
 #~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. "
-#~ "The\n"
-#~ "file system type, the volume storage policy and the desired label will "
-#~ "be\n"
+#~ "This command mounts the device described by the given UDI using pmount. The\n"
+#~ "file system type, the volume storage policy and the desired label will be\n"
 #~ "read out from hal and passed to pmount."
 #~ msgstr ""
 #~ "pmount-hal - запуск pmount с дополнительной информацией от HAL\n"
@@ -473,6 +462,7 @@ msgstr "Внутренняя ошибка: невозможно изменить
 #~ "прочитаны из HAL\n"
 #~ "и переданы в pmount."
 
+#, c-format
 #~ msgid ""
 #~ "Usage:\n"
 #~ "\n"
@@ -492,13 +482,10 @@ msgstr "Внутренняя ошибка: невозможно изменить
 #~ "%s [параметры] <устройство>\n"
 #~ "  Отсоединение <устройства> от каталога %s, если это не противоречит "
 #~ "политике\n"
-#~ "  безопасности (детальнее см. pumount(1)). После этого будет удален "
-#~ "каталог\n"
+#~ "  безопасности (детальнее см. pumount(1)). После этого будет удален каталог\n"
 #~ "  точки присоединения.\n"
 #~ "\n"
 #~ "Параметры:\n"
 #~ "  -l, --lazy : \"ленивое\" отсоединение, детальнее см. umount(8)\n"
-#~ "  -d, --debug : Разрешить вывод отладочной информации (очень "
-#~ "информативно)\n"
-#~ "  -h, --help  : Вывод данного текста подсказки и успешное завершение "
-#~ "работы\n"
+#~ "  -d, --debug : Разрешить вывод отладочной информации (очень информативно)\n"
+#~ "  -h, --help  : Вывод данного текста подсказки и успешное завершение работы\n"

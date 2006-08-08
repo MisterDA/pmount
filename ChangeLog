@@ -8,6 +8,7 @@ Development
 - check for HAL libraries at configure time and conditionally build pmount-hal
 - add configure options for external programs and paths, so that policy.h does
   not need to be altered for installation customizations any more
+- update translations from Rosetta
 
 0.9.11
 ------

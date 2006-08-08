@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 22:20+0200\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-03-30 17:56+0200\n"
 "PO-Revision-Date: 2005-09-15 15:36+0000\n"
 "Last-Translator: Martin Pitt <martin.pitt@ubuntu.com>\n"
 "Language-Team: Chinese (China) <zh_CN@li.org>\n"
@@ -213,16 +213,16 @@ msgid ""
 "will be read out from hal and passed to pmount."
 msgstr ""
 
-#: ../src/pmount-hal.c:162
+#: ../src/pmount-hal.c:161
 msgid "Error: could not execute pmount\n"
 msgstr "错误：无法执行 pmount\n"
 
-#: ../src/pmount-hal.c:204
+#: ../src/pmount-hal.c:197
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr ""
 
-#: ../src/pmount-hal.c:238
+#: ../src/pmount-hal.c:231
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr ""
@@ -282,17 +282,12 @@ msgstr ""
 msgid "Error: device %s is locked\n"
 msgstr ""
 
-#: ../src/policy.c:463
-#, c-format
-msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr ""
-
-#: ../src/policy.c:476
+#: ../src/policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr ""
 
-#: ../src/policy.c:478
+#: ../src/policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr ""
@@ -381,6 +376,7 @@ msgstr ""
 msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
 
+#, c-format
 #~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 #~ msgstr "错误：make_mountpoint_name：无效的设备 %s (必须在 /dev/ 下)\n"
 
@@ -389,16 +385,13 @@ msgstr ""
 #~ "\n"
 #~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
 #~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. "
-#~ "The\n"
-#~ "file system type, the volume storage policy and the desired label will "
-#~ "be\n"
+#~ "This command mounts the device described by the given UDI using pmount. The\n"
+#~ "file system type, the volume storage policy and the desired label will be\n"
 #~ "read out from hal and passed to pmount."
 #~ msgstr ""
 #~ "pmount-hal - 根据 hal 提供的额外信息执行 pmount\n"
 #~ "\n"
 #~ "用法：pmount-hal <hal UDI> [pmount 选项]\n"
 #~ "\n"
-#~ "此命令将根据根据给定的 UDI 用 pmount 来挂载设备。文件系统类型、存储卷政策"
-#~ "和\n"
+#~ "此命令将根据根据给定的 UDI 用 pmount 来挂载设备。文件系统类型、存储卷政策和\n"
 #~ "将要使用的卷标都将从 hal 获得并传递给 pmount。"

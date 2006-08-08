@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 22:20+0200\n"
-"PO-Revision-Date: 2005-04-04 15:53+0000\n"
-"Last-Translator: Jordi Vilalta <jvprat@gmail.com>\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-03-30 17:56+0200\n"
+"PO-Revision-Date: 2006-07-09 22:02+0000\n"
+"Last-Translator: el_libre <el.libre@gmail.com>\n"
 "Language-Team: Catalan <ca@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -134,7 +134,7 @@ msgstr "Error: el nom %s de sistema de fitxers és invàlid\n"
 #: ../src/pmount.c:236
 #, c-format
 msgid "Error: invalid umask %s\n"
-msgstr ""
+msgstr "Error: umask invàlida %s\n"
 
 #: ../src/pmount.c:268
 #, c-format
@@ -191,12 +191,12 @@ msgstr "Error: dispositiu %s invàlid (ha d'estar a /dev/)\n"
 #: ../src/pmount.c:662
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr ""
+msgstr "Error: no es pot desencriptar el dispositiu (clau errònia?)\n"
 
 #: ../src/pmount.c:665
 #, c-format
 msgid "Error: mapped device already exists\n"
-msgstr ""
+msgstr "Error: el dispositiu mapejat ja existeix\n"
 
 #: ../src/pmount.c:679
 #, c-format
@@ -226,16 +226,16 @@ msgid ""
 "will be read out from hal and passed to pmount."
 msgstr ""
 
-#: ../src/pmount-hal.c:162
+#: ../src/pmount-hal.c:161
 msgid "Error: could not execute pmount\n"
 msgstr "Error: no s'ha pogut executar pmount\n"
 
-#: ../src/pmount-hal.c:204
+#: ../src/pmount-hal.c:197
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
-msgstr ""
+msgstr "Error: no es pot connectar a dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:238
+#: ../src/pmount-hal.c:231
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Error: l'UDI donat no és un volum montable\n"
@@ -295,17 +295,12 @@ msgstr "Error: el dispositiu %s no es pot remoure\n"
 msgid "Error: device %s is locked\n"
 msgstr "Error: el dispositiu %s està blocat\n"
 
-#: ../src/policy.c:463
-#, fuzzy, c-format
-msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr "Error: el punt de montatge %s no és a sota %s\n"
-
-#: ../src/policy.c:476
+#: ../src/policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Error: el directori %s ja conté un sistema de fitxers montat\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Error: el directori %s no conté un sistema de fitxers montat\n"
@@ -398,6 +393,7 @@ msgstr ""
 "Error intern: no s'ha pogut canviar l'identificació de grup efectiva a una "
 "identificació real de grup"
 
+#, c-format
 #~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 #~ msgstr ""
 #~ "Error: make_mountpoint_name: dispositiu %s invàlid (ha d'estar a /dev/)\n"
@@ -407,10 +403,8 @@ msgstr ""
 #~ "\n"
 #~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
 #~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. "
-#~ "The\n"
-#~ "file system type, the volume storage policy and the desired label will "
-#~ "be\n"
+#~ "This command mounts the device described by the given UDI using pmount. The\n"
+#~ "file system type, the volume storage policy and the desired label will be\n"
 #~ "read out from hal and passed to pmount."
 #~ msgstr ""
 #~ "pmount-hal - executa pmount amb informació addicional de hal\n"
@@ -421,6 +415,7 @@ msgstr ""
 #~ "pmount. El tipus de sistema de fitxers, la política d'emmagatzematge del\n"
 #~ "volum i l'etiqueta desitjada es llegiran de hal i es passaran a pmount."
 
+#, c-format
 #~ msgid ""
 #~ "Usage:\n"
 #~ "\n"
@@ -439,8 +434,8 @@ msgstr ""
 #~ "\n"
 #~ "%s [opcions] <dispositiu>\n"
 #~ "  Umount <dispositiu> des d'un directori sota %s si es compleixen els\n"
-#~ "  requeriments (vegeu pumount(1) per més detalls). El directori del punt "
-#~ "de montatge\n"
+#~ "  requeriments (vegeu pumount(1) per més detalls). El directori del punt de "
+#~ "montatge\n"
 #~ "  s'elimina després\n"
 #~ "\n"
 #~ "Opcions:\n"
@@ -451,10 +446,8 @@ msgstr ""
 #~ msgid ""
 #~ "Options:\n"
 #~ "  -a, --async : mount <device> with the 'async' option (default: 'sync')\n"
-#~ "  --noatime   : mount <device> with the 'noatime' option (default: "
-#~ "'atime')\n"
-#~ "  -e, --exec  : mount <device> with the 'exec' option (default: "
-#~ "'noexec')\n"
+#~ "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+#~ "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
 #~ "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
 #~ "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
 #~ "                in an UTF-8 locale, otherwise mount default)\n"
@@ -468,13 +461,12 @@ msgstr ""
 #~ "'atime')\n"
 #~ "  -e, --exec  : monta <dispositiu> amb l'opció 'exec' (per defecte: "
 #~ "'noexec')\n"
-#~ "  -t <fs>     : monta com a tipus de sistema de fitxers <fs> (per "
-#~ "defecte: autodetectat)\n"
-#~ "  -c <charset>: usa el joc de caràcters I/O donat (per defecte: 'utf8' si "
-#~ "es crida\n"
+#~ "  -t <fs>     : monta com a tipus de sistema de fitxers <fs> (per defecte: "
+#~ "autodetectat)\n"
+#~ "  -c <charset>: usa el joc de caràcters I/O donat (per defecte: 'utf8' si es "
+#~ "crida\n"
 #~ "                des d'una locale UTF-8, si no es monta per defecte)\n"
-#~ "  -d, --debug : habilita la sortida en mode depuració (molt "
-#~ "detalladament)\n"
+#~ "  -d, --debug : habilita la sortida en mode depuració (molt detalladament)\n"
 #~ "  -h, --help  : imprimeix el missatge d'ajuda i surt exitosament"
 
 #~ msgid "Error: could not raise to full root uid privileges"
@@ -487,6 +479,7 @@ msgstr ""
 #~ msgid "Error: could not connect to hal\n"
 #~ msgstr "Error, no es pot obrir el directori\n"
 
+#, c-format
 #~ msgid "Error: given UDI does not exist\n"
 #~ msgstr "Error: l'UDI donat no existeix\n"
 

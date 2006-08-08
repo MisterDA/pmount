@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 22:20+0200\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-03-30 17:56+0200\n"
 "PO-Revision-Date: 2006-03-09 17:35+0000\n"
 "Last-Translator: Vlastimil Skacel <skacel@svtech.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -188,7 +188,7 @@ msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Chyba: neplatné zařízení %s (musí být v /dev/)\n"
 
 #: ../src/pmount.c:662
-#, fuzzy, c-format
+#, fuzzy
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr "Chyba: nemohu dekódovat zařízení (špatné heslo?)\n"
 
@@ -225,16 +225,16 @@ msgid ""
 "will be read out from hal and passed to pmount."
 msgstr ""
 
-#: ../src/pmount-hal.c:162
+#: ../src/pmount-hal.c:161
 msgid "Error: could not execute pmount\n"
 msgstr "Chyba: nelze spusit pmount\n"
 
-#: ../src/pmount-hal.c:204
+#: ../src/pmount-hal.c:197
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Chyba: nelze se připojit k dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:238
+#: ../src/pmount-hal.c:231
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Chyba: dané UDI neni připojitelné zařízení\n"
@@ -294,17 +294,12 @@ msgstr "Chyba: zařízení %s není vyjímatelné\n"
 msgid "Error: device %s is locked\n"
 msgstr "Chyba: zařízení %s je zamčeno\n"
 
-#: ../src/policy.c:463
-#, fuzzy, c-format
-msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr "Chyba: připojovací bod %s není pod %s\n"
-
-#: ../src/policy.c:476
+#: ../src/policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Chyba: adresář %s již obsahuje připojený souborový systém\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Chyba: adresář %s neobsahuje připojený souborový systém\n"
@@ -394,6 +389,7 @@ msgstr "Vnitřní chyba: nelze změnit na skutečné gid roota"
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupiny"
 
+#, c-format
 #~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 #~ msgstr "Chyba: make_mount_name: neplatné zařízení %s (musí být v /dev/)\n"
 
@@ -403,20 +399,19 @@ msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupin
 #~ "\n"
 #~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
 #~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. "
-#~ "The\n"
-#~ "file system type, the volume storage policy and the desired label will "
-#~ "be\n"
+#~ "This command mounts the device described by the given UDI using pmount. The\n"
+#~ "file system type, the volume storage policy and the desired label will be\n"
 #~ "read out from hal and passed to pmount."
 #~ msgstr ""
 #~ "pmount-hal - spusit pmount s přídavnými informacemi z halu\n"
 #~ "\n"
 #~ "Užití: pmount-hal <hal UDI> [pmount volby]\n"
 #~ "\n"
-#~ "Tento příkaz připojí zařízení popsané daným UDI používající pmount. "
-#~ "Systém souborů, chování diskové jednotky and požadovaný název budou\n"
+#~ "Tento příkaz připojí zařízení popsané daným UDI používající pmount. Systém "
+#~ "souborů, chování diskové jednotky and požadovaný název budou\n"
 #~ "přečteny z halu a zaslány pmountu."
 
+#, c-format
 #~ msgid ""
 #~ "Usage:\n"
 #~ "\n"
@@ -447,10 +442,8 @@ msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupin
 #~ msgid ""
 #~ "Options:\n"
 #~ "  -a, --async : mount <device> with the 'async' option (default: 'sync')\n"
-#~ "  --noatime   : mount <device> with the 'noatime' option (default: "
-#~ "'atime')\n"
-#~ "  -e, --exec  : mount <device> with the 'exec' option (default: "
-#~ "'noexec')\n"
+#~ "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+#~ "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
 #~ "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
 #~ "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
 #~ "                in an UTF-8 locale, otherwise mount default)\n"
@@ -459,10 +452,8 @@ msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupin
 #~ msgstr ""
 #~ "Volby:\n"
 #~ "  -a, --async : připojit <zařízení> s volbou 'async' (výchozí je:'sync')\n"
-#~ "  --noatime : připojit <zařízení> s volbou 'noatime' (výchozí "
-#~ "je:'atime')\n"
-#~ "  -e, --exec : připojit <zařízení> s volbou 'exec' (výchozí je: "
-#~ "'noexec')\n"
+#~ "  --noatime : připojit <zařízení> s volbou 'noatime' (výchozí je:'atime')\n"
+#~ "  -e, --exec : připojit <zařízení> s volbou 'exec' (výchozí je: 'noexec')\n"
 #~ "  -t <fs> : připojit jako souborový systém <fs> (výchozí: autodetected)\n"
 #~ "  -c <charset>: použít danou znakovou sadu (výchozí: 'utf8' jestliže je\n"
 #~ "                v nějakém lokálním UTF-8 , jinak výchozí pro mount)\n"
@@ -475,9 +466,11 @@ msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupin
 #~ msgid "Error: could not wait for executed mount process"
 #~ msgstr "Chyba: nelze čekat na spuštěný proces připojení"
 
+#, c-format
 #~ msgid "Error: could not connect to hal\n"
 #~ msgstr "Chyba: nelze se připojit na hal\n"
 
+#, c-format
 #~ msgid "Error: given UDI does not exist\n"
 #~ msgstr "Chyba: dané UDI neexistuje\n"
 

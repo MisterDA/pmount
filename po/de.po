@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount 0.5\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 22:20+0200\n"
+"Report-Msgid-Bugs-To:\n"
+"POT-Creation-Date: 2006-03-30 17:56+0200\n"
 "PO-Revision-Date: 2006-03-09 17:37+0000\n"
 "Last-Translator: Martin Pitt <martin.pitt@ubuntu.com>\n"
 "Language-Team: German <de@li.org>\n"
@@ -139,7 +139,8 @@ msgstr "Fehler: konnte mount nicht ausführen"
 #: ../src/pmount.c:224
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
-msgstr "Interner Fehler: mount_attempt: gegebener Dateisystem-Name ist NULL\n"
+msgstr ""
+"Interner Fehler: mount_attempt: gegebener Dateisystem-Name ist NULL\n"
 
 #: ../src/pmount.c:230
 #, c-format
@@ -251,16 +252,16 @@ msgstr ""
 "verschiedene Mount-Optionen und der bevorzugte Name werden von hal\n"
 "gelesen und pmount als Optionen überreicht."
 
-#: ../src/pmount-hal.c:162
+#: ../src/pmount-hal.c:161
 msgid "Error: could not execute pmount\n"
 msgstr "Fehler: konnte pmount nicht ausführen\n"
 
-#: ../src/pmount-hal.c:204
+#: ../src/pmount-hal.c:197
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Fehler: konnte keine Verbindung zu dbus herstellen: %s: %s\n"
 
-#: ../src/pmount-hal.c:238
+#: ../src/pmount-hal.c:231
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Fehler: angegebene UDI ist kein einbindbares Gerät\n"
@@ -320,17 +321,12 @@ msgstr "Fehler: Gerät %s ist kein Wechseldatenträger\n"
 msgid "Error: device %s is locked\n"
 msgstr "Fehler: Gerät %s ist gesperrt\n"
 
-#: ../src/policy.c:463
-#, c-format
-msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr "Fehler: Bindungsverzeichnis %s ist schon in /etc/fstab\n"
-
-#: ../src/policy.c:476
+#: ../src/policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Fehler: Verzeichnis %s enthält schon ein eingebundenes Dateisystem\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Fehler: Verzeichnis %s enthält kein eingebundenes Dateisystem\n"

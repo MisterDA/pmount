@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 22:20+0200\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-03-30 17:56+0200\n"
 "PO-Revision-Date: 2006-04-10 11:47+0000\n"
 "Last-Translator: chaffeur <dav.hjelm@spray.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -237,16 +237,16 @@ msgstr ""
 "Filsystemstypen, volymens lagringspolicy och det begärda namnet kommer bli\n"
 "utläst från hal och vidarebefodrat till pmount."
 
-#: ../src/pmount-hal.c:162
+#: ../src/pmount-hal.c:161
 msgid "Error: could not execute pmount\n"
 msgstr "Fel: kunde inte köra pmount\n"
 
-#: ../src/pmount-hal.c:204
+#: ../src/pmount-hal.c:197
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Fel: kunde inte ansluta till dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:238
+#: ../src/pmount-hal.c:231
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Fel: angiven UDI är inte en monterbar volym\n"
@@ -306,17 +306,12 @@ msgstr "Fel: enheten %s är inte löstagbar\n"
 msgid "Error: device %s is locked\n"
 msgstr "Fel: enheten %s är låst\n"
 
-#: ../src/policy.c:463
-#, fuzzy, c-format
-msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr "Fel: monteringspunkten %s är inte under %s\n"
-
-#: ../src/policy.c:476
+#: ../src/policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Fel: mappen %s innehåller redan ett monterat filsystem\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Fel: mappen %s innehåller inte ett monterat filsystem\n"
@@ -410,5 +405,6 @@ msgstr "Internt fel: kunde inte byta till effektiv gid root"
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Internt fel: kunde inte byta effektiv grupp id till riktig grupp id"
 
+#, c-format
 #~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 #~ msgstr "Fel: make_mountpoint_name: ogiltig enhet %s (måste vara i /dev/)\n"

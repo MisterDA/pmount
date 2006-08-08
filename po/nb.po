@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 22:20+0200\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-03-30 17:56+0200\n"
 "PO-Revision-Date: 2005-04-04 15:53+0000\n"
 "Last-Translator: Sigurd Gartmann <sigurdga-ubuntu@brogar.org>\n"
 "Language-Team: Bokmål, Norwegian <nb@li.org>\n"
@@ -192,7 +192,7 @@ msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr ""
 
 #: ../src/pmount.c:665
-#, c-format
+#, fuzzy
 msgid "Error: mapped device already exists\n"
 msgstr ""
 
@@ -224,16 +224,16 @@ msgid ""
 "will be read out from hal and passed to pmount."
 msgstr ""
 
-#: ../src/pmount-hal.c:162
+#: ../src/pmount-hal.c:161
 msgid "Error: could not execute pmount\n"
 msgstr "Feil: Kunne ikke kjøre pmount\n"
 
-#: ../src/pmount-hal.c:204
+#: ../src/pmount-hal.c:197
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr ""
 
-#: ../src/pmount-hal.c:238
+#: ../src/pmount-hal.c:231
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Feil: Oppgitt UDI er ikke en monterbar enhet\n"
@@ -293,17 +293,12 @@ msgstr "Feil: Enheten «%s» kan ikke fjernes\n"
 msgid "Error: device %s is locked\n"
 msgstr "Feil: Enheten «%s» er låst\n"
 
-#: ../src/policy.c:463
-#, fuzzy, c-format
-msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr "Feil: Monteringspunktet «%s» er ikke under «%s»\n"
-
-#: ../src/policy.c:476
+#: ../src/policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Feil: Katalogen «%s» inneholder allerede et montert filsystem\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Feil: Katalogen «%s» inneholder ikke et montert filsystem\n"
@@ -392,6 +387,7 @@ msgstr "Intern feil: Kunne ikke endre til effektiv gid root"
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Intern feil: Kunne ikke endre effektiv gruppe-id til ekte grouppe-id"
 
+#, c-format
 #~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 #~ msgstr "Feil: make_mountpoint_name: ugyldig enhet %s (må finnes i /dev/)\n"
 
@@ -400,20 +396,19 @@ msgstr "Intern feil: Kunne ikke endre effektiv gruppe-id til ekte grouppe-id"
 #~ "\n"
 #~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
 #~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. "
-#~ "The\n"
-#~ "file system type, the volume storage policy and the desired label will "
-#~ "be\n"
+#~ "This command mounts the device described by the given UDI using pmount. The\n"
+#~ "file system type, the volume storage policy and the desired label will be\n"
 #~ "read out from hal and passed to pmount."
 #~ msgstr ""
 #~ "pmount-hal - kjør pmount med tilleggsinformasjon fra hal\n"
 #~ "\n"
 #~ "Bruk: pmount-hal <hal UDI> [pmount-valg]\n"
 #~ "\n"
-#~ "Denne kommandoen monterer enheten beskrevet av den oppgitte UDI-en ved "
-#~ "bruk av «pmount». Filsystemtypen, volumlagringspolitikk og ønsket etikett "
-#~ "vil bli lest ut fra «hal» og gitt til «pmount»."
+#~ "Denne kommandoen monterer enheten beskrevet av den oppgitte UDI-en ved bruk "
+#~ "av «pmount». Filsystemtypen, volumlagringspolitikk og ønsket etikett vil bli "
+#~ "lest ut fra «hal» og gitt til «pmount»."
 
+#, c-format
 #~ msgid ""
 #~ "Usage:\n"
 #~ "\n"

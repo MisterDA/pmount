@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 22:20+0200\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-03-30 17:56+0200\n"
 "PO-Revision-Date: 2006-03-09 17:36+0000\n"
 "Last-Translator: Francesco Accattapà <callipeo@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -124,7 +124,8 @@ msgstr "Errore: impossibile eseguire mount"
 #: ../src/pmount.c:224
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
-msgstr "Errore interno: mount_attempt: il tipo di file system fornito è NULL\n"
+msgstr ""
+"Errore interno: mount_attempt: il tipo di file system fornito è NULL\n"
 
 #: ../src/pmount.c:230
 #, c-format
@@ -182,7 +183,8 @@ msgstr ""
 
 #: ../src/pmount.c:615 ../src/pumount.c:232
 msgid "Error: could not determine real path of the device"
-msgstr "Errore: impossibile determinare il percorso effettivo del dispositivo"
+msgstr ""
+"Errore: impossibile determinare il percorso effettivo del dispositivo"
 
 #: ../src/pmount.c:624 ../src/pumount.c:238
 #, c-format
@@ -229,16 +231,16 @@ msgid ""
 "will be read out from hal and passed to pmount."
 msgstr ""
 
-#: ../src/pmount-hal.c:162
+#: ../src/pmount-hal.c:161
 msgid "Error: could not execute pmount\n"
 msgstr "Errore: impossibile eseguire pmount\n"
 
-#: ../src/pmount-hal.c:204
+#: ../src/pmount-hal.c:197
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Errore: impossibile connettersi a dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:238
+#: ../src/pmount-hal.c:231
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Errore: lo UDI fornito non è un volume montabile\n"
@@ -298,17 +300,12 @@ msgstr "Errore: il dispositivo %s non è rimovibile\n"
 msgid "Error: device %s is locked\n"
 msgstr "Errore: il dispositivo %s è in stato di lock\n"
 
-#: ../src/policy.c:463
-#, fuzzy, c-format
-msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr "Errore: il punto di mount %s non si trova sotto %s\n"
-
-#: ../src/policy.c:476
+#: ../src/policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Errore: la directory %s contiene già un file system montato\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Errore: la directory %s non contiene un file system montato\n"
@@ -404,10 +401,8 @@ msgstr ""
 #~ "  -r          : force <device> to be mounted read-only\n"
 #~ "  -w          : force <device> to be mounted read-write\n"
 #~ "  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
-#~ "  --noatime   : mount <device> with the 'noatime' option (default: "
-#~ "'atime')\n"
-#~ "  -e, --exec  : mount <device> with the 'exec' option (default: "
-#~ "'noexec')\n"
+#~ "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+#~ "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
 #~ "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
 #~ "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
 #~ "                in an UTF-8 locale, otherwise mount default)\n"
@@ -432,13 +427,12 @@ msgstr ""
 #~ "automatico)\n"
 #~ "  -c <charset>: usa il set di caratteri fornito (predefinito: «utf8» se è "
 #~ "in\n"
-#~ "                uso una localizzazione UTF-8, oppure il valore "
-#~ "predefinito di\n"
+#~ "                uso una localizzazione UTF-8, oppure il valore predefinito "
+#~ "di\n"
 #~ "                mount)\n"
 #~ "  -u <umask>  : usa l'umask specificata anziché quella predefinita (solo "
 #~ "per\n"
-#~ "                file system che permettono realmente di impostare "
-#~ "l'umask\n"
+#~ "                file system che permettono realmente di impostare l'umask\n"
 #~ "  --passphrase <file>\n"
 #~ "                legge la passphrase dal file anziché dal terminale (solo "
 #~ "per\n"
@@ -446,33 +440,30 @@ msgstr ""
 #~ "  -d, --debug : abilita l'output di debug (molto prolisso)\n"
 #~ "  -h, --help  : stampa il messaggio di aiuto ed esce con successo"
 
+#, c-format
 #~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 #~ msgstr ""
-#~ "Errore: make_mountpoint_name: dispositivo %s non valido (deve essere in /"
-#~ "dev/)\n"
+#~ "Errore: make_mountpoint_name: dispositivo %s non valido (deve essere in "
+#~ "/dev/)\n"
 
 #~ msgid ""
 #~ "pmount-hal - execute pmount with additional information from hal\n"
 #~ "\n"
 #~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
 #~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. "
-#~ "The\n"
-#~ "file system type, the volume storage policy and the desired label will "
-#~ "be\n"
+#~ "This command mounts the device described by the given UDI using pmount. The\n"
+#~ "file system type, the volume storage policy and the desired label will be\n"
 #~ "read out from hal and passed to pmount."
 #~ msgstr ""
-#~ "pmount-hal - esegue pmount con informazioni aggiuntive provenienti da "
-#~ "hal\n"
+#~ "pmount-hal - esegue pmount con informazioni aggiuntive provenienti da hal\n"
 #~ "\n"
 #~ "Utilizzo: pmount-hal <hal UDI> [opzioni di pmount]\n"
 #~ "\n"
-#~ "Questo comando monta il dispositivo descritto dallo UDI fornito "
-#~ "utilizzando\n"
-#~ "pmount. Il tipo di file system, la politica di memorizzazione del volume "
-#~ "e\n"
+#~ "Questo comando monta il dispositivo descritto dallo UDI fornito utilizzando\n"
+#~ "pmount. Il tipo di file system, la politica di memorizzazione del volume e\n"
 #~ "l'etichetta richiesta saranno estratti da hal e passati a pmount."
 
+#, c-format
 #~ msgid ""
 #~ "Usage:\n"
 #~ "\n"

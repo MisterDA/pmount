@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 22:20+0200\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-03-30 17:56+0200\n"
 "PO-Revision-Date: 2005-04-04 15:53+0000\n"
 "Last-Translator: Edgar Buršić <edgar@monteparadiso.hr>\n"
 "Language-Team: Croatian <hr@li.org>\n"
@@ -124,7 +124,8 @@ msgstr "Greška: ne mogu izvršiti mount"
 #: ../src/pmount.c:224
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
-msgstr "Unutarnja greška: mount_attempt: dato ime datotečnog sustava je NULL\n"
+msgstr ""
+"Unutarnja greška: mount_attempt: dato ime datotečnog sustava je NULL\n"
 
 #: ../src/pmount.c:230
 #, c-format
@@ -193,7 +194,7 @@ msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr ""
 
 #: ../src/pmount.c:665
-#, c-format
+#, fuzzy
 msgid "Error: mapped device already exists\n"
 msgstr ""
 
@@ -225,16 +226,16 @@ msgid ""
 "will be read out from hal and passed to pmount."
 msgstr ""
 
-#: ../src/pmount-hal.c:162
+#: ../src/pmount-hal.c:161
 msgid "Error: could not execute pmount\n"
 msgstr "Greška: ne mogu izvršiti pmount\n"
 
-#: ../src/pmount-hal.c:204
+#: ../src/pmount-hal.c:197
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr ""
 
-#: ../src/pmount-hal.c:238
+#: ../src/pmount-hal.c:231
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Greška: dani UDI nije montabilni volumen\n"
@@ -294,17 +295,12 @@ msgstr "Greška: uređaj %s nije odstranjiv\n"
 msgid "Error: device %s is locked\n"
 msgstr "Greška: uređaj %s je zaključan\n"
 
-#: ../src/policy.c:463
-#, fuzzy, c-format
-msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr "Greška: točka montiranja %s nije ispod %s\n"
-
-#: ../src/policy.c:476
+#: ../src/policy.c:472
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Greška: direktorij %s već sadrži montirani datotečni sustav\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:474
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Greška: direktorij %s ne sadrži montirani datotečni sustav\n"
@@ -396,6 +392,7 @@ msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
 "Unutarnja greška: nisam mogla promjeniti efektivnu grupu u realni id grupe"
 
+#, c-format
 #~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 #~ msgstr ""
 #~ "Greška: make_mountpoint_name: nevažeči uređaj %s (mora biti u /dev/)\n"
@@ -405,10 +402,8 @@ msgstr ""
 #~ "\n"
 #~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
 #~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. "
-#~ "The\n"
-#~ "file system type, the volume storage policy and the desired label will "
-#~ "be\n"
+#~ "This command mounts the device described by the given UDI using pmount. The\n"
+#~ "file system type, the volume storage policy and the desired label will be\n"
 #~ "read out from hal and passed to pmount."
 #~ msgstr ""
 #~ "pmount-hal - izvrši pmount sa dodatnim informacijama iz hal-a\n"
@@ -420,6 +415,7 @@ msgstr ""
 #~ "će\n"
 #~ "čitani iz hal-a i proslijeđeni pmountu."
 
+#, c-format
 #~ msgid ""
 #~ "Usage:\n"
 #~ "\n"
@@ -438,8 +434,8 @@ msgstr ""
 #~ "\n"
 #~ "%s [options] <device>\n"
 #~ "  Umount <device> iz direktorija ispod %s ako su zahtjevi policyja\n"
-#~ "  zadovoljeni (vidi pumount(1) za detalje). Točka montiranja direktorija "
-#~ "je odstranjena \n"
+#~ "  zadovoljeni (vidi pumount(1) za detalje). Točka montiranja direktorija je "
+#~ "odstranjena \n"
 #~ "  kasnije.\n"
 #~ "\n"
 #~ "Opcije:\n"
