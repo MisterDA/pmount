@@ -7,7 +7,11 @@ libpmount_util_a_SOURCES = \
 	policy.c \
 	utils.c
 
-bin_PROGRAMS = pmount-hal
+if PMOUNT_HAL
+EXTRABIN=pmount-hal
+endif
+
+bin_PROGRAMS = $(EXTRABIN)
 noinst_PROGRAMS = pmount pumount
 
 pmount_SOURCES = pmount.c
