@@ -31,7 +31,7 @@ AC_ARG_WITH(lock-dir,
 AC_ARG_WITH(whitelist, 
 	AC_HELP_STRING([--with-whitelist=PATH], [Path of whitelist configuration file (default: /etc/pmount.allow)]),
 	AC_DEFINE_UNQUOTED(WHITELIST, "$withval", [whitelist configuration file]),
-	AC_DEFINE_UNQUOTED(WHITELIST, "/var/lock/pmount", [whitelist configuration file]))
+	AC_DEFINE_UNQUOTED(WHITELIST, "/etc/pmount.allow", [whitelist configuration file]))
 AC_ARG_WITH(mount-prog, 
 	AC_HELP_STRING([--with-mount-prog=PATH], [Path to mount program (default: /bin/mount)]),
 	AC_DEFINE_UNQUOTED(MOUNTPROG, "$withval", [path to mount]),
