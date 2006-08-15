@@ -1,5 +1,5 @@
-Development
------------
+0.9.13
+------
 - pmount-hal: minor change to build with dbus 0.91
 - pmount: if pmount is installed setgid, use pmount's group for gid mount
   option, otherwise use the user's group, as usual (patch from Wilhelm Meier
