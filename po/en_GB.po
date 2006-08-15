@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2006-03-30 17:56+0200\n"
+"POT-Creation-Date: 2006-08-08 12:08+0200\n"
 "PO-Revision-Date: 2006-06-02 16:32+0000\n"
 "Last-Translator: Owl <takowl@tiscali.co.uk>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -247,16 +247,16 @@ msgstr ""
 "label\n"
 "will be read out from hal and passed to pmount."
 
-#: ../src/pmount-hal.c:161
+#: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"
 msgstr "Error: could not execute pmount\n"
 
-#: ../src/pmount-hal.c:197
+#: ../src/pmount-hal.c:210
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Error: could not connect to dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:231
+#: ../src/pmount-hal.c:244
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Error: given UDI is not a mountable volume\n"
@@ -316,12 +316,17 @@ msgstr "Error: device %s is not removable\n"
 msgid "Error: device %s is locked\n"
 msgstr "Error: device %s is locked\n"
 
-#: ../src/policy.c:472
+#: ../src/policy.c:463
+#, c-format
+msgid "Error: mount point %s is already in /etc/fstab\n"
+msgstr ""
+
+#: ../src/policy.c:476
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Error: directory %s already contains a mounted file system\n"
 
-#: ../src/policy.c:474
+#: ../src/policy.c:478
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Error: directory %s does not contain a mounted file system\n"

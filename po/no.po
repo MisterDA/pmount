@@ -7,18 +7,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2006-03-30 17:56+0200\n"
-"PO-Revision-Date: 2006-03-09 17:36+0000\n"
-"Last-Translator: Martin Pitt <martin.pitt@ubuntu.com>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-08-15 23:25+0200\n"
+"PO-Revision-Date: 2005-04-20 20:03+0000\n"
+"Last-Translator: Frode M. Doeving <frode@lnix.net>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
 
-#: ../src/pmount.c:50
-#, fuzzy
+#: ../src/pmount.c:51
+#, fuzzy, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -38,8 +38,8 @@ msgstr ""
 "  Hvis monteringspunktet ikke eksisterer, vil det bli laget.\n"
 "\n"
 
-#: ../src/pmount.c:57
-#, fuzzy
+#: ../src/pmount.c:58
+#, fuzzy, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
 "  Prevent further pmounts of <device> until it is unlocked again. <pid>\n"
@@ -57,8 +57,8 @@ msgstr ""
 "bort før moteringsforsøk).\n"
 "\n"
 
-#: ../src/pmount.c:64
-#, fuzzy
+#: ../src/pmount.c:65
+#, fuzzy, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
 "  Remove the lock on <device> for process <pid> again.\n"
@@ -68,7 +68,7 @@ msgstr ""
 "  Fjern låsen på <enhet> for prosess <pid>.\n"
 "\n"
 
-#: ../src/pmount.c:67
+#: ../src/pmount.c:68
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -89,88 +89,88 @@ msgid ""
 "  --version   : print version number and exit successfully"
 msgstr ""
 
-#: ../src/pmount.c:133
-#, fuzzy
+#: ../src/pmount.c:134
+#, fuzzy, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Feil: etikett kan ikke være tom\n"
 
-#: ../src/pmount.c:137
-#, fuzzy
+#: ../src/pmount.c:138
+#, fuzzy, c-format
 msgid "Error: label too long\n"
 msgstr "Feil: etikett for lang\n"
 
-#: ../src/pmount.c:142
-#, fuzzy
+#: ../src/pmount.c:143
+#, fuzzy, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Feil: Etikettnavn kan ikke inneholde '/'\n"
 
-#: ../src/pmount.c:149
-#, fuzzy
+#: ../src/pmount.c:150
+#, fuzzy, c-format
 msgid "Error: device name too long\n"
 msgstr "Feil: enhetsnavn for langt\n"
 
-#: ../src/pmount.c:180 ../src/pumount.c:100
+#: ../src/pmount.c:181 ../src/pumount.c:100
 #, fuzzy
 msgid "Error: could not drop all uid privileges"
 msgstr "Feil: kunne ikke bli kvitt alle uid privilegier."
 
-#: ../src/pmount.c:185
+#: ../src/pmount.c:186
 #, fuzzy
 msgid "Error: could not execute mount"
 msgstr "Feil: kunne ikke kjøre mount"
 
-#: ../src/pmount.c:224
-#, fuzzy
+#: ../src/pmount.c:225
+#, fuzzy, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr "Intern feil: mount_attempt: gitt filsystemnavn er NULL\n"
 
-#: ../src/pmount.c:230
-#, fuzzy
+#: ../src/pmount.c:231
+#, fuzzy, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Feil: feil i filsystemnavnet '%s'\n"
 
-#: ../src/pmount.c:236
-#, fuzzy
+#: ../src/pmount.c:237
+#, fuzzy, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Feil: feil i umask %s\n"
 
-#: ../src/pmount.c:268
-#, fuzzy
+#: ../src/pmount.c:285
+#, fuzzy, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Feil: feil i tegnsettnavnet '%s'\n"
 
-#: ../src/pmount.c:349
-#, fuzzy
+#: ../src/pmount.c:366
+#, fuzzy, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "Feil: kan ikke låse for pid %u, prosessen eksisterer ikke\n"
 
-#: ../src/pmount.c:363
-#, fuzzy
+#: ../src/pmount.c:380
+#, fuzzy, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Feil: kunne ikke lage pid-låsefil %s: %s\n"
 
-#: ../src/pmount.c:403
-#, fuzzy
+#: ../src/pmount.c:420
+#, fuzzy, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Feil: kunne ikke fjerne pid-låsefil %s: %s\n"
 
-#: ../src/pmount.c:419
+#: ../src/pmount.c:436
 #, fuzzy
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Feil: do_unlock: kunne ikke fjerne låsekatalog"
 
-#: ../src/pmount.c:520 ../src/pumount.c:165
+#: ../src/pmount.c:537 ../src/pumount.c:165
 #, fuzzy
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Feil: dette progammet må installeres suid root.\n"
 
-#: ../src/pmount.c:563 ../src/pumount.c:187
-#, fuzzy
+#: ../src/pmount.c:580 ../src/pumount.c:187
+#, fuzzy, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Intern feil: getopt_long() returnerte ukjent verdi.\n"
 
-#: ../src/pmount.c:601
-#, fuzzy
+#: ../src/pmount.c:618
+#, fuzzy, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
 "ignored\n"
@@ -178,40 +178,40 @@ msgstr ""
 "Advarsel: enheten %s er allerede håndtert av /etc/fstab, gitt etikett "
 "ignoreres\n"
 
-#: ../src/pmount.c:615 ../src/pumount.c:232
+#: ../src/pmount.c:632 ../src/pumount.c:232
 #, fuzzy
 msgid "Error: could not determine real path of the device"
 msgstr "Feil: kunne ikke finne den reelle stien til enheten"
 
-#: ../src/pmount.c:624 ../src/pumount.c:238
-#, fuzzy
+#: ../src/pmount.c:641 ../src/pumount.c:238
+#, fuzzy, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Feil: feil enhet %s (må være i /dev/)\n"
 
-#: ../src/pmount.c:662
+#: ../src/pmount.c:679
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr ""
 
-#: ../src/pmount.c:665
+#: ../src/pmount.c:682
 #, c-format
 msgid "Error: mapped device already exists\n"
 msgstr ""
 
-#: ../src/pmount.c:679
+#: ../src/pmount.c:696
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
 
-#: ../src/pmount.c:703
+#: ../src/pmount.c:720
 #, fuzzy
 msgid "Error: could not delete mount point"
 msgstr "Feil: kunne ikke slette monteringspunkt"
 
-#: ../src/pmount.c:724
-#, fuzzy
+#: ../src/pmount.c:741
+#, fuzzy, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Intern feil: modus %s er ikke støttet.\n"
 
@@ -227,18 +227,18 @@ msgid ""
 "will be read out from hal and passed to pmount."
 msgstr ""
 
-#: ../src/pmount-hal.c:161
+#: ../src/pmount-hal.c:167
 #, fuzzy
 msgid "Error: could not execute pmount\n"
 msgstr "Feil: kunne ikke kjøre pmount\n"
 
-#: ../src/pmount-hal.c:197
-#, fuzzy
+#: ../src/pmount-hal.c:210
+#, fuzzy, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Feil: fikk ikke kontakt med dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:231
-#, fuzzy
+#: ../src/pmount-hal.c:244
+#, fuzzy, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Feil: Gitte UDI er ikke et monterbart volum.\n"
 
@@ -263,12 +263,12 @@ msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Feil: kunne ikke åpne <sysfs dir>/block/<enhet>"
 
 #: ../src/policy.c:241
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Feil: enhet %s eksisterer ikke\n"
 
 #: ../src/policy.c:246
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Feil: %s er ikke en blokk enhet\n"
 
@@ -278,37 +278,42 @@ msgid "Error: could not open fstab-type file"
 msgstr "Feil: kunne ikke åpne fstab-type filen."
 
 #: ../src/policy.c:351
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Feil: enheten %s er allerede montert til %s\n"
 
 #: ../src/policy.c:353
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Feil: enheten %s er ikke montert\n"
 
 #: ../src/policy.c:355
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Feil: enheten %s ble ikke montert av deg\n"
 
 #: ../src/policy.c:391
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Feil: enheten %s er ikke flyttbar\n"
 
 #: ../src/policy.c:454
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Feil: enheten %s er låst\n"
 
-#: ../src/policy.c:472
-#, fuzzy
+#: ../src/policy.c:463
+#, c-format
+msgid "Error: mount point %s is already in /etc/fstab\n"
+msgstr ""
+
+#: ../src/policy.c:476
+#, fuzzy, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Feil: katalogen %s inneholder allerede et montert filsystem.\n"
 
-#: ../src/policy.c:474
-#, fuzzy
+#: ../src/policy.c:478
+#, fuzzy, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Feil: katalogen %s inneholder ikke et montert filsystem\n"
 
@@ -336,7 +341,7 @@ msgid "Internal error: could not determine mount point\n"
 msgstr "Intern feil: kunne ikke finne monteringspunkt\n"
 
 #: ../src/pumount.c:80
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Feil: monteringspunkt %s er ikke under %s\n"
 
@@ -346,12 +351,12 @@ msgid "Error: could not execute umount"
 msgstr "Feil: kunne ikke kjøre umount"
 
 #: ../src/pumount.c:131
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: umount failed\n"
 msgstr "Feil: umount feilet\n"
 
 #: ../src/utils.c:52
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: out of memory\n"
 msgstr "Feil: tom for minne\n"
 
@@ -366,7 +371,7 @@ msgid "Error: could not create stamp file in directory"
 msgstr "Feil: kunne ikke opprette stramp-fil i katalog"
 
 #: ../src/utils.c:132
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: %s is not a directory\n"
 msgstr "Feil: %s er ikke en katalog\n"
 
@@ -376,12 +381,12 @@ msgid "Error: could not open directory"
 msgstr "Feil: kunne ikke åpne katalog"
 
 #: ../src/utils.c:161
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: directory %s is not empty\n"
 msgstr "Feil: katalogen %s er ikke tom\n"
 
 #: ../src/utils.c:213
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: '%s' is not a valid number\n"
 msgstr "Feil: '%s' er ikke et tall.\n"
 
@@ -393,8 +398,7 @@ msgstr "Internt feil: kunne ikke endre til effektiv uid root"
 #: ../src/utils.c:264
 #, fuzzy
 msgid "Internal error: could not change effective user uid to real user id"
-msgstr ""
-"Intern feil: kunne ikke endre effektiv bruker uid til ekte bruker uid."
+msgstr "Intern feil: kunne ikke endre effektiv bruker uid til ekte bruker uid."
 
 #: ../src/utils.c:273
 #, fuzzy
@@ -407,51 +411,7 @@ msgid "Internal error: could not change effective group id to real group id"
 msgstr "Intern error: kunne ikke endre effektiv gruppeid til ekte gruppeid"
 
 #, fuzzy
-#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
-#~ msgstr "Feil: make_mountpoint_name: feil enhet %s (må være i /dev/)\n"
 
 #, fuzzy
-#~ msgid ""
-#~ "pmount-hal - execute pmount with additional information from hal\n"
-#~ "\n"
-#~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
-#~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. The\n"
-#~ "file system type, the volume storage policy and the desired label will be\n"
-#~ "read out from hal and passed to pmount."
-#~ msgstr ""
-#~ "pmount-hal - kjøre pmount med ekstra informasjon fra hal\n"
-#~ "\n"
-#~ "Bruk: pmount-hal <hal UDI> [pmount valg]\n"
-#~ "\n"
-#~ "Denne kommandoen monterer enheten beskrevet av den gitte UDI ved hjelp av "
-#~ "pmount. Filsystemtype, lagringsregler og etikett vil bli\n"
-#~ " lest fra hal, og sendt videre til pmount."
 
 #, fuzzy
-#~ msgid ""
-#~ "Usage:\n"
-#~ "\n"
-#~ "%s [options] <device>\n"
-#~ "  Umount <device> from a directory below %s if policy requirements\n"
-#~ "  are met (see pumount(1) for details). The mount point directory is "
-#~ "removed\n"
-#~ "  afterwards.\n"
-#~ "\n"
-#~ "Options:\n"
-#~ "  -l, --lazy : umount lazily, see umount(8)\n"
-#~ "  -d, --debug : enable debug output (very verbose)\n"
-#~ "  -h, --help  : print help message and exit successfuly\n"
-#~ msgstr ""
-#~ "Bruk:\n"
-#~ "\n"
-#~ "%s [valg] <enhet>\n"
-#~ "  Avmonterer <enhet> fra en katalog under %s hvis praksiskrav\n"
-#~ "  er møtt (se pumount(1) for detaljer). Monteringspunktkatalogen blir "
-#~ "fjernet\n"
-#~ "  etter avmontering.\n"
-#~ "\n"
-#~ "Valg:\n"
-#~ "  -l, --lazy : latskapsavmontering. Se umount(8)\n"
-#~ "  -d, --debug : aktiver feilsøkingsmeldinger (veldig detaljert)\n"
-#~ "  -h, --help : skriv hjelp tekst til skjermen og avslutt feilfritt.\n"

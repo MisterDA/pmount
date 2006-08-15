@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2006-03-30 17:56+0200\n"
-"PO-Revision-Date: 2006-04-10 11:47+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-08-15 23:25+0200\n"
+"PO-Revision-Date: 2006-04-10 11:38+0000\n"
 "Last-Translator: chaffeur <dav.hjelm@spray.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
 
-#: ../src/pmount.c:50
+#: ../src/pmount.c:51
 #, c-format
 msgid ""
 "Usage:\n"
@@ -42,7 +42,7 @@ msgstr ""
 "  Om katalogen där enheten monteras inte finns så kommer den att skapas.\n"
 "\n"
 
-#: ../src/pmount.c:57
+#: ../src/pmount.c:58
 #, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
@@ -62,7 +62,7 @@ msgstr ""
 "  försöks).\n"
 "\n"
 
-#: ../src/pmount.c:64
+#: ../src/pmount.c:65
 #, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
@@ -73,7 +73,7 @@ msgstr ""
 "  Ta bort låset på <enhet> för processen <pid>.\n"
 "\n"
 
-#: ../src/pmount.c:67
+#: ../src/pmount.c:68
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -94,83 +94,83 @@ msgid ""
 "  --version   : print version number and exit successfully"
 msgstr ""
 
-#: ../src/pmount.c:133
+#: ../src/pmount.c:134
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Fel: etiketten får inte vara tom\n"
 
-#: ../src/pmount.c:137
+#: ../src/pmount.c:138
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Fel: etiketten är för lång\n"
 
-#: ../src/pmount.c:142
+#: ../src/pmount.c:143
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Fel: '/' tillåts inte i etiketter\n"
 
-#: ../src/pmount.c:149
+#: ../src/pmount.c:150
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Fel: enhetsnamn för långt\n"
 
-#: ../src/pmount.c:180 ../src/pumount.c:100
+#: ../src/pmount.c:181 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
 msgstr "Fel: kunde inte släppa alla uid-privilegier"
 
-#: ../src/pmount.c:185
+#: ../src/pmount.c:186
 msgid "Error: could not execute mount"
 msgstr "Fel: kunde inte exekvera mount"
 
-#: ../src/pmount.c:224
+#: ../src/pmount.c:225
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr "Internt fel: monterings_försök: givet fil system är NULL\n"
 
-#: ../src/pmount.c:230
+#: ../src/pmount.c:231
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Fel: felaktig filsystemsbeteckning \"%s\"\n"
 
-#: ../src/pmount.c:236
+#: ../src/pmount.c:237
 #, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Fel: felaktig umask %s\n"
 
-#: ../src/pmount.c:268
+#: ../src/pmount.c:285
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Fel: ogiltigt teckentabellnamn \"%s\"\n"
 
-#: ../src/pmount.c:349
+#: ../src/pmount.c:366
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "Fel: kan inte låsa för pid %u; processen finns inte\n"
 
-#: ../src/pmount.c:363
+#: ../src/pmount.c:380
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Fel: kunde inte skapa pid-låsfil %s: %s\n"
 
-#: ../src/pmount.c:403
+#: ../src/pmount.c:420
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Fel: kunde inte ta bort pid-låsfil %s: %s\n"
 
-#: ../src/pmount.c:419
+#: ../src/pmount.c:436
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Fel: do_unlock: kunde inte ta bort låskatalogen"
 
-#: ../src/pmount.c:520 ../src/pumount.c:165
+#: ../src/pmount.c:537 ../src/pumount.c:165
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Fel: detta program måste installeras som suid root\n"
 
-#: ../src/pmount.c:563 ../src/pumount.c:187
+#: ../src/pmount.c:580 ../src/pumount.c:187
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Internt fel: getopt_long() returnerade ett okänt värde\n"
 
-#: ../src/pmount.c:601
+#: ../src/pmount.c:618
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -179,26 +179,26 @@ msgstr ""
 "Varning: enheten %s hanteras redan av /etc/fstab. Tillhandahållen etikett "
 "ignoreras\n"
 
-#: ../src/pmount.c:615 ../src/pumount.c:232
+#: ../src/pmount.c:632 ../src/pumount.c:232
 msgid "Error: could not determine real path of the device"
 msgstr "Fel: kunde inte avgöra enhetens riktiga sökväg"
 
-#: ../src/pmount.c:624 ../src/pumount.c:238
+#: ../src/pmount.c:641 ../src/pumount.c:238
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Fel: ogiltig enhet %s (måste vara i /dev/)\n"
 
-#: ../src/pmount.c:662
+#: ../src/pmount.c:679
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr "Fel: kunde inte dekryptera enheten (fel lösenord?)\n"
 
-#: ../src/pmount.c:665
+#: ../src/pmount.c:682
 #, c-format
 msgid "Error: mapped device already exists\n"
 msgstr "Fel: kartlagd enhet finns redan\n"
 
-#: ../src/pmount.c:679
+#: ../src/pmount.c:696
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
@@ -207,11 +207,11 @@ msgstr ""
 "Fel: kunde inte låsa monterings mappen. En annan pmount kanske körs för "
 "denna monteringspunkt.\n"
 
-#: ../src/pmount.c:703
+#: ../src/pmount.c:720
 msgid "Error: could not delete mount point"
 msgstr "Fel: kunde inte ta bort monteringspunkten"
 
-#: ../src/pmount.c:724
+#: ../src/pmount.c:741
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Internt fel: läget %i hanteras ej.\n"
@@ -237,16 +237,16 @@ msgstr ""
 "Filsystemstypen, volymens lagringspolicy och det begärda namnet kommer bli\n"
 "utläst från hal och vidarebefodrat till pmount."
 
-#: ../src/pmount-hal.c:161
+#: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"
 msgstr "Fel: kunde inte köra pmount\n"
 
-#: ../src/pmount-hal.c:197
+#: ../src/pmount-hal.c:210
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Fel: kunde inte ansluta till dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:231
+#: ../src/pmount-hal.c:244
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Fel: angiven UDI är inte en monterbar volym\n"
@@ -306,12 +306,17 @@ msgstr "Fel: enheten %s är inte löstagbar\n"
 msgid "Error: device %s is locked\n"
 msgstr "Fel: enheten %s är låst\n"
 
-#: ../src/policy.c:472
+#: ../src/policy.c:463
+#, c-format
+msgid "Error: mount point %s is already in /etc/fstab\n"
+msgstr ""
+
+#: ../src/policy.c:476
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Fel: mappen %s innehåller redan ett monterat filsystem\n"
 
-#: ../src/policy.c:474
+#: ../src/policy.c:478
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Fel: mappen %s innehåller inte ett monterat filsystem\n"
@@ -405,6 +410,3 @@ msgstr "Internt fel: kunde inte byta till effektiv gid root"
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Internt fel: kunde inte byta effektiv grupp id till riktig grupp id"
 
-#, c-format
-#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
-#~ msgstr "Fel: make_mountpoint_name: ogiltig enhet %s (måste vara i /dev/)\n"

@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2006-03-30 17:56+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-08-15 23:25+0200\n"
 "PO-Revision-Date: 2006-05-10 07:23+0000\n"
 "Last-Translator: Jakub Ambrożewicz <jakub.ambrozewicz@gazeta.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
 
-#: ../src/pmount.c:50
+#: ../src/pmount.c:51
 #, c-format
 msgid ""
 "Usage:\n"
@@ -36,12 +36,12 @@ msgstr ""
 "\n"
 "  Montuje urządzenie w katalogu poniżej %s jeśli spełnione\n"
 "  są wymagania (zobacz pmount(1)). Jeśli <etykieta> została podana,\n"
-"  punktem montowania będzie %s/<etykieta>, w przeciwnym wypadku będzie to "
-"%s<urządzenie>.\n"
+"  punktem montowania będzie %s/<etykieta>, w przeciwnym wypadku będzie to %"
+"s<urządzenie>.\n"
 "  Jeśli punkt montowania nie istnieje, to zostanie utworzony.\n"
 "\n"
 
-#: ../src/pmount.c:57
+#: ../src/pmount.c:58
 #, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
@@ -61,7 +61,7 @@ msgstr ""
 "montowania)\n"
 "\n"
 
-#: ../src/pmount.c:64
+#: ../src/pmount.c:65
 #, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
@@ -72,7 +72,7 @@ msgstr ""
 "  Usuń ponownie blokadę <urządzenie> dla procesu <pid>.\n"
 "\n"
 
-#: ../src/pmount.c:67
+#: ../src/pmount.c:68
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -113,84 +113,84 @@ msgstr ""
 "  -h, --help : wyświetl informację pomocy i zakończ sukcesem\n"
 "  --version : wyświetl numer wersji i zakończ sukcesem"
 
-#: ../src/pmount.c:133
+#: ../src/pmount.c:134
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Błąd: etykieta nie może być pusta\n"
 
-#: ../src/pmount.c:137
+#: ../src/pmount.c:138
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Błąd: etykieta za długa\n"
 
-#: ../src/pmount.c:142
+#: ../src/pmount.c:143
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Błąd: '/' nie może występować w etykiecie\n"
 
-#: ../src/pmount.c:149
+#: ../src/pmount.c:150
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Błąd: nazwa urządzenia za długa\n"
 
-#: ../src/pmount.c:180 ../src/pumount.c:100
+#: ../src/pmount.c:181 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
 msgstr "Błąd: nie można usunąć wszystkich praw uid"
 
-#: ../src/pmount.c:185
+#: ../src/pmount.c:186
 msgid "Error: could not execute mount"
 msgstr "Błąd: nie można uruchomić mount"
 
-#: ../src/pmount.c:224
+#: ../src/pmount.c:225
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr ""
 "Błąd wewnętrzy: mount_attempt: podana nazwa pliku systemowego to NULL\n"
 
-#: ../src/pmount.c:230
+#: ../src/pmount.c:231
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Błąd: błędna nazwa pliku systemowego '%s'\n"
 
-#: ../src/pmount.c:236
+#: ../src/pmount.c:237
 #, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Błąd: nieprawidłowa maska (umask) %s\n"
 
-#: ../src/pmount.c:268
+#: ../src/pmount.c:285
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Błąd: nieprawidłowa nazwa strony kodowej '%s'\n"
 
-#: ../src/pmount.c:349
+#: ../src/pmount.c:366
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "Błąd: nie można zablokować dla pid %u, ten proces nie istnieje\n"
 
-#: ../src/pmount.c:363
+#: ../src/pmount.c:380
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Błąd: nie można utworzyć pliku blokady %s:%s dla pid\n"
 
-#: ../src/pmount.c:403
+#: ../src/pmount.c:420
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Błąd: nie można usunąć pliku blokady %s:%s dla pid\n"
 
-#: ../src/pmount.c:419
+#: ../src/pmount.c:436
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Błąd: do_unlock nie mógł usunąć katalogu blokad"
 
-#: ../src/pmount.c:520 ../src/pumount.c:165
+#: ../src/pmount.c:537 ../src/pumount.c:165
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Błąd: ten program musi być zainstalowany suid root\n"
 
-#: ../src/pmount.c:563 ../src/pumount.c:187
+#: ../src/pmount.c:580 ../src/pumount.c:187
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Błąd wewnetrzny: getopt_long() zwrócił nieznaną wartość\n"
 
-#: ../src/pmount.c:601
+#: ../src/pmount.c:618
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -199,26 +199,26 @@ msgstr ""
 "Uwaga: urządzenie %s jest już obsługiwane przez /etc/fstab, podana etykieta "
 "została zignorowana\n"
 
-#: ../src/pmount.c:615 ../src/pumount.c:232
+#: ../src/pmount.c:632 ../src/pumount.c:232
 msgid "Error: could not determine real path of the device"
 msgstr "Błąd: nie można określić rzeczywistej ścieżki urządzenia"
 
-#: ../src/pmount.c:624 ../src/pumount.c:238
+#: ../src/pmount.c:641 ../src/pumount.c:238
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Błąd: nieprawidłowe urządzenie %s (musi być w /dev/)\n"
 
-#: ../src/pmount.c:662
+#: ../src/pmount.c:679
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr "Błąd: nie można odszyfrować urządzenia (błędne hasło?)\n"
 
-#: ../src/pmount.c:665
+#: ../src/pmount.c:682
 #, c-format
 msgid "Error: mapped device already exists\n"
 msgstr "Błąd: zmapowane urządzenie już istnieje\n"
 
-#: ../src/pmount.c:679
+#: ../src/pmount.c:696
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
@@ -227,11 +227,11 @@ msgstr ""
 "Błąd: nie można zablokować katalogu montowania. Prawdopodobnie w tym punkcie "
 "montowania działa inna sesja pmount.\n"
 
-#: ../src/pmount.c:703
+#: ../src/pmount.c:720
 msgid "Error: could not delete mount point"
 msgstr "Błąd: nie można usunąc punktu montowania"
 
-#: ../src/pmount.c:724
+#: ../src/pmount.c:741
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Błąd wewnętrzny: tryb %i nie obsłużony.\n"
@@ -257,16 +257,16 @@ msgstr ""
 "pmount. System plików, volume storage policy i etykieta\n"
 "będą odczytane z hal'a i przekazane do polecenia pmount."
 
-#: ../src/pmount-hal.c:161
+#: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"
 msgstr "Błąd: nie można uruchomić pmount\n"
 
-#: ../src/pmount-hal.c:197
+#: ../src/pmount-hal.c:210
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Błąd: nie można połączyć się do dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:231
+#: ../src/pmount-hal.c:244
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Błąd: podane UDI nie jest monotwalnym woluminem\n"
@@ -326,12 +326,17 @@ msgstr "Błąd: urządzenie %s nie jest przenośne\n"
 msgid "Error: device %s is locked\n"
 msgstr "Błąd: urządzenie %s jest zablokowane\n"
 
-#: ../src/policy.c:472
+#: ../src/policy.c:463
+#, c-format
+msgid "Error: mount point %s is already in /etc/fstab\n"
+msgstr ""
+
+#: ../src/policy.c:476
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Błąd: katalog %s zawiera już podmontowany system plików\n"
 
-#: ../src/policy.c:474
+#: ../src/policy.c:478
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Błąd: katalog %s nie zawiera podmontowanego systemu plików\n"
@@ -424,24 +429,4 @@ msgstr ""
 "Błąd wewnętrzny: nie można zmienić efektywnego id grupy na rzeczywisty id "
 "grupy"
 
-#, c-format
-#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
-#~ msgstr ""
-#~ "Błąd: make_mountpoint_name: nieprawidłowe urządzenie %s (musi być w /dev/)\n"
 
-#~ msgid ""
-#~ "pmount-hal - execute pmount with additional information from hal\n"
-#~ "\n"
-#~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
-#~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. The\n"
-#~ "file system type, the volume storage policy and the desired label will be\n"
-#~ "read out from hal and passed to pmount."
-#~ msgstr ""
-#~ "pmount-hal - wykonaj pmount z dodatkowymi informacjami od hala\n"
-#~ "\n"
-#~ "Używanie: pmount-hal <hal UDI> [opcje pmount]\n"
-#~ "\n"
-#~ "To polecenie montuje urządzenie opisane przez podane UDI przy \n"
-#~ "użyciu pmount. Typ systemu plików, polityka woluminu\n"
-#~ "i rządana etykieta będą wczytane z hala i przekazane do pmount."

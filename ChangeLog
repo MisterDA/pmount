@@ -7,6 +7,7 @@ Development
 - pmount: consider devices on pcmcia bus as hotpluggable (and thus pmountable)
 - fix automake file to ship README.devel
 - fix default path of /etc/pmount.allow (regression from 0.9.12)
+- update translations from Rosetta
 
 0.9.12
 ------
