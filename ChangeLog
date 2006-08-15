@@ -5,6 +5,7 @@ Development
   option, otherwise use the user's group, as usual (patch from Wilhelm Meier
   <wilhelm.meier@fh-kl.de>)
 - pmount: consider devices on pcmcia bus as hotpluggable (and thus pmountable)
+- fix automake file to ship README.devel
 
 0.9.12
 ------
