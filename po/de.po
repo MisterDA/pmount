@@ -323,7 +323,7 @@ msgstr "Fehler: Gerät %s ist gesperrt\n"
 #: ../src/policy.c:463
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr ""
+msgstr "Fehler: Bindungsverzeichnis %s ist schon in /etc/fstab\n"
 
 #: ../src/policy.c:476
 #, c-format
