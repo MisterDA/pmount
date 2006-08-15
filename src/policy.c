@@ -366,7 +366,7 @@ int
 device_removable( const char* device )
 {
     struct sysfs_device *dev;
-    static char* hotplug_buses[] = { "usb", "ieee1394", "mmc", NULL };
+    static char* hotplug_buses[] = { "usb", "ieee1394", "mmc", "pcmcia", NULL };
     int removable;
     char blockdevpath[PATH_MAX];
 
