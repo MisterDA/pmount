@@ -64,7 +64,6 @@ else
 fi
 AM_CONDITIONAL(PMOUNT_HAL, test -n "$BUILD_HAL")
 													   
-ALL_LINGUAS="ca cs de el en es et fr he hr hu id it ml nb nl no pa pl pt_BR ro ru sv tl yi zh_CN"
 GETTEXT_PACKAGE="pmount"
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])

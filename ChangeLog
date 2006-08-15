@@ -8,6 +8,7 @@ Development
 - fix automake file to ship README.devel
 - fix default path of /etc/pmount.allow (regression from 0.9.12)
 - update translations from Rosetta
+- remove ALL_LINGUAGS from configure.ac, move them to po/LINGUAS
 
 0.9.12
 ------
