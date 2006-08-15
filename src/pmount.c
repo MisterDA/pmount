@@ -22,6 +22,7 @@
 #include <locale.h>
 #include <langinfo.h>
 #include <libintl.h>
+#include <sys/stat.h>
 
 #include "fs.h"
 #include "policy.h"
@@ -239,9 +240,25 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 
     /* assemble option string */
     *ugid_opt = *umask_opt = *iocharset_opt = 0;
-    if( fs->support_ugid )
-        snprintf( ugid_opt, sizeof( ugid_opt ), ",uid=%i,gid=%i", 
-                getuid(), getgid() );
+    if( fs->support_ugid ) {
+	struct stat statbuf;
+	int gid = getgid();
+	int result;
+
+	/* if pmount is installed setgid, use that group, otherwise use the
+	 * user's group */
+	get_root();
+	result = stat( "/proc/self/exe", &statbuf );
+	drop_root();
+	if( result < 0 )
+	    fprintf( stderr, "Can't stat myself\n" );
+	else {
+	    if( statbuf.st_mode & S_ISGID )
+		gid = statbuf.st_gid;
+	}
+	snprintf( ugid_opt, sizeof( ugid_opt ), ",uid=%i,gid=%i", 
+		  getuid(), gid );
+    }
 
     if( fs->umask )
         snprintf( umask_opt, sizeof( umask_opt ), ",umask=%s", 
