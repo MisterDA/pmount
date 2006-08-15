@@ -361,7 +361,7 @@ main( int argc, const char** argv )
     /* shut down hal connection */
     libhal_ctx_shutdown( hal_ctx, &error );
     libhal_ctx_free( hal_ctx );
-    dbus_connection_disconnect( dbus_conn );
+    dbus_connection_close( dbus_conn );
     dbus_connection_unref( dbus_conn );
 
     /* go */

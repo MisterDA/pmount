@@ -1,3 +1,7 @@
+Development
+-----------
+- pmount-hal: minor change to build with dbus 0.91
+
 0.9.12
 ------
 - fix pmount.allow parsing regular expression (it failed in some ISO locales)
