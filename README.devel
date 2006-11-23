@@ -2,15 +2,15 @@ Notes for pmount development
 ============================
 
 pmount is developed using the "bazaar-ng" revision control system
-(http://www.bazaar-ng.org). You can get the current development tree
+(http://bazaar-vcs.org). You can get the current development tree
 with
 
-  bzr branch http://people.ubuntu.com/~pitti/bzr/pmount/
+  bzr branch http://bazaar.launchpad.net/~pitti/pmount/main
 
 and start to do your own modifications in your local branch. If you
-publish this branch somewhere (copy or rsync it to a public
-webserver), your changes can easily be merged back into the main
-development tree.
+publish this branch somewhere (copy or rsync it to a public webserver,
+such as the launchpad.net supermirror), your changes can easily be
+merged back into the main development tree.
 
 New releases will frequently appear at
 
