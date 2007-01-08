@@ -1,3 +1,7 @@
+Development
+-----------
+- pmount: support the 'omfs' file system
+
 0.9.13
 ------
 - pmount-hal: minor change to build with dbus 0.91
