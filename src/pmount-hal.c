@@ -205,7 +205,7 @@ main( int argc, const char** argv )
 
     /* initialize hal connection */
     dbus_error_init( &error );
-    dbus_conn = dbus_bus_get( DBUS_BUS_SYSTEM, &error );
+    dbus_conn = dbus_bus_get_private( DBUS_BUS_SYSTEM, &error );
     if( dbus_conn == NULL ) {
         fprintf( stderr, _("Error: could not connect to dbus: %s: %s\n"), error.name, error.message );
         return 1;
