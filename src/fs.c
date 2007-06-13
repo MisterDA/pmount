@@ -25,12 +25,12 @@ static struct FS supported_fs[] = {
     { "ntfs", "nosuid,nodev,user", 1, "077", 1 },
     { "hfsplus", "nosuid,nodev,user", 1, NULL, 0 },
     { "hfs", "nosuid,nodev,user", 1, NULL, 0 },
-    { "ext3", "nodev,noauto,nosuid,user", 0, NULL, 0 },
-    { "ext2", "nodev,noauto,nosuid,user", 0, NULL, 0 },
+    { "ext3", "nodev,noauto,nosuid,user,errors=continue", 0, NULL, 0 },
+    { "ext2", "nodev,noauto,nosuid,user,errors=continue", 0, NULL, 0 },
     { "reiserfs", "nodev,noauto,nosuid,user", 0, NULL, 0 },
     { "reiser4", "nodev,noauto,nosuid,user", 0, NULL, 0 },
     { "xfs", "nodev,noauto,nosuid,user", 0, NULL, 0 },
-    { "jfs", "nodev,noauto,nosuid,user", 0, NULL, 1 },
+    { "jfs", "nodev,noauto,nosuid,user,errors=continue", 0, NULL, 1 },
     { "omfs", "nodev,noauto,nosuid,user", 0, NULL, 0 },
     { NULL, NULL, 0, NULL, 0}
 };

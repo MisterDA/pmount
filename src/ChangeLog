@@ -1,0 +1,5 @@
+2007-06-13  Vincent Fourmond  <fourmond@debian.org>
+
+	* fs.c: 
+	Added errors=continue to ext2, ext3 and jfs FS entries.
+
