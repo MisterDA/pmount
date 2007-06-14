@@ -543,7 +543,7 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdelLsArwt:c:u:V", long_opts, NULL ) ) {
+        switch( option = getopt_long( argc, argv, "+hdelLsArwp:t:c:u:V", long_opts, NULL ) ) {
             case -1:  break;          /* end of arguments */
             case ':':
             case '?': return E_ARGS;  /* unknown argument */
