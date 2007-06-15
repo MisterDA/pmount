@@ -165,7 +165,7 @@ is '007', for VFAT and NTFS the default is '077'. This value is
 ignored for file systems which do not support setting an umask.
 
 .TP
-.BI \-p\ file \ \-\-passphrase \ file
+.BI \-p \ file \ \-\-passphrase \ file
 If the device is encrypted (dm-crypt with LUKS metadata), read the
 passphrase from specified
 .I file
@@ -195,6 +195,41 @@ for pmounting.
 .BR pumount (1),
 .BR mount (8)
 
+.SH KNOWN ISSUES
+
+Though we believe 
+.B pmount
+is pretty much free from security problems, there are quite a few
+glitches that probably will never be fixed.
+
+.IP \(bu 2
+.B pmount
+needs to try several different times to mount to get the filesystem
+right in the end; it is vital that 
+.B pmount
+does know which precise filesystem to mount in order to give it the
+right options not to cause security holes. This is rather different
+from the behaviour of 
+.B mount
+with the 
+.I -t auto
+options, which can have a look at the device it is trying to mount
+and find out what its filesystem is.
+.B pmount
+will never try to open a device and look at it to find out which
+filesystem it is, as it might open quite a few security holes.
+Moreover, the order in which the filesystems are tried are what
+we could call the most commonly used filesystems on removable
+media. This order is unlikely to change as well. In particular, that
+means that when you mount an 
+.I ext3
+filesystem using 
+.BR pmount ,
+you might get a lot of fs\-related kernel error messages. Sorry !
+
+
+
 .SH AUTHOR
 .B pmount 
-is developed by Martin Pitt <martin.pitt@canonical.com>.
+was originally developed by Martin Pitt <martin.pitt@canonical.com>.
+It is now maintained by Vincent Fourmond <fourmond@debian.org>.

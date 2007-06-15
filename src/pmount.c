@@ -76,7 +76,7 @@ usage( const char* exename )
     "                in an UTF-8 locale, otherwise mount default)\n"
     "  -u <umask>  : use specified umask instead of the default (only for\n"
     "                file sytems which actually support umask setting)\n"
-    " --passphrase <file>\n"
+    "  -p <file>, --passphrase <file>\n"
     "                read passphrase from file instead of the terminal\n"
     "                (only for LUKS encrypted devices)\n"
     "  -d, --debug : enable debug output (very verbose)\n"
