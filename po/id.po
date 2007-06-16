@@ -8,14 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-15 23:25+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"PO-Revision-Date: 2007-05-28 02:26+0000\n"
+"Last-Translator: Qeyz <formils@gmail.com>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
+"X-Rosetta-Export-Date: 2007-06-16 12:08:31+0000\n"
 
 #: ../src/pmount.c:51
 #, c-format
@@ -30,6 +31,16 @@ msgid ""
 "  If the mount point does not exist, it will be created.\n"
 "\n"
 msgstr ""
+"Penggunaan: \n"
+"\n"
+"%s[options] <perangkat> [<label>]\n"
+"\n"
+"  Mount <perangkat> ke direktori dibawah %s jika kebijakan dibutuhkan\n"
+"  dibutuhkan (lihat pmount(1) untuk detailnya). Jika <label> diberikan, "
+"titik mount \n"
+"  akan menjadi %s/ <label>, jika tidak akan menjadi %s <device>. \n"
+"  Jika titik mount tidak ada, akan dibuat.\n"
+"\n"
 
 #: ../src/pmount.c:58
 #, c-format
@@ -41,6 +52,15 @@ msgid ""
 "  processes (nonexistant pids are cleaned before attempting a mount).\n"
 "\n"
 msgstr ""
+"%s --kunci <perangkat> <pid>\n"
+"  Cegah pmounts lebih lanjut dari <perangkat> sampai tidak terkunci lagi. "
+"<pid>\n"
+"  memberikan spesifikasi dari id proses-proses yang dikunci. Ini "
+"memungkinkan untuk mengunci perangkat\n"
+"  dengan beberapa proses independen dan mencegah kunci tak terbatas dari \n"
+"  proses yang crash (pids yang tidak eksis dibersihkan sebelum dicoba "
+"melakukan mount).\n"
+"\n"
 
 #: ../src/pmount.c:65
 #, c-format
@@ -49,6 +69,9 @@ msgid ""
 "  Remove the lock on <device> for process <pid> again.\n"
 "\n"
 msgstr ""
+"%s --buka kunci <perangkat> <pid>\n"
+"  Hapus kunci dari <perangkat> untuk proses <pid> lagi.\n"
+"\n"
 
 #: ../src/pmount.c:68
 msgid ""
@@ -70,82 +93,109 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully"
 msgstr ""
+"Opsi-opsi: \n"
+"  -r : paksa <perangkat) untuk di mount hanya bisa dibaca\n"
+"  -w : paksa <perangkat> untuk di mount hanya bisa dibaca-tulis\n"
+"  -s, --sync : mount <perangkat> dengan opsi 'sync' (keadaan awal: 'async')\n"
+"  --noatime : mount <perangkat> dengan opsi 'noatime' (keadaan awal: "
+"'atime')\n"
+"  -e, --exec : mount <perangkat> dengan opsi 'exec' (keadaan awal: "
+"'noexec')\n"
+"  -t <fs> : mount sebagai tipe berkas sistem <fs> (keadaan awal: terdeteksi "
+"otomatis)\n"
+"  -c <charset>: gunakan karakter I/O yang telah diberikan (keadaan awal: "
+"'utf8' jika dipanggil)\n"
+"                di dalam UTF-8 local, jika tidak mount sesuai keadaan awal) "
+"\n"
+"  -u <umask) : gunakan umask spesial daripada dari  keadaan awal (hanya "
+"untuk \n"
+"                 tipe berkas yang sebenarnya membutuhkan dukungan preferensi "
+"umask)\n"
+" -- kata sandi <berkas>\n"
+"                  baca kata sandi dari berkas daripada dari berkas dibanding "
+"dari terminal\n"
+"                  (hanya untuk perangkat LUKS terenkripsi)\n"
+"  -d, --debug : aktifkan keluaran debug (sangat verbose)\n"
+"  -h, --help : cetak pesan bantuan dan keluar dengan sukses\n"
+"  --versi : cetak nomor versi dan keluar dengan sukses"
 
 #: ../src/pmount.c:134
 #, c-format
 msgid "Error: label must not be empty\n"
-msgstr ""
+msgstr "Error: label tidak boleh kosong\n"
 
 #: ../src/pmount.c:138
 #, c-format
 msgid "Error: label too long\n"
-msgstr ""
+msgstr "Error: label terlalu panjang\n"
 
 #: ../src/pmount.c:143
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
-msgstr ""
+msgstr "Error: karakter '/' tidak boleh digunakan dalam pelabelan nama\n"
 
 #: ../src/pmount.c:150
 #, c-format
 msgid "Error: device name too long\n"
-msgstr ""
+msgstr "Error: nama perangkat terlalu panjang\n"
 
 #: ../src/pmount.c:181 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
-msgstr ""
+msgstr "Error: tidak dapat membatalkan semua hak istimewa IUD"
 
 #: ../src/pmount.c:186
 msgid "Error: could not execute mount"
-msgstr ""
+msgstr "Error: tidak dapat menjalankan perintah  mount"
 
 #: ../src/pmount.c:225
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr ""
+"Kesalahan internal: mount_attempt: nama berkas sistem yang diberikan NULL\n"
 
 #: ../src/pmount.c:231
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
-msgstr ""
+msgstr "Kesalahan: nama berkas sistem tidak valid '%s'\n"
 
 #: ../src/pmount.c:237
 #, c-format
 msgid "Error: invalid umask %s\n"
-msgstr ""
+msgstr "Error: umask salah %s\n"
 
 #: ../src/pmount.c:285
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
-msgstr ""
+msgstr "Error: karakter huruf salah '%s'\n"
 
 #: ../src/pmount.c:366
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
-msgstr ""
+msgstr "Error: tidak dapat mengunci PID %u, proses ini tidak tersedia\n"
 
 #: ../src/pmount.c:380
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
-msgstr ""
+msgstr "Error: file pengunci pid tidak dapat di buat %s: %s\n"
 
 #: ../src/pmount.c:420
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
-msgstr ""
+msgstr "Error: file pengunci pid tidak dapat dihapus %s: %s\n"
 
 #: ../src/pmount.c:436
 msgid "Error: do_unlock: could not remove lock directory"
-msgstr ""
+msgstr "Error: do_unlock: kunci direktori tidak dapat dihilangkan"
 
 #: ../src/pmount.c:537 ../src/pumount.c:165
 msgid "Error: this program needs to be installed suid root\n"
 msgstr ""
+"Error: program ini memerlukan suid root yang terisntall lebih dulu.\n"
 
 #: ../src/pmount.c:580 ../src/pumount.c:187
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
-msgstr ""
+msgstr "Internal error: getopt_long() nilai pengembali tidak dikenal\n"
 
 #: ../src/pmount.c:618
 #, c-format
@@ -153,25 +203,27 @@ msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
 "ignored\n"
 msgstr ""
+"Peringatan: peralatan %s sudah ada di /etc/fstab, label yang diberikan akan "
+"diabaikan\n"
 
 #: ../src/pmount.c:632 ../src/pumount.c:232
 msgid "Error: could not determine real path of the device"
-msgstr ""
+msgstr "Error:tidak bisa menentukan alur peralatan sesungguhnya"
 
 #: ../src/pmount.c:641 ../src/pumount.c:238
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
-msgstr ""
+msgstr "Error: peralatan salah %s (harus terletak di /dev/)\n"
 
 #: ../src/pmount.c:679
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr ""
+msgstr "Error: tidak bisa men-decrypt (passphrase salah?)\n"
 
 #: ../src/pmount.c:682
 #, c-format
 msgid "Error: mapped device already exists\n"
-msgstr ""
+msgstr "Error: perangkat yang dimaksud sudah ada\n"
 
 #: ../src/pmount.c:696
 #, c-format
@@ -179,15 +231,17 @@ msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
+"Error: tidak dapat mengunci direktori mount. pmount lain mungkin masih "
+"berjalan untuk mount point ini.\n"
 
 #: ../src/pmount.c:720
 msgid "Error: could not delete mount point"
-msgstr ""
+msgstr "Error: tidak dapat menghapus mount point"
 
 #: ../src/pmount.c:741
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
-msgstr ""
+msgstr "Internal error: mode %i tidak bisa ditangani.\n"
 
 #: ../src/pmount-hal.c:31
 msgid ""
@@ -200,90 +254,102 @@ msgid ""
 "label\n"
 "will be read out from hal and passed to pmount."
 msgstr ""
+"pmount-hal - mengeksekusi pmount dengan tambahan informasi dari hal\n"
+"\n"
+"Penggunaan: pmount-hal <pernagkan> [opsi - opsi pmount]\n"
+"\n"
+"Perintah ini akan me-mounting perangkat yang dijelaskan oleh pernagkat yang "
+"diberikan atau UDI, menggunakan\n"
+"pmount. Tipe sistem berkas, kebijakan media penyimpanan dan label yang "
+"diinginkan\n"
+"akan diambil dari informasi yang didapat dari hal dan akan dilewatkan ke "
+"pmount."
 
 #: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"
-msgstr ""
+msgstr "Error: tidak dapat mengeksekusi perintah pmount\n"
 
 #: ../src/pmount-hal.c:210
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
-msgstr ""
+msgstr "Error: tidak dapat menghubungi dbus: %s: %s\n"
 
 #: ../src/pmount-hal.c:244
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr ""
+"Error: UDI yang diberikan bukan merupakan sebuah volume yang dapat di "
+"mount.\n"
 
 #: ../src/policy.c:92
 msgid "Error: could not get status of device"
-msgstr ""
+msgstr "Error: tidak bisa mendapatkan status dari perangkat"
 
 #: ../src/policy.c:103
 msgid "Error: could not get sysfs directory\n"
-msgstr ""
+msgstr "Error: tidak dapat mengambil direktori sysfs\n"
 
 #: ../src/policy.c:110
 msgid "Error: could not open <sysfs dir>/block/"
-msgstr ""
+msgstr "Error: tidak dapat membuka <sysfs dir>/block/"
 
 #: ../src/policy.c:141
 msgid "Error: could not open <sysfs dir>/block/<device>/"
-msgstr ""
+msgstr "Error: tidak dapat membuka <sysfs dir>/block/<device>/"
 
 #: ../src/policy.c:241
 #, c-format
 msgid "Error: device %s does not exist\n"
-msgstr ""
+msgstr "Error: perangkat %s tidak ada\n"
 
 #: ../src/policy.c:246
 #, c-format
 msgid "Error: %s is not a block device\n"
-msgstr ""
+msgstr "Error: %s bukan perangkat blok\n"
 
 #: ../src/policy.c:264 ../src/policy.c:320
 msgid "Error: could not open fstab-type file"
-msgstr ""
+msgstr "Error: tidak bisa membuka file bertipe fstab"
 
 #: ../src/policy.c:351
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
-msgstr ""
+msgstr "Error: peralatan %s sudah di mount ke %s\n"
 
 #: ../src/policy.c:353
 #, c-format
 msgid "Error: device %s is not mounted\n"
-msgstr ""
+msgstr "Error: perangkat %s ini tidak di mount\n"
 
 #: ../src/policy.c:355
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
-msgstr ""
+msgstr "Error: perangkat %s tidak di mount oleh anda sebelumnya\n"
 
 #: ../src/policy.c:391
 #, c-format
 msgid "Error: device %s is not removable\n"
-msgstr ""
+msgstr "Error: perangkat %s bukan jenis yang bisa di lepas-pasang.\n"
 
 #: ../src/policy.c:454
 #, c-format
 msgid "Error: device %s is locked\n"
-msgstr ""
+msgstr "Error: perangkat %s terkunci\n"
 
 #: ../src/policy.c:463
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr ""
+msgstr "Error: mount point %s sudah berada di /etc/fstab\n"
 
 #: ../src/policy.c:476
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
-msgstr ""
+msgstr "Error: direktori %s sudah berisi file sistem yang dimount\n"
 
 #: ../src/policy.c:478
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
-msgstr ""
+msgstr "Error: direktori %s tidak berisi file sistem yang dimount\n"
 
 #: ../src/pumount.c:43
 #, c-format
@@ -302,69 +368,88 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully\n"
 msgstr ""
+"Penggunaan:\n"
+"\n"
+"%s [opsi] <pernagkat>\n"
+"  Meng-umount <perangkat> dari sebuah direktori dibawah %s jika semua "
+"kebijakan\n"
+"  sudah terpenuhi (lihat pumount(1) untuk detil). direktori untuk mount "
+"point akan di hapus\n"
+"  setelahnya\n"
+"\n"
+"Opsi:\n"
+"  -l, --lazy : meng-umount secara lazy (malas), lihat umount(8)\n"
+"  -d, --debug : aktifkan mode debug (sangat verbose)\n"
+"  -h, --help : cetak pesan pertolongan dan keluar\n"
+"  --version : cetak nomor versi dan keluar\n"
 
 #: ../src/pumount.c:74
 msgid "Internal error: could not determine mount point\n"
-msgstr ""
+msgstr "Kesalahan Internal : TIdak bisa menentukan mount point\n"
 
 #: ../src/pumount.c:80
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
-msgstr ""
+msgstr "Error: mount point %s tidak berada dibawah %s\n"
 
 #: ../src/pumount.c:110
 msgid "Error: could not execute umount"
-msgstr ""
+msgstr "Error: tidak dapat mengeksekusi perintah umount"
 
 #: ../src/pumount.c:131
 #, c-format
 msgid "Error: umount failed\n"
-msgstr ""
+msgstr "Error: perintah umount gagal\n"
 
 #: ../src/utils.c:52
 #, c-format
 msgid "Error: out of memory\n"
-msgstr ""
+msgstr "Error: memori tidak mencukupi\n"
 
 #: ../src/utils.c:108
 msgid "Error: could not create directory"
-msgstr ""
+msgstr "Error: tidak dapat menciptakan direktori"
 
 #: ../src/utils.c:124
 msgid "Error: could not create stamp file in directory"
-msgstr ""
+msgstr "Error: tidak dapat menciptakan stempel di direktori"
 
 #: ../src/utils.c:132
 #, c-format
 msgid "Error: %s is not a directory\n"
-msgstr ""
+msgstr "Error: %s bukan merupakan sebuah direktori\n"
 
 #: ../src/utils.c:152
 msgid "Error: could not open directory"
-msgstr ""
+msgstr "Error: tidak dapat membuka direktori"
 
 #: ../src/utils.c:161
 #, c-format
 msgid "Error: directory %s is not empty\n"
-msgstr ""
+msgstr "Error: direktori %s tidak kosong\n"
 
 #: ../src/utils.c:213
 #, c-format
 msgid "Error: '%s' is not a valid number\n"
-msgstr ""
+msgstr "Error: '%s' bukan sebuah nomor yang valid\n"
 
 #: ../src/utils.c:255
 msgid "Internal error: could not change to effective uid root"
-msgstr ""
+msgstr "Kesalahan internal: tidak dapat berubah menjadi uid efektif root"
 
 #: ../src/utils.c:264
 msgid "Internal error: could not change effective user uid to real user id"
 msgstr ""
+"Kesalahan internal: tidak dapat merubah uid efektif pengguna saat ini "
+"menjadi id pengguna sesungguhnya"
 
 #: ../src/utils.c:273
+#, fuzzy
 msgid "Internal error: could not change to effective gid root"
-msgstr ""
+msgstr "Kesalahan internal: tidak dapat berubah menjadi gid efektif root"
 
 #: ../src/utils.c:282
 msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
+"Kesalahan internal: tidak dapat merubah id group efektif saat ini menjadi id "
+"group sesungguhnya"

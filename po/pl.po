@@ -8,14 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-15 23:25+0200\n"
-"PO-Revision-Date: 2006-05-10 07:23+0000\n"
-"Last-Translator: Jakub Ambrożewicz <jakub.ambrozewicz@gazeta.pl>\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"PO-Revision-Date: 2007-04-18 22:29+0000\n"
+"Last-Translator: Jakub Kostrzewa <aard@tlen.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
+"X-Rosetta-Export-Date: 2007-06-16 12:08:30+0000\n"
 
 #: ../src/pmount.c:51
 #, c-format
@@ -36,8 +37,8 @@ msgstr ""
 "\n"
 "  Montuje urządzenie w katalogu poniżej %s jeśli spełnione\n"
 "  są wymagania (zobacz pmount(1)). Jeśli <etykieta> została podana,\n"
-"  punktem montowania będzie %s/<etykieta>, w przeciwnym wypadku będzie to %"
-"s<urządzenie>.\n"
+"  punktem montowania będzie %s/<etykieta>, w przeciwnym wypadku będzie to "
+"%s<urządzenie>.\n"
 "  Jeśli punkt montowania nie istnieje, to zostanie utworzony.\n"
 "\n"
 
@@ -237,7 +238,6 @@ msgid "Internal error: mode %i not handled.\n"
 msgstr "Błąd wewnętrzny: tryb %i nie obsłużony.\n"
 
 #: ../src/pmount-hal.c:31
-#, fuzzy
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
@@ -250,11 +250,11 @@ msgid ""
 msgstr ""
 "pmount-hal - wykonaj pmount z dodatkowymi informacjami od hal'a\n"
 "\n"
-"Użycie: pmount-hal <device> [opcje pmount]\n"
+"Użycie: pmount-hal <urządzenie> [opcje pmount]\n"
 "\n"
-"To polecenie montuje urządzenie opisane podanym urządzeniem lub UDI przy "
+"To polecenie montuje urządzenie opisane podanym urządzeniem lub UID przy "
 "użyciu\n"
-"pmount. System plików, volume storage policy i etykieta\n"
+"pmount. System plików, zasada przechowywania woluminu i etykieta\n"
 "będą odczytane z hal'a i przekazane do polecenia pmount."
 
 #: ../src/pmount-hal.c:167
@@ -329,7 +329,7 @@ msgstr "Błąd: urządzenie %s jest zablokowane\n"
 #: ../src/policy.c:463
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr ""
+msgstr "Błąd: punkt montowania %s istnieje już w pliku /etc/fstab\n"
 
 #: ../src/policy.c:476
 #, c-format
@@ -358,6 +358,19 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully\n"
 msgstr ""
+"Użycie:\n"
+"\n"
+"%s [opcje] <urządzenie>\n"
+"  Odmontowuje <urządzenie> z katalogu poniżej %s jeśli są spełnione zasady\n"
+"  polityki (zajrzyj do pumount(1) po szczegóły). Punkt montowania katalogu "
+"jest później\n"
+"  usuwany.\n"
+"\n"
+"Opcje:\n"
+"  -l, --lazy : odmontowuje leniwie, spójrz do umount(8)\n"
+"  -d, --debug : włącza wyjście debuggowania (bardzo szczegółowe)\n"
+"  -h, --help : wyświetla wiadomość z pomocą i wychodzi bez błędu\n"
+"  --version : wyświetla numer wersji i wychodzi bez błędu\n"
 
 #: ../src/pumount.c:74
 msgid "Internal error: could not determine mount point\n"
@@ -428,5 +441,3 @@ msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
 "Błąd wewnętrzny: nie można zmienić efektywnego id grupy na rzeczywisty id "
 "grupy"
-
-

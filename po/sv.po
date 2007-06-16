@@ -7,15 +7,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-15 23:25+0200\n"
-"PO-Revision-Date: 2006-04-10 11:38+0000\n"
-"Last-Translator: chaffeur <dav.hjelm@spray.se>\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"PO-Revision-Date: 2006-11-11 16:19+0000\n"
+"Last-Translator: Daniel Nylander <yeager@ubuntu.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
+"X-Rosetta-Export-Date: 2007-06-16 12:08:24+0000\n"
 
 #: ../src/pmount.c:51
 #, c-format
@@ -32,13 +33,13 @@ msgid ""
 msgstr ""
 "Användning:\n"
 "\n"
-"%s [flaggor] <enhet> [<beteckning>]\n"
+"%s [flaggor] <enhet> [<etikett>]\n"
 "\n"
 "  Montera <enhet> på en katalog under %s om kraven ställda av policyn "
 "uppfylls\n"
-"  (se pmount(1) för detaljer). Om <beteckning> är given, kommer "
+"  (se pmount(1) för detaljer). Om <etikett> är given, kommer "
 "monteringspunkten att\n"
-"  bli %s/<beteckning>, annars kommer den att bli %s<enhet>.\n"
+"  bli %s/<etikett>, annars kommer den att bli %s<enhet>.\n"
 "  Om katalogen där enheten monteras inte finns så kommer den att skapas.\n"
 "\n"
 
@@ -93,6 +94,24 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully"
 msgstr ""
+"Flaggor:\n"
+"  -r: tvinga <enhet> att bli monterad som endast läsbar\n"
+"  -w: tvinga <enhet> att bli monterad som läs- och skrivbar\n"
+"  -s, --sync: montera <enhet> med flaggan \"sync\" (standard: \"async\")\n"
+"  --noatime: montera <enhet> med alternativet \"noatime\" (standard: "
+"\"atime\")\n"
+"  -e, --exec: montera <enhet> med alternativet \"exec\" (standard: "
+"\"noexec\")\n"
+"  -t <fs>: montera med filsystemstypen <fs> (standard: autodetect)\n"
+"  -c <teckentabell>: använd teckentabellen <teckentabell> (standard: utf8\n"
+"                        om anropad i lokalisering med utf8, annars\n"
+"                        används standard för mount)\n"
+"  --passphrase <fil>: läs lösenordsfrasen från en fil istället för "
+"terminalen\n"
+"                        (endast för LUKS-krypterade enheter)\n"
+"  -d. --debug: aktivera utmatning av felsökning (väldigt detaljerad)\n"
+"  -h, --help: visa hjälpmeddelande och avsluta\n"
+"  --version: visa versionsnummer och avsluta"
 
 #: ../src/pmount.c:134
 #, c-format
@@ -107,12 +126,12 @@ msgstr "Fel: etiketten är för lång\n"
 #: ../src/pmount.c:143
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
-msgstr "Fel: '/' tillåts inte i etiketter\n"
+msgstr "Fel: \"/\" tillåts inte i etiketter\n"
 
 #: ../src/pmount.c:150
 #, c-format
 msgid "Error: device name too long\n"
-msgstr "Fel: enhetsnamn för långt\n"
+msgstr "Fel: enhetsnamnet är för långt\n"
 
 #: ../src/pmount.c:181 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
@@ -120,22 +139,22 @@ msgstr "Fel: kunde inte släppa alla uid-privilegier"
 
 #: ../src/pmount.c:186
 msgid "Error: could not execute mount"
-msgstr "Fel: kunde inte exekvera mount"
+msgstr "Fel: kunde inte köra mount"
 
 #: ../src/pmount.c:225
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
-msgstr "Internt fel: monterings_försök: givet fil system är NULL\n"
+msgstr "Internt fel: mount_attempt: angivet fil system är NULL\n"
 
 #: ../src/pmount.c:231
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
-msgstr "Fel: felaktig filsystemsbeteckning \"%s\"\n"
+msgstr "Fel: ogiltig filsystemsnamn \"%s\"\n"
 
 #: ../src/pmount.c:237
 #, c-format
 msgid "Error: invalid umask %s\n"
-msgstr "Fel: felaktig umask %s\n"
+msgstr "Fel: ogiltig umask %s\n"
 
 #: ../src/pmount.c:285
 #, c-format
@@ -145,17 +164,17 @@ msgstr "Fel: ogiltigt teckentabellnamn \"%s\"\n"
 #: ../src/pmount.c:366
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
-msgstr "Fel: kan inte låsa för pid %u; processen finns inte\n"
+msgstr "Fel: kan inte låsa för pid %u, denna process finns inte\n"
 
 #: ../src/pmount.c:380
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
-msgstr "Fel: kunde inte skapa pid-låsfil %s: %s\n"
+msgstr "Fel: kunde inte skapa pid-låsfilen %s: %s\n"
 
 #: ../src/pmount.c:420
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
-msgstr "Fel: kunde inte ta bort pid-låsfil %s: %s\n"
+msgstr "Fel: kunde inte ta bort pid-låsfilen %s: %s\n"
 
 #: ../src/pmount.c:436
 msgid "Error: do_unlock: could not remove lock directory"
@@ -181,17 +200,17 @@ msgstr ""
 
 #: ../src/pmount.c:632 ../src/pumount.c:232
 msgid "Error: could not determine real path of the device"
-msgstr "Fel: kunde inte avgöra enhetens riktiga sökväg"
+msgstr "Fel: kunde inte bestämma enhetens riktiga sökväg"
 
 #: ../src/pmount.c:641 ../src/pumount.c:238
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
-msgstr "Fel: ogiltig enhet %s (måste vara i /dev/)\n"
+msgstr "Fel: ogiltig enhet %s (måste finnas i /dev/)\n"
 
 #: ../src/pmount.c:679
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr "Fel: kunde inte dekryptera enheten (fel lösenord?)\n"
+msgstr "Fel: kunde inte dekryptera enheten (felaktig lösenfras?)\n"
 
 #: ../src/pmount.c:682
 #, c-format
@@ -204,7 +223,7 @@ msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
-"Fel: kunde inte låsa monterings mappen. En annan pmount kanske körs för "
+"Fel: kunde inte låsa monteringskatalogen. En annan pmount kanske kör för "
 "denna monteringspunkt.\n"
 
 #: ../src/pmount.c:720
@@ -214,10 +233,9 @@ msgstr "Fel: kunde inte ta bort monteringspunkten"
 #: ../src/pmount.c:741
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
-msgstr "Internt fel: läget %i hanteras ej.\n"
+msgstr "Internt fel: läget %i hanteras inte.\n"
 
 #: ../src/pmount-hal.c:31
-#, fuzzy
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
@@ -230,16 +248,16 @@ msgid ""
 msgstr ""
 "pmount-hal - kör pmount med extra information från hal\n"
 "\n"
-"Användning: pmount-hal <enhet> [pmount val]\n"
+"Användning: pmount-hal <enhet> [pmount-flaggor]\n"
 "\n"
-"Detta kommando monterar enheten angiven av den givna enheten eller UDI genom "
+"Detta kommando monterar enheten angiven av den givna enheten eller UDI via "
 "pmount.\n"
-"Filsystemstypen, volymens lagringspolicy och det begärda namnet kommer bli\n"
-"utläst från hal och vidarebefodrat till pmount."
+"Filsystemstypen, volymens lagringspolicy och den önskade etiketten\n"
+"kommer att bli läst från hal och skickas vidare till pmount."
 
 #: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"
-msgstr "Fel: kunde inte köra pmount\n"
+msgstr "Fel: kunde inte starta pmount\n"
 
 #: ../src/pmount-hal.c:210
 #, c-format
@@ -257,29 +275,29 @@ msgstr "Fel: kunde inte erhålla enhetens status"
 
 #: ../src/policy.c:103
 msgid "Error: could not get sysfs directory\n"
-msgstr "Fel: kunde inte erhålla sysfs-mappen\n"
+msgstr "Fel: kunde inte erhålla sysfs-katalogen\n"
 
 #: ../src/policy.c:110
 msgid "Error: could not open <sysfs dir>/block/"
-msgstr "Fel: kunde inte öppna <sysfs dir>/block/"
+msgstr "Fel: kunde inte öppna <sysfs-katalog>/block/"
 
 #: ../src/policy.c:141
 msgid "Error: could not open <sysfs dir>/block/<device>/"
-msgstr "Fel: kunde inte öppna <sysfs dir>/block/<enhet>/"
+msgstr "Fel: kunde inte öppna <sysfs-katalog>/block/<enhet>/"
 
 #: ../src/policy.c:241
 #, c-format
 msgid "Error: device %s does not exist\n"
-msgstr "Fel: enhet %s finns inte\n"
+msgstr "Fel: enheten %s finns inte\n"
 
 #: ../src/policy.c:246
 #, c-format
 msgid "Error: %s is not a block device\n"
-msgstr "Fel: %s är inte en block enhet\n"
+msgstr "Fel: %s är inte en blockenhet\n"
 
 #: ../src/policy.c:264 ../src/policy.c:320
 msgid "Error: could not open fstab-type file"
-msgstr "Fel: kunde inte öppna fstab-type filen"
+msgstr "Fel: kunde inte öppna filen fstab-type"
 
 #: ../src/policy.c:351
 #, c-format
@@ -299,7 +317,7 @@ msgstr "Fel: enheten %s monterades inte av dig\n"
 #: ../src/policy.c:391
 #, c-format
 msgid "Error: device %s is not removable\n"
-msgstr "Fel: enheten %s är inte löstagbar\n"
+msgstr "Fel: enheten %s är inte flyttbar\n"
 
 #: ../src/policy.c:454
 #, c-format
@@ -309,17 +327,17 @@ msgstr "Fel: enheten %s är låst\n"
 #: ../src/policy.c:463
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr ""
+msgstr "Fel: monteringspunkten %s finns redan i /etc/fstab\n"
 
 #: ../src/policy.c:476
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
-msgstr "Fel: mappen %s innehåller redan ett monterat filsystem\n"
+msgstr "Fel: katalogen %s innehåller redan ett monterat filsystem\n"
 
 #: ../src/policy.c:478
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
-msgstr "Fel: mappen %s innehåller inte ett monterat filsystem\n"
+msgstr "Fel: katalogen %s innehåller inte ett monterat filsystem\n"
 
 #: ../src/pumount.c:43
 #, c-format
@@ -338,10 +356,22 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully\n"
 msgstr ""
+"Användning:\n"
+"\n"
+"%s [flaggor] <enhet>\n"
+"  Avmontera <enhet> från en katalog under %s om policyn\n"
+"  tillåter det (se pumount(1) för detaljer). Monteringspunktens\n"
+"  katalog tas bort efteråt.\n"
+"\n"
+"Flaggor:\n"
+"  -l, --lazy: avmontera enkelt, se umount(8)\n"
+"  -d, --debug: aktivera utskrift för felsökning (väldigt detaljerat)\n"
+"  -h, --help: visa hjälpmeddelande och avsluta\n"
+"  --version: visa versionsnummer och avsluta\n"
 
 #: ../src/pumount.c:74
 msgid "Internal error: could not determine mount point\n"
-msgstr "Internt fel: kunde inte avgöra monteringspunkten\n"
+msgstr "Internt fel: kunde inte bestämma monteringspunkt\n"
 
 #: ../src/pumount.c:80
 #, c-format
@@ -350,7 +380,7 @@ msgstr "Fel: monteringspunkten %s är inte under %s\n"
 
 #: ../src/pumount.c:110
 msgid "Error: could not execute umount"
-msgstr "Fel: kunde inte köra umount"
+msgstr "Fel: kunde inte starta umount"
 
 #: ../src/pumount.c:131
 #, c-format
@@ -364,49 +394,49 @@ msgstr "Fel: slut på minne\n"
 
 #: ../src/utils.c:108
 msgid "Error: could not create directory"
-msgstr "Fel: kunde inte skapa mapp"
+msgstr "Fel: kunde inte skapa katalog"
 
 #: ../src/utils.c:124
 msgid "Error: could not create stamp file in directory"
-msgstr "Fel: kunde inte skapa stamp fil i mappen"
+msgstr "Fel: kunde inte skapa stämpelfil i katalogen"
 
 #: ../src/utils.c:132
 #, c-format
 msgid "Error: %s is not a directory\n"
-msgstr "Fel: %s är inte en mapp\n"
+msgstr "Fel: %s är inte en katalog\n"
 
 #: ../src/utils.c:152
 msgid "Error: could not open directory"
-msgstr "Fel: kunde inte öppna mapp"
+msgstr "Fel: kunde inte öppna katalog"
 
 #: ../src/utils.c:161
 #, c-format
 msgid "Error: directory %s is not empty\n"
-msgstr "Fel: mappen %s är inte tom\n"
+msgstr "Fel: katalogen %s är inte tom\n"
 
 #: ../src/utils.c:213
 #, c-format
 msgid "Error: '%s' is not a valid number\n"
-msgstr "Fel: '%s' är inte ett giltigt nummer\n"
+msgstr "Fel: \"%s\" är inte ett giltigt nummer\n"
 
 #: ../src/utils.c:255
-#, fuzzy
 msgid "Internal error: could not change to effective uid root"
-msgstr "Internt fel: kunde inte byta till effektiv uid root"
+msgstr "Internt fel: kunde inte växla till effektivt uid som root"
 
 #: ../src/utils.c:264
-#, fuzzy
 msgid "Internal error: could not change effective user uid to real user id"
 msgstr ""
-"Internt fel: kunde inte byta effektiv användar uid till riktig användar id"
+"Internt fel: kunde inte växla effektivt användar-uid till riktigt användar-id"
 
 #: ../src/utils.c:273
-#, fuzzy
 msgid "Internal error: could not change to effective gid root"
-msgstr "Internt fel: kunde inte byta till effektiv gid root"
+msgstr "Internt fel: kunde inte växla till effektivt gid som root"
 
 #: ../src/utils.c:282
-#, fuzzy
 msgid "Internal error: could not change effective group id to real group id"
-msgstr "Internt fel: kunde inte byta effektiv grupp id till riktig grupp id"
+msgstr ""
+"Internt fel: kunde inte växla effektivt grupp-id till riktigt grupp-id"
 
+#, c-format
+#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
+#~ msgstr "Fel: make_mountpoint_name: ogiltig enhet %s (måste vara i /dev/)\n"

@@ -62,6 +62,7 @@ int
 check_umount_policy( const char* device, int do_lazy ) 
 {
     int devvalid;
+    char mediadir[PATH_MAX];
 
     devvalid = ( do_lazy || device_valid( device ) ) &&
         device_mounted( device, 1, mntpt );
@@ -75,8 +76,15 @@ check_umount_policy( const char* device, int do_lazy )
         exit( E_INTERNAL );
     }
 
+    /* MEDIADIR may be a symlink (for read-only root systems) */
+    if( NULL == realpath( MEDIADIR, mediadir ) ) {
+        fprintf( stderr, _("Error: could not find real path of %s\n"),
+                MEDIADIR );
+        exit( E_INTERNAL );
+    }
+
     /* mount point must be below MEDIADIR */
-    if( strncmp( mntpt, MEDIADIR, sizeof( MEDIADIR )-1 ) ) {
+    if( strncmp( mntpt, mediadir, strlen( mediadir ) ) ) {
         fprintf( stderr, _("Error: mount point %s is not below %s\n"), mntpt,
                 MEDIADIR );
         return -1;

@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-15 23:25+0200\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
 "PO-Revision-Date: 2005-03-03 14:39+0000\n"
 "Last-Translator: Ovidiu Borlean <ovidiu.borlean@gmail.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -16,6 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
+"X-Rosetta-Export-Date: 2007-06-16 12:08:24+0000\n"
 
 #: ../src/pmount.c:51
 #, c-format
@@ -391,3 +392,8 @@ msgstr "Eroare interna: nu pot schimba in root gid efectiv"
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Eroare interna: nu pot schimba group id efectiv in group id real"
 
+#, c-format
+#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
+#~ msgstr ""
+#~ "Eroare: make_mountpoint_name: dispozitiv invalid %s (trebuie sa existe in "
+#~ "/dev/)\n"

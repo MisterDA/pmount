@@ -8,15 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-15 23:25+0200\n"
-"PO-Revision-Date: 2006-06-16 17:14+0000\n"
-"Last-Translator: Pierre Slamich <pierre.slamich@gmail.com>\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"PO-Revision-Date: 2007-05-28 22:01+0000\n"
+"Last-Translator: Florent MORSELLI <spomky@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
+"X-Rosetta-Export-Date: 2007-06-16 12:08:23+0000\n"
 
 #: ../src/pmount.c:51
 #, c-format
@@ -92,11 +93,32 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully"
 msgstr ""
+"Options :\n"
+"  -r : force le montage de <device> en mode lecture seule\n"
+"  -w : force le montage de <device> en mode lecture-écriture\n"
+"  -s, --sync : monte <device> avec l'option 'sync' (par défaut: 'async')\n"
+"  --noatime : monte <device> avec l'option 'noatime' (par défaut: 'atime')\n"
+"  -e, --exec : monte <device> avec l'option 'exec' (par défaut: 'noexec')\n"
+"  -t <fs> : monte en tant que système de fichiers <fs> (par défaut: "
+"autodetected)\n"
+"  -c <charset>: utilise le jeu de caractères fourni (par défaut: 'utf8' est "
+"utilisé\n"
+"                dans un environnement UTF-8, sinon le jeu par défaut est "
+"utilisé)\n"
+"  -u <umask> : utilise le 'umask' spécifié à la place de celui par défaut "
+"(seulement pour\n"
+"                les systèmes de fichier supportant le réglage 'umask')\n"
+" --passphrase <file>\n"
+"                lit passphrase depuis le fichier au lieu du terminal\n"
+"                (uniquement pour les périphériques cryptés de type LUKS)\n"
+"  -d, --debug : active la sortie debug (très locace)\n"
+"  -h, --help : affiche le message d'aide et quitte\n"
+"  --version : affiche le numéro de version et quitte"
 
 #: ../src/pmount.c:134
 #, c-format
 msgid "Error: label must not be empty\n"
-msgstr "Erreur : l'étiquette ne peut pas être vide\n"
+msgstr "Erreur : l'étiquette ne doit pas être vide\n"
 
 #: ../src/pmount.c:138
 #, c-format
@@ -161,7 +183,7 @@ msgstr "Erreur : impossible d'ôter le fichier de verrou pid %s : %s\n"
 
 #: ../src/pmount.c:436
 msgid "Error: do_unlock: could not remove lock directory"
-msgstr "Erreur : do_unlock: ne peut ôter le verrou du répertoire"
+msgstr "Erreur : do_unlock: impossible d'ôter le verrou du répertoire"
 
 #: ../src/pmount.c:537 ../src/pumount.c:165
 msgid "Error: this program needs to be installed suid root\n"
@@ -201,7 +223,7 @@ msgstr ""
 #: ../src/pmount.c:682
 #, c-format
 msgid "Error: mapped device already exists\n"
-msgstr ""
+msgstr "Erreur : le périphérique mappé existe déjà\n"
 
 #: ../src/pmount.c:696
 #, c-format
@@ -233,6 +255,13 @@ msgid ""
 "label\n"
 "will be read out from hal and passed to pmount."
 msgstr ""
+"pmount-hal - exécute pmount avec les informations additionnelles de HAL\n"
+"\n"
+"Exemple : pmount-hal <peripherique> [options de pmount ]\n"
+"\n"
+"Cette commande monte le périphérique décrit par le périphérique ou l'UDI "
+"fourni en utilisant pmount. Le type de système de fichiers, la politique de "
+"sécurité et le nom du volume seront récupérés par HAL et passés à pmount."
 
 #: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"
@@ -306,12 +335,13 @@ msgstr "Erreur : le périphérique %s est verrouillé\n"
 #: ../src/policy.c:463
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr ""
+msgstr "Erreur : le point de montage %s est déjà dans /etc/fstab\n"
 
 #: ../src/policy.c:476
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
-msgstr "Erreur : le répertoire %s contient déjà un système de fichiers\n"
+msgstr ""
+"Erreur : le répertoire %s contient déjà un système de fichiers monté\n"
 
 #: ../src/policy.c:478
 #, c-format
@@ -336,6 +366,19 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully\n"
 msgstr ""
+"Utilisation :\n"
+"\n"
+"%s [options] <peripherique>\n"
+"  Démonte le <peripherique> du répertoire %s si la politique requise est "
+"satisfaite\n"
+"  (voir pumount(1) pour les détails). Le point de montage est ensuite\n"
+"  supprimé.\n"
+"\n"
+"Options:\n"
+"  -l, --lazy : Démontage paresseux, voir umount(8)\n"
+"  -d, --debug : Active le mode debug (très loquace)\n"
+"  -h, --help : affiche l'aide et quitte avec succès\n"
+"  --version : affiche le numéro de version et quitte avec succès\n"
 
 #: ../src/pumount.c:74
 msgid "Internal error: could not determine mount point\n"
@@ -362,11 +405,12 @@ msgstr "Erreur : plus de mémoire disponible\n"
 
 #: ../src/utils.c:108
 msgid "Error: could not create directory"
-msgstr "Erreur : impossible de créer de répertoire"
+msgstr "Erreur : impossible de créer le répertoire"
 
 #: ../src/utils.c:124
 msgid "Error: could not create stamp file in directory"
-msgstr "Erreur : impossible de créer un fichier estampillé dans le répertoire"
+msgstr ""
+"Erreur : impossible de créer un fichier estampillé dans le répertoire"
 
 #: ../src/utils.c:132
 #, c-format
@@ -389,7 +433,7 @@ msgstr "Erreur : '%s' n'est pas un nombre valide\n"
 
 #: ../src/utils.c:255
 msgid "Internal error: could not change to effective uid root"
-msgstr "Erreur interne : impossible de changer l'uid effectif de root"
+msgstr "Erreur interne : impossible de passer à l'uid effectif de root"
 
 #: ../src/utils.c:264
 msgid "Internal error: could not change effective user uid to real user id"
@@ -406,6 +450,3 @@ msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
 "Erreur interne : impossible de changer de l'id effectif de groupe pour le "
 "véritable id du groupe"
-
-
-

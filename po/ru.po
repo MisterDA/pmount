@@ -9,13 +9,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-15 23:25+0200\n"
-"PO-Revision-Date: 2006-08-13 20:02+0000\n"
-"Last-Translator: intel <intel19@yandex.ru>\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"PO-Revision-Date: 2007-05-01 06:27+0000\n"
+"Last-Translator: qxov <qxov@mail.ru>\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Rosetta-Export-Date: 2007-06-16 12:08:33+0000\n"
 
 #: ../src/pmount.c:51
 #, c-format
@@ -42,7 +43,7 @@ msgstr ""
 "\n"
 
 #: ../src/pmount.c:58
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
 "  Prevent further pmounts of <device> until it is unlocked again. <pid>\n"
@@ -204,6 +205,8 @@ msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
+"Ошибка: невозможно заблокировать каталог для монтирования. Возможно другой "
+"процесс pmount использует этот каталог.\n"
 
 #: ../src/pmount.c:720
 msgid "Error: could not delete mount point"
@@ -225,6 +228,13 @@ msgid ""
 "label\n"
 "will be read out from hal and passed to pmount."
 msgstr ""
+"pmount-hal - выполнить pmount с дополнительной информацией от hal\n"
+"\n"
+"Применение: pmount-hal <устройство> [опции pmount]\n"
+"\n"
+"Эта команда монтироует заданное устройство или UDI, используя pmount.\n"
+"Тип файловой системы, политика хранения данных и желаемая метка тома\n"
+"будут прочитаны из hal и переданы pmount."
 
 #: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"
@@ -327,6 +337,18 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully\n"
 msgstr ""
+"Использование:\n"
+"\n"
+"%s [опции] <устройство>\n"
+"  Отмонтировать <устройство> из каталога %s, если соблюдены требования\n"
+"  политики (см. pumount(1) для деталей). После этого, точка монтирования \n"
+"  каталога удаляется.\n"
+"\n"
+"Опции:\n"
+"  -l, --lazy : отсоеденить \"лениво\", см. umount(8)\n"
+"  -d, --debug : включить отладочный вывод (очень информативно)\n"
+"  -h, --help : вывести справочное сообщение и завершить работу\n"
+"  --version : вывести номер версии и завершить работу\n"
 
 #: ../src/pumount.c:74
 msgid "Internal error: could not determine mount point\n"
@@ -395,7 +417,3 @@ msgstr "Внутренняя ошибка: невозможно изменить
 #: ../src/utils.c:282
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Внутренняя ошибка: невозможно изменить текущую группу на реальную"
-
-
-
-

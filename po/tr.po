@@ -1,22 +1,21 @@
-# Hebrew translation for pmount
-# Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
+# Turkish translation for pmount
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
 # This file is distributed under the same license as the pmount package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
-"PO-Revision-Date: 2005-05-18 17:22+0000\n"
-"Last-Translator: MBD <bardavid@gmail.com>\n"
-"Language-Team: Hebrew <he@li.org>\n"
+"PO-Revision-Date: 2007-06-14 06:08+0000\n"
+"Last-Translator: Baris Ozyurt <baris@tuxworkshop.com>\n"
+"Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Rosetta-Version: 0.1\n"
-"X-Rosetta-Export-Date: 2007-06-16 12:08:25+0000\n"
+"X-Rosetta-Export-Date: 2007-06-16 12:08:35+0000\n"
 
 #: ../src/pmount.c:51
 #, c-format
@@ -75,22 +74,22 @@ msgstr ""
 #: ../src/pmount.c:134
 #, c-format
 msgid "Error: label must not be empty\n"
-msgstr "שגיאה: תווית אינה יכולה להיות ריקה\n"
+msgstr "Hata: etiket boş olmamalıdır\n"
 
 #: ../src/pmount.c:138
-#, fuzzy
+#, c-format
 msgid "Error: label too long\n"
-msgstr "שגיאה: תווית ארוכה מדי\n"
+msgstr "Hata: etiket çok uzun\n"
 
 #: ../src/pmount.c:143
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
-msgstr "שגיאה: שימוש בתו '/' בשם תוית אסור\n"
+msgstr "Hata: etiket isminde '/' işareti bulunmamalıdır\n"
 
 #: ../src/pmount.c:150
 #, c-format
 msgid "Error: device name too long\n"
-msgstr "שגיאה: שם ההתקן ארוך מדי\n"
+msgstr "Hata: cihaz adı çok uzun\n"
 
 #: ../src/pmount.c:181 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
@@ -98,17 +97,17 @@ msgstr ""
 
 #: ../src/pmount.c:186
 msgid "Error: could not execute mount"
-msgstr "שגיאה: לא ניתן לבצע עגינה"
+msgstr ""
 
 #: ../src/pmount.c:225
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
-msgstr "שגיאה פנימית: ניסיון עגינה: שם מערכת הקבצים הנתונה הינו NULL\n"
+msgstr ""
 
 #: ../src/pmount.c:231
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
-msgstr "שגיאה: שם מערכת קבצים לא תקין '%s'\n"
+msgstr ""
 
 #: ../src/pmount.c:237
 #, c-format
@@ -157,7 +156,7 @@ msgstr ""
 
 #: ../src/pmount.c:632 ../src/pumount.c:232
 msgid "Error: could not determine real path of the device"
-msgstr "שגיאה: לא ניתן לקבוע את המיקום הממשי של ההתקן"
+msgstr "Hata: cihazın gerçek yolu doğrulanamıyor"
 
 #: ../src/pmount.c:641 ../src/pumount.c:238
 #, c-format
@@ -183,7 +182,7 @@ msgstr ""
 
 #: ../src/pmount.c:720
 msgid "Error: could not delete mount point"
-msgstr "שגיאה: לא מסוגל למחוק נקודת עגינה"
+msgstr ""
 
 #: ../src/pmount.c:741
 #, c-format
@@ -235,7 +234,7 @@ msgstr ""
 #: ../src/policy.c:241
 #, c-format
 msgid "Error: device %s does not exist\n"
-msgstr "שגיאה: ההתקן %s לא נמצא\n"
+msgstr ""
 
 #: ../src/policy.c:246
 #, c-format
@@ -244,17 +243,17 @@ msgstr ""
 
 #: ../src/policy.c:264 ../src/policy.c:320
 msgid "Error: could not open fstab-type file"
-msgstr "שגיאה: לא ניתן לפתוח קובץ fstab-type"
+msgstr ""
 
 #: ../src/policy.c:351
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
-msgstr "שגיאה: ההתקן %s כבר עוגן ל %s\n"
+msgstr ""
 
 #: ../src/policy.c:353
 #, c-format
 msgid "Error: device %s is not mounted\n"
-msgstr "שגיאה: ההתקן %s לא מעוגן\n"
+msgstr ""
 
 #: ../src/policy.c:355
 #, c-format
@@ -264,12 +263,12 @@ msgstr ""
 #: ../src/policy.c:391
 #, c-format
 msgid "Error: device %s is not removable\n"
-msgstr "שגיאה: ההתקן %s אינו ניתן להסרה\n"
+msgstr ""
 
 #: ../src/policy.c:454
 #, c-format
 msgid "Error: device %s is locked\n"
-msgstr "שגיאה: ההתקן %s נעול\n"
+msgstr ""
 
 #: ../src/policy.c:463
 #, c-format
@@ -277,14 +276,14 @@ msgid "Error: mount point %s is already in /etc/fstab\n"
 msgstr ""
 
 #: ../src/policy.c:476
-#, fuzzy
+#, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
-msgstr "שגיאה: תיקיה %s כבר מכילה מערכת קבצים שעוגנה\n"
+msgstr ""
 
 #: ../src/policy.c:478
-#, fuzzy
+#, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
-msgstr "שגיאה: תיקיה %s אינה מכילה מערכת קבצים שעוגנה\n"
+msgstr ""
 
 #: ../src/pumount.c:43
 #, c-format
@@ -315,45 +314,44 @@ msgstr ""
 
 #: ../src/pumount.c:110
 msgid "Error: could not execute umount"
-msgstr "שגיאה: לא ניתן לבצע umount"
+msgstr ""
 
 #: ../src/pumount.c:131
-#, fuzzy
+#, c-format
 msgid "Error: umount failed\n"
-msgstr "שגיאה: ביטול עגינה (umount) נכשל\n"
+msgstr ""
 
 #: ../src/utils.c:52
-#, fuzzy
+#, c-format
 msgid "Error: out of memory\n"
-msgstr "שגיאה: קיים מחסור בזכרון\n"
+msgstr ""
 
 #: ../src/utils.c:108
-#, fuzzy
 msgid "Error: could not create directory"
-msgstr "שגיאה: לא ניתן ליצור תיקיה"
+msgstr ""
 
 #: ../src/utils.c:124
 msgid "Error: could not create stamp file in directory"
 msgstr ""
 
 #: ../src/utils.c:132
-#, fuzzy
+#, c-format
 msgid "Error: %s is not a directory\n"
-msgstr "שגיאה: %s אינה תיקיה\n"
+msgstr ""
 
 #: ../src/utils.c:152
 msgid "Error: could not open directory"
-msgstr "שגיאה: לא ניתן לפתוח תיקיה"
+msgstr ""
 
 #: ../src/utils.c:161
 #, c-format
 msgid "Error: directory %s is not empty\n"
-msgstr "שגיאה: התיקיה '%s' אינה ריקה\n"
+msgstr ""
 
 #: ../src/utils.c:213
 #, c-format
 msgid "Error: '%s' is not a valid number\n"
-msgstr "שגיאה: '%s' אינו מספר תקין\n"
+msgstr ""
 
 #: ../src/utils.c:255
 msgid "Internal error: could not change to effective uid root"

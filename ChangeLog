@@ -1,6 +1,22 @@
-Development
+0.9.14
 -----------
 - pmount: support the 'omfs' file system
+- applied patch from Tim Phipps <tim@phipps-hutton.freeserve.co.uk> to
+  fix pumount when /media is a symlink.
+- use errors=continue when applicable to prevent carefully crafted fs 
+  to cause kernel panics.
+- some typo fixes
+- -p is now a shortcut for --passphrase
+- document why for some filesystems, pmount makes the kernel complain.
+- use the realpath implementation from the mount utility for security
+  reasons (man 3 realpath says 'Avoid using this function.')
+- pulling recent translations from Rosetta; adding (partial)
+  translations for: 
+  * Basque
+  * Persian
+  * Norwegian
+  * Telugu
+  * Turkish
 
 0.9.13
 ------

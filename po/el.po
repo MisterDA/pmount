@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-15 23:25+0200\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
 "PO-Revision-Date: 2006-03-09 17:35+0000\n"
 "Last-Translator: Martin Pitt <martin.pitt@ubuntu.com>\n"
 "Language-Team: Greek, Modern (1453-) <el@li.org>\n"
@@ -16,6 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
+"X-Rosetta-Export-Date: 2007-06-16 12:08:26+0000\n"
 
 #: ../src/pmount.c:51
 #, c-format

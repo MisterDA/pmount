@@ -28,7 +28,8 @@ EXTRA_DIST = \
 	fs.h     \
 	luks.h   \
 	policy.h \
-	utils.h
+	utils.h  \
+	realpath.h
 
 INSTALL_DIR = $(DESTDIR)/$(prefix)/bin
 INSTALL_SRC = $(top_builddir)/src
