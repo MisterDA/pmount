@@ -30,6 +30,9 @@
 #include "luks.h"
 #include "config.h"
 
+/* Using our private realpath function */
+#include "realpath.h"
+
 /* error codes */
 const int E_ARGS = 1;
 const int E_DEVICE = 2;

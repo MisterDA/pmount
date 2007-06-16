@@ -5,7 +5,8 @@ libpmount_util_a_SOURCES = \
 	fs.c     \
 	luks.c   \
 	policy.c \
-	utils.c
+	utils.c  \
+	realpath.c
 
 if PMOUNT_HAL
 EXTRABIN=pmount-hal
@@ -36,8 +37,8 @@ install-data-hook:
 	test -z $(INSTALL_DIR) || mkdir -p -- $(INSTALL_DIR)
 	$(INSTALL_DATA) -o root -g root -m 4755 -D $(INSTALL_SRC)/pmount $(INSTALL_DIR)/pmount
 	$(INSTALL_DATA) -o root -g root -m 4755 -D $(INSTALL_SRC)/pumount $(INSTALL_DIR)/pumount
-	
+
 uninstall-hook:
 	rm -f $(INSTALL_DIR)/pmount
 	rm -f $(INSTALL_DIR)/pumount
-	
+

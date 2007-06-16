@@ -23,6 +23,8 @@
 #include "fs.h"
 #include "utils.h"
 
+#include "realpath.h"
+
 /* gettext abbreviation */
 #define _(String) gettext(String)
 

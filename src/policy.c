@@ -23,6 +23,8 @@
 #include <sysfs/libsysfs.h>
 #include <regex.h>
 
+#include "realpath.h"
+
 /*************************************************************************
  *
  * Sysfs query functions for determining if a device is removable

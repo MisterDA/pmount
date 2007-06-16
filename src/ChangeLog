@@ -1,5 +1,9 @@
 2007-06-16  Vincent Fourmond  <vincent.fourmond@ibsm.cnrs-mrs.fr>
 
+	* realpath.c: 
+	Adding a private realpath implementation, switching all occurences
+	of realpath to using it (nm -D does not mention realpath anymore).
+
 	* pmount.c (usage): 
 	Add a -p shortcut for --passphrase
 
