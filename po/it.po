@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-06-18 23:10+0200\n"
 "PO-Revision-Date: 2007-04-12 18:44+0000\n"
 "Last-Translator: HDS619 <thestreet@hotmail.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
 "X-Rosetta-Export-Date: 2007-06-16 12:08:29+0000\n"
 
-#: ../src/pmount.c:51
+#: ../src/pmount.c:54
 #, c-format
 msgid ""
 "Usage:\n"
@@ -42,7 +42,7 @@ msgstr ""
 "  Se il punto di mount non esiste verrà creato.\n"
 "\n"
 
-#: ../src/pmount.c:58
+#: ../src/pmount.c:61
 #, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
@@ -62,7 +62,7 @@ msgstr ""
 "  non esistenti sono ripuliti prima di tentare un mount).\n"
 "\n"
 
-#: ../src/pmount.c:65
+#: ../src/pmount.c:68
 #, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
@@ -73,7 +73,8 @@ msgstr ""
 "  Rimuove il lock sul <dispositivo> per il processo <pid>.\n"
 "\n"
 
-#: ../src/pmount.c:68
+#: ../src/pmount.c:71
+#, fuzzy
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -86,7 +87,7 @@ msgid ""
 "                in an UTF-8 locale, otherwise mount default)\n"
 "  -u <umask>  : use specified umask instead of the default (only for\n"
 "                file sytems which actually support umask setting)\n"
-" --passphrase <file>\n"
+"  -p <file>, --passphrase <file>\n"
 "                read passphrase from file instead of the terminal\n"
 "                (only for LUKS encrypted devices)\n"
 "  -d, --debug : enable debug output (very verbose)\n"
@@ -117,86 +118,85 @@ msgstr ""
 "  -h, --help : visualizza un messaggio d'aiuto ed esce\n"
 "  --version : visualizza il numero di versione ed esce"
 
-#: ../src/pmount.c:134
+#: ../src/pmount.c:137
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Errore: l'etichetta non deve essere vuota\n"
 
-#: ../src/pmount.c:138
+#: ../src/pmount.c:141
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Errore: etichetta troppo lunga\n"
 
-#: ../src/pmount.c:143
+#: ../src/pmount.c:146
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Errore: \"/\" non deve comparire nell'etichetta\n"
 
-#: ../src/pmount.c:150
+#: ../src/pmount.c:153
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Errore: nome del dispositivo troppo lungo\n"
 
-#: ../src/pmount.c:181 ../src/pumount.c:100
+#: ../src/pmount.c:184 ../src/pumount.c:108
 msgid "Error: could not drop all uid privileges"
 msgstr "Errore: non è possibile eliminare tutti i privilegi uid"
 
-#: ../src/pmount.c:186
+#: ../src/pmount.c:189
 msgid "Error: could not execute mount"
 msgstr "Errore: impossibile eseguire mount"
 
-#: ../src/pmount.c:225
+#: ../src/pmount.c:228
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
-msgstr ""
-"Errore interno: mount_attempt: il tipo di file system fornito è NULL\n"
+msgstr "Errore interno: mount_attempt: il tipo di file system fornito è NULL\n"
 
-#: ../src/pmount.c:231
+#: ../src/pmount.c:234
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Errore: file system «%s» non valido\n"
 
-#: ../src/pmount.c:237
+#: ../src/pmount.c:240
 #, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Errore: umask «%s» non valida\n"
 
-#: ../src/pmount.c:285
+#: ../src/pmount.c:288
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Errore: set di caratteri «%s» non valido\n"
 
-#: ../src/pmount.c:366
+#: ../src/pmount.c:369
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr ""
 "Errore: impossibile fare il lock per il pid %u, il processo non esiste\n"
 
-#: ../src/pmount.c:380
+#: ../src/pmount.c:383
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Errore: impossibile creare il lock file per questo pid: %s: %s\n"
 
-#: ../src/pmount.c:420
+#: ../src/pmount.c:423
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Errore: impossibile rimuovere il lock file per questo pid: %s: %s\n"
 
-#: ../src/pmount.c:436
+#: ../src/pmount.c:439
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Errore: do_unlock: impossibile rimuovere la directory di lock"
 
-#: ../src/pmount.c:537 ../src/pumount.c:165
+#: ../src/pmount.c:540 ../src/pumount.c:173
 msgid "Error: this program needs to be installed suid root\n"
 msgstr ""
 "Errore: questo programma deve essere installato con i permessi di root\n"
 
-#: ../src/pmount.c:580 ../src/pumount.c:187
+#: ../src/pmount.c:583 ../src/pumount.c:195
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Errore interno: getopt_long() ha restituito un valore sconosciuto\n"
 
-#: ../src/pmount.c:618
+#: ../src/pmount.c:621
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -205,27 +205,26 @@ msgstr ""
 "Attenzione: il dispositivo %s è già gestito da /etc/fstab,\n"
 "l'etichetta fornita verrà ignorata\n"
 
-#: ../src/pmount.c:632 ../src/pumount.c:232
+#: ../src/pmount.c:635 ../src/pumount.c:240
 msgid "Error: could not determine real path of the device"
-msgstr ""
-"Errore: impossibile determinare il percorso effettivo del dispositivo"
+msgstr "Errore: impossibile determinare il percorso effettivo del dispositivo"
 
-#: ../src/pmount.c:641 ../src/pumount.c:238
+#: ../src/pmount.c:644 ../src/pumount.c:246
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Errore: dispositivo %s non valido (deve trovarsi in /dev)\n"
 
-#: ../src/pmount.c:679
+#: ../src/pmount.c:682
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr "Errore: impossibile decifrare il dispositivo (passphrase errata?)\n"
 
-#: ../src/pmount.c:682
+#: ../src/pmount.c:685
 #, c-format
 msgid "Error: mapped device already exists\n"
 msgstr "Errore: il dispositivo mappato esiste già\n"
 
-#: ../src/pmount.c:696
+#: ../src/pmount.c:699
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
@@ -234,16 +233,16 @@ msgstr ""
 "Errore: impossibile fare il lock della directory di mount. Probabilmente un "
 "altro pmount è in esecuzione per questo punto di mount.\n"
 
-#: ../src/pmount.c:720
+#: ../src/pmount.c:723
 msgid "Error: could not delete mount point"
 msgstr "Errore: impossibile cancellare il punto di mount"
 
-#: ../src/pmount.c:741
+#: ../src/pmount.c:744
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Errore interno: modalità %i non gestibile.\n"
 
-#: ../src/pmount-hal.c:31
+#: ../src/pmount-hal.c:33
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
@@ -264,86 +263,86 @@ msgstr ""
 "e l'etichetta desiderata\n"
 "verranno lette da hal e passate a pmount."
 
-#: ../src/pmount-hal.c:167
+#: ../src/pmount-hal.c:169
 msgid "Error: could not execute pmount\n"
 msgstr "Errore: impossibile eseguire pmount\n"
 
-#: ../src/pmount-hal.c:210
+#: ../src/pmount-hal.c:212
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Errore: impossibile connettersi a dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:244
+#: ../src/pmount-hal.c:246
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Errore: lo UDI fornito non è un volume montabile\n"
 
-#: ../src/policy.c:92
+#: ../src/policy.c:94
 msgid "Error: could not get status of device"
 msgstr "Errore: impossibile ottenere lo stato del dispositivo"
 
-#: ../src/policy.c:103
+#: ../src/policy.c:105
 msgid "Error: could not get sysfs directory\n"
 msgstr "Errore: impossibile ottenere la directory sysfs\n"
 
-#: ../src/policy.c:110
+#: ../src/policy.c:112
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "Errore: impossibile aprire <sysfs dir>/blobk/"
 
-#: ../src/policy.c:141
+#: ../src/policy.c:143
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Errore: impossibile aprire <sysfs dir>/block/<dispositivo>/"
 
-#: ../src/policy.c:241
+#: ../src/policy.c:243
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Errore: il dispositivo %s non esiste\n"
 
-#: ../src/policy.c:246
+#: ../src/policy.c:248
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Errore: %s non è un dispositivo a blocchi\n"
 
-#: ../src/policy.c:264 ../src/policy.c:320
+#: ../src/policy.c:266 ../src/policy.c:322
 msgid "Error: could not open fstab-type file"
 msgstr "Errore: impossibile aprire il file di tipo fstab"
 
-#: ../src/policy.c:351
+#: ../src/policy.c:353
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Errore: il dispositivo %s è già montato in %s\n"
 
-#: ../src/policy.c:353
+#: ../src/policy.c:355
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Errore: il dispositivo %s non è montato\n"
 
-#: ../src/policy.c:355
+#: ../src/policy.c:357
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Errore: il dispositivo %s è stato montato da un altro utente\n"
 
-#: ../src/policy.c:391
+#: ../src/policy.c:393
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Errore: il dispositivo %s non è rimovibile\n"
 
-#: ../src/policy.c:454
+#: ../src/policy.c:456
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Errore: il dispositivo %s è in stato di lock\n"
 
-#: ../src/policy.c:463
+#: ../src/policy.c:465
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
 msgstr "Errore: il punto di mount %s è già in /etc/fstab\n"
 
-#: ../src/policy.c:476
+#: ../src/policy.c:478
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Errore: la directory %s contiene già un file system montato\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:480
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Errore: la directory %s non contiene un file system montato\n"
@@ -379,20 +378,25 @@ msgstr ""
 "-h, --help : visualizza un messaggio d'aiuto ed esce\n"
 "--version : visualizza il numero di versione ed esce\n"
 
-#: ../src/pumount.c:74
+#: ../src/pumount.c:75
 msgid "Internal error: could not determine mount point\n"
 msgstr "Errore interno: impossibile determinare il punto di mount\n"
 
-#: ../src/pumount.c:80
+#: ../src/pumount.c:81
+#, fuzzy, c-format
+msgid "Error: could not find real path of %s\n"
+msgstr "Errore: impossibile determinare il percorso effettivo del dispositivo"
+
+#: ../src/pumount.c:88
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Errore: il punto di mount %s non si trova sotto %s\n"
 
-#: ../src/pumount.c:110
+#: ../src/pumount.c:118
 msgid "Error: could not execute umount"
 msgstr "Errore: impossibile eseguire umount"
 
-#: ../src/pumount.c:131
+#: ../src/pumount.c:139
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "Errore: umount fallito\n"
@@ -452,8 +456,10 @@ msgstr ""
 #~ "  -r          : force <device> to be mounted read-only\n"
 #~ "  -w          : force <device> to be mounted read-write\n"
 #~ "  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
-#~ "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
-#~ "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
+#~ "  --noatime   : mount <device> with the 'noatime' option (default: "
+#~ "'atime')\n"
+#~ "  -e, --exec  : mount <device> with the 'exec' option (default: "
+#~ "'noexec')\n"
 #~ "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
 #~ "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
 #~ "                in an UTF-8 locale, otherwise mount default)\n"
@@ -478,12 +484,13 @@ msgstr ""
 #~ "automatico)\n"
 #~ "  -c <charset>: usa il set di caratteri fornito (predefinito: «utf8» se è "
 #~ "in\n"
-#~ "                uso una localizzazione UTF-8, oppure il valore predefinito "
-#~ "di\n"
+#~ "                uso una localizzazione UTF-8, oppure il valore "
+#~ "predefinito di\n"
 #~ "                mount)\n"
 #~ "  -u <umask>  : usa l'umask specificata anziché quella predefinita (solo "
 #~ "per\n"
-#~ "                file system che permettono realmente di impostare l'umask\n"
+#~ "                file system che permettono realmente di impostare "
+#~ "l'umask\n"
 #~ "  --passphrase <file>\n"
 #~ "                legge la passphrase dal file anziché dal terminale (solo "
 #~ "per\n"
@@ -491,30 +498,33 @@ msgstr ""
 #~ "  -d, --debug : abilita l'output di debug (molto prolisso)\n"
 #~ "  -h, --help  : stampa il messaggio di aiuto ed esce con successo"
 
-#, c-format
 #~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 #~ msgstr ""
-#~ "Errore: make_mountpoint_name: dispositivo %s non valido (deve essere in "
-#~ "/dev/)\n"
+#~ "Errore: make_mountpoint_name: dispositivo %s non valido (deve essere in /"
+#~ "dev/)\n"
 
 #~ msgid ""
 #~ "pmount-hal - execute pmount with additional information from hal\n"
 #~ "\n"
 #~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
 #~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. The\n"
-#~ "file system type, the volume storage policy and the desired label will be\n"
+#~ "This command mounts the device described by the given UDI using pmount. "
+#~ "The\n"
+#~ "file system type, the volume storage policy and the desired label will "
+#~ "be\n"
 #~ "read out from hal and passed to pmount."
 #~ msgstr ""
-#~ "pmount-hal - esegue pmount con informazioni aggiuntive provenienti da hal\n"
+#~ "pmount-hal - esegue pmount con informazioni aggiuntive provenienti da "
+#~ "hal\n"
 #~ "\n"
 #~ "Utilizzo: pmount-hal <hal UDI> [opzioni di pmount]\n"
 #~ "\n"
-#~ "Questo comando monta il dispositivo descritto dallo UDI fornito utilizzando\n"
-#~ "pmount. Il tipo di file system, la politica di memorizzazione del volume e\n"
+#~ "Questo comando monta il dispositivo descritto dallo UDI fornito "
+#~ "utilizzando\n"
+#~ "pmount. Il tipo di file system, la politica di memorizzazione del volume "
+#~ "e\n"
 #~ "l'etichetta richiesta saranno estratti da hal e passati a pmount."
 
-#, c-format
 #~ msgid ""
 #~ "Usage:\n"
 #~ "\n"

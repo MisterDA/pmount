@@ -46,7 +46,7 @@ xmalloc (size_t size) {
   t = malloc(size);
   if(! t) 
     {
-      fprintf(stderr, "Not enough memory");
+      fprintf(stderr, _("Error: out of memory\n"));
       exit(5);			/* Memory allocation error */
     }
   return t;

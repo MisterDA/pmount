@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
-"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-06-18 23:10+0200\n"
 "PO-Revision-Date: 2007-05-07 14:57+0000\n"
 "Last-Translator: AlbertVarga <aqua_byte@yahoo.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
 "X-Rosetta-Export-Date: 2007-06-16 12:08:27+0000\n"
 
-#: ../src/pmount.c:51
+#: ../src/pmount.c:54
 #, c-format
 msgid ""
 "Usage:\n"
@@ -43,7 +43,7 @@ msgstr ""
 "  Ako ne postoji točka montiranja, biti će kreirana.\n"
 "\n"
 
-#: ../src/pmount.c:58
+#: ../src/pmount.c:61
 #, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
@@ -62,7 +62,7 @@ msgstr ""
 "  procesa (nepostojeći pid-ovi su očišćeni prije pokušaja montiranja).\n"
 "\n"
 
-#: ../src/pmount.c:65
+#: ../src/pmount.c:68
 #, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
@@ -73,7 +73,7 @@ msgstr ""
 "  Odstrani bravu na <device> za ponovno procesiranje <pid>.\n"
 "\n"
 
-#: ../src/pmount.c:68
+#: ../src/pmount.c:71
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -86,7 +86,7 @@ msgid ""
 "                in an UTF-8 locale, otherwise mount default)\n"
 "  -u <umask>  : use specified umask instead of the default (only for\n"
 "                file sytems which actually support umask setting)\n"
-" --passphrase <file>\n"
+"  -p <file>, --passphrase <file>\n"
 "                read passphrase from file instead of the terminal\n"
 "                (only for LUKS encrypted devices)\n"
 "  -d, --debug : enable debug output (very verbose)\n"
@@ -94,84 +94,83 @@ msgid ""
 "  --version   : print version number and exit successfully"
 msgstr ""
 
-#: ../src/pmount.c:134
+#: ../src/pmount.c:137
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Greška: etiketa ne smije biti prazna\n"
 
-#: ../src/pmount.c:138
+#: ../src/pmount.c:141
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Greška: etiketa je preduga\n"
 
-#: ../src/pmount.c:143
+#: ../src/pmount.c:146
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Greška: '/' ne smije se nalaziti u imenu etikete\n"
 
-#: ../src/pmount.c:150
+#: ../src/pmount.c:153
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Greška: ime uređaja je predugo\n"
 
-#: ../src/pmount.c:181 ../src/pumount.c:100
+#: ../src/pmount.c:184 ../src/pumount.c:108
 msgid "Error: could not drop all uid privileges"
 msgstr "Greška: ne mogu otpustiti sve uid privilegije"
 
-#: ../src/pmount.c:186
+#: ../src/pmount.c:189
 msgid "Error: could not execute mount"
 msgstr "Greška: ne mogu izvršiti mount"
 
-#: ../src/pmount.c:225
+#: ../src/pmount.c:228
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
-msgstr ""
-"Unutarnja greška: mount_attempt: dato ime datotečnog sustava je NULL\n"
+msgstr "Unutarnja greška: mount_attempt: dato ime datotečnog sustava je NULL\n"
 
-#: ../src/pmount.c:231
+#: ../src/pmount.c:234
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Greška: nevažeće ime datotečnog sustava '%s'\n"
 
-#: ../src/pmount.c:237
+#: ../src/pmount.c:240
 #, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Greška: neispravan umask %s\n"
 
-#: ../src/pmount.c:285
+#: ../src/pmount.c:288
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Greška: nevažeće ime charseta '%s'\n"
 
-#: ../src/pmount.c:366
+#: ../src/pmount.c:369
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "Greška: ne mogu zaključati za pid %u, taj proces ne postoji\n"
 
-#: ../src/pmount.c:380
+#: ../src/pmount.c:383
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Greška: ne mogu kreirati pid zaključanu datoteku %s: %s\n"
 
-#: ../src/pmount.c:420
+#: ../src/pmount.c:423
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Greška: ne mogu maknuti pid zaključanu datoteku %s: %s\n"
 
-#: ../src/pmount.c:436
+#: ../src/pmount.c:439
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Greška: do_unlock: ne mogu maknuti zaključani direktorij"
 
-#: ../src/pmount.c:537 ../src/pumount.c:165
+#: ../src/pmount.c:540 ../src/pumount.c:173
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Greška: ovaj program mora biti instaliran kao suid root\n"
 
-#: ../src/pmount.c:580 ../src/pumount.c:187
+#: ../src/pmount.c:583 ../src/pumount.c:195
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Unutarnja greška: getopt_long() vratio nepoznatu vrijednost\n"
 
-#: ../src/pmount.c:618
+#: ../src/pmount.c:621
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -180,26 +179,26 @@ msgstr ""
 "Upozorenje: uređaj %s je već zbrinut sa strane /etc/fstab, dana etiketa je "
 "zanemarena\n"
 
-#: ../src/pmount.c:632 ../src/pumount.c:232
+#: ../src/pmount.c:635 ../src/pumount.c:240
 msgid "Error: could not determine real path of the device"
 msgstr "Greška: ne mogu ustanoviti pravi put uređaja"
 
-#: ../src/pmount.c:641 ../src/pumount.c:238
+#: ../src/pmount.c:644 ../src/pumount.c:246
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Greška: nevažeći uređaj %s (mora biti u /dev/)\n"
 
-#: ../src/pmount.c:679
+#: ../src/pmount.c:682
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr "Greska: ne mogu dekriptirati uredaj (pogresna lozinka?)\n"
 
-#: ../src/pmount.c:682
+#: ../src/pmount.c:685
 #, c-format
 msgid "Error: mapped device already exists\n"
 msgstr "Greska: mapirani uredaj vec postoji\n"
 
-#: ../src/pmount.c:696
+#: ../src/pmount.c:699
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
@@ -208,16 +207,16 @@ msgstr ""
 "Greska: ne mogu zakljucati mapu za mountanje. Vjerovatno drugi pmount "
 "koristi ovu mapu za montiranje.\n"
 
-#: ../src/pmount.c:720
+#: ../src/pmount.c:723
 msgid "Error: could not delete mount point"
 msgstr "Greška: ne mogu izbrisati točku montiranja"
 
-#: ../src/pmount.c:741
+#: ../src/pmount.c:744
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Unutarnja greška: mod %i nije obrađen.\n"
 
-#: ../src/pmount-hal.c:31
+#: ../src/pmount-hal.c:33
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
@@ -229,86 +228,86 @@ msgid ""
 "will be read out from hal and passed to pmount."
 msgstr ""
 
-#: ../src/pmount-hal.c:167
+#: ../src/pmount-hal.c:169
 msgid "Error: could not execute pmount\n"
 msgstr "Greška: ne mogu izvršiti pmount\n"
 
-#: ../src/pmount-hal.c:210
+#: ../src/pmount-hal.c:212
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Greska: ne mogu se povezati na dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:244
+#: ../src/pmount-hal.c:246
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Greška: dani UDI nije montabilni volumen\n"
 
-#: ../src/policy.c:92
+#: ../src/policy.c:94
 msgid "Error: could not get status of device"
 msgstr "Greška: ne mogu dobiti stanje uređaja"
 
-#: ../src/policy.c:103
+#: ../src/policy.c:105
 msgid "Error: could not get sysfs directory\n"
 msgstr "Greška: ne mogu dobiti sysfs direktorij\n"
 
-#: ../src/policy.c:110
+#: ../src/policy.c:112
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "Greška: ne mogu otvoriti <sysfs dir>/block/"
 
-#: ../src/policy.c:141
+#: ../src/policy.c:143
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Greška: ne mogu otvoriti <sysfs dir>/block/<device>/"
 
-#: ../src/policy.c:241
+#: ../src/policy.c:243
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Greška: uređaj %s ne postoji\n"
 
-#: ../src/policy.c:246
+#: ../src/policy.c:248
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Greška: %s nije blok uređaj\n"
 
-#: ../src/policy.c:264 ../src/policy.c:320
+#: ../src/policy.c:266 ../src/policy.c:322
 msgid "Error: could not open fstab-type file"
 msgstr "Greška: ne mogu otvoriti fstab-type datoteku"
 
-#: ../src/policy.c:351
+#: ../src/policy.c:353
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Greška: uređaj %s je već montiran na %s\n"
 
-#: ../src/policy.c:353
+#: ../src/policy.c:355
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Greška: uređaj %s nije montiran\n"
 
-#: ../src/policy.c:355
+#: ../src/policy.c:357
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Greška: uređaj %s nije montiran za vas\n"
 
-#: ../src/policy.c:391
+#: ../src/policy.c:393
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Greška: uređaj %s nije odstranjiv\n"
 
-#: ../src/policy.c:454
+#: ../src/policy.c:456
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Greška: uređaj %s je zaključan\n"
 
-#: ../src/policy.c:463
+#: ../src/policy.c:465
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
 msgstr "Greska: tocka mountanja %s je vec u /etc/fstab\n"
 
-#: ../src/policy.c:476
+#: ../src/policy.c:478
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Greška: direktorij %s već sadrži montirani datotečni sustav\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:480
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Greška: direktorij %s ne sadrži montirani datotečni sustav\n"
@@ -331,20 +330,25 @@ msgid ""
 "  --version   : print version number and exit successfully\n"
 msgstr ""
 
-#: ../src/pumount.c:74
+#: ../src/pumount.c:75
 msgid "Internal error: could not determine mount point\n"
 msgstr "Unutarnja greška: ne mogu ustanoviti točku montiranja\n"
 
-#: ../src/pumount.c:80
+#: ../src/pumount.c:81
+#, fuzzy, c-format
+msgid "Error: could not find real path of %s\n"
+msgstr "Greška: ne mogu ustanoviti pravi put uređaja"
+
+#: ../src/pumount.c:88
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Greška: točka montiranja %s nije ispod %s\n"
 
-#: ../src/pumount.c:110
+#: ../src/pumount.c:118
 msgid "Error: could not execute umount"
 msgstr "Greška: ne mogu izvršiti umount"
 
-#: ../src/pumount.c:131
+#: ../src/pumount.c:139
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "Greška: neuspjelo umount\n"
@@ -400,7 +404,6 @@ msgid "Internal error: could not change effective group id to real group id"
 msgstr ""
 "Unutarnja greška: nisam mogla promjeniti efektivnu grupu u realni id grupe"
 
-#, c-format
 #~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 #~ msgstr ""
 #~ "Greška: make_mountpoint_name: nevažeči uređaj %s (mora biti u /dev/)\n"
@@ -410,8 +413,10 @@ msgstr ""
 #~ "\n"
 #~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
 #~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. The\n"
-#~ "file system type, the volume storage policy and the desired label will be\n"
+#~ "This command mounts the device described by the given UDI using pmount. "
+#~ "The\n"
+#~ "file system type, the volume storage policy and the desired label will "
+#~ "be\n"
 #~ "read out from hal and passed to pmount."
 #~ msgstr ""
 #~ "pmount-hal - izvrši pmount sa dodatnim informacijama iz hal-a\n"
@@ -423,7 +428,6 @@ msgstr ""
 #~ "će\n"
 #~ "čitani iz hal-a i proslijeđeni pmountu."
 
-#, c-format
 #~ msgid ""
 #~ "Usage:\n"
 #~ "\n"
@@ -442,8 +446,8 @@ msgstr ""
 #~ "\n"
 #~ "%s [options] <device>\n"
 #~ "  Umount <device> iz direktorija ispod %s ako su zahtjevi policyja\n"
-#~ "  zadovoljeni (vidi pumount(1) za detalje). Točka montiranja direktorija je "
-#~ "odstranjena \n"
+#~ "  zadovoljeni (vidi pumount(1) za detalje). Točka montiranja direktorija "
+#~ "je odstranjena \n"
 #~ "  kasnije.\n"
 #~ "\n"
 #~ "Opcije:\n"
