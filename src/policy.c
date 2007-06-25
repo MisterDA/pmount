@@ -41,6 +41,8 @@
 int
 find_bus_ancestry( struct sysfs_device* dev, char** buses ) {
     char **i;
+    struct sysfs_bus * bus;
+    struct sysfs_device * found;
 
     if( !buses ) {
         debug ( "find_bus_ancestry: no buses to check, fail\n" );
@@ -59,11 +61,56 @@ find_bus_ancestry( struct sysfs_device* dev, char** buses ) {
             return 1;
         }
     }
+    /* Try the hard way */
+    if(find_device_in_buses(dev, buses))
+      return 1;
 
-    debug ( "find_bus_ancestry: device %s (path %s, bus %s) does not match, trying parent\n", 
+    debug ( "find_bus_ancestry: device '%s' (path '%s', bus '%s') "
+	    "does not match, trying parent\n", 
             dev->name, dev->path, dev->bus );
+/*     debug ( "find_bus_ancestry: extra info: name %s\tpath %s\t" */
+/* 	    "bus %s\tbus-id %s", dev->name, dev->path, dev->bus, */
+/* 	    dev->bus_id); */
     return find_bus_ancestry( sysfs_get_device_parent( dev ), buses );
 }
+
+/**
+ * Check whether a particular device is found in a list of buses.
+ * @param dev sysfs device
+ * @param buses NULL-terminated array of bus names to scan for
+ * @return 0 if not found, 1 if found
+ */
+
+int
+find_device_in_buses( struct sysfs_device * dev, char** buses) {
+  struct sysfs_bus * bus;
+  struct sysfs_device * found;
+  char ** i;
+
+  for(i = buses; *i; ++i) 
+    {
+      bus = sysfs_open_bus(*i);
+      if(bus)
+	{
+	  debug("find_device_in_buses : "
+		"successfully opened bus '%s' path '%s'\n",
+		bus->name, bus->path);
+	  found = sysfs_get_bus_device(bus,dev->bus_id);
+	  if(found)
+	    {
+	      debug("find_device_in_buses : "
+		    "found '%s' in bus '%s'\n",
+		    dev->name, *i);
+	      sysfs_close_bus(bus);
+	      return 1;		/* We found  it !*/
+	    }
+	  sysfs_close_bus(bus);
+	}
+    }
+  return 0;
+}
+
+
 
 /**
  * Find sysfs node that matches the major and minor device number of the given
@@ -192,6 +239,10 @@ find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize 
     }
 
     closedir( devdir );
+
+    debug ( "find_sysfs_device: extra info: name %s\tpath %s\t"
+	    "bus %s\tbus-id %s", sysdev->name, sysdev->path, sysdev->bus,
+	    sysdev->bus_id);
 
     return sysdev;
 }
@@ -404,7 +455,7 @@ device_whitelisted( const char* device )
     regex_t re;
     regmatch_t match[3];
     int result;
-    const char* whitelist_regex = "^[[:space:]]*([[:alnum:]/_+.\-]+)[[:space:]]*(#.*)?$";
+    const char* whitelist_regex = "^[[:space:]]*([[:alnum:]/_+.\\-]+)[[:space:]]*(#.*)?$";
 
     fwl = fopen( WHITELIST, "r" );
     if( !fwl )

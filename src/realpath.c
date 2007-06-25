@@ -24,6 +24,7 @@
   This file was taken from the source code for mount.
 */
 
+#include "utils.h"
 #include <limits.h>		/* for PATH_MAX */
 #include <unistd.h>
 #include <string.h>
