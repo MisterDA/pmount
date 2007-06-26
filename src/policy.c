@@ -68,9 +68,6 @@ find_bus_ancestry( struct sysfs_device* dev, char** buses ) {
     debug ( "find_bus_ancestry: device '%s' (path '%s', bus '%s') "
 	    "does not match, trying parent\n", 
             dev->name, dev->path, dev->bus );
-/*     debug ( "find_bus_ancestry: extra info: name %s\tpath %s\t" */
-/* 	    "bus %s\tbus-id %s", dev->name, dev->path, dev->bus, */
-/* 	    dev->bus_id); */
     return find_bus_ancestry( sysfs_get_device_parent( dev ), buses );
 }
 
@@ -239,10 +236,6 @@ find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize 
     }
 
     closedir( devdir );
-
-    debug ( "find_sysfs_device: extra info: name %s\tpath %s\t"
-	    "bus %s\tbus-id %s", sysdev->name, sysdev->path, sysdev->bus,
-	    sysdev->bus_id);
 
     return sysdev;
 }

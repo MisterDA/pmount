@@ -24,13 +24,15 @@
   This file was taken from the source code for mount.
 */
 
-#include "utils.h"
 #include <limits.h>		/* for PATH_MAX */
 #include <unistd.h>
+#include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <stdio.h>
 #include "realpath.h"
+#include <libintl.h>
+#include "utils.h"
 
 #define MAX_READLINKS 32
 

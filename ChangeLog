@@ -1,3 +1,8 @@
+0.9.15
+-----------
+- fix problems with the missing bus symlink in recent kernels
+	
+
 0.9.14
 -----------
 - pmount: support the 'omfs' file system

@@ -1,4 +1,9 @@
-2007-06-16  Vincent Fourmond  <vincent.fourmond@ibsm.cnrs-mrs.fr>
+2007-06-26  Vincent Fourmond  <fourmond@debian.org>
+
+	* policy.c: 
+	Added a function to cope without the bus symlink in sysfs.
+
+2007-06-16  Vincent Fourmond  <fourmond@debian.org>
 
 	* realpath.c: 
 	Adding a private realpath implementation, switching all occurences
