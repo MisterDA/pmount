@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-18 23:10+0200\n"
+"POT-Creation-Date: 2007-06-27 23:27+0200\n"
 "PO-Revision-Date: 2007-05-09 07:50+0000\n"
 "Last-Translator: Martin Frnka <flintik@seznam.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -123,7 +123,7 @@ msgstr "Chyba:'/' se nesmí vyskytovat ve jméně\n"
 msgid "Error: device name too long\n"
 msgstr "Chyba: příliš dlouhé jméno zařízení\n"
 
-#: ../src/pmount.c:184 ../src/pumount.c:108
+#: ../src/pmount.c:184 ../src/pumount.c:109
 msgid "Error: could not drop all uid privileges"
 msgstr "Chyba: nelze zapsat všechna uid oprávnění"
 
@@ -171,11 +171,11 @@ msgstr "Chyba: nelze odstranit pid zamykací soubor %s: %s\n"
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Chyba: do_unlock: nelze odstranit uzamčení adresáře"
 
-#: ../src/pmount.c:540 ../src/pumount.c:173
+#: ../src/pmount.c:540 ../src/pumount.c:176
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Chyba: tento program je potřeba instalovat jako root\n"
 
-#: ../src/pmount.c:583 ../src/pumount.c:195
+#: ../src/pmount.c:583 ../src/pumount.c:200
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Vnitřní chyba: getopt_long() vrátil neznámou hodnotu\n"
@@ -189,11 +189,11 @@ msgstr ""
 "Varování: zařízení %s je již řízeno s /etc/fstab, dodané jméno bude "
 "ignorováno\n"
 
-#: ../src/pmount.c:635 ../src/pumount.c:240
+#: ../src/pmount.c:635 ../src/pumount.c:245
 msgid "Error: could not determine real path of the device"
 msgstr "Chyba: nelze určit opravdovou cestu k zařízení"
 
-#: ../src/pmount.c:644 ../src/pumount.c:246
+#: ../src/pmount.c:644 ../src/pumount.c:251
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Chyba: neplatné zařízení %s (musí být v /dev/)\n"
@@ -208,18 +208,23 @@ msgstr "Chyba: nemohu dekódovat zařízení (špatné heslo?)\n"
 msgid "Error: mapped device already exists\n"
 msgstr "Chyba: mapované zařízení již existuje\n"
 
-#: ../src/pmount.c:699
+#: ../src/pmount.c:690
+#, fuzzy, c-format
+msgid "Warning: could not create luks lockfile\n"
+msgstr "Chyba: nelze vytvořit pid zamykací soubor %s:%s\n"
+
+#: ../src/pmount.c:702
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
 
-#: ../src/pmount.c:723
+#: ../src/pmount.c:726
 msgid "Error: could not delete mount point"
 msgstr "Chyba: nelze smazat bod připojení"
 
-#: ../src/pmount.c:744
+#: ../src/pmount.c:747
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Vnitřní chyba: mód %i není obsluhován.\n"
@@ -257,78 +262,78 @@ msgstr "Chyba: nelze se připojit k dbus: %s: %s\n"
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Chyba: dané UDI neni připojitelné zařízení\n"
 
-#: ../src/policy.c:94
+#: ../src/policy.c:138
 msgid "Error: could not get status of device"
 msgstr "Chyba: nelze zjistit stav zařízení"
 
-#: ../src/policy.c:105
+#: ../src/policy.c:149
 msgid "Error: could not get sysfs directory\n"
 msgstr "Chyba: nelze získat sysfs adresář\n"
 
-#: ../src/policy.c:112
+#: ../src/policy.c:156
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "Chyba: nelze otevřít <sysfs adresář>/block/"
 
-#: ../src/policy.c:143
+#: ../src/policy.c:187
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Chyba: nelze otevřít <sysfs adresář>/block/<device>/"
 
-#: ../src/policy.c:243
+#: ../src/policy.c:287
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Chyba: zařízení %s neexistuje\n"
 
-#: ../src/policy.c:248
+#: ../src/policy.c:292
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Chyba: %s není blokové zařízení\n"
 
-#: ../src/policy.c:266 ../src/policy.c:322
+#: ../src/policy.c:310 ../src/policy.c:366
 msgid "Error: could not open fstab-type file"
 msgstr "Chyba: nelze otevřít soubor fstab-type"
 
-#: ../src/policy.c:353
+#: ../src/policy.c:397
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Chyba: zařízení %s je jíž připojeno na %s\n"
 
-#: ../src/policy.c:355
+#: ../src/policy.c:399
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Chyba: zařízení %s není připojeno\n"
 
-#: ../src/policy.c:357
+#: ../src/policy.c:401
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Chyba: zařízení %s nepřipojils ty\n"
 
-#: ../src/policy.c:393
+#: ../src/policy.c:437
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Chyba: zařízení %s není vyjímatelné\n"
 
-#: ../src/policy.c:456
+#: ../src/policy.c:500
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Chyba: zařízení %s je zamčeno\n"
 
-#: ../src/policy.c:465
+#: ../src/policy.c:509
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
 msgstr ""
 
-#: ../src/policy.c:478
+#: ../src/policy.c:522
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Chyba: adresář %s již obsahuje připojený souborový systém\n"
 
-#: ../src/policy.c:480
+#: ../src/policy.c:524
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Chyba: adresář %s neobsahuje připojený souborový systém\n"
 
 #: ../src/pumount.c:43
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -339,31 +344,43 @@ msgid ""
 "  afterwards.\n"
 "\n"
 "Options:\n"
-"  -l, --lazy  : umount lazily, see umount(8)\n"
-"  -d, --debug : enable debug output (very verbose)\n"
-"  -h, --help  : print help message and exit successfuly\n"
-"  --version   : print version number and exit successfully\n"
+"  -l, --lazy   : umount lazily, see umount(8)\n"
+"  --luks-force : luksClose devices pmount didn't open\n"
+"  -d, --debug  : enable debug output (very verbose)\n"
+"  -h, --help   : print help message and exit successfuly\n"
+"  --version    : print version number and exit successfully\n"
 msgstr ""
+"Použití:\n"
+"\n"
+"%s [parametry] <zařízení>\n"
+"  Odpojenit <zařízení> z adresáře pod %s jestliže \n"
+"  jsou nastavená požadovná práva (podrobnosti viz pumount(1)). \n"
+"  Adresář připojovacího bodu je poté odstraněn.\n"
+"\n"
+"Parametry:\n"
+"  -l, --lazy : odpojit líně, viz umount(8)\n"
+"  -d, --debug : povolit ladící výstupy (velmi ukecané)\n"
+"  -h, --help : vytiskne nápovědu a ukončí se\n"
 
-#: ../src/pumount.c:75
+#: ../src/pumount.c:76
 msgid "Internal error: could not determine mount point\n"
 msgstr "Vnitřní chyba: nelze určit bod připojení\n"
 
-#: ../src/pumount.c:81
+#: ../src/pumount.c:82
 #, fuzzy, c-format
 msgid "Error: could not find real path of %s\n"
 msgstr "Chyba: nelze určit opravdovou cestu k zařízení"
 
-#: ../src/pumount.c:88
+#: ../src/pumount.c:89
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Chyba: připojovací bod %s není pod %s\n"
 
-#: ../src/pumount.c:118
+#: ../src/pumount.c:119
 msgid "Error: could not execute umount"
 msgstr "Chyba: nelze spustit umount"
 
-#: ../src/pumount.c:139
+#: ../src/pumount.c:140
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "Chyba: umount selhal\n"
@@ -439,32 +456,6 @@ msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupin
 #~ "Tento příkaz připojí zařízení popsané daným UDI používající pmount. "
 #~ "Systém souborů, chování diskové jednotky and požadovaný název budou\n"
 #~ "přečteny z halu a zaslány pmountu."
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "\n"
-#~ "%s [options] <device>\n"
-#~ "  Umount <device> from a directory below %s if policy requirements\n"
-#~ "  are met (see pumount(1) for details). The mount point directory is "
-#~ "removed\n"
-#~ "  afterwards.\n"
-#~ "\n"
-#~ "Options:\n"
-#~ "  -l, --lazy : umount lazily, see umount(8)\n"
-#~ "  -d, --debug : enable debug output (very verbose)\n"
-#~ "  -h, --help  : print help message and exit successfuly\n"
-#~ msgstr ""
-#~ "Použití:\n"
-#~ "\n"
-#~ "%s [parametry] <zařízení>\n"
-#~ "  Odpojenit <zařízení> z adresáře pod %s jestliže \n"
-#~ "  jsou nastavená požadovná práva (podrobnosti viz pumount(1)). \n"
-#~ "  Adresář připojovacího bodu je poté odstraněn.\n"
-#~ "\n"
-#~ "Parametry:\n"
-#~ "  -l, --lazy : odpojit líně, viz umount(8)\n"
-#~ "  -d, --debug : povolit ladící výstupy (velmi ukecané)\n"
-#~ "  -h, --help : vytiskne nápovědu a ukončí se\n"
 
 #~ msgid "Error: could not raise to full root uid privileges"
 #~ msgstr "Chyba: nelze získat plná práva superuživatele"

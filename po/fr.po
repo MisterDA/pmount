@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-18 23:10+0200\n"
+"POT-Creation-Date: 2007-06-27 23:27+0200\n"
 "PO-Revision-Date: 2007-05-28 22:01+0000\n"
 "Last-Translator: Florent MORSELLI <spomky@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -136,7 +136,7 @@ msgstr "Erreur : '/' ne doit pas apparaitre dans un nom de label\n"
 msgid "Error: device name too long\n"
 msgstr "Erreur : nom du périphérique trop long\n"
 
-#: ../src/pmount.c:184 ../src/pumount.c:108
+#: ../src/pmount.c:184 ../src/pumount.c:109
 msgid "Error: could not drop all uid privileges"
 msgstr "Erreur : impossible de révoquer tous les privilèges"
 
@@ -186,11 +186,11 @@ msgstr "Erreur : impossible d'ôter le fichier de verrou pid %s : %s\n"
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Erreur : do_unlock: impossible d'ôter le verrou du répertoire"
 
-#: ../src/pmount.c:540 ../src/pumount.c:173
+#: ../src/pmount.c:540 ../src/pumount.c:176
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Erreur : ce programme a besoin d'être installé en suid root\n"
 
-#: ../src/pmount.c:583 ../src/pumount.c:195
+#: ../src/pmount.c:583 ../src/pumount.c:200
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Erreur interne : getopt_long() a retourné une valeur inconnue\n"
@@ -204,13 +204,13 @@ msgstr ""
 "Avertissement : le périphérique %s est déjà pris en charge par /etc/fstab, "
 "l'étiquette fournie est ignorée\n"
 
-#: ../src/pmount.c:635 ../src/pumount.c:240
+#: ../src/pmount.c:635 ../src/pumount.c:245
 msgid "Error: could not determine real path of the device"
 msgstr ""
 "Erreur : impossible de déterminer le véritable chemin d'accès à ce "
 "périphérique"
 
-#: ../src/pmount.c:644 ../src/pumount.c:246
+#: ../src/pmount.c:644 ../src/pumount.c:251
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Erreur : périphérique invalide %s (doit être dans /dev/)\n"
@@ -226,7 +226,12 @@ msgstr ""
 msgid "Error: mapped device already exists\n"
 msgstr "Erreur : le périphérique mappé existe déjà\n"
 
-#: ../src/pmount.c:699
+#: ../src/pmount.c:690
+#, fuzzy, c-format
+msgid "Warning: could not create luks lockfile\n"
+msgstr "Erreur : impossible de créer le fichier de verrou de pid %s : %s\n"
+
+#: ../src/pmount.c:702
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
@@ -236,11 +241,11 @@ msgstr ""
 "instance de pmount est probablement en cours d'utilisation sur ce point de "
 "montage.\n"
 
-#: ../src/pmount.c:723
+#: ../src/pmount.c:726
 msgid "Error: could not delete mount point"
 msgstr "Erreur : impossible de détruire le point de montage"
 
-#: ../src/pmount.c:744
+#: ../src/pmount.c:747
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Erreur interne : le mode %i n'est pas pris en charge.\n"
@@ -278,79 +283,79 @@ msgstr "Erreur : impossible de se connecter à dbus:%s : %s\n"
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Erreur : L'UDI fourni n'est pas un volume montable\n"
 
-#: ../src/policy.c:94
+#: ../src/policy.c:138
 msgid "Error: could not get status of device"
 msgstr "Erreur : n'a pas pu obtenir l'état du périphérique"
 
-#: ../src/policy.c:105
+#: ../src/policy.c:149
 msgid "Error: could not get sysfs directory\n"
 msgstr "Erreur : impossible de trouver le répertoire sysfs\n"
 
-#: ../src/policy.c:112
+#: ../src/policy.c:156
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "Erreur : impossible d'ouvrir <sysfs dir>/block/"
 
-#: ../src/policy.c:143
+#: ../src/policy.c:187
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Erreur : impossible d'ouvrir <sysfs dir>/block/<device>/"
 
-#: ../src/policy.c:243
+#: ../src/policy.c:287
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Erreur : le périphérique %s n'existe pas\n"
 
-#: ../src/policy.c:248
+#: ../src/policy.c:292
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Erreur : %s n'est pas un périphérique de bloc\n"
 
-#: ../src/policy.c:266 ../src/policy.c:322
+#: ../src/policy.c:310 ../src/policy.c:366
 msgid "Error: could not open fstab-type file"
 msgstr "Erreur : impossible d'ouvrir le fichier fstab-type"
 
-#: ../src/policy.c:353
+#: ../src/policy.c:397
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Erreur : le périphérique %s est déja monté sur %s\n"
 
-#: ../src/policy.c:355
+#: ../src/policy.c:399
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Erreur : le périphérique %s n'est pas monté\n"
 
-#: ../src/policy.c:357
+#: ../src/policy.c:401
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Erreur : le périphérique %s n'a pas été monté par vous\n"
 
-#: ../src/policy.c:393
+#: ../src/policy.c:437
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Erreur : le périphérique %s n'est pas amovible\n"
 
-#: ../src/policy.c:456
+#: ../src/policy.c:500
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Erreur : le périphérique %s est verrouillé\n"
 
-#: ../src/policy.c:465
+#: ../src/policy.c:509
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
 msgstr "Erreur : le point de montage %s est déjà dans /etc/fstab\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:522
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Erreur : le répertoire %s contient déjà un système de fichiers monté\n"
 
-#: ../src/policy.c:480
+#: ../src/policy.c:524
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr ""
 "Erreur : le répertoire %s ne contient pas de système de fichiers monté\n"
 
 #: ../src/pumount.c:43
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -361,10 +366,11 @@ msgid ""
 "  afterwards.\n"
 "\n"
 "Options:\n"
-"  -l, --lazy  : umount lazily, see umount(8)\n"
-"  -d, --debug : enable debug output (very verbose)\n"
-"  -h, --help  : print help message and exit successfuly\n"
-"  --version   : print version number and exit successfully\n"
+"  -l, --lazy   : umount lazily, see umount(8)\n"
+"  --luks-force : luksClose devices pmount didn't open\n"
+"  -d, --debug  : enable debug output (very verbose)\n"
+"  -h, --help   : print help message and exit successfuly\n"
+"  --version    : print version number and exit successfully\n"
 msgstr ""
 "Utilisation :\n"
 "\n"
@@ -380,27 +386,27 @@ msgstr ""
 "  -h, --help : affiche l'aide et quitte avec succès\n"
 "  --version : affiche le numéro de version et quitte avec succès\n"
 
-#: ../src/pumount.c:75
+#: ../src/pumount.c:76
 msgid "Internal error: could not determine mount point\n"
 msgstr "Erreur interne : impossible de déterminer le point de montage\n"
 
-#: ../src/pumount.c:81
+#: ../src/pumount.c:82
 #, fuzzy, c-format
 msgid "Error: could not find real path of %s\n"
 msgstr ""
 "Erreur : impossible de déterminer le véritable chemin d'accès à ce "
 "périphérique"
 
-#: ../src/pumount.c:88
+#: ../src/pumount.c:89
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Erreur : le point de montage %s n'est pas sous %s\n"
 
-#: ../src/pumount.c:118
+#: ../src/pumount.c:119
 msgid "Error: could not execute umount"
 msgstr "Erreur : impossible d'exécuter umount"
 
-#: ../src/pumount.c:139
+#: ../src/pumount.c:140
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "Erreur : échec de umount\n"

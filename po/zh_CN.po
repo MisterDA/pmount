@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-18 23:10+0200\n"
+"POT-Creation-Date: 2007-06-27 23:27+0200\n"
 "PO-Revision-Date: 2007-05-11 23:22+0000\n"
 "Last-Translator: hugh <hugh.shang@gmail.com>\n"
 "Language-Team: Chinese (China) <zh_CN@li.org>\n"
@@ -124,7 +124,7 @@ msgstr "错误：“/”不能出现在卷标名中\n"
 msgid "Error: device name too long\n"
 msgstr "错误：设备名太长\n"
 
-#: ../src/pmount.c:184 ../src/pumount.c:108
+#: ../src/pmount.c:184 ../src/pumount.c:109
 msgid "Error: could not drop all uid privileges"
 msgstr "错误：无法撤消所有 uid 特权"
 
@@ -171,11 +171,11 @@ msgstr "错误：无法删除 pid 锁文件 %s：%s\n"
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "错误：do_unlock：无法删除锁定目录"
 
-#: ../src/pmount.c:540 ../src/pumount.c:173
+#: ../src/pmount.c:540 ../src/pumount.c:176
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "错误：本程序需要被安装为 suid root\n"
 
-#: ../src/pmount.c:583 ../src/pumount.c:195
+#: ../src/pmount.c:583 ../src/pumount.c:200
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "内部错误：getopt_long() 返回未知值\n"
@@ -187,11 +187,11 @@ msgid ""
 "ignored\n"
 msgstr "警告：设备 %s 已经由 /etc/fstab 负责处理，您提供的卷标将被忽略\n"
 
-#: ../src/pmount.c:635 ../src/pumount.c:240
+#: ../src/pmount.c:635 ../src/pumount.c:245
 msgid "Error: could not determine real path of the device"
 msgstr "错误：无法确定设备的真实路径"
 
-#: ../src/pmount.c:644 ../src/pumount.c:246
+#: ../src/pmount.c:644 ../src/pumount.c:251
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "错误：无效的设备名 %s (必须在 /dev/ 中)\n"
@@ -206,18 +206,23 @@ msgstr "错误：不能解密设备 (错误的密码?)\n"
 msgid "Error: mapped device already exists\n"
 msgstr "错误：映射的设备已经存在\n"
 
-#: ../src/pmount.c:699
+#: ../src/pmount.c:690
+#, fuzzy, c-format
+msgid "Warning: could not create luks lockfile\n"
+msgstr "错误：无法创建 pid 锁文件 %s：%s\n"
+
+#: ../src/pmount.c:702
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr "错误：不能锁住挂载目录，这个挂载点或许有另一个 pmount 在运行.\n"
 
-#: ../src/pmount.c:723
+#: ../src/pmount.c:726
 msgid "Error: could not delete mount point"
 msgstr "错误：无法删除挂载点"
 
-#: ../src/pmount.c:744
+#: ../src/pmount.c:747
 #, fuzzy, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "内部错误：模式 %s 未处理。\n"
@@ -254,78 +259,78 @@ msgstr "错误：不能够连接数据总线：%s: %s\n"
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "错误：给定的UDI是个不可挂载卷轴\n"
 
-#: ../src/policy.c:94
+#: ../src/policy.c:138
 msgid "Error: could not get status of device"
 msgstr "错误：无法获知设备状态"
 
-#: ../src/policy.c:105
+#: ../src/policy.c:149
 msgid "Error: could not get sysfs directory\n"
 msgstr "错误：无法获得sysfs 目录。\n"
 
-#: ../src/policy.c:112
+#: ../src/policy.c:156
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "错误：无法打开 <sysfs dir>/block/"
 
-#: ../src/policy.c:143
+#: ../src/policy.c:187
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "错误：无法打开 <sysfs dir>/block/<device>/"
 
-#: ../src/policy.c:243
+#: ../src/policy.c:287
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "错误：设备 %s 不存在\n"
 
-#: ../src/policy.c:248
+#: ../src/policy.c:292
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "错误：%s 不是块设备\n"
 
-#: ../src/policy.c:266 ../src/policy.c:322
+#: ../src/policy.c:310 ../src/policy.c:366
 msgid "Error: could not open fstab-type file"
 msgstr "错误：不能打开fstab类型文件"
 
-#: ../src/policy.c:353
+#: ../src/policy.c:397
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "错误：设备%s已经挂载到%s\n"
 
-#: ../src/policy.c:355
+#: ../src/policy.c:399
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "错误：设备 %s 未装载。\n"
 
-#: ../src/policy.c:357
+#: ../src/policy.c:401
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "错误：设备%s还未被你挂载\n"
 
-#: ../src/policy.c:393
+#: ../src/policy.c:437
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "错误：设备%s不可删除\n"
 
-#: ../src/policy.c:456
+#: ../src/policy.c:500
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "错误：设备%s被锁定\n"
 
-#: ../src/policy.c:465
+#: ../src/policy.c:509
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
 msgstr "错误：挂载点%s已存在于/etc/fstab\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:522
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "错误：目录%s已经包含一种被挂载的文件系统\n"
 
-#: ../src/policy.c:480
+#: ../src/policy.c:524
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "错误：目录%s还没有被挂载的文件系统\n"
 
 #: ../src/pumount.c:43
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -336,10 +341,11 @@ msgid ""
 "  afterwards.\n"
 "\n"
 "Options:\n"
-"  -l, --lazy  : umount lazily, see umount(8)\n"
-"  -d, --debug : enable debug output (very verbose)\n"
-"  -h, --help  : print help message and exit successfuly\n"
-"  --version   : print version number and exit successfully\n"
+"  -l, --lazy   : umount lazily, see umount(8)\n"
+"  --luks-force : luksClose devices pmount didn't open\n"
+"  -d, --debug  : enable debug output (very verbose)\n"
+"  -h, --help   : print help message and exit successfuly\n"
+"  --version    : print version number and exit successfully\n"
 msgstr ""
 "用法：\n"
 "\n"
@@ -353,25 +359,25 @@ msgstr ""
 "-h, --help : 打印帮助信息并成功退出\n"
 "--version : 打印版本号并成功退出\n"
 
-#: ../src/pumount.c:75
+#: ../src/pumount.c:76
 msgid "Internal error: could not determine mount point\n"
 msgstr "内部错误：找不到挂载点\n"
 
-#: ../src/pumount.c:81
+#: ../src/pumount.c:82
 #, fuzzy, c-format
 msgid "Error: could not find real path of %s\n"
 msgstr "错误：无法确定设备的真实路径"
 
-#: ../src/pumount.c:88
+#: ../src/pumount.c:89
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "错误：挂载点%s不在%s下\n"
 
-#: ../src/pumount.c:118
+#: ../src/pumount.c:119
 msgid "Error: could not execute umount"
 msgstr "错误：不能够执行解除挂载"
 
-#: ../src/pumount.c:139
+#: ../src/pumount.c:140
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "错误：解除挂载失败\n"

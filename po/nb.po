@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-18 23:10+0200\n"
+"POT-Creation-Date: 2007-06-27 23:27+0200\n"
 "PO-Revision-Date: 2005-03-31 10:35+0000\n"
 "Last-Translator: Sigurd Gartmann <sigurdga-ubuntu@brogar.org>\n"
 "Language-Team: Bokmål, Norwegian <nb@li.org>\n"
@@ -113,7 +113,7 @@ msgstr "Feil: Etiketter kan ikke inneholde «/»\n"
 msgid "Error: device name too long\n"
 msgstr "Feil: Navnet på enheten er for langt\n"
 
-#: ../src/pmount.c:184 ../src/pumount.c:108
+#: ../src/pmount.c:184 ../src/pumount.c:109
 msgid "Error: could not drop all uid privileges"
 msgstr "Feil: Kunne ikke fjerne alle uid-rettigheter"
 
@@ -160,11 +160,11 @@ msgstr "Feil: Kunne ikke fjerne pid-låsfil %s: %s\n"
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Feil: du_unlock: Kunne ikke fjerne låskatalog"
 
-#: ../src/pmount.c:540 ../src/pumount.c:173
+#: ../src/pmount.c:540 ../src/pumount.c:176
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Feil: Dette programmet må være installert suid root\n"
 
-#: ../src/pmount.c:583 ../src/pumount.c:195
+#: ../src/pmount.c:583 ../src/pumount.c:200
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Intern feil: getopt_long() returnerte ukjent verdi\n"
@@ -178,11 +178,11 @@ msgstr ""
 "Advarsel: Enheten «%s» håndteres allerede i /etc/fstab, ny etikett blir "
 "ignorert\n"
 
-#: ../src/pmount.c:635 ../src/pumount.c:240
+#: ../src/pmount.c:635 ../src/pumount.c:245
 msgid "Error: could not determine real path of the device"
 msgstr "Feil: Kunne ikke bestemme den ordentlige stien for denne enheten"
 
-#: ../src/pmount.c:644 ../src/pumount.c:246
+#: ../src/pmount.c:644 ../src/pumount.c:251
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Feil: Ugyldig enhet %s (må være i /dev/)\n"
@@ -197,18 +197,23 @@ msgstr ""
 msgid "Error: mapped device already exists\n"
 msgstr ""
 
-#: ../src/pmount.c:699
+#: ../src/pmount.c:690
+#, fuzzy, c-format
+msgid "Warning: could not create luks lockfile\n"
+msgstr "Feil: Kunne ikke opprette pid-låsfil %s: %s\n"
+
+#: ../src/pmount.c:702
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
 
-#: ../src/pmount.c:723
+#: ../src/pmount.c:726
 msgid "Error: could not delete mount point"
 msgstr "Feil: Kunne ikke slette monteringspunkt"
 
-#: ../src/pmount.c:744
+#: ../src/pmount.c:747
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Intern feil: modus %i er blir ikke håndtert.\n"
@@ -239,78 +244,78 @@ msgstr ""
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Feil: Oppgitt UDI er ikke en monterbar enhet\n"
 
-#: ../src/policy.c:94
+#: ../src/policy.c:138
 msgid "Error: could not get status of device"
 msgstr "Feil: Kunne ikke få status fra enhet"
 
-#: ../src/policy.c:105
+#: ../src/policy.c:149
 msgid "Error: could not get sysfs directory\n"
 msgstr "Feil: Kunne ikke hente sysfs-katalog\n"
 
-#: ../src/policy.c:112
+#: ../src/policy.c:156
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "Feil: Kunne ikke åpne <sysfs-katalog>/block/"
 
-#: ../src/policy.c:143
+#: ../src/policy.c:187
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Feil: Kunne ikke åpne <sysfs-kat>/block/<enhet>/"
 
-#: ../src/policy.c:243
+#: ../src/policy.c:287
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Feil: Enhet %s finnes ikke\n"
 
-#: ../src/policy.c:248
+#: ../src/policy.c:292
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Feil: %s er ikke en blokkenhet\n"
 
-#: ../src/policy.c:266 ../src/policy.c:322
+#: ../src/policy.c:310 ../src/policy.c:366
 msgid "Error: could not open fstab-type file"
 msgstr "Feil: Kunne ikke åpne fstab-fil"
 
-#: ../src/policy.c:353
+#: ../src/policy.c:397
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Feil: Enheten «%s» er allerede montert på «%s»\n"
 
-#: ../src/policy.c:355
+#: ../src/policy.c:399
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Feil: Enheten «%s» er ikke montert\n"
 
-#: ../src/policy.c:357
+#: ../src/policy.c:401
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Feil: Enheten %s ble ikke montert av deg\n"
 
-#: ../src/policy.c:393
+#: ../src/policy.c:437
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Feil: Enheten «%s» kan ikke fjernes\n"
 
-#: ../src/policy.c:456
+#: ../src/policy.c:500
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Feil: Enheten «%s» er låst\n"
 
-#: ../src/policy.c:465
+#: ../src/policy.c:509
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
 msgstr ""
 
-#: ../src/policy.c:478
+#: ../src/policy.c:522
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Feil: Katalogen «%s» inneholder allerede et montert filsystem\n"
 
-#: ../src/policy.c:480
+#: ../src/policy.c:524
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Feil: Katalogen «%s» inneholder ikke et montert filsystem\n"
 
 #: ../src/pumount.c:43
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -321,31 +326,43 @@ msgid ""
 "  afterwards.\n"
 "\n"
 "Options:\n"
-"  -l, --lazy  : umount lazily, see umount(8)\n"
-"  -d, --debug : enable debug output (very verbose)\n"
-"  -h, --help  : print help message and exit successfuly\n"
-"  --version   : print version number and exit successfully\n"
+"  -l, --lazy   : umount lazily, see umount(8)\n"
+"  --luks-force : luksClose devices pmount didn't open\n"
+"  -d, --debug  : enable debug output (very verbose)\n"
+"  -h, --help   : print help message and exit successfuly\n"
+"  --version    : print version number and exit successfully\n"
 msgstr ""
+"Bruk\n"
+"\n"
+"%s [valg] <enhet>\n"
+"  Avmonter <enhet> fra en katalog under %s hvis krav er\n"
+"  tilfredsstilt (se pumount(1) for mer). Monteringspunktkatalogen\n"
+"  blir fjernet etterpå.\n"
+"\n"
+"Valg:\n"
+"  -l, --lazy : lat umount, se umount(8)\n"
+"  -d, --debug :  skriv debuginformasjon (veldig mye)\n"
+"  -h, --help : skriv hjelpemelding og avslutt med suksess\n"
 
-#: ../src/pumount.c:75
+#: ../src/pumount.c:76
 msgid "Internal error: could not determine mount point\n"
 msgstr "Intern feil: Kunne ikke bestemme monteringspunkt\n"
 
-#: ../src/pumount.c:81
+#: ../src/pumount.c:82
 #, fuzzy, c-format
 msgid "Error: could not find real path of %s\n"
 msgstr "Feil: Kunne ikke bestemme den ordentlige stien for denne enheten"
 
-#: ../src/pumount.c:88
+#: ../src/pumount.c:89
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Feil: Monteringspunktet «%s» er ikke under «%s»\n"
 
-#: ../src/pumount.c:118
+#: ../src/pumount.c:119
 msgid "Error: could not execute umount"
 msgstr "Feil: Kunne ikke kjøre umount"
 
-#: ../src/pumount.c:139
+#: ../src/pumount.c:140
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "Feil: Avmontering feilet\n"
@@ -419,29 +436,3 @@ msgstr "Intern feil: Kunne ikke endre effektiv gruppe-id til ekte grouppe-id"
 #~ "Denne kommandoen monterer enheten beskrevet av den oppgitte UDI-en ved "
 #~ "bruk av «pmount». Filsystemtypen, volumlagringspolitikk og ønsket etikett "
 #~ "vil bli lest ut fra «hal» og gitt til «pmount»."
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "\n"
-#~ "%s [options] <device>\n"
-#~ "  Umount <device> from a directory below %s if policy requirements\n"
-#~ "  are met (see pumount(1) for details). The mount point directory is "
-#~ "removed\n"
-#~ "  afterwards.\n"
-#~ "\n"
-#~ "Options:\n"
-#~ "  -l, --lazy : umount lazily, see umount(8)\n"
-#~ "  -d, --debug : enable debug output (very verbose)\n"
-#~ "  -h, --help  : print help message and exit successfuly\n"
-#~ msgstr ""
-#~ "Bruk\n"
-#~ "\n"
-#~ "%s [valg] <enhet>\n"
-#~ "  Avmonter <enhet> fra en katalog under %s hvis krav er\n"
-#~ "  tilfredsstilt (se pumount(1) for mer). Monteringspunktkatalogen\n"
-#~ "  blir fjernet etterpå.\n"
-#~ "\n"
-#~ "Valg:\n"
-#~ "  -l, --lazy : lat umount, se umount(8)\n"
-#~ "  -d, --debug :  skriv debuginformasjon (veldig mye)\n"
-#~ "  -h, --help : skriv hjelpemelding og avslutt med suksess\n"

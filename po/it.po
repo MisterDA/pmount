@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-18 23:10+0200\n"
+"POT-Creation-Date: 2007-06-27 23:27+0200\n"
 "PO-Revision-Date: 2007-04-12 18:44+0000\n"
 "Last-Translator: HDS619 <thestreet@hotmail.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -138,7 +138,7 @@ msgstr "Errore: \"/\" non deve comparire nell'etichetta\n"
 msgid "Error: device name too long\n"
 msgstr "Errore: nome del dispositivo troppo lungo\n"
 
-#: ../src/pmount.c:184 ../src/pumount.c:108
+#: ../src/pmount.c:184 ../src/pumount.c:109
 msgid "Error: could not drop all uid privileges"
 msgstr "Errore: non è possibile eliminare tutti i privilegi uid"
 
@@ -186,12 +186,12 @@ msgstr "Errore: impossibile rimuovere il lock file per questo pid: %s: %s\n"
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Errore: do_unlock: impossibile rimuovere la directory di lock"
 
-#: ../src/pmount.c:540 ../src/pumount.c:173
+#: ../src/pmount.c:540 ../src/pumount.c:176
 msgid "Error: this program needs to be installed suid root\n"
 msgstr ""
 "Errore: questo programma deve essere installato con i permessi di root\n"
 
-#: ../src/pmount.c:583 ../src/pumount.c:195
+#: ../src/pmount.c:583 ../src/pumount.c:200
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Errore interno: getopt_long() ha restituito un valore sconosciuto\n"
@@ -205,11 +205,11 @@ msgstr ""
 "Attenzione: il dispositivo %s è già gestito da /etc/fstab,\n"
 "l'etichetta fornita verrà ignorata\n"
 
-#: ../src/pmount.c:635 ../src/pumount.c:240
+#: ../src/pmount.c:635 ../src/pumount.c:245
 msgid "Error: could not determine real path of the device"
 msgstr "Errore: impossibile determinare il percorso effettivo del dispositivo"
 
-#: ../src/pmount.c:644 ../src/pumount.c:246
+#: ../src/pmount.c:644 ../src/pumount.c:251
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Errore: dispositivo %s non valido (deve trovarsi in /dev)\n"
@@ -224,7 +224,12 @@ msgstr "Errore: impossibile decifrare il dispositivo (passphrase errata?)\n"
 msgid "Error: mapped device already exists\n"
 msgstr "Errore: il dispositivo mappato esiste già\n"
 
-#: ../src/pmount.c:699
+#: ../src/pmount.c:690
+#, fuzzy, c-format
+msgid "Warning: could not create luks lockfile\n"
+msgstr "Errore: impossibile creare il lock file per questo pid: %s: %s\n"
+
+#: ../src/pmount.c:702
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
@@ -233,11 +238,11 @@ msgstr ""
 "Errore: impossibile fare il lock della directory di mount. Probabilmente un "
 "altro pmount è in esecuzione per questo punto di mount.\n"
 
-#: ../src/pmount.c:723
+#: ../src/pmount.c:726
 msgid "Error: could not delete mount point"
 msgstr "Errore: impossibile cancellare il punto di mount"
 
-#: ../src/pmount.c:744
+#: ../src/pmount.c:747
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Errore interno: modalità %i non gestibile.\n"
@@ -277,78 +282,78 @@ msgstr "Errore: impossibile connettersi a dbus: %s: %s\n"
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Errore: lo UDI fornito non è un volume montabile\n"
 
-#: ../src/policy.c:94
+#: ../src/policy.c:138
 msgid "Error: could not get status of device"
 msgstr "Errore: impossibile ottenere lo stato del dispositivo"
 
-#: ../src/policy.c:105
+#: ../src/policy.c:149
 msgid "Error: could not get sysfs directory\n"
 msgstr "Errore: impossibile ottenere la directory sysfs\n"
 
-#: ../src/policy.c:112
+#: ../src/policy.c:156
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "Errore: impossibile aprire <sysfs dir>/blobk/"
 
-#: ../src/policy.c:143
+#: ../src/policy.c:187
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Errore: impossibile aprire <sysfs dir>/block/<dispositivo>/"
 
-#: ../src/policy.c:243
+#: ../src/policy.c:287
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Errore: il dispositivo %s non esiste\n"
 
-#: ../src/policy.c:248
+#: ../src/policy.c:292
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Errore: %s non è un dispositivo a blocchi\n"
 
-#: ../src/policy.c:266 ../src/policy.c:322
+#: ../src/policy.c:310 ../src/policy.c:366
 msgid "Error: could not open fstab-type file"
 msgstr "Errore: impossibile aprire il file di tipo fstab"
 
-#: ../src/policy.c:353
+#: ../src/policy.c:397
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Errore: il dispositivo %s è già montato in %s\n"
 
-#: ../src/policy.c:355
+#: ../src/policy.c:399
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Errore: il dispositivo %s non è montato\n"
 
-#: ../src/policy.c:357
+#: ../src/policy.c:401
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Errore: il dispositivo %s è stato montato da un altro utente\n"
 
-#: ../src/policy.c:393
+#: ../src/policy.c:437
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Errore: il dispositivo %s non è rimovibile\n"
 
-#: ../src/policy.c:456
+#: ../src/policy.c:500
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Errore: il dispositivo %s è in stato di lock\n"
 
-#: ../src/policy.c:465
+#: ../src/policy.c:509
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
 msgstr "Errore: il punto di mount %s è già in /etc/fstab\n"
 
-#: ../src/policy.c:478
+#: ../src/policy.c:522
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Errore: la directory %s contiene già un file system montato\n"
 
-#: ../src/policy.c:480
+#: ../src/policy.c:524
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Errore: la directory %s non contiene un file system montato\n"
 
 #: ../src/pumount.c:43
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -359,10 +364,11 @@ msgid ""
 "  afterwards.\n"
 "\n"
 "Options:\n"
-"  -l, --lazy  : umount lazily, see umount(8)\n"
-"  -d, --debug : enable debug output (very verbose)\n"
-"  -h, --help  : print help message and exit successfuly\n"
-"  --version   : print version number and exit successfully\n"
+"  -l, --lazy   : umount lazily, see umount(8)\n"
+"  --luks-force : luksClose devices pmount didn't open\n"
+"  -d, --debug  : enable debug output (very verbose)\n"
+"  -h, --help   : print help message and exit successfuly\n"
+"  --version    : print version number and exit successfully\n"
 msgstr ""
 "Uso:\n"
 "\n"
@@ -378,25 +384,25 @@ msgstr ""
 "-h, --help : visualizza un messaggio d'aiuto ed esce\n"
 "--version : visualizza il numero di versione ed esce\n"
 
-#: ../src/pumount.c:75
+#: ../src/pumount.c:76
 msgid "Internal error: could not determine mount point\n"
 msgstr "Errore interno: impossibile determinare il punto di mount\n"
 
-#: ../src/pumount.c:81
+#: ../src/pumount.c:82
 #, fuzzy, c-format
 msgid "Error: could not find real path of %s\n"
 msgstr "Errore: impossibile determinare il percorso effettivo del dispositivo"
 
-#: ../src/pumount.c:88
+#: ../src/pumount.c:89
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Errore: il punto di mount %s non si trova sotto %s\n"
 
-#: ../src/pumount.c:118
+#: ../src/pumount.c:119
 msgid "Error: could not execute umount"
 msgstr "Errore: impossibile eseguire umount"
 
-#: ../src/pumount.c:139
+#: ../src/pumount.c:140
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "Errore: umount fallito\n"
