@@ -1,3 +1,21 @@
+2007-06-27  Vincent Fourmond  <fourmond@debian.org>
+
+	* luks.c: 
+	Add luks_create_lockfile, luks_has_lockfile, and the like to deal
+	with luks lock files.
+
+	* luks.c (luks_release): 
+	Add a force parameter to force the luksClosing of the device even
+	if pmount detects it didn't luksOpen it in the first place.
+	Modified pmount.c and pumount.c accordingly.
+	
+	* pmount.c (main): 
+	Create a special 'lockfile' when pmount luksOpen a luks
+	device.
+
+	* pumount.c (main): 
+	Add a --luks-force option.
+
 2007-06-26  Vincent Fourmond  <fourmond@debian.org>
 
 	* policy.c: 

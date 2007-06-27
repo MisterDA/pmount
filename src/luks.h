@@ -30,9 +30,12 @@ enum decrypt_status luks_decrypt( const char* device, char* decrypted,
         int decrypted_size, const char* password_file, int readonly );
 
 /**
- * Check whether device is mapped through cryptsetup, and release it if so.
+ * Check whether device is mapped through cryptsetup, and release it if
+ * one of the given conditions are met:
+ * - if force is true
+ * - if the corresponding lockfile exists.
  */
-void luks_release( const char* device );
+void luks_release( const char* device, int force );
 
 /**
  * Check whether the given real device has been mapped to a dmcrypt device. If
@@ -48,5 +51,16 @@ int luks_get_mapped_device( const char* device, char* mapped_device,
  */
 int luks_create_lockfile(const char * device);
 
+/**
+ * Checks the presence of the luks 'lockfile' for a given device.
+ * Returns 1 if the lockfile is present.
+ */
+int luks_has_lockfile(const char * device);
+
+/**
+ * Removes the luks 'lockfile' corresponding to the given device.
+ * Never fails. But might not really remove it if it is a directory.
+ */
+void luks_remove_lockfile(const char * device);
 
 #endif /* !defined( __luks_h) */

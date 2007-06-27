@@ -1,6 +1,9 @@
 0.9.15
 -----------
 - fix problems with the missing bus symlink in recent kernels
+- now, pmount keeps track of the encrypted volume it did luksOpen, and
+  pumount won't luksClose them unless explicitly asked to (with the
+  --luks-force option).
 	
 
 0.9.14

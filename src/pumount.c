@@ -45,10 +45,11 @@ usage( const char* exename )
     "  are met (see pumount(1) for details). The mount point directory is removed\n"
     "  afterwards.\n\n"
     "Options:\n"
-    "  -l, --lazy  : umount lazily, see umount(8)\n"
-    "  -d, --debug : enable debug output (very verbose)\n"
-    "  -h, --help  : print help message and exit successfuly\n"
-    "  --version   : print version number and exit successfully\n"),
+    "  -l, --lazy   : umount lazily, see umount(8)\n"
+    "  --luks-force : luksClose devices pmount didn't open\n"
+    "  -d, --debug  : enable debug output (very verbose)\n"
+    "  -h, --help   : print help message and exit successfuly\n"
+    "  --version    : print version number and exit successfully\n"),
         exename, MEDIADIR );
 }
 
@@ -153,12 +154,14 @@ main( int argc, char** argv )
     const char* fstab_device;
     int is_real_path = 0;
     int do_lazy = 0;
+    int luks_force = 0;
 
     int  option;
     static struct option long_opts[] = {
         { "help", 0, NULL, 'h'},
         { "debug", 0, NULL, 'd'},
         { "lazy", 0, NULL, 'l'},
+        { "luks-force", 0, NULL, 'L'},
         { "version", 0, NULL, 'V' },
         { NULL, 0, NULL, 0}
     };
@@ -188,6 +191,8 @@ main( int argc, char** argv )
             case 'd':   enable_debug = 1; break;
 
             case 'l':        do_lazy = 1; break;
+
+            case 'L':        luks_force = 1; break;
 
             case 'V': puts(VERSION); return 0;
 
@@ -259,7 +264,7 @@ main( int argc, char** argv )
         return E_EXECUMOUNT;
 
     /* release LUKS device, if appropriate */
-    luks_release( device );
+    luks_release( device, 1 );
 
     /* delete mount point */
     remove_pmount_mntpt( mntpt );

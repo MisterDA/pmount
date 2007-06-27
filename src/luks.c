@@ -76,10 +76,16 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
 }
 
 void
-luks_release( const char* device )
+luks_release( const char* device, int force )
 {
+  if(force || luks_has_lockfile(device)) {
     spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, CRYPTSETUP, CRYPTSETUP,
             "luksClose", device, NULL );
+    luks_remove_lockfile(device);
+  }
+  else
+    debug("Not luksClosing '%s' as there is no corresponding lockfile\n",
+	  device);
 }
 
 int 
@@ -119,6 +125,9 @@ int luks_create_lockfile(const char * device)
   if(assert_dir(LUKS_LOCKDIR, 0))
     return 0;			/* Failed for some reason */
   luks_lockfile_name(device, path, sizeof(path));
+
+  debug("Creating luks lockfile '%s' for device '%s'",
+	path, device);
   get_root();
   f = creat( path, 0600);
   drop_root();
@@ -130,3 +139,32 @@ int luks_create_lockfile(const char * device)
   return 1;
 }
 
+int luks_has_lockfile(const char * device)
+{
+  char path[PATH_MAX];
+  struct stat st;
+  int ret = 0;
+
+  luks_lockfile_name(device, path, sizeof(path));
+  debug("Checking luks lockfile '%s' for device '%s'\n",
+	path, device);
+  get_root();
+  if(!stat(path,&st)) 
+    ret = 1;
+  drop_root();
+  return ret;
+}
+
+void luks_remove_lockfile(const char * device)
+{
+  char path[PATH_MAX];
+  struct stat st;
+
+  luks_lockfile_name(device, path, sizeof(path));
+  debug("Removing luks lockfile '%s' for device '%s'\n",
+	path, device);
+  get_root();
+  if(!stat(path,&st) && !is_dir(path)) 
+    unlink(path);
+  drop_root();
+}

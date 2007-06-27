@@ -685,8 +685,8 @@ main( int argc, char** argv )
                     fprintf( stderr, _("Error: mapped device already exists\n") );
                     exit( E_POLICY );
                 case DECRYPT_OK:
-		  /* We create a luks lockfile */
-		  if(! luks_create_lockfile(device))
+		  /* We create a luks lockfile _on the decrypted device !_*/
+		  if(! luks_create_lockfile(decrypted_device))
 		    fprintf(stderr, _("Warning: could not create luks lockfile\n"));
                 case DECRYPT_NOTENCRYPTED:
                     break;
@@ -719,7 +719,7 @@ main( int argc, char** argv )
 
             if( result ) {
                 if( decrypt == DECRYPT_OK )
-                    luks_release( decrypted_device );
+                    luks_release( decrypted_device, 0 ); 
 
                 /* mount failed, delete the mount point again */
                 if( remove_pmount_mntpt( mntpt ) ) {
