@@ -42,4 +42,11 @@ void luks_release( const char* device );
 int luks_get_mapped_device( const char* device, char* mapped_device, 
         size_t mapped_device_size );
 
+/**
+ * Creates a 'lockfile' to remember that the given luks device was
+ * luksOpened by pmount. Returns 1 on success, 0 on error.
+ */
+int luks_create_lockfile(const char * device);
+
+
 #endif /* !defined( __luks_h) */

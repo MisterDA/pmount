@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <sys/stat.h>
+#include <libintl.h>
 
 enum decrypt_status
 luks_decrypt( const char* device, char* decrypted, int decrypted_size, 
@@ -96,3 +97,36 @@ luks_get_mapped_device( const char* device, char* mapped_device,
     } else
         return 0;
 }
+
+#define LUKS_LOCKDIR LOCKDIR "_luks"
+
+void luks_lockfile_name(const char *device, char * target, size_t t_s)
+{
+  char* dmlabel = strreplace( device, '/', '_' );
+  snprintf(target, t_s, "%s/%s", LUKS_LOCKDIR, dmlabel);
+  free(dmlabel);
+}
+
+/**
+   Creates a 'lockfile' for a given luks device. Returns:
+   * 1 on success
+   * 0 on error
+ */
+int luks_create_lockfile(const char * device)
+{
+  char path[PATH_MAX];
+  int f;
+  if(assert_dir(LUKS_LOCKDIR, 0))
+    return 0;			/* Failed for some reason */
+  luks_lockfile_name(device, path, sizeof(path));
+  get_root();
+  f = creat( path, 0600);
+  drop_root();
+  if (f < 0) {
+    perror( _("luks_create_lockfile(): creat") );
+    return 0;
+  }
+  close(f);
+  return 1;
+}
+
