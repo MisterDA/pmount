@@ -1,10 +1,17 @@
+0.9.16
+-----------
+- added support for fmask and dmask for filesystems that support it,
+  based on a patch by Suren A. Chilingaryan <csa@dside.dyndns.org>
+- NTFS now uses nls= instead of iocharset=
+- support for ntfsmount (via the ntfs-fuse fs type) and ntfs-3g 
+  (via ntfs-3g)
+
 0.9.15
 -----------
 - fix problems with the missing bus symlink in recent kernels
 - now, pmount keeps track of the encrypted volume it did luksOpen, and
   pumount won't luksClose them unless explicitly asked to (with the
   --luks-force option).
-	
 
 0.9.14
 -----------

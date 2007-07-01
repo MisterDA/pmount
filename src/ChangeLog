@@ -1,3 +1,23 @@
+2007-07-01  Vincent Fourmond  <fourmond@debian.org>
+
+	* pmount.c (do_mount): 
+	now takes two extra arguments, fmask and dmask, that can safely
+	default to NULL. Changed all corresponding calls.
+	
+	(main): 
+	added --fmask --dmask arguments, made the corresponding changes in
+	pmount-hal.c  
+
+	* fs.h, fs.c: 
+	Heavy changes in the FS strucure:
+	- support_iocharset is replaced by iocharset_format, the
+	  corresponding format string
+	- fdmask is a format string corresponding to the fdmask options
+	- skip_autodetect is used to explicitly exclude FS types from
+	  autodetection 
+	
+	Made corresponding changes in fs.c + ntfs-fuse and ntfs-3g.
+
 2007-06-27  Vincent Fourmond  <fourmond@debian.org>
 
 	* luks.c: 

@@ -35,6 +35,14 @@ static struct FS supported_fs[] = {
     { "jfs", "nodev,noauto,nosuid,user,errors=continue", 0, NULL, 
       ",iocharset=%s"},
     { "omfs", "nodev,noauto,nosuid,user", 0, NULL, 0 },
+    { "ntfs-fuse", "nosuid,nodev,user", 1, "077", 
+      NULL /* no nls support, it seems*/, ",fmask=%04o,dmask=%04o", 
+      1 /* skip detection */
+    },
+    { "ntfs-3g", "nosuid,nodev,user", 1, "077", 
+      NULL /* no nls support, it seems*/, ",fmask=%04o,dmask=%04o", 
+      1 /* skip detection */
+    },
     { NULL, NULL, 0, NULL, 0}
 };
 

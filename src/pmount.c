@@ -375,6 +375,8 @@ do_mount_auto( const char* device, const char* mntpt, int async,
     int result = -1;
 
     for( fs = get_supported_fs(); fs->fsname; ++fs ) {
+        if(fs->skip_autodetect)
+	  continue;		/* skip fs that are marked as such */
         /* don't suppress stderr if we try the last possible fs */
         if( (fs+1)->fsname == NULL )
             nostderr = 0;

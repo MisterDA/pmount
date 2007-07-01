@@ -154,7 +154,9 @@ Use given I/O character set (default:
 .B utf8 
 if called in an UTF-8 locale, otherwise mount default). This
 corresponds with the mount option
-.B iocharset\fR. This option is ignored for file systems that do not
+.B iocharset\fR (or 
+.B nls
+for NTFS). This option is ignored for file systems that do not
 support setting the character set (see
 .B mount
 (8) for details).
@@ -227,11 +229,25 @@ for pmounting.
 For now, 
 .B pmount
 supports the following filesystems:
-.IR udf ,\ iso9660 ,\ vfat ,\ ntfs ,\ hfsplus ,\ hfs ,
-.IR ext3 ,\ ext2 , \ reiserfs ,\ reiser4 ,\ xfs ,\ jfs \ and
+.IR udf , \ iso9660 , \ vfat , \ ntfs , \ hfsplus , \ hfs ,
+.IR ext3 , \ ext2 , \ reiserfs , \ reiser4 , \ xfs , \ jfs \ and
 .IR omfs.
-They are tried in that exact order when the filesystem is not
-specified. 
+They are tried sequentially in that exact order when the filesystem is
+not specified.  
+
+Additionnally, 
+.B pmount
+supports the filesystem types
+.I ntfs-fuse
+and
+.I ntfs-3g
+to mount NTFS volumes respectively with 
+.B ntfsmount
+(1)
+or
+.B ntfs-3g
+(1). These file types are currently not supported in automatic
+detection, the kernel NTFS driver will be used instead. 
 
 .SH KNOWN ISSUES
 
