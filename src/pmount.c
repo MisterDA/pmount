@@ -44,6 +44,9 @@ const int E_PID = 7;
 const int E_LOCKED = 8;
 const int E_INTERNAL = 100;
 
+#define OPT_FMASK 128
+#define OPT_DMASK 129
+
 /**
  * Print some help.
  * @param exename Name of the executable (argv[0]).
@@ -79,6 +82,10 @@ usage( const char* exename )
     "                in an UTF-8 locale, otherwise mount default)\n"
     "  -u <umask>  : use specified umask instead of the default (only for\n"
     "                file sytems which actually support umask setting)\n"
+    "  --fmask <fmask>\n"
+    "                use specified fmask\n"
+    "  --dmask <dmask>\n"
+    "                use specified dmask\n"
     "  -p <file>, --passphrase <file>\n"
     "                read passphrase from file instead of the terminal\n"
     "                (only for LUKS encrypted devices)\n"
@@ -205,23 +212,29 @@ do_mount_fstab( const char* device )
  * @param iocharset charset to use for file name conversion; NULL for mount
  *        default
  * @param umask User specified umask (NULL for default)
+ * @param fmask User specified fmask (NULL for umask)
+ * @param dmask User specified dmask (NULL for umask)
  * @param suppress_errors: if true, stderr is redirected to /dev/null
  * @return exit status of mount, or -1 on failure.
  */
 int
 do_mount( const char* device, const char* mntpt, const char* fsname, int async,
-        int noatime, int exec, int force_write, const char* iocharset, const
-        char* umask, int suppress_errors )
+	  int noatime, int exec, int force_write, const char* iocharset, 
+	  const char* umask, const char *fmask, const char *dmask, 
+	  int suppress_errors )
 {
     const struct FS* fs;
     char ugid_opt[100];
     char umask_opt[100];
+    char fdmask_opt[100];
     char iocharset_opt[100];
     const char* sync_opt = ",sync";
     const char* atime_opt = ",atime";
     const char* exec_opt = ",noexec";
     const char* access_opt = NULL;
     char options[1000];
+    /* We deal with masks in another way now: */
+    unsigned i_umask, i_dmask, i_fmask;
 
     /* check and retrieve option information for requested file system */
     if( !fsname) {
@@ -235,14 +248,24 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
         return -1;
     }
 
-    /* validate user specified umask */
+    /* validate user specified masks */
     if( umask && parse_unsigned( umask, E_ARGS ) > 0777 ) {
         fprintf( stderr, _("Error: invalid umask %s\n"), umask );
         return -1;
     }
 
+    if( fmask && parse_unsigned( fmask, E_ARGS ) > 0777 ) {
+        fprintf( stderr, _("Error: invalid fmask %s\n"), fmask );
+        return -1;
+    }
+
+    if( dmask && parse_unsigned( dmask, E_ARGS ) > 0777 ) {
+        fprintf( stderr, _("Error: invalid dmask %s\n"), dmask );
+        return -1;
+    }
+
     /* assemble option string */
-    *ugid_opt = *umask_opt = *iocharset_opt = 0;
+    *ugid_opt = *umask_opt = *fdmask_opt = *iocharset_opt = 0;
     if( fs->support_ugid ) {
 	struct stat statbuf;
 	int gid = getgid();
@@ -264,9 +287,32 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     }
 
     if( fs->umask )
-        snprintf( umask_opt, sizeof( umask_opt ), ",umask=%s", 
-		  umask ? umask : fs->umask );
-    
+      snprintf( umask_opt, sizeof( umask_opt ), ",umask=%s", 
+		umask ? umask : fs->umask );
+    /* If the fs supports fdmasks, we try to make some values
+       up.
+    */
+    if( fs->umask && fs->fdmask ) {
+      /* We first get the umask value */
+      if(umask)
+	i_umask = parse_unsigned( umask, E_ARGS ); /* shouldn't fail */
+      else
+	i_umask = parse_unsigned( fs->umask, E_ARGS ); /* shouldn't fail */
+
+      /* Now the fmask */
+      if(fmask)
+	i_fmask = parse_unsigned( fmask, E_ARGS ); /* shouldn't fail */
+      else			/* make up from the umask parameter */
+	i_fmask = i_umask | 0111; /* remove exec permissions */
+      /* And the dmask */
+      if(dmask)
+	i_dmask = parse_unsigned( dmask, E_ARGS ); /* shouldn't fail */
+      else			/* make up from the umask parameter */
+	i_dmask = i_umask;	/* same as umask */
+      snprintf( fdmask_opt, sizeof( fdmask_opt ), fs->fdmask, 
+		i_fmask, i_dmask );
+    }
+
     if( async )
         sync_opt = ",async";
 
@@ -283,17 +329,18 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     else
         access_opt = "";
 
-    if( iocharset && fs->support_iocharset ) {
+    if( iocharset && fs->iocharset_format ) {
         if( !is_word_str( iocharset ) ) {
             fprintf( stderr, _("Error: invalid charset name '%s'\n"), iocharset );
             return -1;
         }
-        snprintf( iocharset_opt, sizeof( iocharset_opt ), ",iocharset=%s", iocharset );
+        snprintf( iocharset_opt, sizeof( iocharset_opt ), 
+		  fs->iocharset_format, iocharset );
     }
 
-    snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s", 
+    snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s%s", 
             fs->options, sync_opt, atime_opt, exec_opt, access_opt, ugid_opt,
-            umask_opt, iocharset_opt );
+            umask_opt, fdmask_opt, iocharset_opt );
 
     /* go for it */
     return spawnl( SPAWN_EROOT | SPAWN_RROOT | (suppress_errors ? SPAWN_NO_STDERR : 0 ),
@@ -314,12 +361,14 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
  * @param iocharset charset to use for file name conversion; NULL for mount
  *        default
  * @param umask User specified umask (NULL for default)
+ * @param fmask User specified fmask (NULL for umask)
+ * @param dmask User specified dmask (NULL for umask)
  * @return last return value of do_mount (i. e. 0 on success, != 0 on error)
  */
 int
 do_mount_auto( const char* device, const char* mntpt, int async, 
         int noatime, int exec, int force_write, const char* iocharset, 
-        const char* umask )
+        const char* umask, const char *fmask, const char *dmask )
 {
     const struct FS* fs;
     int nostderr = 1;
@@ -330,14 +379,14 @@ do_mount_auto( const char* device, const char* mntpt, int async,
         if( (fs+1)->fsname == NULL )
             nostderr = 0;
         result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-                force_write, iocharset, umask, nostderr );
+                force_write, iocharset, umask, fmask, dmask, nostderr );
         if( result == 0 )
             break;
 
 	/* sometimes VFAT fails when using iocharset; try again without */
 	if( iocharset )
 	    result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-                    force_write, NULL, umask, nostderr );
+                    force_write, NULL, umask, fmask, dmask, nostderr );
         if( result <= 0 )
             break;
     }
@@ -506,6 +555,8 @@ main( int argc, char** argv )
     const char* use_fstype = NULL;
     const char* iocharset = NULL;
     const char* umask = NULL;
+    const char* fmask = NULL;
+    const char* dmask = NULL;
     const char* passphrase = NULL;
     int result;
 
@@ -523,6 +574,8 @@ main( int argc, char** argv )
         { "type", 1, NULL, 't' },
         { "charset", 1, NULL, 'c' },
         { "umask", 1, NULL, 'u' },
+        { "fmask", 1, NULL, OPT_FMASK },
+        { "dmask", 1, NULL, OPT_DMASK },
         { "passphrase", 1, NULL, 'p' },
         { "read-only", 0, NULL, 'r' },
         { "read-write", 0, NULL, 'w' },
@@ -570,6 +623,10 @@ main( int argc, char** argv )
             case 'c': iocharset = optarg; break;
 
             case 'u': umask = optarg; break;
+	    
+	    case OPT_FMASK: fmask = optarg; break;
+	    
+	    case OPT_DMASK: dmask = optarg; break;
 
             case 'p': passphrase = optarg; break;
 
@@ -707,10 +764,10 @@ main( int argc, char** argv )
             /* off we go */
             if( use_fstype )
                 result = do_mount( decrypted_device, mntpt, use_fstype, async, noatime,
-                        exec, force_write, iocharset, umask, 0 );
+                        exec, force_write, iocharset, umask, fmask, dmask, 0 );
             else
                 result = do_mount_auto( decrypted_device, mntpt, async, noatime, exec,
-                        force_write, iocharset, umask ); 
+                        force_write, iocharset, umask, fmask, dmask ); 
 
             /* unlock the mount point again */
             debug( "unlocking mount point directory\n" );

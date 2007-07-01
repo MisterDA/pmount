@@ -161,8 +161,28 @@ support setting the character set (see
 .TP
 .B \-u \fIumask\fR, \fB\-\-umask \fIumask\fR
 Use specified umask instead of the default one. For UDF, the default
-is '007', for VFAT and NTFS the default is '077'. This value is
+is '000', for VFAT and NTFS the default is '077'. This value is
 ignored for file systems which do not support setting an umask.
+
+.TP
+.B  \fB\-\-dmask \fIdmask\fR
+.TP
+.B  \fB\-\-fmask \fIfmask\fR
+Some filesystems (essentially VFAT and HFS) supports separate 
+.I umasks
+(see the 
+.I -u
+option just above)
+for directories and files, to avoid the annoying effect of having all
+files executable. For these filesystems, you can specify separately
+the masks using these options. By default, 
+.I fmask
+is
+.I umask
+without all executable permissions and
+.I dmask
+is 
+.IR umask .
 
 .TP
 .BI \-p \ file \ \-\-passphrase \ file
@@ -226,7 +246,6 @@ means that when you mount an
 filesystem using 
 .BR pmount ,
 you might get a lot of fs\-related kernel error messages. Sorry !
-
 
 
 .SH AUTHOR

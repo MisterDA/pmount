@@ -19,18 +19,21 @@
  * to command line options. It is anyway better not to use it...
  */
 static struct FS supported_fs[] = {
-    { "udf", "nosuid,nodev,user", 1, "000", 1 },
-    { "iso9660", "nosuid,nodev,user", 1, NULL, 1 },
-    { "vfat", "nosuid,nodev,user,quiet,shortname=mixed", 1, "077", 1 },
-    { "ntfs", "nosuid,nodev,user", 1, "077", 1 },
+    { "udf", "nosuid,nodev,user", 1, "000", ",iocharset=%s" },
+    { "iso9660", "nosuid,nodev,user", 1, NULL, ",iocharset=%s" },
+    { "vfat", "nosuid,nodev,user,quiet,shortname=mixed", 1, "077", 
+      ",iocharset=%s",",fmask=%04o,dmask=%04o"},
+    { "ntfs", "nosuid,nodev,user", 1, "077", ",nls=%s" },
     { "hfsplus", "nosuid,nodev,user", 1, NULL, 0 },
-    { "hfs", "nosuid,nodev,user", 1, NULL, 0 },
+    { "hfs", "nosuid,nodev,user", 1, "077", NULL, 
+      ",file_umask=%04o,dir_umask=%04o"},
     { "ext3", "nodev,noauto,nosuid,user,errors=continue", 0, NULL, 0 },
     { "ext2", "nodev,noauto,nosuid,user,errors=continue", 0, NULL, 0 },
     { "reiserfs", "nodev,noauto,nosuid,user", 0, NULL, 0 },
     { "reiser4", "nodev,noauto,nosuid,user", 0, NULL, 0 },
     { "xfs", "nodev,noauto,nosuid,user", 0, NULL, 0 },
-    { "jfs", "nodev,noauto,nosuid,user,errors=continue", 0, NULL, 1 },
+    { "jfs", "nodev,noauto,nosuid,user,errors=continue", 0, NULL, 
+      ",iocharset=%s"},
     { "omfs", "nodev,noauto,nosuid,user", 0, NULL, 0 },
     { NULL, NULL, 0, NULL, 0}
 };

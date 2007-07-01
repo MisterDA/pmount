@@ -19,14 +19,12 @@ struct FS {
   const char* options;   /* standard mount options (must not be empty) */
   int support_ugid;      /* whether the fs supports uid and gid options */
   const char* umask;     /* umask value (NULL if umask is not supported) */
-  int support_iocharset; /* whether the fs supports the iocharset option */
   const char* iocharset_format;	 
   /* the format to be used for iocharset option -- NULL = iocharset=%s */
-  const char* fdmask_format; 	/* how to actually implement the
-				   fdmask_format. Takes two strings as
-				   arguments
-				*/
-  int skip;              /* whether or not to skip this fs for detection */
+  const char* fdmask;    /* how to actually implement the fdmask format. 
+			    Takes two unsigned ints as arguments: fmask then 
+			    dmask */
+  int skip_autodetect;   /* whether or not to skip this fs for detection */
 };
 
 /**

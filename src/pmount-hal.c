@@ -113,7 +113,7 @@ void get_free_label( const char* label, char* result, size_t result_size )
 
 void exec_pmount( const char* device, const char* fstype, const char* label,
         dbus_bool_t sync, dbus_bool_t noatime, dbus_bool_t exec, const char*
-        umask, const char* iocharset, int addargc, const char* const* addargv ) 
+        umask, const char *fmask, const char *dmask, const char* iocharset, int addargc, const char* const* addargv ) 
 {
     const char** argv = (const char**) calloc( sizeof( const char* ), addargc+15 );
     int argc = 0;
@@ -137,6 +137,16 @@ void exec_pmount( const char* device, const char* fstype, const char* label,
     if( umask ) {
         argv[argc++] = "--umask";
         argv[argc++] = umask;
+    }
+
+    if ( fmask ) {
+        argv[argc++] = "--fmask";
+        argv[argc++] = fmask;
+    }
+
+    if ( dmask ) {
+        argv[argc++] = "--dmask";
+        argv[argc++] = dmask;
     }
 
     if( iocharset ) {
@@ -182,6 +192,8 @@ main( int argc, const char** argv )
     LibHalDrive* drive;
     dbus_bool_t sync = FALSE, noatime = FALSE, exec = FALSE;
     char *umask = NULL;
+    char *fmask = NULL;
+    char *dmask = NULL;
     char *iocharset = NULL;
 
     /* initialize locale */
@@ -360,6 +372,32 @@ main( int argc, const char** argv )
 
     debug( "umask: %s\n", umask );
 
+    if( volume && libhal_device_property_exists( hal_ctx,
+                libhal_volume_get_udi( volume ), "volume.policy.mount_option.fmask", &error ) )
+        fmask = libhal_device_get_property_string( hal_ctx,
+                libhal_volume_get_udi( volume ), "volume.policy.mount_option.fmask", &error );
+    else if( libhal_device_property_exists( hal_ctx, 
+                libhal_drive_get_udi( drive ), "storage.policy.mount_option.fmask", &error ) )
+        fmask = libhal_device_get_property_string( hal_ctx,
+                libhal_drive_get_udi( drive ), "storage.policy.mount_option.fmask", &error );
+    else if( libhal_device_property_exists( hal_ctx, computer_udi, "storage.policy.default.mount_option.fmask", &error ) )
+        fmask = libhal_device_get_property_string( hal_ctx, computer_udi, "storage.policy.default.mount_option.fmask", &error );
+
+    debug( "fmask: %s\n", fmask );
+
+    if( volume && libhal_device_property_exists( hal_ctx,
+                libhal_volume_get_udi( volume ), "volume.policy.mount_option.dmask", &error ) )
+        dmask = libhal_device_get_property_string( hal_ctx,
+                libhal_volume_get_udi( volume ), "volume.policy.mount_option.dmask", &error );
+    else if( libhal_device_property_exists( hal_ctx, 
+                libhal_drive_get_udi( drive ), "storage.policy.mount_option.dmask", &error ) )
+        dmask = libhal_device_get_property_string( hal_ctx,
+                libhal_drive_get_udi( drive ), "storage.policy.mount_option.dmask", &error );
+    else if( libhal_device_property_exists( hal_ctx, computer_udi, "storage.policy.default.mount_option.dmask", &error ) )
+        dmask = libhal_device_get_property_string( hal_ctx, computer_udi, "storage.policy.default.mount_option.dmask", &error );
+
+    debug( "dmask: %s\n", dmask );
+
     /* shut down hal connection */
     libhal_ctx_shutdown( hal_ctx, &error );
     libhal_ctx_free( hal_ctx );
@@ -367,7 +405,7 @@ main( int argc, const char** argv )
     dbus_connection_unref( dbus_conn );
 
     /* go */
-    exec_pmount( device, fstype, label, sync, noatime, exec, umask, iocharset, argc-2, argv+2 );
+    exec_pmount( device, fstype, label, sync, noatime, exec, umask, fmask, dmask, iocharset, argc-2, argv+2 );
 
     return 0;
 }
