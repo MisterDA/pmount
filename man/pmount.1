@@ -145,7 +145,8 @@ option. Default is
 .TP
 .B \-t \fIfilesystem\fR, \fB\-\-type \fIfilesystem
 Mount as specified file system type. The file system type is automatically
-determined if this option is not given.
+determined if this option is not given. See at the bottom for a list
+of currently supported filesystems.
 
 .TP
 .B \-c \fIcharset\fR, \fB\-\-charset \fIcharset
@@ -183,6 +184,12 @@ without all executable permissions and
 .I dmask
 is 
 .IR umask .
+Most of the times, these settings should just do what you want, so
+there should be seldom any need for using directly the
+.I \-\-fmask
+and
+.I \-\-dmask
+options.
 
 .TP
 .BI \-p \ file \ \-\-passphrase \ file
@@ -214,6 +221,17 @@ for pmounting.
 
 .BR pumount (1),
 .BR mount (8)
+
+.SH SUPPORTED FILESYSTEMS
+
+For now, 
+.B pmount
+supports the following filesystems:
+.IR udf ,\ iso9660 ,\ vfat ,\ ntfs ,\ hfsplus ,\ hfs ,
+.IR ext3 ,\ ext2 , \ reiserfs ,\ reiser4 ,\ xfs ,\ jfs \ and
+.IR omfs.
+They are tried in that exact order when the filesystem is not
+specified. 
 
 .SH KNOWN ISSUES
 
