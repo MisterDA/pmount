@@ -165,7 +165,10 @@ support setting the character set (see
 .B \-u \fIumask\fR, \fB\-\-umask \fIumask\fR
 Use specified umask instead of the default one. For UDF, the default
 is '000', for VFAT and NTFS the default is '077'. This value is
-ignored for file systems which do not support setting an umask.
+ignored for file systems which do not support setting an umask. Note
+that you can use a value of 077 to forbid anyone else to read/write
+the files, 027 to allow your group to read the files and 022 to allow
+anyone to read the files (but only you can write).
 
 .TP
 .B  \fB\-\-dmask \fIdmask\fR
