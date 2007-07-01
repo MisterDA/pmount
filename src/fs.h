@@ -15,11 +15,18 @@
  * Structure with information about a supported file system
  */
 struct FS {
-    const char* fsname;    /* file system name (e. g. 'ext2') */
-    const char* options;   /* standard mount options (must not be empty) */
-    int support_ugid;      /* whether the fs supports uid and gid options */
-    const char* umask;     /* umask value (NULL if umask is not supported) */
-    int support_iocharset; /* whether the fs supports the iocharset option */
+  const char* fsname;    /* file system name (e. g. 'ext2') */
+  const char* options;   /* standard mount options (must not be empty) */
+  int support_ugid;      /* whether the fs supports uid and gid options */
+  const char* umask;     /* umask value (NULL if umask is not supported) */
+  int support_iocharset; /* whether the fs supports the iocharset option */
+  const char* iocharset_format;	 
+  /* the format to be used for iocharset option -- NULL = iocharset=%s */
+  const char* fdmask_format; 	/* how to actually implement the
+				   fdmask_format. Takes two strings as
+				   arguments
+				*/
+  int skip;              /* whether or not to skip this fs for detection */
 };
 
 /**

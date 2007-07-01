@@ -265,8 +265,8 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 
     if( fs->umask )
         snprintf( umask_opt, sizeof( umask_opt ), ",umask=%s", 
-                umask ? umask : fs->umask );
-
+		  umask ? umask : fs->umask );
+    
     if( async )
         sync_opt = ",async";
 

@@ -16,7 +16,7 @@
  * List of file systems supported by pmount; terminated with a struct with
  * fsname == NULL;
  * Do not specify the 'sync' option; this will be dynamically added according
- * to command line options.
+ * to command line options. It is anyway better not to use it...
  */
 static struct FS supported_fs[] = {
     { "udf", "nosuid,nodev,user", 1, "000", 1 },
