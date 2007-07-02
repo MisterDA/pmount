@@ -408,35 +408,42 @@ device_mounted( const char* device, int expect, char* mntpt )
     return mounted;
 }
 
+/* The silent version of the device_removable function. */
+int device_removable_silent(const char * device)
+{
+  struct sysfs_device *dev;
+  static char* hotplug_buses[] = { "usb", "ieee1394", "mmc", "pcmcia", NULL };
+  int removable;
+  char blockdevpath[PATH_MAX];
+  
+  dev = find_sysfs_device( device, blockdevpath, sizeof( blockdevpath ) );
+  if( !dev ) {
+    debug( "device_removable: could not find a sysfs device for %s\n", device );
+    return 0; 
+  }
+  
+  debug( "device_removable: corresponding block device for %s is %s\n",
+	 device, blockdevpath );
+  
+  /* check whether device has "removable" attribute with value '1' */
+  removable = get_blockdev_attr( blockdevpath, "removable" );
+  
+  /* if not, fall back to bus scanning (regard USB and FireWire as removable) */
+  if( !removable )
+    removable = find_bus_ancestry( dev, hotplug_buses );
+  sysfs_close_device( dev );
+  return removable;
+}
+
 int
 device_removable( const char* device )
 {
-    struct sysfs_device *dev;
-    static char* hotplug_buses[] = { "usb", "ieee1394", "mmc", "pcmcia", NULL };
-    int removable;
-    char blockdevpath[PATH_MAX];
+  int removable = device_removable_silent(device);
 
-    dev = find_sysfs_device( device, blockdevpath, sizeof( blockdevpath ) );
-    if( !dev ) {
-        debug( "device_removable: could not find a sysfs device for %s\n", device );
-        return 0; 
-    }
+  if( !removable )
+    fprintf( stderr, _("Error: device %s is not removable\n"), device );
 
-    debug( "device_removable: corresponding block device for %s is %s\n",
-                device, blockdevpath );
-
-    /* check whether device has "removable" attribute with value '1' */
-    removable = get_blockdev_attr( blockdevpath, "removable" );
-
-    /* if not, fall back to bus scanning (regard USB and FireWire as removable) */
-    if( !removable )
-        removable = find_bus_ancestry( dev, hotplug_buses );
-    sysfs_close_device( dev );
-
-    if( !removable )
-        fprintf( stderr, _("Error: device %s is not removable\n"), device );
-    
-    return removable;
+  return removable;
 }
 
 int
@@ -535,3 +542,53 @@ void make_lockdir_name( const char* device, char* name, size_t name_size )
     free( devname );
 }
 
+int
+device_valid_silent( const char* device )
+{
+    struct stat st;
+
+    if( stat( device, &st ) ) {
+        return 0;
+    }
+
+    if( !S_ISBLK( st.st_mode ) ) {
+        return 0;
+    }
+
+    return 1;
+}
+
+
+#define PROC_MOUNTS "/proc/mounts"
+#define safe_strcpy(dest, src) snprintf(dest, sizeof(dest), "%s", src);
+
+void print_mounted_removable_devices()
+{
+  FILE* f;
+  struct mntent* ent;
+  char pathbuf[PATH_MAX];
+  /* We need copies, as calls to libsysfs garble the contents of
+     the fields */
+  char name[MEDIA_STRING_SIZE], dir[MEDIA_STRING_SIZE], 
+    type[MEDIA_STRING_SIZE], opts[MEDIA_STRING_SIZE];
+
+  
+  if( !( f = setmntent( PROC_MOUNTS, "r" ) ) ) {
+    fprintf(stderr, _("Error: could not open the %s file: %s"),
+	    PROC_MOUNTS, strerror(errno));
+    exit( 100 );
+  }
+    
+  while( ( ent = getmntent( f ) ) != NULL ) {
+    if(device_valid_silent(ent->mnt_fsname))  {
+      /* We make copies */
+      safe_strcpy(name, ent->mnt_fsname);
+      safe_strcpy(dir, ent->mnt_dir);
+      safe_strcpy(type, ent->mnt_type);
+      safe_strcpy(opts, ent->mnt_opts);
+      if(device_removable_silent(name))
+	printf("%s on %s type %s (%s)\n", name, dir, type, opts);
+    }
+  }
+  endmntent(f);
+}

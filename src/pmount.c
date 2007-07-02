@@ -90,7 +90,7 @@ usage( const char* exename )
     "                read passphrase from file instead of the terminal\n"
     "                (only for LUKS encrypted devices)\n"
     "  -d, --debug : enable debug output (very verbose)\n"
-    "  -h, --help  : print help message and exit successfuly\n"
+    "  -h, --help  : print this help message and exit successfuly\n"
     "  --version   : print version number and exit successfully") );
 }
 
@@ -590,6 +590,17 @@ main( int argc, char** argv )
     bindtextdomain( "pmount", NULL );
     textdomain( "pmount" );
 
+    /* If pmount is run without a single argument, print out the list
+       of removable devices. Does not require root privileges, just read access
+       to the /proc/mounts file.
+    */
+    if( argc == 1 ) {
+      printf(_("Printing mounted removable devices:\n"));
+      print_mounted_removable_devices();
+      printf(_("To get a short, use %s -h\n"), argv[0]);
+      return 0;
+    }
+
     /* are we root? */
     if( geteuid() ) {
         fputs( _("Error: this program needs to be installed suid root\n"), stderr );
@@ -598,6 +609,7 @@ main( int argc, char** argv )
 
     /* drop root privileges until we really need them (still available as saved uid) */
     seteuid( getuid() );
+
 
     /* parse command line options */
     do {

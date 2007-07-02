@@ -96,5 +96,11 @@ int mntpt_mounted( const char* mntpt, int expect );
 void
 make_lockdir_name( const char* device, char* name, size_t name_size );
 
+/**
+ * Prints the removable devices that are currently mounted.
+ * Takes no arguments. Based on a pacth from Dan Keder <keder@fi.muni.cz>
+ */
+void print_mounted_removable_devices();
+
 #endif /* __policy_h */
 

@@ -29,6 +29,8 @@ pmount \- mount arbitrary hotpluggable devices as normal user
 ]
 .I device pid
 
+.B pmount
+
 .SH DESCRIPTION
 
 pmount ("policy mount") is a wrapper around the standard mount program which
@@ -77,6 +79,13 @@ several processes.
 During mount, the list of locks is cleaned, i. e. all locks whose associated
 process does not exist any more are removed. This prevents forgotten indefinite
 locks from crashed programs.
+
+Running
+.B pmount
+without arguments prints the list of mounted removable devices, a bit
+in the fashion of 
+.B mount 
+(1).
 
 .SH POLICY
 
