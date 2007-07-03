@@ -29,6 +29,22 @@ as its only argument. This will umount
 .I device
 from a directory below /media if policy is met (see below). 
 
+Please note that, as with
+.BR pmount ,
+you can use labels and uuids as described in
+.B fstab
+(5) for devices present in
+.IR /etc/fstab .
+In this case, the device name need to match exactly the corresponding
+entry in 
+.IR /etc/fstab ,
+including the 
+.I LABEL=
+or
+.I UUID=
+part.
+
+
 .SH OPTIONS
 
 .TP

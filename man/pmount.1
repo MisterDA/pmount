@@ -87,6 +87,20 @@ in the fashion of
 .B mount 
 (1).
 
+Please note that you can use labels and uuids as described in
+.B fstab
+(5) for devices present in
+.IR /etc/fstab .
+In this case, the device name need to match exactly the corresponding
+entry in 
+.IR /etc/fstab ,
+including the 
+.I LABEL=
+or
+.I UUID=
+part.
+
+
 .SH POLICY
 
 The mount will succeed if all of the following conditions are met:

@@ -597,7 +597,7 @@ main( int argc, char** argv )
     if( argc == 1 ) {
       printf(_("Printing mounted removable devices:\n"));
       print_mounted_removable_devices();
-      printf(_("To get a short, use %s -h\n"), argv[0]);
+      printf(_("To get a short help, run %s -h\n"), argv[0]);
       return 0;
     }
 
@@ -685,7 +685,7 @@ main( int argc, char** argv )
     }
 
     /* is the device already handled by fstab? We allow is_real_path == 0 here
-     * to transparently mount thinks like NFS and SMB drives */
+     * to transparently mount things like NFS and SMB drives */
     fstab_device = fstab_has_device( "/etc/fstab", device, NULL, NULL );
     if( mode == MOUNT && fstab_device ) {
         if( arg2 )

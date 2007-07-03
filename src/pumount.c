@@ -101,7 +101,7 @@ check_umount_policy( const char* device, int do_lazy )
  * @param lazy 0 for normal umount, 1 for lazy umount
  */
 void
-do_umount_fstab( const char* device, int lazy )
+do_umount_fstab( const char* device, int lazy, const char * fstab_mntpt )
 {
     /* drop all privileges */
     get_root();
@@ -111,6 +111,11 @@ do_umount_fstab( const char* device, int lazy )
     }
 
     debug( "device %s handled by fstab, calling umount\n", device );
+    if(! strncmp(device, "LABEL=", 6) || ! strncmp(device, "UUID=", 5)) {
+      debug( "'%s' is a label/uuid specification, using mount point %s to umount\n",
+	     device, fstab_mntpt);
+      device = fstab_mntpt;	/* device is now the mount point */
+    }
 
     if( lazy )
         execl( UMOUNTPROG, UMOUNTPROG, "-l", device, NULL );
@@ -152,6 +157,7 @@ main( int argc, char** argv )
 {
     char device[PATH_MAX], mntptdev[PATH_MAX], path[PATH_MAX];
     const char* fstab_device;
+    char fstab_mntpt[MEDIA_STRING_SIZE]; 
     int is_real_path = 0;
     int do_lazy = 0;
     int luks_force = 0;
@@ -233,9 +239,9 @@ main( int argc, char** argv )
     }
 
     /* is the device already handled by fstab? */
-    fstab_device = fstab_has_device( "/etc/fstab", device, NULL, NULL );
+    fstab_device = fstab_has_device( "/etc/fstab", device, fstab_mntpt, NULL );
     if( fstab_device ) {
-        do_umount_fstab( fstab_device, do_lazy );
+        do_umount_fstab( fstab_device, do_lazy, fstab_mntpt );
         return E_EXECUMOUNT;
     }
 
