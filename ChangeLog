@@ -5,6 +5,10 @@
 - NTFS now uses nls= instead of iocharset=
 - support for ntfsmount (via the ntfs-fuse fs type) and ntfs-3g 
   (via ntfs-3g)
+- included the patch by Dan Keder <keder@fi.muni.cz> for listing 
+  mounted removable devices, in the fashion of mount (with some edits)
+- pumount now works with uuids/labels.
+- /etc/pmount.allow now supports fully globs (7)
 
 0.9.15
 -----------

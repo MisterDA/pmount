@@ -23,6 +23,10 @@
 #include <sysfs/libsysfs.h>
 #include <regex.h>
 
+/* For globs in /etc/pmount.allow */
+#include <fnmatch.h>
+
+
 #include "realpath.h"
 
 /*************************************************************************
@@ -455,7 +459,7 @@ device_whitelisted( const char* device )
     regex_t re;
     regmatch_t match[3];
     int result;
-    const char* whitelist_regex = "^[[:space:]]*([[:alnum:]/_+.\\-]+)[[:space:]]*(#.*)?$";
+    const char* whitelist_regex = "^[[:space:]]*([][:alnum:]/_+.[*?-]+)[[:space:]]*(#.*)?$";
 
     fwl = fopen( WHITELIST, "r" );
     if( !fwl )
@@ -481,7 +485,7 @@ device_whitelisted( const char* device )
            line[match[1].rm_eo] = 0;
            d = line+match[1].rm_so;
            debug( "comparing %s against whitelisted '%s'\n", device, d);
-           if( !strcmp( d, device ) ) {
+	   if( !fnmatch(d, device, FNM_PATHNAME) ) {
                debug( "device_whitlisted(): match, returning 1\n" );
                fclose( fwl );
                return 1;

@@ -1,3 +1,9 @@
+2007-07-04  Vincent Fourmond  <fourmond@debian.org>
+
+	* policy.c (device_whitelisted): 
+	Now using fnmatch to look for whitelisted devices in
+	/etc/pmount.allow. Fixed the regexp accordingly.
+
 2007-07-01  Vincent Fourmond  <fourmond@debian.org>
 
 	* pmount.c (do_mount): 
