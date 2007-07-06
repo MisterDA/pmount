@@ -1,3 +1,7 @@
+0.9.17
+-----------
+- removed obnoxious symlink lookup for fstab entries.
+
 0.9.16
 -----------
 - added support for fmask and dmask for filesystems that support it,

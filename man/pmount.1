@@ -110,8 +110,9 @@ The mount will succeed if all of the following conditions are met:
 is a block device in /dev/
 .IP \(bu 
 .I device
-is not in /etc/fstab (if it is, pmount executes \fB mount \fI device\fR as the
-calling user to handle this transparently)
+is not in /etc/fstab (if it is, pmount executes \fB mount \fI
+device\fR as the calling user to handle this transparently). See below
+for more details.
 .IP \(bu
 .I device
 is not already mounted according to /etc/mtab and /proc/mounts
@@ -120,8 +121,8 @@ if the mount point already exists, there is no device already mounted at it
 and the directory is empty 
 .IP \(bu
 .I device
-is removable (USB, FireWire, or MMC device, or \fB/sys/block/\fIdrive\fB/removable\fR
-is 1) or whitelisted in
+is removable (USB, FireWire, or MMC device, or
+\fB/sys/block/\fIdrive\fB/removable\fR is 1) or whitelisted in
 .B /etc/pmount.allow\fR.
 .IP \(bu
 .I device
@@ -278,6 +279,47 @@ or
 .B ntfs-3g
 (1). These file types are currently not supported in automatic
 detection, the kernel NTFS driver will be used instead. 
+
+.SH MORE ABOUT FSTAB
+
+Until 
+.B pmount
+version 0.9.16-1, a device was deemed to be handled by
+.I /etc/fstab
+if the real path (after symlink resolution) of the device given on the
+command-line was matching the real path of one entry in 
+.IR /etc/fstab .
+This meant that, if 
+.I /dev/cdrom
+was a symlink to say,
+.I /dev/hda
+and that only 
+.I /dev/cdrom 
+was referenced in 
+.IR /etc/fstab ,
+
+
+.BI pmount \ /dev/hda
+
+would necessary fail as 
+.B pmount
+would delegate to 
+.B mount
+who would not find 
+.I /dev/hda
+in
+.IR /etc/fstab .
+
+Starting from version 0.9.16-2, this behavior has been fixed. This
+means that if you really want that
+.B pmount
+does not mount devices that are in 
+.IR /etc/fstab ,
+you need to make sure that 
+.I /etc/fstab 
+refers only real device nodes and not symlinks. See 
+.I http://bugs.debian.org/418888
+for a real-life example...
 
 .SH KNOWN ISSUES
 

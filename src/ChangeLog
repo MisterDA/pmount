@@ -1,3 +1,10 @@
+2007-07-06  Vincent Fourmond  <fourmond@debian.org>
+
+	* policy.c (fstab_has_device): 
+	Remove symlink resolution in /etc/fstab, as this necessary makes
+	pmount fail in case one tries to mount directly the target of a
+	symlink present in /etc/fstab.
+
 2007-07-04  Vincent Fourmond  <fourmond@debian.org>
 
 	* policy.c (device_whitelisted): 
