@@ -669,8 +669,11 @@ main( int argc, char** argv )
         return E_ARGS;
     }
 
-    /* if we got a mount point, convert it to a device */
-    if( fstab_has_mntpt( "/etc/fstab", devarg, mntptdev, sizeof(mntptdev) ) ) {
+    /* Lookup in /etc/fstab if devarg is a mount point, unless we already
+       have a block device -- this way, pmount shouldn't choke on stale
+       network mounts. */
+    if( (! is_block(devarg)) && 
+	fstab_has_mntpt( "/etc/fstab", devarg, mntptdev, sizeof(mntptdev) ) ) {
         debug( "resolved mount point %s to device %s\n", devarg, mntptdev );
         devarg = mntptdev;
     }
