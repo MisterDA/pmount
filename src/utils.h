@@ -47,6 +47,13 @@ int assert_emptydir( const char* dirname );
 int is_dir( const char* path );
 
 /**
+ * Return whether given path is a block device.
+ @ return 1 = block device, 0 = no block device
+ */
+int is_block( const char* path );
+
+
+/**
  * Remove a mountpoint created by pmount (i. e. only if the directory contains
  * a stamp file).
  * @return 0 on success, -1 on error

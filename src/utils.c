@@ -179,6 +179,18 @@ is_dir( const char* path )
 }
 
 int
+is_block( const char* path )
+{
+    struct stat st;
+
+    if( stat( path, &st ) )
+        return 0;
+
+    return S_ISBLK( st.st_mode );
+}
+
+
+int
 remove_pmount_mntpt( const char *path ) 
 {
     char stampfile[PATH_MAX];
