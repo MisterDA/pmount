@@ -30,6 +30,12 @@
 #include "luks.h"
 #include "config.h"
 
+/* Enable autodetection if possible */
+#ifdef HAVE_BLKID
+#error "biniou" 
+#include <blkid/blkid.h>
+#endif
+
 /* Using our private realpath function */
 #include "realpath.h"
 
