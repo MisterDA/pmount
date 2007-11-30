@@ -1,6 +1,9 @@
 0.9.17
 -----------
 - removed obnoxious symlink lookup for fstab entries.
+- now using libblkid where available to detect FS type (that's what
+  mount is doing). This way we'll have less error messages (nearly
+  none, AFAICS), and we won't have wrong FS detection (it happens).
 
 0.9.16
 -----------

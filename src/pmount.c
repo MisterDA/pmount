@@ -32,7 +32,6 @@
 
 /* Enable autodetection if possible */
 #ifdef HAVE_BLKID
-#error "biniou" 
 #include <blkid/blkid.h>
 #endif
 
@@ -379,6 +378,24 @@ do_mount_auto( const char* device, const char* mntpt, int async,
     const struct FS* fs;
     int nostderr = 1;
     int result = -1;
+
+    /* First, if that is supported, we try with blkid */
+#ifdef HAVE_BLKID
+    const char * tp;
+    blkid_cache c;
+    blkid_get_cache(&c, "/dev/null");
+    tp = blkid_get_tag_value(c, "TYPE", device);
+    if(tp) {
+      debug("blkid gave FS %s for '%s'\n", tp, device);
+      result = do_mount( device, mntpt, tp, async, noatime, exec, 
+			 force_write, iocharset, umask, fmask, 
+			 dmask, nostderr );
+      if(result == 0)
+	return result;
+      debug("blkid-detected FS failed\n");
+    }
+    blkid_put_cache(c);
+#endif /* HAVE_BLKID */
 
     for( fs = get_supported_fs(); fs->fsname; ++fs ) {
         if(fs->skip_autodetect)
