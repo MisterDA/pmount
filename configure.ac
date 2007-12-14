@@ -53,10 +53,10 @@ AC_ARG_WITH(cryptsetup-prog,
 	AC_HELP_STRING([--with-cryptsetup-prog=PATH], [Path to cryptsetup program (default: /sbin/cryptsetup)]),
 	AC_DEFINE_UNQUOTED(CRYPTSETUP, "$withval", [path to cryptsetup]),
 	AC_DEFINE_UNQUOTED(CRYPTSETUP, "/sbin/cryptsetup", [path to cryptsetup]))
-AC_ARG_WITH(media-dir, 
-	AC_HELP_STRING([--with-mount-ntfs3g=DIR], [Parent directory for mounts; MUST have trailing slash (default: /media/)]),
-	AC_DEFINE_UNQUOTED(MEDIADIR, "$withval", [directory for mounts]),
-	AC_DEFINE_UNQUOTED(MEDIADIR, "/media/", [directory for mounts]))
+AC_ARG_WITH(mount-ntfs3g, 
+	AC_HELP_STRING([--with-mount-ntfs3g=PATH], [Where to look for mount.ntfs-3g (default: /sbin/mount.ntfs-3g)]),
+	AC_DEFINE_UNQUOTED(MOUNT_NTFS_3G, "$withval", [location of mount.ntfs-3g]),
+	AC_DEFINE_UNQUOTED(MOUNT_NTFS_3G, "/sbin/mount.ntfs-3g", [location of mount.ntfs-3g]))
 
 AC_ARG_ENABLE(hal,
   AC_HELP_STRING([--enable-hal],[build pmount-hal frontend, if hal is available]),

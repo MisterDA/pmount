@@ -248,8 +248,24 @@ main( int argc, char** argv )
     /* we cannot really check the real path when unmounting lazily since the
      * device node might not exist any more */
     if( !is_real_path && !do_lazy ) {
-        perror( _("Error: could not determine real path of the device") );
-        return E_DEVICE;
+        /* try to prepend '/dev' */
+        if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) { 
+            char d[PATH_MAX];
+            snprintf( d, sizeof( d ), "%s%s", DEVDIR, device );
+            if ( !realpath( d, device ) ) {
+                perror( _("Error: could not determine real path of the device") );
+                return E_DEVICE;
+            }
+            debug( "trying to prepend '" DEVDIR 
+		   "' to device argument, now '%s'\n", device );
+	    /* We need to lookup again in fstab: */
+	    fstab_device = fstab_has_device( "/etc/fstab", device, 
+					     fstab_mntpt, NULL );
+	    if( fstab_device ) {
+	      do_umount_fstab( fstab_device, do_lazy, fstab_mntpt );
+	      return E_EXECUMOUNT;
+	    }
+	}
     }
 
     /* does the device start with DEVDIR? */

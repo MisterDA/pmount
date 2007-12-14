@@ -310,6 +310,8 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
     char* realdev;
     char* uidopt;
 
+    debug("Checking for device '%s' in '%s'\n", device, fname);
+
     if( !( f = fopen( fname, "r" ) ) ) {
         perror( _("Error: could not open fstab-type file") );
         exit( 100 );

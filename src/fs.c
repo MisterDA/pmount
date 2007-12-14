@@ -23,7 +23,6 @@ static struct FS supported_fs[] = {
     { "iso9660", "nosuid,nodev,user", 1, NULL, ",iocharset=%s" },
     { "vfat", "nosuid,nodev,user,quiet,shortname=mixed", 1, "077", 
       ",iocharset=%s",",fmask=%04o,dmask=%04o"},
-    { "ntfs", "nosuid,nodev,user", 1, "077", ",nls=%s" },
     { "hfsplus", "nosuid,nodev,user", 1, NULL, 0 },
     { "hfs", "nosuid,nodev,user", 1, "077", NULL, 
       ",file_umask=%04o,dir_umask=%04o"},
@@ -43,6 +42,7 @@ static struct FS supported_fs[] = {
       NULL /* no nls support, it seems*/, ",fmask=%04o,dmask=%04o", 
       1 /* skip detection */
     },
+    { "ntfs", "nosuid,nodev,user", 1, "077", ",nls=%s" },
     { NULL, NULL, 0, NULL, 0}
 };
 

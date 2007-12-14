@@ -378,6 +378,7 @@ do_mount_auto( const char* device, const char* mntpt, int async,
     const struct FS* fs;
     int nostderr = 1;
     int result = -1;
+    struct stat buf;		/* Not used */
 
     /* First, if that is supported, we try with blkid */
 #ifdef HAVE_BLKID
@@ -387,6 +388,10 @@ do_mount_auto( const char* device, const char* mntpt, int async,
     tp = blkid_get_tag_value(c, "TYPE", device);
     if(tp) {
       debug("blkid gave FS %s for '%s'\n", tp, device);
+      if(! strcmp(tp, "ntfs") && !stat(MOUNT_NTFS_3G, &buf)) {
+	debug("blkdid detected ntfs and ntfs-3g was found. Using ntfs-3g");
+	tp = "ntfs-3g";
+      }
       result = do_mount( device, mntpt, tp, async, noatime, exec, 
 			 force_write, iocharset, umask, fmask, 
 			 dmask, nostderr );
@@ -396,24 +401,28 @@ do_mount_auto( const char* device, const char* mntpt, int async,
     }
     blkid_put_cache(c);
 #endif /* HAVE_BLKID */
-
+    
     for( fs = get_supported_fs(); fs->fsname; ++fs ) {
-        if(fs->skip_autodetect)
-	  continue;		/* skip fs that are marked as such */
-        /* don't suppress stderr if we try the last possible fs */
-        if( (fs+1)->fsname == NULL )
-            nostderr = 0;
-        result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-                force_write, iocharset, umask, fmask, dmask, nostderr );
-        if( result == 0 )
-            break;
+      /* Skip fs marked as such unless it is ntfs-3g and
+	 we can stat MOUNT_NTFS_G3 
+      */
+      if(fs->skip_autodetect && 
+	 !(! strcmp(fs->fsname, "ntfs-3g") && !stat(MOUNT_NTFS_3G, &buf)))
+	continue;		/* skip fs that are marked as such */
+      /* don't suppress stderr if we try the last possible fs */
+      if( (fs+1)->fsname == NULL )
+	nostderr = 0;
+      result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
+			 force_write, iocharset, umask, fmask, dmask, nostderr );
+      if( result == 0 )
+	break;
 
-	/* sometimes VFAT fails when using iocharset; try again without */
-	if( iocharset )
-	    result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-                    force_write, NULL, umask, fmask, dmask, nostderr );
-        if( result <= 0 )
-            break;
+      /* sometimes VFAT fails when using iocharset; try again without */
+      if( iocharset )
+	result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
+			   force_write, NULL, umask, fmask, dmask, nostderr );
+      if( result <= 0 )
+	break;
     }
     return result;
 }
@@ -733,6 +742,16 @@ main( int argc, char** argv )
                 return E_DEVICE;
             }
             debug( "trying to prepend '" DEVDIR "' to device argument, now %s\n", device );
+	    /* We need to lookup again in fstab: */
+	    fstab_device = fstab_has_device( "/etc/fstab", device, NULL, NULL );
+	    if( mode == MOUNT && fstab_device ) {
+	      if( arg2 )
+		fprintf( stderr, _("Warning: device %s is already handled by /etc/fstab,"
+				   " supplied label is ignored\n"), fstab_device );
+	      
+	      do_mount_fstab( fstab_device );
+	      return E_EXECMOUNT;
+	    }
         }
     }
 

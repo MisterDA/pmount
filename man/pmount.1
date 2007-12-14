@@ -277,8 +277,17 @@ to mount NTFS volumes respectively with
 (1)
 or
 .B ntfs-3g
-(1). These file types are currently not supported in automatic
-detection, the kernel NTFS driver will be used instead. 
+(1). If the file
+.I /sbin/mount.ntfs-3g
+is found, then 
+.B pmount
+will mount NTFS filestystems with type
+.I ntfs-3g
+rather than plain 
+.IR ntfs .
+To disable this behavior, just specify
+.I -t ntfs
+on the command-line, as this happens only for autodetection.
 
 .SH MORE ABOUT FSTAB
 
@@ -352,6 +361,15 @@ means that when you mount an
 filesystem using 
 .BR pmount ,
 you might get a lot of fs\-related kernel error messages. Sorry !
+.P
+.B NOTE:
+Starting from version
+.IR 0.9.17 ,
+.B pmount
+uses the same mechanism as 
+.B mount
+(1) to autodetect the filesystem type, so this kind of problems should
+not happen anymore.
 
 
 .SH AUTHOR

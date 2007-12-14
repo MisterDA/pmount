@@ -4,6 +4,11 @@
 - now using libblkid where available to detect FS type (that's what
   mount is doing). This way we'll have less error messages (nearly
   none, AFAICS), and we won't have wrong FS detection (it happens).
+- fix a problem with lookup for fstab entries
+- do not look for a mountpoint in etc/fstab if we know a path is
+  a device (prevents hanging on stale network mounts)
+- pulled translations from Rosetta
+- using ntfs-3g if /sbin/mount.ntfs-3g is found.
 
 0.9.16
 -----------
