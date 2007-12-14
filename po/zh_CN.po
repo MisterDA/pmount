@@ -3,22 +3,42 @@
 # This file is distributed under the same license as the pmount package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-04 00:19+0200\n"
-"PO-Revision-Date: 2007-05-11 23:22+0000\n"
-"Last-Translator: hugh <hugh.shang@gmail.com>\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"PO-Revision-Date: 2007-10-22 11:46+0000\n"
+"Last-Translator: Martin Pitt <martin.pitt@ubuntu.com>\n"
 "Language-Team: Chinese (China) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2007-12-14 18:32+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
-"X-Rosetta-Export-Date: 2007-06-16 12:08:25+0000\n"
 
-#: ../src/pmount.c:57
+#, c-format
+#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
+#~ msgstr "错误：make_mountpoint_name：无效的设备 %s (必须在 /dev/ 下)\n"
+
+#~ msgid ""
+#~ "pmount-hal - execute pmount with additional information from hal\n"
+#~ "\n"
+#~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
+#~ "\n"
+#~ "This command mounts the device described by the given UDI using pmount. The\n"
+#~ "file system type, the volume storage policy and the desired label will be\n"
+#~ "read out from hal and passed to pmount."
+#~ msgstr ""
+#~ "pmount-hal - 根据 hal 提供的额外信息执行 pmount\n"
+#~ "\n"
+#~ "用法：pmount-hal <hal UDI> [pmount 选项]\n"
+#~ "\n"
+#~ "此命令将根据根据给定的 UDI 用 pmount 来挂载设备。文件系统类型、存储卷政策和\n"
+#~ "将要使用的卷标都将从 hal 获得并传递给 pmount。"
+
+#: ../src/pmount.c:51
 #, c-format
 msgid ""
 "Usage:\n"
@@ -41,7 +61,7 @@ msgstr ""
 "  程序将会创建它。\n"
 "\n"
 
-#: ../src/pmount.c:64
+#: ../src/pmount.c:58
 #, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
@@ -58,7 +78,7 @@ msgstr ""
 "进行无休止的锁定。（在尝试挂载前，不存在的进程号将被清除。）\n"
 "\n"
 
-#: ../src/pmount.c:71
+#: ../src/pmount.c:65
 #, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
@@ -69,8 +89,7 @@ msgstr ""
 "  再次为进程 <pid> 删除 <设备> 上的锁。\n"
 "\n"
 
-#: ../src/pmount.c:74
-#, fuzzy
+#: ../src/pmount.c:68
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -83,15 +102,11 @@ msgid ""
 "                in an UTF-8 locale, otherwise mount default)\n"
 "  -u <umask>  : use specified umask instead of the default (only for\n"
 "                file sytems which actually support umask setting)\n"
-"  --fmask <fmask>\n"
-"                use specified fmask\n"
-"  --dmask <dmask>\n"
-"                use specified dmask\n"
-"  -p <file>, --passphrase <file>\n"
+" --passphrase <file>\n"
 "                read passphrase from file instead of the terminal\n"
 "                (only for LUKS encrypted devices)\n"
 "  -d, --debug : enable debug output (very verbose)\n"
-"  -h, --help  : print this help message and exit successfuly\n"
+"  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully"
 msgstr ""
 "选项:\n"
@@ -108,150 +123,125 @@ msgstr ""
 "-h,--help : 打印帮助信息并成功返回\n"
 "--version : 打印版本号并成功返回"
 
-#: ../src/pmount.c:144
+#: ../src/pmount.c:134
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "错误：卷标不能为空\n"
 
-#: ../src/pmount.c:148
+#: ../src/pmount.c:138
 #, c-format
 msgid "Error: label too long\n"
 msgstr "错误：卷标太长\n"
 
-#: ../src/pmount.c:153
+#: ../src/pmount.c:143
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "错误：“/”不能出现在卷标名中\n"
 
-#: ../src/pmount.c:160
+#: ../src/pmount.c:150
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "错误：设备名太长\n"
 
-#: ../src/pmount.c:191 ../src/pumount.c:109
+#: ../src/pmount.c:181 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
 msgstr "错误：无法撤消所有 uid 特权"
 
-#: ../src/pmount.c:196
+#: ../src/pmount.c:186
 msgid "Error: could not execute mount"
 msgstr "错误：无法执行挂载"
 
-#: ../src/pmount.c:241
+#: ../src/pmount.c:225
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr "内部错误：mount_attempt：提供的文件系统名称为空\n"
 
-#: ../src/pmount.c:247
+#: ../src/pmount.c:231
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "错误：无效的文件系统名称“%s”\n"
 
-#: ../src/pmount.c:253
+#: ../src/pmount.c:237
 #, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "错误：无效的权限掩码 %s\n"
 
-#: ../src/pmount.c:258
-#, fuzzy, c-format
-msgid "Error: invalid fmask %s\n"
-msgstr "错误：无效的权限掩码 %s\n"
-
-#: ../src/pmount.c:263
-#, fuzzy, c-format
-msgid "Error: invalid dmask %s\n"
-msgstr "错误：无效的权限掩码 %s\n"
-
-#: ../src/pmount.c:334
+#: ../src/pmount.c:285
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "错误：无效的字符集名称“%s”\n"
 
-#: ../src/pmount.c:420
+#: ../src/pmount.c:366
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "错误：无法锁定 pid %u，此进程不存在\n"
 
-#: ../src/pmount.c:434
+#: ../src/pmount.c:380
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "错误：无法创建 pid 锁文件 %s：%s\n"
 
-#: ../src/pmount.c:474
+#: ../src/pmount.c:420
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "错误：无法删除 pid 锁文件 %s：%s\n"
 
-#: ../src/pmount.c:490
+#: ../src/pmount.c:436
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "错误：do_unlock：无法删除锁定目录"
 
-#: ../src/pmount.c:598
-#, c-format
-msgid "Printing mounted removable devices:\n"
-msgstr ""
-
-#: ../src/pmount.c:600
-#, c-format
-msgid "To get a short help, run %s -h\n"
-msgstr ""
-
-#: ../src/pmount.c:606 ../src/pumount.c:182
+#: ../src/pmount.c:537 ../src/pumount.c:165
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "错误：本程序需要被安装为 suid root\n"
 
-#: ../src/pmount.c:654 ../src/pumount.c:206
+#: ../src/pmount.c:580 ../src/pumount.c:187
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "内部错误：getopt_long() 返回未知值\n"
 
-#: ../src/pmount.c:692
+#: ../src/pmount.c:618
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
 "ignored\n"
 msgstr "警告：设备 %s 已经由 /etc/fstab 负责处理，您提供的卷标将被忽略\n"
 
-#: ../src/pmount.c:706 ../src/pumount.c:251
+#: ../src/pmount.c:632 ../src/pumount.c:232
 msgid "Error: could not determine real path of the device"
 msgstr "错误：无法确定设备的真实路径"
 
-#: ../src/pmount.c:715 ../src/pumount.c:257
+#: ../src/pmount.c:641 ../src/pumount.c:238
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "错误：无效的设备名 %s (必须在 /dev/ 中)\n"
 
-#: ../src/pmount.c:753
+#: ../src/pmount.c:679
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr "错误：不能解密设备 (错误的密码?)\n"
 
-#: ../src/pmount.c:756
+#: ../src/pmount.c:682
 #, c-format
 msgid "Error: mapped device already exists\n"
 msgstr "错误：映射的设备已经存在\n"
 
-#: ../src/pmount.c:761
-#, fuzzy, c-format
-msgid "Warning: could not create luks lockfile\n"
-msgstr "错误：无法创建 pid 锁文件 %s：%s\n"
-
-#: ../src/pmount.c:773
+#: ../src/pmount.c:696
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr "错误：不能锁住挂载目录，这个挂载点或许有另一个 pmount 在运行.\n"
 
-#: ../src/pmount.c:797
+#: ../src/pmount.c:720
 msgid "Error: could not delete mount point"
 msgstr "错误：无法删除挂载点"
 
-#: ../src/pmount.c:818
-#, fuzzy, c-format
+#: ../src/pmount.c:741
+#, c-format
 msgid "Internal error: mode %i not handled.\n"
-msgstr "内部错误：模式 %s 未处理。\n"
+msgstr "内部错误：模式 %i 未处理。\n"
 
-#: ../src/pmount-hal.c:33
+#: ../src/pmount-hal.c:31
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
@@ -269,97 +259,92 @@ msgstr ""
 "此命令用pmount挂载设备描述中的设备或UDI。\n"
 "文件系统类型、卷轴存储规则以及首选的卷标会从hal中读出并传给pmount."
 
-#: ../src/pmount-hal.c:179
+#: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"
 msgstr "错误：无法执行 pmount\n"
 
-#: ../src/pmount-hal.c:224
+#: ../src/pmount-hal.c:210
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "错误：不能够连接数据总线：%s: %s\n"
 
-#: ../src/pmount-hal.c:258
+#: ../src/pmount-hal.c:244
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "错误：给定的UDI是个不可挂载卷轴\n"
 
-#: ../src/policy.c:142
+#: ../src/policy.c:92
 msgid "Error: could not get status of device"
 msgstr "错误：无法获知设备状态"
 
-#: ../src/policy.c:153
+#: ../src/policy.c:103
 msgid "Error: could not get sysfs directory\n"
 msgstr "错误：无法获得sysfs 目录。\n"
 
-#: ../src/policy.c:160
+#: ../src/policy.c:110
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "错误：无法打开 <sysfs dir>/block/"
 
-#: ../src/policy.c:191
+#: ../src/policy.c:141
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "错误：无法打开 <sysfs dir>/block/<device>/"
 
-#: ../src/policy.c:291
+#: ../src/policy.c:241
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "错误：设备 %s 不存在\n"
 
-#: ../src/policy.c:296
+#: ../src/policy.c:246
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "错误：%s 不是块设备\n"
 
-#: ../src/policy.c:314 ../src/policy.c:370
+#: ../src/policy.c:264 ../src/policy.c:320
 msgid "Error: could not open fstab-type file"
 msgstr "错误：不能打开fstab类型文件"
 
-#: ../src/policy.c:401
+#: ../src/policy.c:351
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "错误：设备%s已经挂载到%s\n"
 
-#: ../src/policy.c:403
+#: ../src/policy.c:353
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "错误：设备 %s 未装载。\n"
 
-#: ../src/policy.c:405
+#: ../src/policy.c:355
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "错误：设备%s还未被你挂载\n"
 
-#: ../src/policy.c:448
+#: ../src/policy.c:391
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "错误：设备%s不可删除\n"
 
-#: ../src/policy.c:511
+#: ../src/policy.c:454
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "错误：设备%s被锁定\n"
 
-#: ../src/policy.c:520
+#: ../src/policy.c:463
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
 msgstr "错误：挂载点%s已存在于/etc/fstab\n"
 
-#: ../src/policy.c:533
+#: ../src/policy.c:476
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "错误：目录%s已经包含一种被挂载的文件系统\n"
 
-#: ../src/policy.c:535
+#: ../src/policy.c:478
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "错误：目录%s还没有被挂载的文件系统\n"
 
-#: ../src/policy.c:581
-#, fuzzy, c-format
-msgid "Error: could not open the %s file: %s"
-msgstr "错误：不能打开fstab类型文件"
-
 #: ../src/pumount.c:43
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -370,11 +355,10 @@ msgid ""
 "  afterwards.\n"
 "\n"
 "Options:\n"
-"  -l, --lazy   : umount lazily, see umount(8)\n"
-"  --luks-force : luksClose devices pmount didn't open\n"
-"  -d, --debug  : enable debug output (very verbose)\n"
-"  -h, --help   : print help message and exit successfuly\n"
-"  --version    : print version number and exit successfully\n"
+"  -l, --lazy  : umount lazily, see umount(8)\n"
+"  -d, --debug : enable debug output (very verbose)\n"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully\n"
 msgstr ""
 "用法：\n"
 "\n"
@@ -388,25 +372,20 @@ msgstr ""
 "-h, --help : 打印帮助信息并成功退出\n"
 "--version : 打印版本号并成功退出\n"
 
-#: ../src/pumount.c:76
+#: ../src/pumount.c:74
 msgid "Internal error: could not determine mount point\n"
 msgstr "内部错误：找不到挂载点\n"
 
-#: ../src/pumount.c:82
-#, fuzzy, c-format
-msgid "Error: could not find real path of %s\n"
-msgstr "错误：无法确定设备的真实路径"
-
-#: ../src/pumount.c:89
+#: ../src/pumount.c:80
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "错误：挂载点%s不在%s下\n"
 
-#: ../src/pumount.c:124
+#: ../src/pumount.c:110
 msgid "Error: could not execute umount"
 msgstr "错误：不能够执行解除挂载"
 
-#: ../src/pumount.c:145
+#: ../src/pumount.c:131
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "错误：解除挂载失败\n"
@@ -458,25 +437,3 @@ msgstr "内部错误：不能够改成有效的gid root"
 #: ../src/utils.c:282
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "内部错误：不能够把有效的组id改成真实组id"
-
-#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
-#~ msgstr "错误：make_mountpoint_name：无效的设备 %s (必须在 /dev/ 下)\n"
-
-#~ msgid ""
-#~ "pmount-hal - execute pmount with additional information from hal\n"
-#~ "\n"
-#~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
-#~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. "
-#~ "The\n"
-#~ "file system type, the volume storage policy and the desired label will "
-#~ "be\n"
-#~ "read out from hal and passed to pmount."
-#~ msgstr ""
-#~ "pmount-hal - 根据 hal 提供的额外信息执行 pmount\n"
-#~ "\n"
-#~ "用法：pmount-hal <hal UDI> [pmount 选项]\n"
-#~ "\n"
-#~ "此命令将根据根据给定的 UDI 用 pmount 来挂载设备。文件系统类型、存储卷政策"
-#~ "和\n"
-#~ "将要使用的卷标都将从 hal 获得并传递给 pmount。"

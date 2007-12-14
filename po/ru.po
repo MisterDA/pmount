@@ -9,17 +9,117 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pmount 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-04 00:19+0200\n"
-"PO-Revision-Date: 2007-05-01 06:27+0000\n"
-"Last-Translator: qxov <qxov@mail.ru>\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"PO-Revision-Date: 2007-09-16 17:33+0000\n"
+"Last-Translator: intel <intel19@yandex.ru>\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Rosetta-Export-Date: 2007-06-16 12:08:33+0000\n"
+"X-Launchpad-Export-Date: 2007-12-14 18:32+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
-#: ../src/pmount.c:57
+#~ msgid ""
+#~ "Options:\n"
+#~ "  -r          : force <device> to be mounted read-only\n"
+#~ "  -w          : force <device> to be mounted read-write\n"
+#~ "  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
+#~ "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+#~ "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
+#~ "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
+#~ "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
+#~ "                in an UTF-8 locale, otherwise mount default)\n"
+#~ "  -u <umask>  : use specified umask instead of the default (only for\n"
+#~ "                file sytems which actually support umask setting)\n"
+#~ " --passphrase <file>\n"
+#~ "                read passphrase from file instead of the terminal\n"
+#~ "                (only for LUKS encrypted devices)\n"
+#~ "  -d, --debug : enable debug output (very verbose)\n"
+#~ "  -h, --help  : print help message and exit successfuly"
+#~ msgstr ""
+#~ "Параметры:\n"
+#~ "  -r          : Принудительно подключить <устройство> в режиме 'только для "
+#~ "чтения'\n"
+#~ "  -w          : Принудительно подключить <устройства> в режиме 'чтение и "
+#~ "запись'\n"
+#~ "  -s, --sync  : Подключить <устройство> с параметром 'синхронихзация записи "
+#~ "данных'\n"
+#~ "                (по умолчанию: 'без синхронизации записи данных')\n"
+#~ "  --noatime   : Подключить <устройство> с параметром 'без метки времени "
+#~ "изменения'\n"
+#~ "                (по умолчанию: 'c меткой времени изменения')\n"
+#~ "  -e, --exec  : Подключить <устройство> с параметром 'запускать программы'\n"
+#~ "                (по умолчанию: 'не запускать программы')\n"
+#~ "  -t <fs>     : Указать тип файловой системы (по умолчанию: "
+#~ "автоопределение)\n"
+#~ "  -c <charset>: Указать кодовую таблицу ввода/вывода (по умолчанию: 'utf8' "
+#~ "если\n"
+#~ "                установлена локализация UTF-8, в противном случае - "
+#~ "текущую)\n"
+#~ "  -u <umask>  : Указать инверсную маску доступа к данным (только для "
+#~ "файловых\n"
+#~ "                систем, которые реально поддерживают даный параметр)\n"
+#~ " --passphrase <file>\n"
+#~ "                Прочитать пароль из указанного файла, а не с терминала\n"
+#~ "                (только для LUKS-зашифрованных устройств)\n"
+#~ "  -d, --debug : Разрешить вывод отладочной информации (очень информативно)\n"
+#~ "  -h, --help  : Вывод данного текста подсказки и успешное завершение работы"
+
 #, c-format
+#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
+#~ msgstr ""
+#~ "Ошибка: make_mountpoint_name: некорректное имя устройства %s (должно быть в "
+#~ "/dev/)\n"
+
+#, c-format
+#~ msgid ""
+#~ "Usage:\n"
+#~ "\n"
+#~ "%s [options] <device>\n"
+#~ "  Umount <device> from a directory below %s if policy requirements\n"
+#~ "  are met (see pumount(1) for details). The mount point directory is "
+#~ "removed\n"
+#~ "  afterwards.\n"
+#~ "\n"
+#~ "Options:\n"
+#~ "  -l, --lazy : umount lazily, see umount(8)\n"
+#~ "  -d, --debug : enable debug output (very verbose)\n"
+#~ "  -h, --help  : print help message and exit successfuly\n"
+#~ msgstr ""
+#~ "Применение:\n"
+#~ "\n"
+#~ "%s [параметры] <устройство>\n"
+#~ "  Отсоединение <устройства> от каталога %s, если это не противоречит "
+#~ "политике\n"
+#~ "  безопасности (детальнее см. pumount(1)). После этого будет удален каталог\n"
+#~ "  точки присоединения.\n"
+#~ "\n"
+#~ "Параметры:\n"
+#~ "  -l, --lazy : \"ленивое\" отсоединение, детальнее см. umount(8)\n"
+#~ "  -d, --debug : Разрешить вывод отладочной информации (очень информативно)\n"
+#~ "  -h, --help  : Вывод данного текста подсказки и успешное завершение работы\n"
+
+#~ msgid ""
+#~ "pmount-hal - execute pmount with additional information from hal\n"
+#~ "\n"
+#~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
+#~ "\n"
+#~ "This command mounts the device described by the given UDI using pmount. The\n"
+#~ "file system type, the volume storage policy and the desired label will be\n"
+#~ "read out from hal and passed to pmount."
+#~ msgstr ""
+#~ "pmount-hal - запуск pmount с дополнительной информацией от HAL\n"
+#~ "\n"
+#~ "Применение: pmount-hal <hal UDI> [параметры pmount]\n"
+#~ "\n"
+#~ "Данная команда подключает устройство, описанное в указанном UDI используя "
+#~ "pmount.\n"
+#~ "Тип файловой системы, политика хранения данных и желаемая метка будут "
+#~ "прочитаны из HAL\n"
+#~ "и переданы в pmount."
+
+#: ../src/pmount.c:51
+#, fuzzy, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -39,11 +139,11 @@ msgstr ""
 "  политике безопасности (детальнее, см. pmount(1)).\n"
 "  Если указана <метка>, точка подключения будет в виде\n"
 "  %s<метка>, в противном случае - %s<устройство>.\n"
-"  Если точка подключения несуществует, она будет создана автоматически.\n"
+"  Если точка подключения не существует, она будет создана автоматически.\n"
 "\n"
 
-#: ../src/pmount.c:64
-#, c-format
+#: ../src/pmount.c:58
+#, fuzzy, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
 "  Prevent further pmounts of <device> until it is unlocked again. <pid>\n"
@@ -53,15 +153,15 @@ msgid ""
 "\n"
 msgstr ""
 "%s --lock <устройство> <pid>\n"
-"  Предотвращает последующее подключение <устройства>, пока оно не будет\n"
-"  разблокировано. <pid> указывает идентификатор блокирующего процесса.\n"
+"  Предотвращает последующее подключение <устройства>, пока его не\n"
+"  разблокируют. <pid> указывает идентификатор блокирующего процесса.\n"
 "  Эта опция позволяет блокировать устройство несколькими независимыми\n"
 "  процессами, а также предотвращает блокировку устройства 'мертвым'\n"
 "  процессом (перед попыткой подключения происходит удаление несуществующих\n"
 "  идентификаторов процессов).\n"
 "\n"
 
-#: ../src/pmount.c:71
+#: ../src/pmount.c:65
 #, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
@@ -72,8 +172,7 @@ msgstr ""
 "  Снимает блокировку <устройства> процессом c идентификатором <pid>.\n"
 "\n"
 
-#: ../src/pmount.c:74
-#, fuzzy
+#: ../src/pmount.c:68
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -86,117 +185,95 @@ msgid ""
 "                in an UTF-8 locale, otherwise mount default)\n"
 "  -u <umask>  : use specified umask instead of the default (only for\n"
 "                file sytems which actually support umask setting)\n"
-"  --fmask <fmask>\n"
-"                use specified fmask\n"
-"  --dmask <dmask>\n"
-"                use specified dmask\n"
-"  -p <file>, --passphrase <file>\n"
+" --passphrase <file>\n"
 "                read passphrase from file instead of the terminal\n"
 "                (only for LUKS encrypted devices)\n"
 "  -d, --debug : enable debug output (very verbose)\n"
-"  -h, --help  : print this help message and exit successfuly\n"
+"  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully"
 msgstr "-r : примонтировать <устройство> толька для чтения"
 
-#: ../src/pmount.c:144
+#: ../src/pmount.c:134
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Ошибка: метка неможет быть пустой\n"
 
-#: ../src/pmount.c:148
+#: ../src/pmount.c:138
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Ошибка: слишком длинная метка\n"
 
-#: ../src/pmount.c:153
-#, c-format
+#: ../src/pmount.c:143
+#, fuzzy, c-format
 msgid "Error: '/' must not occur in label name\n"
-msgstr "Ошибка: метка неможет содержать символ '/'\n"
+msgstr "Ошибка: метка не может содержать символ '/'\n"
 
-#: ../src/pmount.c:160
+#: ../src/pmount.c:150
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Ошибка: слишком длинное имя устройства\n"
 
-#: ../src/pmount.c:191 ../src/pumount.c:109
+#: ../src/pmount.c:181 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
 msgstr "Ошибка: невозможно понизить привелегии пользователя"
 
-#: ../src/pmount.c:196
+#: ../src/pmount.c:186
 msgid "Error: could not execute mount"
 msgstr "Ошибка: невозможно выполнить команду mount"
 
-#: ../src/pmount.c:241
+#: ../src/pmount.c:225
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr ""
 "Внутренняя ошибка: mount_attempt: указанное имя файловой системы - NULL\n"
 
-#: ../src/pmount.c:247
+#: ../src/pmount.c:231
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Ошибка: некорректное имя файловой системы '%s'\n"
 
-#: ../src/pmount.c:253
+#: ../src/pmount.c:237
 #, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Ошибка: некорректная инверсная маска '%s'\n"
 
-#: ../src/pmount.c:258
-#, fuzzy, c-format
-msgid "Error: invalid fmask %s\n"
-msgstr "Ошибка: некорректная инверсная маска '%s'\n"
-
-#: ../src/pmount.c:263
-#, fuzzy, c-format
-msgid "Error: invalid dmask %s\n"
-msgstr "Ошибка: некорректная инверсная маска '%s'\n"
-
-#: ../src/pmount.c:334
+#: ../src/pmount.c:285
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Ошибка: некорректное мая кодовой таблицы '%s'\n"
 
-#: ../src/pmount.c:420
-#, c-format
+#: ../src/pmount.c:366
+#, fuzzy, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
-msgstr ""
-"Ошибка: невозможно установить блокировку для несуществующего процесса %u\n"
+msgstr "Ошибка: невозможно заблокировать несуществующий процесс %u\n"
 
-#: ../src/pmount.c:434
+#: ../src/pmount.c:380
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Ошибка: для процесса %s невозможно создать файл блокировки: %s\n"
 
-#: ../src/pmount.c:474
+#: ../src/pmount.c:420
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Ошибка: для процесса %s невозможно удалить файл блокировки: %s\n"
 
-#: ../src/pmount.c:490
+#: ../src/pmount.c:436
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Ошибка: do_unlock: невозможно удалить каталог блокировки"
 
-#: ../src/pmount.c:598
-#, c-format
-msgid "Printing mounted removable devices:\n"
-msgstr ""
-
-#: ../src/pmount.c:600
-#, c-format
-msgid "To get a short help, run %s -h\n"
-msgstr ""
-
-#: ../src/pmount.c:606 ../src/pumount.c:182
+#: ../src/pmount.c:537 ../src/pumount.c:165
+#, fuzzy
 msgid "Error: this program needs to be installed suid root\n"
-msgstr "Ошибка: данная программа должна быть установлена с 'suid root'\n"
+msgstr ""
+"Ошибка: чтобы установить программу, требуются права суперпользователя "
+"(root).\n"
 
-#: ../src/pmount.c:654 ../src/pumount.c:206
+#: ../src/pmount.c:580 ../src/pumount.c:187
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Внутренняя ошибка: getopt_long() возвратила неизвестное значение\n"
 
-#: ../src/pmount.c:692
+#: ../src/pmount.c:618
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -205,31 +282,26 @@ msgstr ""
 "Предупреждение: Т.к. устройство %s уже описано в /etc/fstab,\n"
 "указанная метка будет проигнорирована\n"
 
-#: ../src/pmount.c:706 ../src/pumount.c:251
+#: ../src/pmount.c:632 ../src/pumount.c:232
 msgid "Error: could not determine real path of the device"
 msgstr "Ошибка: невозможно определить путь к устройству"
 
-#: ../src/pmount.c:715 ../src/pumount.c:257
+#: ../src/pmount.c:641 ../src/pumount.c:238
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Ошибка: некорректное имя устройства %s (должно быть в /dev/)\n"
 
-#: ../src/pmount.c:753
+#: ../src/pmount.c:679
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr "Ошибка: невозможно расшифровать устройство (неправильный пароль?)\n"
 
-#: ../src/pmount.c:756
+#: ../src/pmount.c:682
 #, c-format
 msgid "Error: mapped device already exists\n"
 msgstr "Ошибка: переопределенное устройство уже существует\n"
 
-#: ../src/pmount.c:761
-#, fuzzy, c-format
-msgid "Warning: could not create luks lockfile\n"
-msgstr "Ошибка: для процесса %s невозможно создать файл блокировки: %s\n"
-
-#: ../src/pmount.c:773
+#: ../src/pmount.c:696
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
@@ -238,16 +310,16 @@ msgstr ""
 "Ошибка: невозможно заблокировать каталог для монтирования. Возможно другой "
 "процесс pmount использует этот каталог.\n"
 
-#: ../src/pmount.c:797
+#: ../src/pmount.c:720
 msgid "Error: could not delete mount point"
 msgstr "Ошибка: невозможно удалить точку подключения"
 
-#: ../src/pmount.c:818
+#: ../src/pmount.c:741
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Внутренняя ошибка: режим %i не поддерживается.\n"
 
-#: ../src/pmount-hal.c:33
+#: ../src/pmount-hal.c:31
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
@@ -266,94 +338,91 @@ msgstr ""
 "Тип файловой системы, политика хранения данных и желаемая метка тома\n"
 "будут прочитаны из hal и переданы pmount."
 
-#: ../src/pmount-hal.c:179
+#: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"
 msgstr "Ошибка: невозможно выполнить команду pmount\n"
 
-#: ../src/pmount-hal.c:224
+#: ../src/pmount-hal.c:210
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Ошибка: невозможно установить соединение с шиной dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:258
+#: ../src/pmount-hal.c:244
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Ошибка: указанный UDI - неприсоединяемое устройство\n"
 
-#: ../src/policy.c:142
+#: ../src/policy.c:92
 msgid "Error: could not get status of device"
 msgstr "Ошибка: невозможно определить состояние устройства"
 
-#: ../src/policy.c:153
+#: ../src/policy.c:103
 msgid "Error: could not get sysfs directory\n"
 msgstr "Ошибка: невозможно определить каталог sysfs\n"
 
-#: ../src/policy.c:160
+#: ../src/policy.c:110
+#, fuzzy
 msgid "Error: could not open <sysfs dir>/block/"
-msgstr "Ошибка: невозможно открыть <sysfs>/block/"
+msgstr "Ошибка: невозможно открыть <sysfs dir>/block/"
 
-#: ../src/policy.c:191
+#: ../src/policy.c:141
+#, fuzzy
 msgid "Error: could not open <sysfs dir>/block/<device>/"
-msgstr "Ошибка: невозможно открыть <sysfs>/block/<device>"
+msgstr "Ошибка: невозможно открыть <sysfs dir>/block/<device>"
 
-#: ../src/policy.c:291
+#: ../src/policy.c:241
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Ошибка: %s - несуществующее устройство\n"
 
-#: ../src/policy.c:296
+#: ../src/policy.c:246
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Ошибка: %s - неблочное устройство\n"
 
-#: ../src/policy.c:314 ../src/policy.c:370
+#: ../src/policy.c:264 ../src/policy.c:320
 msgid "Error: could not open fstab-type file"
 msgstr "Ошибка: невозможно открыть файл типа fstab"
 
-#: ../src/policy.c:401
-#, c-format
+#: ../src/policy.c:351
+#, fuzzy, c-format
 msgid "Error: device %s is already mounted to %s\n"
-msgstr "Ошибка: устройство %s уже присоеденено к %s\n"
+msgstr "Ошибка: устройство %s уже присоединено к %s\n"
 
-#: ../src/policy.c:403
+#: ../src/policy.c:353
 #, c-format
 msgid "Error: device %s is not mounted\n"
-msgstr "Ошибка: устройство %s неприсоеденено\n"
+msgstr "Ошибка: устройство %s не присоединено\n"
 
-#: ../src/policy.c:405
+#: ../src/policy.c:355
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
-msgstr "Ошибка: устройство %s было присоеденено другим пользователем\n"
+msgstr "Ошибка: устройство %s было присоединено другим пользователем\n"
 
-#: ../src/policy.c:448
+#: ../src/policy.c:391
 #, c-format
 msgid "Error: device %s is not removable\n"
-msgstr "Ошибка: %s - несъемное устройство\n"
+msgstr "Ошибка: %s - не является съемным устройством\n"
 
-#: ../src/policy.c:511
+#: ../src/policy.c:454
 #, c-format
 msgid "Error: device %s is locked\n"
-msgstr "Ошибка: %s - заблокированное устройство\n"
+msgstr "Ошибка: устройство %s заблокировано\n"
 
-#: ../src/policy.c:520
+#: ../src/policy.c:463
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr "Ошибка: точка монтирования %s уже есть в /etc/fstab\n"
+msgstr "Ошибка: точка подключения %s уже существует в /etc/fstab\n"
 
-#: ../src/policy.c:533
+#: ../src/policy.c:476
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Ошибка: каталог %s уже содержит присоединенную файловую систему\n"
 
-#: ../src/policy.c:535
+#: ../src/policy.c:478
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
-msgstr "Ошибка: каталок %s не содержит присоединенной файловой системы\n"
-
-#: ../src/policy.c:581
-#, fuzzy, c-format
-msgid "Error: could not open the %s file: %s"
-msgstr "Ошибка: невозможно открыть файл типа fstab"
+msgstr "Ошибка: каталог %s не содержит присоединенной файловой системы\n"
 
 #: ../src/pumount.c:43
 #, fuzzy, c-format
@@ -367,11 +436,10 @@ msgid ""
 "  afterwards.\n"
 "\n"
 "Options:\n"
-"  -l, --lazy   : umount lazily, see umount(8)\n"
-"  --luks-force : luksClose devices pmount didn't open\n"
-"  -d, --debug  : enable debug output (very verbose)\n"
-"  -h, --help   : print help message and exit successfuly\n"
-"  --version    : print version number and exit successfully\n"
+"  -l, --lazy  : umount lazily, see umount(8)\n"
+"  -d, --debug : enable debug output (very verbose)\n"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully\n"
 msgstr ""
 "Использование:\n"
 "\n"
@@ -381,38 +449,33 @@ msgstr ""
 "  каталога удаляется.\n"
 "\n"
 "Опции:\n"
-"  -l, --lazy : отсоеденить \"лениво\", см. umount(8)\n"
+"  -l, --lazy : отсоединить \"лениво\", см. umount(8)\n"
 "  -d, --debug : включить отладочный вывод (очень информативно)\n"
 "  -h, --help : вывести справочное сообщение и завершить работу\n"
 "  --version : вывести номер версии и завершить работу\n"
 
-#: ../src/pumount.c:76
+#: ../src/pumount.c:74
 msgid "Internal error: could not determine mount point\n"
 msgstr "Внутренняя ошибка: невозможно определить точку присоединения\n"
 
-#: ../src/pumount.c:82
+#: ../src/pumount.c:80
 #, fuzzy, c-format
-msgid "Error: could not find real path of %s\n"
-msgstr "Ошибка: невозможно определить путь к устройству"
-
-#: ../src/pumount.c:89
-#, c-format
 msgid "Error: mount point %s is not below %s\n"
-msgstr "Ошибка: точка присоединения %s не в %s\n"
+msgstr "Ошибка: точка присоединения %s не может быть внутри %s\n"
 
-#: ../src/pumount.c:124
+#: ../src/pumount.c:110
 msgid "Error: could not execute umount"
 msgstr "Ошибка: невозможно выполнить команду umount"
 
-#: ../src/pumount.c:145
-#, c-format
+#: ../src/pumount.c:131
+#, fuzzy, c-format
 msgid "Error: umount failed\n"
-msgstr "Ошибка: отсоединение неудалось\n"
+msgstr "Ошибка: отсоединение не удалось\n"
 
 #: ../src/utils.c:52
-#, c-format
+#, fuzzy, c-format
 msgid "Error: out of memory\n"
-msgstr "Ошибка: закончилась память\n"
+msgstr "Ошибка: нехватка памяти\n"
 
 #: ../src/utils.c:108
 msgid "Error: could not create directory"
@@ -423,9 +486,9 @@ msgid "Error: could not create stamp file in directory"
 msgstr "Ошибка: невозможно создать файл-отметку в каталоге"
 
 #: ../src/utils.c:132
-#, c-format
+#, fuzzy, c-format
 msgid "Error: %s is not a directory\n"
-msgstr "Ошибка: %s - не каталог\n"
+msgstr "Ошибка: %s - не является каталогом\n"
 
 #: ../src/utils.c:152
 msgid "Error: could not open directory"

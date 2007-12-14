@@ -3,23 +3,73 @@
 # This file is distributed under the same license as the pmount package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
 "PO-Revision-Date: 2005-04-20 20:03+0000\n"
-"Last-Translator: Frode M. Døving <frode@lnix.net>\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2007-12-14 18:32+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
-"X-Rosetta-Export-Date: 2007-06-16 12:08:28+0000\n"
+
+#, fuzzy, c-format
+#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
+#~ msgstr "Feil: make_mountpoint_name: feil enhet %s (må være i /dev/)\n"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "Usage:\n"
+#~ "\n"
+#~ "%s [options] <device>\n"
+#~ "  Umount <device> from a directory below %s if policy requirements\n"
+#~ "  are met (see pumount(1) for details). The mount point directory is "
+#~ "removed\n"
+#~ "  afterwards.\n"
+#~ "\n"
+#~ "Options:\n"
+#~ "  -l, --lazy : umount lazily, see umount(8)\n"
+#~ "  -d, --debug : enable debug output (very verbose)\n"
+#~ "  -h, --help  : print help message and exit successfuly\n"
+#~ msgstr ""
+#~ "Bruk:\n"
+#~ "\n"
+#~ "%s [valg] <enhet>\n"
+#~ "  Avmonterer <enhet> fra en katalog under %s hvis praksiskrav\n"
+#~ "  er møtt (se pumount(1) for detaljer). Monteringspunktkatalogen blir "
+#~ "fjernet\n"
+#~ "  etter avmontering.\n"
+#~ "\n"
+#~ "Valg:\n"
+#~ "  -l, --lazy : latskapsavmontering. Se umount(8)\n"
+#~ "  -d, --debug : aktiver feilsøkingsmeldinger (veldig detaljert)\n"
+#~ "  -h, --help : skriv hjelp tekst til skjermen og avslutt feilfritt.\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "pmount-hal - execute pmount with additional information from hal\n"
+#~ "\n"
+#~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
+#~ "\n"
+#~ "This command mounts the device described by the given UDI using pmount. The\n"
+#~ "file system type, the volume storage policy and the desired label will be\n"
+#~ "read out from hal and passed to pmount."
+#~ msgstr ""
+#~ "pmount-hal - kjøre pmount med ekstra informasjon fra hal\n"
+#~ "\n"
+#~ "Bruk: pmount-hal <hal UDI> [pmount valg]\n"
+#~ "\n"
+#~ "Denne kommandoen monterer enheten beskrevet av den gitte UDI ved hjelp av "
+#~ "pmount. Filsystemtype, lagringsregler og etikett vil bli\n"
+#~ " lest fra hal, og sendt videre til pmount."
 
 #: ../src/pmount.c:51
-#, fuzzy
+#, fuzzy, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -40,7 +90,7 @@ msgstr ""
 "\n"
 
 #: ../src/pmount.c:58
-#, fuzzy
+#, fuzzy, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
 "  Prevent further pmounts of <device> until it is unlocked again. <pid>\n"
@@ -59,7 +109,7 @@ msgstr ""
 "\n"
 
 #: ../src/pmount.c:65
-#, fuzzy
+#, fuzzy, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
 "  Remove the lock on <device> for process <pid> again.\n"
@@ -91,22 +141,22 @@ msgid ""
 msgstr ""
 
 #: ../src/pmount.c:134
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Feil: etikett kan ikke være tom\n"
 
 #: ../src/pmount.c:138
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: label too long\n"
 msgstr "Feil: etikett for lang\n"
 
 #: ../src/pmount.c:143
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Feil: Etikettnavn kan ikke inneholde '/'\n"
 
 #: ../src/pmount.c:150
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device name too long\n"
 msgstr "Feil: enhetsnavn for langt\n"
 
@@ -121,37 +171,37 @@ msgid "Error: could not execute mount"
 msgstr "Feil: kunne ikke kjøre mount"
 
 #: ../src/pmount.c:225
-#, fuzzy
+#, fuzzy, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr "Intern feil: mount_attempt: gitt filsystemnavn er NULL\n"
 
 #: ../src/pmount.c:231
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Feil: feil i filsystemnavnet '%s'\n"
 
 #: ../src/pmount.c:237
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Feil: feil i umask %s\n"
 
 #: ../src/pmount.c:285
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Feil: feil i tegnsettnavnet '%s'\n"
 
 #: ../src/pmount.c:366
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "Feil: kan ikke låse for pid %u, prosessen eksisterer ikke\n"
 
 #: ../src/pmount.c:380
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Feil: kunne ikke lage pid-låsefil %s: %s\n"
 
 #: ../src/pmount.c:420
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Feil: kunne ikke fjerne pid-låsefil %s: %s\n"
 
@@ -166,12 +216,12 @@ msgid "Error: this program needs to be installed suid root\n"
 msgstr "Feil: dette progammet må installeres suid root.\n"
 
 #: ../src/pmount.c:580 ../src/pumount.c:187
-#, fuzzy
+#, fuzzy, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Intern feil: getopt_long() returnerte ukjent verdi.\n"
 
 #: ../src/pmount.c:618
-#, fuzzy
+#, fuzzy, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
 "ignored\n"
@@ -185,7 +235,7 @@ msgid "Error: could not determine real path of the device"
 msgstr "Feil: kunne ikke finne den reelle stien til enheten"
 
 #: ../src/pmount.c:641 ../src/pumount.c:238
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Feil: feil enhet %s (må være i /dev/)\n"
 
@@ -212,7 +262,7 @@ msgid "Error: could not delete mount point"
 msgstr "Feil: kunne ikke slette monteringspunkt"
 
 #: ../src/pmount.c:741
-#, fuzzy
+#, fuzzy, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Intern feil: modus %s er ikke støttet.\n"
 
@@ -234,12 +284,12 @@ msgid "Error: could not execute pmount\n"
 msgstr "Feil: kunne ikke kjøre pmount\n"
 
 #: ../src/pmount-hal.c:210
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Feil: fikk ikke kontakt med dbus: %s: %s\n"
 
 #: ../src/pmount-hal.c:244
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Feil: Gitte UDI er ikke et monterbart volum.\n"
 
@@ -264,12 +314,12 @@ msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Feil: kunne ikke åpne <sysfs dir>/block/<enhet>"
 
 #: ../src/policy.c:241
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Feil: enhet %s eksisterer ikke\n"
 
 #: ../src/policy.c:246
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Feil: %s er ikke en blokk enhet\n"
 
@@ -279,27 +329,27 @@ msgid "Error: could not open fstab-type file"
 msgstr "Feil: kunne ikke åpne fstab-type filen."
 
 #: ../src/policy.c:351
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Feil: enheten %s er allerede montert til %s\n"
 
 #: ../src/policy.c:353
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Feil: enheten %s er ikke montert\n"
 
 #: ../src/policy.c:355
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Feil: enheten %s ble ikke montert av deg\n"
 
 #: ../src/policy.c:391
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Feil: enheten %s er ikke flyttbar\n"
 
 #: ../src/policy.c:454
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Feil: enheten %s er låst\n"
 
@@ -309,12 +359,12 @@ msgid "Error: mount point %s is already in /etc/fstab\n"
 msgstr ""
 
 #: ../src/policy.c:476
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Feil: katalogen %s inneholder allerede et montert filsystem.\n"
 
 #: ../src/policy.c:478
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Feil: katalogen %s inneholder ikke et montert filsystem\n"
 
@@ -342,7 +392,7 @@ msgid "Internal error: could not determine mount point\n"
 msgstr "Intern feil: kunne ikke finne monteringspunkt\n"
 
 #: ../src/pumount.c:80
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Feil: monteringspunkt %s er ikke under %s\n"
 
@@ -352,12 +402,12 @@ msgid "Error: could not execute umount"
 msgstr "Feil: kunne ikke kjøre umount"
 
 #: ../src/pumount.c:131
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: umount failed\n"
 msgstr "Feil: umount feilet\n"
 
 #: ../src/utils.c:52
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: out of memory\n"
 msgstr "Feil: tom for minne\n"
 
@@ -372,7 +422,7 @@ msgid "Error: could not create stamp file in directory"
 msgstr "Feil: kunne ikke opprette stramp-fil i katalog"
 
 #: ../src/utils.c:132
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: %s is not a directory\n"
 msgstr "Feil: %s er ikke en katalog\n"
 
@@ -382,12 +432,12 @@ msgid "Error: could not open directory"
 msgstr "Feil: kunne ikke åpne katalog"
 
 #: ../src/utils.c:161
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: directory %s is not empty\n"
 msgstr "Feil: katalogen %s er ikke tom\n"
 
 #: ../src/utils.c:213
-#, fuzzy
+#, fuzzy, c-format
 msgid "Error: '%s' is not a valid number\n"
 msgstr "Feil: '%s' er ikke et tall.\n"
 
@@ -411,53 +461,3 @@ msgstr "Intern error: kunne ikke endre til effektiv gid root"
 #, fuzzy
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Intern error: kunne ikke endre effektiv gruppeid til ekte gruppeid"
-
-#, fuzzy
-#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
-#~ msgstr "Feil: make_mountpoint_name: feil enhet %s (må være i /dev/)\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "pmount-hal - execute pmount with additional information from hal\n"
-#~ "\n"
-#~ "Usage: pmount-hal <hal UDI> [pmount options]\n"
-#~ "\n"
-#~ "This command mounts the device described by the given UDI using pmount. The\n"
-#~ "file system type, the volume storage policy and the desired label will be\n"
-#~ "read out from hal and passed to pmount."
-#~ msgstr ""
-#~ "pmount-hal - kjøre pmount med ekstra informasjon fra hal\n"
-#~ "\n"
-#~ "Bruk: pmount-hal <hal UDI> [pmount valg]\n"
-#~ "\n"
-#~ "Denne kommandoen monterer enheten beskrevet av den gitte UDI ved hjelp av "
-#~ "pmount. Filsystemtype, lagringsregler og etikett vil bli\n"
-#~ " lest fra hal, og sendt videre til pmount."
-
-#, fuzzy
-#~ msgid ""
-#~ "Usage:\n"
-#~ "\n"
-#~ "%s [options] <device>\n"
-#~ "  Umount <device> from a directory below %s if policy requirements\n"
-#~ "  are met (see pumount(1) for details). The mount point directory is "
-#~ "removed\n"
-#~ "  afterwards.\n"
-#~ "\n"
-#~ "Options:\n"
-#~ "  -l, --lazy : umount lazily, see umount(8)\n"
-#~ "  -d, --debug : enable debug output (very verbose)\n"
-#~ "  -h, --help  : print help message and exit successfuly\n"
-#~ msgstr ""
-#~ "Bruk:\n"
-#~ "\n"
-#~ "%s [valg] <enhet>\n"
-#~ "  Avmonterer <enhet> fra en katalog under %s hvis praksiskrav\n"
-#~ "  er møtt (se pumount(1) for detaljer). Monteringspunktkatalogen blir "
-#~ "fjernet\n"
-#~ "  etter avmontering.\n"
-#~ "\n"
-#~ "Valg:\n"
-#~ "  -l, --lazy : latskapsavmontering. Se umount(8)\n"
-#~ "  -d, --debug : aktiver feilsøkingsmeldinger (veldig detaljert)\n"
-#~ "  -h, --help : skriv hjelp tekst til skjermen og avslutt feilfritt.\n"

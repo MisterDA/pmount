@@ -3,22 +3,22 @@
 # This file is distributed under the same license as the pmount package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-04 00:19+0200\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
 "PO-Revision-Date: 2007-06-13 14:08+0000\n"
-"Last-Translator: Balaam's Miracle <balaam@balaamsmiracle.com>\n"
+"Last-Translator: Martin Pitt <martin.pitt@ubuntu.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2007-12-14 18:32+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
-"X-Rosetta-Export-Date: 2007-06-16 12:08:26+0000\n"
 
-#: ../src/pmount.c:57
+#: ../src/pmount.c:51
 #, c-format
 msgid ""
 "Usage:\n"
@@ -41,7 +41,7 @@ msgstr ""
 "  Als het mountpoint niet bestaat zal het worden aangemaakt.\n"
 "\n"
 
-#: ../src/pmount.c:64
+#: ../src/pmount.c:58
 #, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
@@ -59,7 +59,7 @@ msgstr ""
 "  verwijderd voordat een mount gedaan wordt.)\n"
 "\n"
 
-#: ../src/pmount.c:71
+#: ../src/pmount.c:65
 #, c-format
 msgid ""
 "%s --unlock <device> <pid>\n"
@@ -70,8 +70,7 @@ msgstr ""
 "  Verwijder de lock op <apparaat> voor proces <pid> weer.\n"
 "\n"
 
-#: ../src/pmount.c:74
-#, fuzzy
+#: ../src/pmount.c:68
 msgid ""
 "Options:\n"
 "  -r          : force <device> to be mounted read-only\n"
@@ -84,15 +83,11 @@ msgid ""
 "                in an UTF-8 locale, otherwise mount default)\n"
 "  -u <umask>  : use specified umask instead of the default (only for\n"
 "                file sytems which actually support umask setting)\n"
-"  --fmask <fmask>\n"
-"                use specified fmask\n"
-"  --dmask <dmask>\n"
-"                use specified dmask\n"
-"  -p <file>, --passphrase <file>\n"
+" --passphrase <file>\n"
 "                read passphrase from file instead of the terminal\n"
 "                (only for LUKS encrypted devices)\n"
 "  -d, --debug : enable debug output (very verbose)\n"
-"  -h, --help  : print this help message and exit successfuly\n"
+"  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully"
 msgstr ""
 "Opties:\n"
@@ -115,105 +110,85 @@ msgstr ""
 "  -h, --help  : Hulp tekst weergen en succesvol afsluiten\n"
 "  --version   : Versienummer weergeven en succesvol afsluiten"
 
-#: ../src/pmount.c:144
+#: ../src/pmount.c:134
 #, c-format
 msgid "Error: label must not be empty\n"
 msgstr "Fout: label mag niet leeg zijn\n"
 
-#: ../src/pmount.c:148
+#: ../src/pmount.c:138
 #, c-format
 msgid "Error: label too long\n"
 msgstr "Fout: label is te lang\n"
 
-#: ../src/pmount.c:153
+#: ../src/pmount.c:143
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
 msgstr "Fout: '/' mag niet in de labelnaam niet voorkomen\n"
 
-#: ../src/pmount.c:160
+#: ../src/pmount.c:150
 #, c-format
 msgid "Error: device name too long\n"
 msgstr "Fout: apparaatnaam is te lang\n"
 
-#: ../src/pmount.c:191 ../src/pumount.c:109
+#: ../src/pmount.c:181 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
 msgstr "Fout: kon niet alle uid privileges loslaten."
 
-#: ../src/pmount.c:196
+#: ../src/pmount.c:186
 msgid "Error: could not execute mount"
 msgstr "Fout: kon mount niet uitvoeren"
 
-#: ../src/pmount.c:241
+#: ../src/pmount.c:225
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
 msgstr ""
 "Interne fout: mount_attempt: opgegeven naam voor het bestandssysteem is "
 "NULL\n"
 
-#: ../src/pmount.c:247
+#: ../src/pmount.c:231
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr "Fout: ongeldige bestandssysteemnaam '%s'\n"
 
-#: ../src/pmount.c:253
+#: ../src/pmount.c:237
 #, c-format
 msgid "Error: invalid umask %s\n"
 msgstr "Fout: ongeldige umask %s\n"
 
-#: ../src/pmount.c:258
-#, fuzzy, c-format
-msgid "Error: invalid fmask %s\n"
-msgstr "Fout: ongeldige umask %s\n"
-
-#: ../src/pmount.c:263
-#, fuzzy, c-format
-msgid "Error: invalid dmask %s\n"
-msgstr "Fout: ongeldige umask %s\n"
-
-#: ../src/pmount.c:334
+#: ../src/pmount.c:285
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
 msgstr "Fout: ongeldige karaktersetnaam: '%s'\n"
 
-#: ../src/pmount.c:420
+#: ../src/pmount.c:366
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
 msgstr "Fout: kan pid %u niet locken, dit proces bestaat niet\n"
 
-#: ../src/pmount.c:434
+#: ../src/pmount.c:380
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
 msgstr "Fout: kon geen lockbestand maken %s: %s\n"
 
-#: ../src/pmount.c:474
+#: ../src/pmount.c:420
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr "Fout: kon pid lockbestand %s: %s niet verwijderen\n"
 
-#: ../src/pmount.c:490
+#: ../src/pmount.c:436
 msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Fout: do_unlock: kon lock directory niet verwijderen"
 
-#: ../src/pmount.c:598
-#, c-format
-msgid "Printing mounted removable devices:\n"
-msgstr ""
-
-#: ../src/pmount.c:600
-#, c-format
-msgid "To get a short help, run %s -h\n"
-msgstr ""
-
-#: ../src/pmount.c:606 ../src/pumount.c:182
+#: ../src/pmount.c:537 ../src/pumount.c:165
 msgid "Error: this program needs to be installed suid root\n"
 msgstr "Fout: dit programma moet als suid root geïnstalleerd worden.\n"
 
-#: ../src/pmount.c:654 ../src/pumount.c:206
+#: ../src/pmount.c:580 ../src/pumount.c:187
 #, c-format
 msgid "Internal error: getopt_long() returned unknown value\n"
 msgstr "Interne fout: getopt_long() meldde een onverwachte waarde.\n"
 
-#: ../src/pmount.c:692
+#: ../src/pmount.c:618
 #, c-format
 msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
@@ -222,31 +197,26 @@ msgstr ""
 "Waarschuwing: apparaat %s wordt al gebruikt door /etc/fstab, het opgegeven "
 "wordt genegeerd\n"
 
-#: ../src/pmount.c:706 ../src/pumount.c:251
+#: ../src/pmount.c:632 ../src/pumount.c:232
 msgid "Error: could not determine real path of the device"
 msgstr "Fout: kon werkelijke pad naar apparaat niet bepalen"
 
-#: ../src/pmount.c:715 ../src/pumount.c:257
+#: ../src/pmount.c:641 ../src/pumount.c:238
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
 msgstr "Fout: ongeldig apparaat %s (moet in /dev/ staan)\n"
 
-#: ../src/pmount.c:753
+#: ../src/pmount.c:679
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
 msgstr "Fout: kon apparaat niet decoderen (verkeerd wachtwoord?)\n"
 
-#: ../src/pmount.c:756
+#: ../src/pmount.c:682
 #, c-format
 msgid "Error: mapped device already exists\n"
 msgstr "Fout: Gemapte apparaat bestaat reeds\n"
 
-#: ../src/pmount.c:761
-#, fuzzy, c-format
-msgid "Warning: could not create luks lockfile\n"
-msgstr "Fout: kon geen lockbestand maken %s: %s\n"
-
-#: ../src/pmount.c:773
+#: ../src/pmount.c:696
 #, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
@@ -255,16 +225,16 @@ msgstr ""
 "Fout: kon de mountdirectory niet locken. Waarschijnlijk draait er een andere "
 "pmount voor dit mountpoint.\n"
 
-#: ../src/pmount.c:797
+#: ../src/pmount.c:720
 msgid "Error: could not delete mount point"
 msgstr "Fout: kon mountpoint niet verwijderen"
 
-#: ../src/pmount.c:818
+#: ../src/pmount.c:741
 #, c-format
 msgid "Internal error: mode %i not handled.\n"
 msgstr "Interne fout: kan niet overweg met mode %i .\n"
 
-#: ../src/pmount-hal.c:33
+#: ../src/pmount-hal.c:31
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
@@ -283,97 +253,92 @@ msgstr ""
 "UDI met pmount. Het bestandssysteemtype, het opslag beleid en het gewenste\n"
 "label zullen worden gelezen vanuit hal en aan pmount doorgegeven."
 
-#: ../src/pmount-hal.c:179
+#: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"
 msgstr "Fout: kon pmount niet uitvoeren\n"
 
-#: ../src/pmount-hal.c:224
+#: ../src/pmount-hal.c:210
 #, c-format
 msgid "Error: could not connect to dbus: %s: %s\n"
 msgstr "Fout: kon geen verbinding krijgen met dbus: %s: %s\n"
 
-#: ../src/pmount-hal.c:258
+#: ../src/pmount-hal.c:244
 #, c-format
 msgid "Error: given UDI is not a mountable volume\n"
 msgstr "Fout: opgegeven UDI is geen apparaat dat gemount kan worden\n"
 
-#: ../src/policy.c:142
+#: ../src/policy.c:92
 msgid "Error: could not get status of device"
 msgstr "Fout: kon status van het apparaat niet verkrijgen"
 
-#: ../src/policy.c:153
+#: ../src/policy.c:103
 msgid "Error: could not get sysfs directory\n"
 msgstr "Fout: kon de sysfs map niet verkrijgen\n"
 
-#: ../src/policy.c:160
+#: ../src/policy.c:110
 msgid "Error: could not open <sysfs dir>/block/"
 msgstr "Fout: kon <sysfs map>/block/ niet openen"
 
-#: ../src/policy.c:191
+#: ../src/policy.c:141
 msgid "Error: could not open <sysfs dir>/block/<device>/"
 msgstr "Fout: kon <sysfs map>/block/<apparaat>/ niet openen"
 
-#: ../src/policy.c:291
+#: ../src/policy.c:241
 #, c-format
 msgid "Error: device %s does not exist\n"
 msgstr "Fout: apparaat %s bestaat niet\n"
 
-#: ../src/policy.c:296
+#: ../src/policy.c:246
 #, c-format
 msgid "Error: %s is not a block device\n"
 msgstr "Fout: %s is geen block device\n"
 
-#: ../src/policy.c:314 ../src/policy.c:370
+#: ../src/policy.c:264 ../src/policy.c:320
 msgid "Error: could not open fstab-type file"
 msgstr "Fout: kon bestand van type fstab niet openen"
 
-#: ../src/policy.c:401
+#: ../src/policy.c:351
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
 msgstr "Fout: apparaat %s is al gemount onder %s\n"
 
-#: ../src/policy.c:403
+#: ../src/policy.c:353
 #, c-format
 msgid "Error: device %s is not mounted\n"
 msgstr "Fout: apparaat %s is niet gemount\n"
 
-#: ../src/policy.c:405
+#: ../src/policy.c:355
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
 msgstr "Fout: apparaat %s was niet door u gemount\n"
 
-#: ../src/policy.c:448
+#: ../src/policy.c:391
 #, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Fout: %s is geen verwisselbaar apparaat\n"
 
-#: ../src/policy.c:511
+#: ../src/policy.c:454
 #, c-format
 msgid "Error: device %s is locked\n"
 msgstr "Fout: apparaat %s is gelockt\n"
 
-#: ../src/policy.c:520
+#: ../src/policy.c:463
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
 msgstr "Fout: mountpoint %s staat al in /etc/fstab\n"
 
-#: ../src/policy.c:533
+#: ../src/policy.c:476
 #, c-format
 msgid "Error: directory %s already contains a mounted file system\n"
 msgstr "Fout: directory %s bevat reeds een gemount bestandssysteem\n"
 
-#: ../src/policy.c:535
+#: ../src/policy.c:478
 #, c-format
 msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Fout: directory %s bevat geen gemount bestandssysteem\n"
 
-#: ../src/policy.c:581
-#, fuzzy, c-format
-msgid "Error: could not open the %s file: %s"
-msgstr "Fout: kon bestand van type fstab niet openen"
-
 #: ../src/pumount.c:43
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -384,11 +349,10 @@ msgid ""
 "  afterwards.\n"
 "\n"
 "Options:\n"
-"  -l, --lazy   : umount lazily, see umount(8)\n"
-"  --luks-force : luksClose devices pmount didn't open\n"
-"  -d, --debug  : enable debug output (very verbose)\n"
-"  -h, --help   : print help message and exit successfuly\n"
-"  --version    : print version number and exit successfully\n"
+"  -l, --lazy  : umount lazily, see umount(8)\n"
+"  -d, --debug : enable debug output (very verbose)\n"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully\n"
 msgstr ""
 "Gebruik:\n"
 "\n"
@@ -403,25 +367,20 @@ msgstr ""
 "  -h, --help  : Hulptekst weergeven en succesvol afsluiten\n"
 "  --version   : Versienummer weergeven en succesvol afsluiten\n"
 
-#: ../src/pumount.c:76
+#: ../src/pumount.c:74
 msgid "Internal error: could not determine mount point\n"
 msgstr "Interne fout: kon mountpoint niet bepalen\n"
 
-#: ../src/pumount.c:82
-#, fuzzy, c-format
-msgid "Error: could not find real path of %s\n"
-msgstr "Fout: kon werkelijke pad naar apparaat niet bepalen"
-
-#: ../src/pumount.c:89
+#: ../src/pumount.c:80
 #, c-format
 msgid "Error: mount point %s is not below %s\n"
 msgstr "Fout: mountpoint %s bevindt zich niet onder %s\n"
 
-#: ../src/pumount.c:124
+#: ../src/pumount.c:110
 msgid "Error: could not execute umount"
 msgstr "Fout: kon umount niet uitvoeren"
 
-#: ../src/pumount.c:145
+#: ../src/pumount.c:131
 #, c-format
 msgid "Error: umount failed\n"
 msgstr "Fout: umount mislukt\n"
@@ -464,7 +423,8 @@ msgstr "Interne fout: kon niet omschakelen naar effectieve uid root"
 
 #: ../src/utils.c:264
 msgid "Internal error: could not change effective user uid to real user id"
-msgstr "Interne fout: kon effectieve uid niet omzetten naar werkelijke user id"
+msgstr ""
+"Interne fout: kon effectieve uid niet omzetten naar werkelijke user id"
 
 #: ../src/utils.c:273
 msgid "Internal error: could not change to effective gid root"
