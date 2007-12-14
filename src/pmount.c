@@ -62,7 +62,7 @@ usage( const char* exename )
     printf( _("Usage:\n\n%s [options] <device> [<label>]\n\n"
     "  Mount <device> to a directory below %s if policy requirements\n"
     "  are met (see pmount(1) for details). If <label> is given, the mount point\n"
-    "  will be %s/<label>, otherwise it will be %s<device>.\n"
+    "  will be %s<label>, otherwise it will be %s<device>.\n"
     "  If the mount point does not exist, it will be created.\n\n"),
         exename, MEDIADIR, MEDIADIR, MEDIADIR );
 
