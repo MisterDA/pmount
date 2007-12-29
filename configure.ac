@@ -18,13 +18,13 @@ AC_DEFINE([HAVE_BLKID], [], [Description])
 
 AC_CHECK_HEADER(sysfs/libsysfs.h,
 	[AC_CHECK_LIB(sysfs, sysfs_open_attribute,
-		[AC_DEFINE(HAVE_BLKID) LIBS="$LIBS -lsysfs"],
+		[LIBS="$LIBS -lsysfs"],
 		[AC_MSG_ERROR([Missing sysfs library (install libsysfs-dev or similar?)])])],
 	[AC_MSG_ERROR([Missing /usr/include/sysfs/libsysfs.h (install libsysfs-dev or similar?)])])
 
 AC_CHECK_HEADER(blkid/blkid.h,
 	[AC_CHECK_LIB(blkid, blkid_get_cache,
-		[LIBS="$LIBS -lblkid"],
+		[AC_DEFINE(HAVE_BLKID) LIBS="$LIBS -lblkid"],
 		[AC_MSG_WARN([Missing blkid library: you will not have fs autodetection (install libblkid-dev or similar?)])])],
 	[AC_MSG_WARN([Missing /usr/include/blkid/blkid.h: you will not have fs autodetection (install libblkid-dev or similar?)])])
 
