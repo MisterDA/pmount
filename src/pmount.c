@@ -389,7 +389,7 @@ do_mount_auto( const char* device, const char* mntpt, int async,
     if(tp) {
       debug("blkid gave FS %s for '%s'\n", tp, device);
       if(! strcmp(tp, "ntfs") && !stat(MOUNT_NTFS_3G, &buf)) {
-	debug("blkdid detected ntfs and ntfs-3g was found. Using ntfs-3g");
+	debug("blkdid detected ntfs and ntfs-3g was found. Using ntfs-3g\n");
 	tp = "ntfs-3g";
       }
       result = do_mount( device, mntpt, tp, async, noatime, exec, 
@@ -397,11 +397,13 @@ do_mount_auto( const char* device, const char* mntpt, int async,
 			 dmask, nostderr );
       if(result == 0)
 	return result;
-      debug("blkid-detected FS failed\n");
+      debug("blkid-detected FS failed, trying manually \n");
     }
     blkid_put_cache(c);
 #endif /* HAVE_BLKID */
-    
+
+    result = -1;
+
     for( fs = get_supported_fs(); fs->fsname; ++fs ) {
       /* Skip fs marked as such unless it is ntfs-3g and
 	 we can stat MOUNT_NTFS_G3 
