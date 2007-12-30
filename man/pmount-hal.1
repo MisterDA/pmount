@@ -30,6 +30,37 @@ The first parameter (\fIdevice\fR) must be the HAL UDI or the device
 node of the device to be mounted. All further parameters are passed to
 pmount unchanged.
 
+.SH WARNING
+
+As 
+.B pmount-hal
+uses 
+.BR pmount (1)
+to mount the given device, 
+.B it is not possible to unmount it with hal !
+You need to use either
+.BR pumount (1)
+or directly
+.BR umount (1)
+to unmount the devices mounted by
+.BR pmount-hal .
+This is the cause of the following error messages when unmounting with 
+.IR hal\ umount :
+
+.TP 2
+.B *
+Device to unmount is not in /media/.hal-mtab so it is not mounted by HAL
+
+.TP
+.B *
+Cannot open /media/.hal-mtab
+
+.TP
+.B *
+Cannot obtain lock on /media/.hal-mtab
+
+
+
 .SH ENVIRONMENT
 
 .TP

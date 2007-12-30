@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Simply asks hal to unmount the device on the command-line
+#
+# Coming from http://lists.freedesktop.org/archives/hal/2005-December/004077.html
+
+dbus-send --system --print-reply --dest=org.freedesktop.Hal \
+    $1 org.freedesktop.Hal.Device.Volume.Unmount 
+
+# This method does not work as now umount takes an array of strings as
+# argument and dbus-send apparently cannot send arrays.
