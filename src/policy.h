@@ -28,7 +28,7 @@
  *        point; must be at least MEDIA_STRING_SIZE bytes
  * @param uid if not NULL and returning 1, this will be filled with the mounted
  *        uid, or -1 if uid is not present
- * @return fstab device name whose realpath() matches device; NULL if not found
+ * @return fstab device name whose realpath() matches that of device; NULL if not found
  */
 const char* fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid );
 

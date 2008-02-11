@@ -306,8 +306,10 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
     FILE* f;
     struct mntent *entry;
     char pathbuf[PATH_MAX];
+    char pathbuf_arg[PATH_MAX];
     static char fstab_device[PATH_MAX];
     char* realdev;
+    char* realdev_arg;
     char* uidopt;
 
     debug("Checking for device '%s' in '%s'\n", device, fname);
@@ -320,17 +322,17 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
     while( ( entry = getmntent( f ) ) != NULL ) {
         snprintf( fstab_device, sizeof( fstab_device ), "%s", entry->mnt_fsname );
 
-	/* 
-	   We deactivate the symlink lookup for fstab files: it does
-	   more harm than necessary. After all, the admin should know what
-	   they are doing when they are writing symlinks in /etc/fstab.
-	*/
-        if( 0 && realpath( fstab_device, pathbuf ) )
+        if( realpath( fstab_device, pathbuf ) )
             realdev = pathbuf;
         else
             realdev = fstab_device;
 
-        if( !strcmp( realdev, device ) ) {
+        if( realpath( device, pathbuf_arg ) )
+	    realdev_arg = pathbuf_arg;
+        else
+            realdev_arg = device;
+
+        if( !strcmp( realdev, realdev_arg ) ) {
                 endmntent( f );
                 if( mntpt ) {
                     snprintf( mntpt, MEDIA_STRING_SIZE-1, "%s", entry->mnt_dir );
