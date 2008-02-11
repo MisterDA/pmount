@@ -1,4 +1,4 @@
-SUBDIRS = etc man po src
+SUBDIRS = etc man po src tests
 
 EXTRA_DIST = \
        intltool-extract.in \
