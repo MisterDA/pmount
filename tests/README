@@ -1,0 +1,3 @@
+This directory is meant to contain informal, usually more-or-less
+interactive tests for pmount and relatives. This is not a real test
+suite, rather a big help for development and most especially bugfixes.
