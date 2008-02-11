@@ -88,5 +88,6 @@ po/Makefile.in
 man/Makefile
 etc/Makefile
 src/Makefile
+tests/Makefile
 ])
 
