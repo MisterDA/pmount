@@ -291,44 +291,23 @@ on the command-line, as this happens only for autodetection.
 
 .SH MORE ABOUT FSTAB
 
-Until 
 .B pmount
-version 0.9.16-1, a device was deemed to be handled by
+now fully resolve all symlinks both in its input and in the 
 .I /etc/fstab
-if the real path (after symlink resolution) of the device given on the
-command-line was matching the real path of one entry in 
-.IR /etc/fstab .
-This meant that, if 
+file, which means that if
 .I /dev/cdrom
-was a symlink to say,
-.I /dev/hda
-and that only 
-.I /dev/cdrom 
-was referenced in 
-.IR /etc/fstab ,
-
-
-.BI pmount \ /dev/hda
-
-would necessary fail as 
+is a symlink to 
+.I /dev/hdc
+and you try to mount 
+.I /dev/hdc
+directly, 
 .B pmount
-would delegate to 
-.B mount
-who would not find 
-.I /dev/hda
-in
+will delegate this to
+.BR mount (1).
+This is a feature, and it contrasts with previous unclear behavior of
+.B pmount
+about symlinks in 
 .IR /etc/fstab .
-
-Starting from version 0.9.16-2, this behavior has been fixed. This
-means that if you really want that
-.B pmount
-does not mount devices that are in 
-.IR /etc/fstab ,
-you need to make sure that 
-.I /etc/fstab 
-refers only real device nodes and not symlinks. See 
-.I http://bugs.debian.org/418888
-for a real-life example...
 
 .SH KNOWN ISSUES
 

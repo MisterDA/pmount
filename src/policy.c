@@ -509,7 +509,7 @@ device_whitelisted( const char* device )
     }
 
     fclose( fwl );
-   debug( "device_whitlisted(): nothing matched, returning 0\n" );
+    debug( "device_whitlisted(): nothing matched, returning 0\n" );
     return 0;
 }
 
@@ -531,11 +531,15 @@ device_locked( const char* device )
 int
 mntpt_valid( const char* mntpt ) 
 {
-    if( fstab_has_mntpt( "/etc/fstab", mntpt, NULL, 0 ) ) {
-	fprintf( stderr, _("Error: mount point %s is already in /etc/fstab\n"), mntpt );
-	return 0;
-    }
-    return !assert_dir( mntpt, 1 ) && !assert_emptydir( mntpt );
+  char fstab_device[PATH_MAX];
+  if( fstab_has_mntpt( "/etc/fstab", mntpt, fstab_device, 
+		       sizeof(fstab_device) ) ) {
+    fprintf( stderr, _("Error: mount point %s is already in /etc/fstab, "
+		       "associated to device %s\n"), 
+	     mntpt, fstab_device );
+    return 0;
+  }
+  return !assert_dir( mntpt, 1 ) && !assert_emptydir( mntpt );
 }
 
 int
