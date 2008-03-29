@@ -69,14 +69,17 @@ private_realpath(const char *path, char *resolved_path, int maxreslth) {
 
 	/* If it's a relative pathname use getcwd for starters. */
 	if (*path != '/') {
-		if (!getcwd(npath, maxreslth-2))
-			return NULL;
-		npath += strlen(npath);
-		if (npath[-1] != '/')
-			*npath++ = '/';
+	  if (!getcwd(npath, maxreslth-2)) {
+	    debug("realpath: could not get current directory: %s"),
+	      strerror();
+	    return NULL;
+	  }
+	  npath += strlen(npath);
+	  if (npath[-1] != '/')
+	    *npath++ = '/';
 	} else {
-		*npath++ = '/';
-		path++;
+	  *npath++ = '/';
+	  path++;
 	}
 
 	/* Expand each slash-separated pathname component. */

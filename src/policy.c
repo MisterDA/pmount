@@ -319,23 +319,27 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
         exit( 100 );
     }
 
+    if( realpath( device, pathbuf_arg ) )
+      realdev_arg = pathbuf_arg;
+    else {
+      debug("realpath failed on %s : %s\n", device, strerror(errno));
+      realdev_arg = device;
+    }
+
     while( ( entry = getmntent( f ) ) != NULL ) {
-        snprintf( fstab_device, sizeof( fstab_device ), "%s", entry->mnt_fsname );
+        snprintf( fstab_device, sizeof( fstab_device ), "%s", 
+		  entry->mnt_fsname );
 
         if( realpath( fstab_device, pathbuf ) )
             realdev = pathbuf;
         else
             realdev = fstab_device;
 
-        if( realpath( device, pathbuf_arg ) )
-	    realdev_arg = pathbuf_arg;
-        else
-            realdev_arg = device;
-
         if( !strcmp( realdev, realdev_arg ) ) {
                 endmntent( f );
                 if( mntpt ) {
-                    snprintf( mntpt, MEDIA_STRING_SIZE-1, "%s", entry->mnt_dir );
+                    snprintf( mntpt, MEDIA_STRING_SIZE-1, "%s", 
+			      entry->mnt_dir );
                 }
                 if( uid ) {
                     uidopt = hasmntopt( entry, "uid" );
@@ -348,6 +352,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
                     } else
                         *uid = -1;
                 }
+		debug(" -> found as '%s'", fstab_device);
                 return fstab_device;
         }
     }
@@ -357,6 +362,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
         *mntpt = 0; 
 
     endmntent( f );
+    debug(" -> not found");
     return NULL;
 }
 
