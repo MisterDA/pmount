@@ -80,7 +80,8 @@ usage( const char* exename )
     "  -r          : force <device> to be mounted read-only\n"
     "  -w          : force <device> to be mounted read-write\n"
     "  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
-    "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+    "  -A, --noatime\n"
+    "                mount <device> with the 'noatime' option (default: 'atime')\n"
     "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
     "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
     "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
@@ -96,7 +97,8 @@ usage( const char* exename )
     "                (only for LUKS encrypted devices)\n"
     "  -d, --debug : enable debug output (very verbose)\n"
     "  -h, --help  : print this help message and exit successfuly\n"
-    "  --version   : print version number and exit successfully") );
+    "  -V, --version\n"
+    "                print version number and exit successfully") );
 }
 
 /**
