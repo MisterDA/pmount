@@ -10,13 +10,13 @@ msgstr ""
 "Project-Id-Version: pmount 0.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
-"PO-Revision-Date: 2007-09-16 17:33+0000\n"
-"Last-Translator: intel <intel19@yandex.ru>\n"
+"PO-Revision-Date: 2007-12-21 12:32+0000\n"
+"Last-Translator: Rogowsky Alexander <Unknown>\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2007-12-14 18:32+0000\n"
+"X-Launchpad-Export-Date: 2008-10-07 18:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #~ msgid ""
@@ -119,7 +119,7 @@ msgstr ""
 #~ "и переданы в pmount."
 
 #: ../src/pmount.c:51
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -131,19 +131,9 @@ msgid ""
 "  If the mount point does not exist, it will be created.\n"
 "\n"
 msgstr ""
-"Применение:\n"
-"\n"
-"%s [параметры] <устройство> [<метка>]\n"
-"\n"
-"  Подключает <устройство> в каталог %s, если это не противоречит\n"
-"  политике безопасности (детальнее, см. pmount(1)).\n"
-"  Если указана <метка>, точка подключения будет в виде\n"
-"  %s<метка>, в противном случае - %s<устройство>.\n"
-"  Если точка подключения не существует, она будет создана автоматически.\n"
-"\n"
 
 #: ../src/pmount.c:58
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s --lock <device> <pid>\n"
 "  Prevent further pmounts of <device> until it is unlocked again. <pid>\n"
@@ -152,14 +142,6 @@ msgid ""
 "  processes (nonexistant pids are cleaned before attempting a mount).\n"
 "\n"
 msgstr ""
-"%s --lock <устройство> <pid>\n"
-"  Предотвращает последующее подключение <устройства>, пока его не\n"
-"  разблокируют. <pid> указывает идентификатор блокирующего процесса.\n"
-"  Эта опция позволяет блокировать устройство несколькими независимыми\n"
-"  процессами, а также предотвращает блокировку устройства 'мертвым'\n"
-"  процессом (перед попыткой подключения происходит удаление несуществующих\n"
-"  идентификаторов процессов).\n"
-"\n"
 
 #: ../src/pmount.c:65
 #, c-format
@@ -168,9 +150,6 @@ msgid ""
 "  Remove the lock on <device> for process <pid> again.\n"
 "\n"
 msgstr ""
-"%s --unlock <device> <pid>\n"
-"  Снимает блокировку <устройства> процессом c идентификатором <pid>.\n"
-"\n"
 
 #: ../src/pmount.c:68
 msgid ""
@@ -191,12 +170,35 @@ msgid ""
 "  -d, --debug : enable debug output (very verbose)\n"
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully"
-msgstr "-r : примонтировать <устройство> толька для чтения"
+msgstr ""
+"Опции:\n"
+"  -r : примонтировать <устройство> в режиме только для чтения\n"
+"  -w : примонтировать <устройство> в режиме чтения и записи\n"
+"  -s, --sync : примонтировать <устройство> с опцией 'sync' (по умолчанию: "
+"'async')\n"
+"  --noatime : примонтировать <устройство> с опцией 'noatime' (по умолчанию: "
+"'atime')\n"
+"  -e, --exec : примонтировать <устройство> с опцией 'exec' (по умолчанию: "
+"'noexec')\n"
+"  -t <fs> : примонтировать <устройство> как файловую систему типа <fs> (по "
+"умолчанию: автоопределение)\n"
+"  -c <charset>: использовать указанную кодировку (по умолчанию: 'utf8' "
+"вызывается в\n"
+"                локали UTF-8, иначе используются значения mount по "
+"умолчанию)\n"
+"  -u <umask> : использует выбранную маску прав доступа вместо умолчальной\n"
+"                (только для файловых систем, поддерживающих эту функцию)\n"
+" --passphrase <file>\n"
+"                прочитать пароль из файла вместо терминала\n"
+"                (только для устройств, зашифрованных с помощью LUKS)\n"
+"  -d, --debug : включить отладочный вывод (очень информативно)\n"
+"  -h, --help : вывести справочное сообщение и успешно завершить работу\n"
+"  --version : вывести номер версии и успешно завершить работу"
 
 #: ../src/pmount.c:134
 #, c-format
 msgid "Error: label must not be empty\n"
-msgstr "Ошибка: метка неможет быть пустой\n"
+msgstr "Ошибка: метка не может быть пустой\n"
 
 #: ../src/pmount.c:138
 #, c-format
@@ -204,9 +206,9 @@ msgid "Error: label too long\n"
 msgstr "Ошибка: слишком длинная метка\n"
 
 #: ../src/pmount.c:143
-#, fuzzy, c-format
+#, c-format
 msgid "Error: '/' must not occur in label name\n"
-msgstr "Ошибка: метка не может содержать символ '/'\n"
+msgstr ""
 
 #: ../src/pmount.c:150
 #, c-format
@@ -215,7 +217,7 @@ msgstr "Ошибка: слишком длинное имя устройства\
 
 #: ../src/pmount.c:181 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
-msgstr "Ошибка: невозможно понизить привелегии пользователя"
+msgstr "Ошибка: невозможно понизить все привилегии пользователя"
 
 #: ../src/pmount.c:186
 msgid "Error: could not execute mount"
@@ -240,12 +242,12 @@ msgstr "Ошибка: некорректная инверсная маска '%s
 #: ../src/pmount.c:285
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
-msgstr "Ошибка: некорректное мая кодовой таблицы '%s'\n"
+msgstr ""
 
 #: ../src/pmount.c:366
-#, fuzzy, c-format
+#, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
-msgstr "Ошибка: невозможно заблокировать несуществующий процесс %u\n"
+msgstr ""
 
 #: ../src/pmount.c:380
 #, c-format
@@ -262,11 +264,8 @@ msgid "Error: do_unlock: could not remove lock directory"
 msgstr "Ошибка: do_unlock: невозможно удалить каталог блокировки"
 
 #: ../src/pmount.c:537 ../src/pumount.c:165
-#, fuzzy
 msgid "Error: this program needs to be installed suid root\n"
 msgstr ""
-"Ошибка: чтобы установить программу, требуются права суперпользователя "
-"(root).\n"
 
 #: ../src/pmount.c:580 ../src/pumount.c:187
 #, c-format
@@ -361,14 +360,12 @@ msgid "Error: could not get sysfs directory\n"
 msgstr "Ошибка: невозможно определить каталог sysfs\n"
 
 #: ../src/policy.c:110
-#, fuzzy
 msgid "Error: could not open <sysfs dir>/block/"
-msgstr "Ошибка: невозможно открыть <sysfs dir>/block/"
+msgstr ""
 
 #: ../src/policy.c:141
-#, fuzzy
 msgid "Error: could not open <sysfs dir>/block/<device>/"
-msgstr "Ошибка: невозможно открыть <sysfs dir>/block/<device>"
+msgstr ""
 
 #: ../src/policy.c:241
 #, c-format
@@ -385,9 +382,9 @@ msgid "Error: could not open fstab-type file"
 msgstr "Ошибка: невозможно открыть файл типа fstab"
 
 #: ../src/policy.c:351
-#, fuzzy, c-format
+#, c-format
 msgid "Error: device %s is already mounted to %s\n"
-msgstr "Ошибка: устройство %s уже присоединено к %s\n"
+msgstr ""
 
 #: ../src/policy.c:353
 #, c-format
@@ -425,7 +422,7 @@ msgid "Error: directory %s does not contain a mounted file system\n"
 msgstr "Ошибка: каталог %s не содержит присоединенной файловой системы\n"
 
 #: ../src/pumount.c:43
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage:\n"
 "\n"
@@ -441,41 +438,29 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully\n"
 msgstr ""
-"Использование:\n"
-"\n"
-"%s [опции] <устройство>\n"
-"  Отмонтировать <устройство> из каталога %s, если соблюдены требования\n"
-"  политики (см. pumount(1) для деталей). После этого, точка монтирования \n"
-"  каталога удаляется.\n"
-"\n"
-"Опции:\n"
-"  -l, --lazy : отсоединить \"лениво\", см. umount(8)\n"
-"  -d, --debug : включить отладочный вывод (очень информативно)\n"
-"  -h, --help : вывести справочное сообщение и завершить работу\n"
-"  --version : вывести номер версии и завершить работу\n"
 
 #: ../src/pumount.c:74
 msgid "Internal error: could not determine mount point\n"
 msgstr "Внутренняя ошибка: невозможно определить точку присоединения\n"
 
 #: ../src/pumount.c:80
-#, fuzzy, c-format
+#, c-format
 msgid "Error: mount point %s is not below %s\n"
-msgstr "Ошибка: точка присоединения %s не может быть внутри %s\n"
+msgstr ""
 
 #: ../src/pumount.c:110
 msgid "Error: could not execute umount"
 msgstr "Ошибка: невозможно выполнить команду umount"
 
 #: ../src/pumount.c:131
-#, fuzzy, c-format
+#, c-format
 msgid "Error: umount failed\n"
-msgstr "Ошибка: отсоединение не удалось\n"
+msgstr ""
 
 #: ../src/utils.c:52
-#, fuzzy, c-format
+#, c-format
 msgid "Error: out of memory\n"
-msgstr "Ошибка: нехватка памяти\n"
+msgstr ""
 
 #: ../src/utils.c:108
 msgid "Error: could not create directory"
@@ -486,9 +471,9 @@ msgid "Error: could not create stamp file in directory"
 msgstr "Ошибка: невозможно создать файл-отметку в каталоге"
 
 #: ../src/utils.c:132
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s is not a directory\n"
-msgstr "Ошибка: %s - не является каталогом\n"
+msgstr ""
 
 #: ../src/utils.c:152
 msgid "Error: could not open directory"

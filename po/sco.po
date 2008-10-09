@@ -1,22 +1,21 @@
-# Estonian translation for pmount
-# Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
+# Scots translation for pmount
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the pmount package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
-"PO-Revision-Date: 2005-11-06 22:25+0000\n"
-"Last-Translator: H_M_Murdock_EST <eerove@gmail.com>\n"
-"Language-Team: Estonian <et@li.org>\n"
+"PO-Revision-Date: 2008-02-27 02:22+0000\n"
+"Last-Translator: Andrew Barber <andrew-alex-barber@ubuntu.com>\n"
+"Language-Team: Scots <sco@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2008-10-07 18:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-"X-Rosetta-Version: 0.1\n"
 
 #: ../src/pmount.c:51
 #, c-format
@@ -31,6 +30,16 @@ msgid ""
 "  If the mount point does not exist, it will be created.\n"
 "\n"
 msgstr ""
+"Copy text   \t\n"
+"Usage:\n"
+"\n"
+"%s [options] <device> [<label>]\n"
+"\n"
+"Mount <device> te directory belo %s if policy requirements\n"
+"are met (see pmount(1) fer details). If <label> is given, the mount point\n"
+"will be %s/<label>, oherwise it will be %s<device>.\n"
+"If the mount point doesny exist, it will be created.\n"
+"\n"
 
 #: ../src/pmount.c:58
 #, c-format
@@ -75,69 +84,69 @@ msgstr ""
 #: ../src/pmount.c:134
 #, c-format
 msgid "Error: label must not be empty\n"
-msgstr ""
+msgstr "Error: label canny be empty\n"
 
 #: ../src/pmount.c:138
 #, c-format
 msgid "Error: label too long\n"
-msgstr ""
+msgstr "Error: label tae long\n"
 
 #: ../src/pmount.c:143
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
-msgstr ""
+msgstr "Error: '/' cany be in eh lebel nam\n"
 
 #: ../src/pmount.c:150
 #, c-format
 msgid "Error: device name too long\n"
-msgstr ""
+msgstr "Error: device name tae long\n"
 
 #: ../src/pmount.c:181 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
-msgstr ""
+msgstr "Error: couldny drop awl uid privlages"
 
 #: ../src/pmount.c:186
 msgid "Error: could not execute mount"
-msgstr ""
+msgstr "Error: couldny execut mount"
 
 #: ../src/pmount.c:225
 #, c-format
 msgid "Internal error: mount_attempt: given file system name is NULL\n"
-msgstr ""
+msgstr "Internal error: mount_attempt: given fyle system name is NULL\n"
 
 #: ../src/pmount.c:231
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
-msgstr ""
+msgstr "Error: nae-valid fyle system name '%s'\n"
 
 #: ../src/pmount.c:237
 #, c-format
 msgid "Error: invalid umask %s\n"
-msgstr ""
+msgstr "Error: nae-valid umask %s\n"
 
 #: ../src/pmount.c:285
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
-msgstr ""
+msgstr "Error: nae-valid charset name '%s'\n"
 
 #: ../src/pmount.c:366
 #, c-format
 msgid "Error: cannot lock for pid %u, this process does not exist\n"
-msgstr ""
+msgstr "Error: canny lock fer pid %u, this process doesny exist\n"
 
 #: ../src/pmount.c:380
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
-msgstr ""
+msgstr "Error: coodny mak pid lock fyle %s: %s\n"
 
 #: ../src/pmount.c:420
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
-msgstr ""
+msgstr "Error: could not remove pid lock file %s: %s\n"
 
 #: ../src/pmount.c:436
 msgid "Error: do_unlock: could not remove lock directory"
-msgstr ""
+msgstr "Error: do_unlock: coodny can lock directory"
 
 #: ../src/pmount.c:537 ../src/pumount.c:165
 msgid "Error: this program needs to be installed suid root\n"

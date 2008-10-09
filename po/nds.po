@@ -9,12 +9,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
 "PO-Revision-Date: 2007-10-14 14:13+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: FriedChicken <Unknown>\n"
 "Language-Team: German, Low <nds@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2007-12-14 18:32+0000\n"
+"X-Launchpad-Export-Date: 2008-10-07 18:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/pmount.c:51
@@ -221,13 +221,11 @@ msgid "Error: mapped device already exists\n"
 msgstr "Fehler: Gemapptes Gerät existiert bereits\n"
 
 #: ../src/pmount.c:696
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
-"Fehler: Konnte Mountpoint nicht sperren. Wahrscheinlich greift eine andere "
-"Instanz von pmount darauf zu.\n"
 
 #: ../src/pmount.c:720
 msgid "Error: could not delete mount point"
@@ -239,7 +237,6 @@ msgid "Internal error: mode %i not handled.\n"
 msgstr "Interner Fehler: Modus %i kann nicht verwendet werden\n"
 
 #: ../src/pmount-hal.c:31
-#, fuzzy
 msgid ""
 "pmount-hal - execute pmount with additional information from hal\n"
 "\n"
@@ -250,13 +247,6 @@ msgid ""
 "label\n"
 "will be read out from hal and passed to pmount."
 msgstr ""
-"pmount-hal - Führe pmount mit zusätzlichen Informationen von HAL aus\n"
-"\n"
-"Verwendung: pmount-hal <Gerät> [pmount-Optionen]\n"
-"\n"
-"Dieser Befehl mountet das über den Gerätenamen oder UDI angegebene Gerät\n"
-"mit pmount. Der Dateisystemtyp, die Speichervolumen-Richtlinie und das\n"
-"verlangte Label werden von HAL ausgelesen und an pmount weitergeleitet."
 
 #: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"

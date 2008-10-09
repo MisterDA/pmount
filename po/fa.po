@@ -9,12 +9,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
 "PO-Revision-Date: 2007-06-10 12:32+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Kasra <Unknown>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2007-12-14 18:32+0000\n"
+"X-Launchpad-Export-Date: 2008-10-07 18:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/pmount.c:51
@@ -72,19 +72,19 @@ msgid ""
 msgstr ""
 
 #: ../src/pmount.c:134
-#, fuzzy, c-format
+#, c-format
 msgid "Error: label must not be empty\n"
-msgstr "خطا: برچسب نباید خالی باشد\n"
+msgstr ""
 
 #: ../src/pmount.c:138
-#, fuzzy, c-format
+#, c-format
 msgid "Error: label too long\n"
-msgstr "خطا: برچسب، بیش از حد طولانی است\n"
+msgstr ""
 
 #: ../src/pmount.c:143
-#, fuzzy, c-format
+#, c-format
 msgid "Error: '/' must not occur in label name\n"
-msgstr "خطا: '/' نباید در نام برچسب بیاید\n"
+msgstr ""
 
 #: ../src/pmount.c:150
 #, c-format

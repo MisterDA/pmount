@@ -8,69 +8,21 @@ msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
-"PO-Revision-Date: 2007-10-09 23:55+0000\n"
-"Last-Translator: Jorge González González "
-"<jorge.gonzalez.gonzalez@hispalinux.es>\n"
+"PO-Revision-Date: 2008-06-28 20:56+0000\n"
+"Last-Translator: Gabriel Ruiz <debianmaster@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2007-12-14 18:32+0000\n"
+"X-Launchpad-Export-Date: 2008-10-07 18:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "Options:\n"
-#~ "  -r          : force <device> to be mounted read-only\n"
-#~ "  -w          : force <device> to be mounted read-write\n"
-#~ "  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
-#~ "  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
-#~ "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
-#~ "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
-#~ "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
-#~ "                in an UTF-8 locale, otherwise mount default)\n"
-#~ "  -u <umask>  : use specified umask instead of the default (only for\n"
-#~ "                file sytems which actually support umask setting)\n"
-#~ " --passphrase <file>\n"
-#~ "                read passphrase from file instead of the terminal\n"
-#~ "                (only for LUKS encrypted devices)\n"
-#~ "  -d, --debug : enable debug output (very verbose)\n"
-#~ "  -h, --help  : print help message and exit successfuly"
-#~ msgstr ""
-#~ "Options:\n"
-#~ "  -r : Forzar <dispositivo> a montarse de Solo-Lectura\n"
-#~ "  -w : Forzar <dsipositivo> a montarse en modo lectura-escritura\n"
-#~ "  -s, --sync : Montar <dispositivo> con la opción sync (Por defecto: "
-#~ "'async')\n"
-#~ "  --noatime : Montar <dispositvio> con la opción 'noatime'(Por defecto: "
-#~ "'atime')\n"
-#~ "  -e, --exec : Montar <dispositvio> con la opción 'exec' (Por Defecto: "
-#~ "'noexec')\n"
-#~ "  -t <fs> : Montar que el sistema de archivos <fs> (Por Defecto: "
-#~ "autodetected)\n"
-#~ "  -c <charset>: Utilizar el grupo de caracteres E/S dado (Por defecto: "
-#~ "'utf8' si se especifica\n"
-#~ "                se montará el indicado,de lo contrario se mostará el valor "
-#~ "por defecto)\n"
-#~ "  -u <umask> : Utilizar una umask especifica, en lugar del valor por defecto "
-#~ "(solo para\n"
-#~ "                sistemas de archivos que soporten las umask)\n"
-#~ " --passphrase <file>\n"
-#~ "                Contraseña de lectura de files en lugar de la terminal\n"
-#~ "                (solo para dispositivos encriptados LUKS)\n"
-#~ "  -d, --debug : Activar depuración (very verbose)\n"
-#~ "  -h, --help : Muestra el mensaje de ayuda y de finalización correcta"
 
 #, c-format
 #~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
 #~ msgstr ""
 #~ "Error: make_mountpoint_name: el dispositivo %s no es válido (debe estar en "
 #~ "/dev/)\n"
-
-#, fuzzy
-#~ msgid "Error: could not raise to full root uid privileges"
-#~ msgstr "Error: no se han podido alcanzar privilegios de uid root completos"
 
 #~ msgid "Error: could not wait for executed mount process"
 #~ msgstr "Error: no se puede esperar a la conclusión del proceso de montaje"
@@ -294,7 +246,6 @@ msgstr ""
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
 msgstr ""
-"Error: el nombre del sistema de ficheros o archivos '%s' no es válido\n"
 
 #: ../src/pmount.c:237
 #, c-format
@@ -314,14 +265,13 @@ msgstr "Error: no se puede bloquear para el pid %u, este proceso no existe\n"
 #: ../src/pmount.c:380
 #, c-format
 msgid "Error: could not create pid lock file %s: %s\n"
-msgstr ""
-"Error: no se ha podido crear el archivo o fichero de bloqueo del pid %s: %s\n"
+msgstr "Error: no se ha podido crear el archivo de bloqueo del pid %s: %s\n"
 
 #: ../src/pmount.c:420
 #, c-format
 msgid "Error: could not remove pid lock file %s: %s\n"
 msgstr ""
-"Error: no se ha podido eliminar el fichero de bloqueo del pid %s: %s\n"
+"Error: no se ha podido eliminar el archivo de bloqueo del pid %s: %s\n"
 
 #: ../src/pmount.c:436
 msgid "Error: do_unlock: could not remove lock directory"
@@ -343,7 +293,7 @@ msgid ""
 "Warning: device %s is already handled by /etc/fstab, supplied label is "
 "ignored\n"
 msgstr ""
-"ADVERTENCIA: el dispositivo %s está actualmente manejado por /etc/fstab, la "
+"AVISO: el dispositivo %s está actualmente manejado por /etc/fstab, la "
 "etiqueta proporcionada se ha ignorado\n"
 
 #: ../src/pmount.c:632 ../src/pumount.c:232
@@ -353,7 +303,7 @@ msgstr "Error: no es posible determinar la ubicación real del dispositivo"
 #: ../src/pmount.c:641 ../src/pumount.c:238
 #, c-format
 msgid "Error: invalid device %s (must be in /dev/)\n"
-msgstr "Error: el dispositivo %s es invalido (debe estar en /dev/)\n"
+msgstr "Error: El dispositivo es Inválido %s (debe estar en /dev/)\n"
 
 #: ../src/pmount.c:679
 #, c-format
@@ -372,7 +322,7 @@ msgid ""
 "Error: could not lock the mount directory. Another pmount is probably "
 "running for this mount point.\n"
 msgstr ""
-"Error: No es posible bloquear el punto de montaje. Probablemente esta siendo "
+"Error: No es posible bloquear el punto de montaje. Probablemente está siendo "
 "utilizado por otra aplicación.\n"
 
 #: ../src/pmount.c:720
@@ -399,7 +349,7 @@ msgstr ""
 "\n"
 "Uso: pmount-hal <dispositivo> [opciones de pmount]\n"
 "\n"
-"Este comando monta el dispositivo descrito por el <dispositivo> o UDI\n"
+"Esta orden monta el dispositivo descrito por el <dispositivo> o UDI\n"
 "proporcionados utilizando pmount. El tipo de sistema de archivos, la "
 "política de\n"
 "almacenamiento y la etiqueta deseada serán leídas desde hal y pasadas a "

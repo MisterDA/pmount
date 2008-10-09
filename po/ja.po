@@ -1,22 +1,21 @@
-# Estonian translation for pmount
-# Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
+# Japanese translation for pmount
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the pmount package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: pmount\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
-"PO-Revision-Date: 2005-11-06 22:25+0000\n"
-"Last-Translator: H_M_Murdock_EST <eerove@gmail.com>\n"
-"Language-Team: Estonian <et@li.org>\n"
+"PO-Revision-Date: 2008-01-24 13:36+0000\n"
+"Last-Translator: otk <Unknown>\n"
+"Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2008-10-07 18:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-"X-Rosetta-Version: 0.1\n"
 
 #: ../src/pmount.c:51
 #, c-format
@@ -75,22 +74,22 @@ msgstr ""
 #: ../src/pmount.c:134
 #, c-format
 msgid "Error: label must not be empty\n"
-msgstr ""
+msgstr "エラー: ラベル名が空です\n"
 
 #: ../src/pmount.c:138
 #, c-format
 msgid "Error: label too long\n"
-msgstr ""
+msgstr "エラー: ラベル名が長すぎます\n"
 
 #: ../src/pmount.c:143
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
-msgstr ""
+msgstr "エラー: ラベル名に '/' を含めることはできません\n"
 
 #: ../src/pmount.c:150
 #, c-format
 msgid "Error: device name too long\n"
-msgstr ""
+msgstr "エラー: デバイス名が長すぎます\n"
 
 #: ../src/pmount.c:181 ../src/pumount.c:100
 msgid "Error: could not drop all uid privileges"
@@ -98,7 +97,7 @@ msgstr ""
 
 #: ../src/pmount.c:186
 msgid "Error: could not execute mount"
-msgstr ""
+msgstr "エラー: マウントが実行できません"
 
 #: ../src/pmount.c:225
 #, c-format
@@ -108,17 +107,17 @@ msgstr ""
 #: ../src/pmount.c:231
 #, c-format
 msgid "Error: invalid file system name '%s'\n"
-msgstr ""
+msgstr "エラー: 不正なファイルシステム名 '%s'\n"
 
 #: ../src/pmount.c:237
 #, c-format
 msgid "Error: invalid umask %s\n"
-msgstr ""
+msgstr "エラー: 不正な umask %s\n"
 
 #: ../src/pmount.c:285
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
-msgstr ""
+msgstr "エラー: 不正なキャラクタセット名 '%s'\n"
 
 #: ../src/pmount.c:366
 #, c-format
@@ -183,7 +182,7 @@ msgstr ""
 
 #: ../src/pmount.c:720
 msgid "Error: could not delete mount point"
-msgstr ""
+msgstr "エラー: マウントポイントを削除できません"
 
 #: ../src/pmount.c:741
 #, c-format
@@ -204,7 +203,7 @@ msgstr ""
 
 #: ../src/pmount-hal.c:167
 msgid "Error: could not execute pmount\n"
-msgstr ""
+msgstr "エラー: pmount を実行できません\n"
 
 #: ../src/pmount-hal.c:210
 #, c-format
@@ -218,7 +217,7 @@ msgstr ""
 
 #: ../src/policy.c:92
 msgid "Error: could not get status of device"
-msgstr ""
+msgstr "エラー: デバイスのステータスを取得できません"
 
 #: ../src/policy.c:103
 msgid "Error: could not get sysfs directory\n"
@@ -226,7 +225,7 @@ msgstr ""
 
 #: ../src/policy.c:110
 msgid "Error: could not open <sysfs dir>/block/"
-msgstr ""
+msgstr "エラー: <sysfs dir>/block/ をオープンできません"
 
 #: ../src/policy.c:141
 msgid "Error: could not open <sysfs dir>/block/<device>/"
@@ -235,12 +234,12 @@ msgstr ""
 #: ../src/policy.c:241
 #, c-format
 msgid "Error: device %s does not exist\n"
-msgstr ""
+msgstr "エラー: デバイス %s が存在しません\n"
 
 #: ../src/policy.c:246
 #, c-format
 msgid "Error: %s is not a block device\n"
-msgstr ""
+msgstr "エラー: %s はブロックデバイスではありません\n"
 
 #: ../src/policy.c:264 ../src/policy.c:320
 msgid "Error: could not open fstab-type file"
@@ -249,32 +248,32 @@ msgstr ""
 #: ../src/policy.c:351
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
-msgstr ""
+msgstr "エラー: デバイス %s はすでに %s にマウントされています\n"
 
 #: ../src/policy.c:353
 #, c-format
 msgid "Error: device %s is not mounted\n"
-msgstr ""
+msgstr "エラー: デバイス %s はマウントされていません\n"
 
 #: ../src/policy.c:355
 #, c-format
 msgid "Error: device %s was not mounted by you\n"
-msgstr ""
+msgstr "エラー: %s はあなたがマウントしたデバイスではありません\n"
 
 #: ../src/policy.c:391
 #, c-format
 msgid "Error: device %s is not removable\n"
-msgstr ""
+msgstr "エラー: デバイス %s はリムーバブルではありません\n"
 
 #: ../src/policy.c:454
 #, c-format
 msgid "Error: device %s is locked\n"
-msgstr ""
+msgstr "エラー: デバイス %s はロックされています\n"
 
 #: ../src/policy.c:463
 #, c-format
 msgid "Error: mount point %s is already in /etc/fstab\n"
-msgstr ""
+msgstr "エラー: マウントポイント %s はすでに /etc/fstab にあります\n"
 
 #: ../src/policy.c:476
 #, c-format
@@ -315,12 +314,12 @@ msgstr ""
 
 #: ../src/pumount.c:110
 msgid "Error: could not execute umount"
-msgstr ""
+msgstr "エラー: umount が実行できません"
 
 #: ../src/pumount.c:131
 #, c-format
 msgid "Error: umount failed\n"
-msgstr ""
+msgstr "エラー: umount に失敗\n"
 
 #: ../src/utils.c:52
 #, c-format
@@ -329,7 +328,7 @@ msgstr ""
 
 #: ../src/utils.c:108
 msgid "Error: could not create directory"
-msgstr ""
+msgstr "エラー: ディレクトリが作成できません"
 
 #: ../src/utils.c:124
 msgid "Error: could not create stamp file in directory"
@@ -338,16 +337,16 @@ msgstr ""
 #: ../src/utils.c:132
 #, c-format
 msgid "Error: %s is not a directory\n"
-msgstr ""
+msgstr "エラー: %s はディレクトリではありません\n"
 
 #: ../src/utils.c:152
 msgid "Error: could not open directory"
-msgstr ""
+msgstr "エラー: ディレクトリが開けません"
 
 #: ../src/utils.c:161
 #, c-format
 msgid "Error: directory %s is not empty\n"
-msgstr ""
+msgstr "エラー: ディレクトリ %s は空ではありません\n"
 
 #: ../src/utils.c:213
 #, c-format

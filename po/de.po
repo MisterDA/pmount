@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: pmount 0.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
-"PO-Revision-Date: 2007-08-29 09:26+0000\n"
-"Last-Translator: Martin Pitt <martin.pitt@ubuntu.com>\n"
+"PO-Revision-Date: 2008-01-28 21:37+0000\n"
+"Last-Translator: Martin Schaaf <mascha@ma-scha.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2007-12-14 18:32+0000\n"
+"X-Launchpad-Export-Date: 2008-10-07 18:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #~ msgid ""
@@ -459,7 +459,7 @@ msgid "Error: device %s was not mounted by you\n"
 msgstr "Fehler: Gerät %s wurde nicht von Ihnen eingebunden\n"
 
 #: ../src/policy.c:391
-#, fuzzy, c-format
+#, c-format
 msgid "Error: device %s is not removable\n"
 msgstr "Fehler: Gerät %s ist kein Wechseldatenträger\n"
 
