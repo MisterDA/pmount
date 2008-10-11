@@ -341,8 +341,16 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
             fprintf( stderr, _("Error: invalid charset name '%s'\n"), iocharset );
             return -1;
         }
-        snprintf( iocharset_opt, sizeof( iocharset_opt ), 
+	/* VFAT and UTF-8 need special care, see bug #443514 and mount(1) */
+	if( ! strcmp(iocharset, "utf8") && ! strcmp(fsname, "vfat")) {
+	  debug("Charset is utf8 and filesystem is vfat: using option utf8 "
+		"rather than iocharset=utf8\n");
+	  snprintf( iocharset_opt, sizeof( iocharset_opt ), 
+		    ",utf8" );
+	} else {
+	  snprintf( iocharset_opt, sizeof( iocharset_opt ), 
 		  fs->iocharset_format, iocharset );
+	}
     }
 
     snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s%s", 
