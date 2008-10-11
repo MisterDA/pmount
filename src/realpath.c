@@ -71,7 +71,7 @@ private_realpath(const char *path, char *resolved_path, int maxreslth) {
 	if (*path != '/') {
 	  if (!getcwd(npath, maxreslth-2)) {
 	    debug("realpath: could not get current directory: %s"),
-	      strerror();
+	      strerror(errno);
 	    return NULL;
 	  }
 	  npath += strlen(npath);
