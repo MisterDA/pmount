@@ -1,8 +1,9 @@
 /**
  * policy.c - functions for testing various policy parts for pmount
  *
- * Author: Martin Pitt <martin.pitt@canonical.com>
- * (c) 2004 Canonical Ltd.
+ * Authors: Martin Pitt <martin.pitt@canonical.com>,
+ *          Vincent Fourmond <fourmond@debian.org
+ * (c) 2004 Canonical Ltd, 2007, 2008 by Vincent Fourmond
  *
  * This software is distributed under the terms and conditions of the 
  * GNU General Public License. See file GPL for the full text of the license.
@@ -20,13 +21,13 @@
 #include <dirent.h>
 #include <libintl.h>
 #include <sys/stat.h>
-#include <sysfs/libsysfs.h>
 #include <regex.h>
 
 /* For globs in /etc/pmount.allow */
 #include <fnmatch.h>
 
 
+/* We use our own safe version of realpath */
 #include "realpath.h"
 
 /*************************************************************************
@@ -35,81 +36,93 @@
  *
  *************************************************************************/
 
+/* We drop the 'bus' stuff, as, quoting  Documentation/sysfs-rules.txt, 
 
-/**
- * Check whether a bus occurs anywhere in the ancestry of a device.
- * @param dev sysfs device
- * @param buses NULL-terminated array of bus names to scan for
- * @return 0 if not found, 1 if found
- */
-int
-find_bus_ancestry( struct sysfs_device* dev, char** buses ) {
-    char **i;
-    struct sysfs_bus * bus;
-    struct sysfs_device * found;
+   - devices are only "devices"
+   There is no such thing like class-, bus-, physical devices,
+   interfaces, and such that you can rely on in userspace. Everything is
+   just simply a "device". Class-, bus-, physical, ... types are just
+   kernel implementation details which should not be expected by
+   applications that look for devices in sysfs.
 
-    if( !buses ) {
-        debug ( "find_bus_ancestry: no buses to check, fail\n" );
-        return 0;
-    }
+   Therefore, we shouldn't rely on the notion of 'bus'.
+*/
 
-    if( !dev ) {
-        debug ( "find_bus_ancestry: dev == NULL, fail\n" );
-        return 0;
-    }
 
-    for( i = buses; *i; ++i ) {
-        if( !strcmp( dev->bus, *i ) ) {
-            debug ( "find_bus_ancestry: device %s (path %s, bus %s) matches query, success\n", 
-                    dev->name, dev->path, dev->bus );
-            return 1;
-        }
-    }
-    /* Try the hard way */
-    if(find_device_in_buses(dev, buses))
-      return 1;
+/* /\** */
+/*  * Check whether a bus occurs anywhere in the ancestry of a device. */
+/*  * @param dev sysfs device */
+/*  * @param buses NULL-terminated array of bus names to scan for */
+/*  * @return 0 if not found, 1 if found */
+/*  *\/ */
+/* int */
+/* find_bus_ancestry( struct sysfs_device* dev, char** buses ) { */
+/*     char **i; */
+/*     struct sysfs_bus * bus; */
+/*     struct sysfs_device * found; */
 
-    debug ( "find_bus_ancestry: device '%s' (path '%s', bus '%s') "
-	    "does not match, trying parent\n", 
-            dev->name, dev->path, dev->bus );
-    return find_bus_ancestry( sysfs_get_device_parent( dev ), buses );
-}
+/*     if( !buses ) { */
+/*         debug ( "find_bus_ancestry: no buses to check, fail\n" ); */
+/*         return 0; */
+/*     } */
 
-/**
- * Check whether a particular device is found in a list of buses.
- * @param dev sysfs device
- * @param buses NULL-terminated array of bus names to scan for
- * @return 0 if not found, 1 if found
- */
+/*     if( !dev ) { */
+/*         debug ( "find_bus_ancestry: dev == NULL, fail\n" ); */
+/*         return 0; */
+/*     } */
 
-int
-find_device_in_buses( struct sysfs_device * dev, char** buses) {
-  struct sysfs_bus * bus;
-  struct sysfs_device * found;
-  char ** i;
+/*     for( i = buses; *i; ++i ) { */
+/*         if( !strcmp( dev->bus, *i ) ) { */
+/*             debug ( "find_bus_ancestry: device %s (path %s, bus %s) matches query, success\n",  */
+/*                     dev->name, dev->path, dev->bus ); */
+/*             return 1; */
+/*         } */
+/*     } */
+/*     /\* Try the hard way *\/ */
+/*     if(find_device_in_buses(dev, buses)) */
+/*       return 1; */
 
-  for(i = buses; *i; ++i) 
-    {
-      bus = sysfs_open_bus(*i);
-      if(bus)
-	{
-	  debug("find_device_in_buses : "
-		"successfully opened bus '%s' path '%s'\n",
-		bus->name, bus->path);
-	  found = sysfs_get_bus_device(bus,dev->bus_id);
-	  if(found)
-	    {
-	      debug("find_device_in_buses : "
-		    "found '%s' in bus '%s'\n",
-		    dev->name, *i);
-	      sysfs_close_bus(bus);
-	      return 1;		/* We found  it !*/
-	    }
-	  sysfs_close_bus(bus);
-	}
-    }
-  return 0;
-}
+/*     debug ( "find_bus_ancestry: device '%s' (path '%s', bus '%s') " */
+/* 	    "does not match, trying parent\n",  */
+/*             dev->name, dev->path, dev->bus ); */
+/*     return find_bus_ancestry( sysfs_get_device_parent( dev ), buses ); */
+/* } */
+
+/* /\** */
+/*  * Check whether a particular device is found in a list of buses. */
+/*  * @param dev sysfs device */
+/*  * @param buses NULL-terminated array of bus names to scan for */
+/*  * @return 0 if not found, 1 if found */
+/*  *\/ */
+
+/* int */
+/* find_device_in_buses( struct sysfs_device * dev, char** buses) { */
+/*   struct sysfs_bus * bus; */
+/*   struct sysfs_device * found; */
+/*   char ** i; */
+
+/*   for(i = buses; *i; ++i)  */
+/*     { */
+/*       bus = sysfs_open_bus(*i); */
+/*       if(bus) */
+/* 	{ */
+/* 	  debug("find_device_in_buses : " */
+/* 		"successfully opened bus '%s' path '%s'\n", */
+/* 		bus->name, bus->path); */
+/* 	  found = sysfs_get_bus_device(bus,dev->bus_id); */
+/* 	  if(found) */
+/* 	    { */
+/* 	      debug("find_device_in_buses : " */
+/* 		    "found '%s' in bus '%s'\n", */
+/* 		    dev->name, *i); */
+/* 	      sysfs_close_bus(bus); */
+/* 	      return 1;		/\* We found  it !*\/ */
+/* 	    } */
+/* 	  sysfs_close_bus(bus); */
+/* 	} */
+/*     } */
+/*   return 0; */
+/* } */
 
 
 
@@ -123,6 +136,18 @@ find_device_in_buses( struct sysfs_device * dev, char** buses) {
  * @param blockdevpathsize size of blockdevpath buffer (if not NULL)
  * @return Matching sysfs_device node (NULL if not found)
  */
+
+/* This function needs a major rewrite to get rid of the
+   libsysfs dependencies...
+
+   Proposal:
+   - browse /sys/block or /sys/class/block for devices whose dev matches
+     the major/minor of the device we're interested in
+   - get the removable property
+
+   Problem: assumes too much about the directory structure, but is
+   already better and that would drop the dependency on libsysfs
+*/
 struct sysfs_device*
 find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize ) {
     unsigned char devmajor, devminor;
@@ -229,6 +254,11 @@ find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize 
             snprintf( devfilename, sizeof( devfilename ), "%s/device", devdirname );
 
             /* read out the link */
+	    /* Hmmmmm... According to Documentation/sysfs-rules.txt, the idea
+	       to use libsysfs is a bad one...
+
+	       This is probably why things now fail.
+	    */
             if( !sysfs_get_link( devfilename, linkfilename, 1024 ) )
                 sysdev = sysfs_open_device_path( linkfilename );
 
@@ -435,6 +465,7 @@ int device_removable_silent(const char * device)
   int removable;
   char blockdevpath[PATH_MAX];
   
+  /* In real, we don't need dev here. That can be slightly modified... */
   dev = find_sysfs_device( device, blockdevpath, sizeof( blockdevpath ) );
   if( !dev ) {
     debug( "device_removable: could not find a sysfs device for %s\n", device );
