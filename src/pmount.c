@@ -218,6 +218,7 @@ do_mount_fstab( const char* device )
  * @param force_write 1 for forced r/w, 0 for forced r/o, -1 for kernel default
  * @param iocharset charset to use for file name conversion; NULL for mount
  *        default
+ * @param utf8 is true if the option utf8 should be used for VFAT
  * @param umask User specified umask (NULL for default)
  * @param fmask User specified fmask (NULL for umask)
  * @param dmask User specified dmask (NULL for umask)
@@ -227,6 +228,7 @@ do_mount_fstab( const char* device )
 int
 do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 	  int noatime, int exec, int force_write, const char* iocharset, 
+	  int utf8, 
 	  const char* umask, const char *fmask, const char *dmask, 
 	  int suppress_errors )
 {
@@ -342,16 +344,27 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
             return -1;
         }
 	/* VFAT and UTF-8 need special care, see bug #443514 and mount(1) */
-	if( ! strcmp(iocharset, "utf8") && ! strcmp(fsname, "vfat")) {
-	  debug("Charset is utf8 and filesystem is vfat: using option utf8 "
-		"rather than iocharset=utf8\n");
-	  snprintf( iocharset_opt, sizeof( iocharset_opt ), 
-		    ",utf8" );
+	if(! strcmp(fsname, "vfat") && utf8 ) {
+	  debug("VFAT in a UTF-8 locale: using option utf8\n");
+	  if(! strcmp(iocharset, "utf8")) {
+	    debug("filesystem is vfat and charset is utf-8: using iso8859-1\n"
+		  "You can change with the -c option");
+	    snprintf( iocharset_opt, sizeof( iocharset_opt ), 
+		      ",utf8,iocharset=iso8859-1" );
+	  }
+	  else {
+	    snprintf( iocharset_opt, sizeof( iocharset_opt ), 
+		      ",utf8,iocharset=%s", iocharset );
+
+	  }
 	} else {
 	  snprintf( iocharset_opt, sizeof( iocharset_opt ), 
 		  fs->iocharset_format, iocharset );
 	}
     }
+    /* Unfortunately, debian's mount now defaults to iocharset=utf8
+       for VFAT, which is very bad...
+    */
 
     snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s%s", 
             fs->options, sync_opt, atime_opt, exec_opt, access_opt, ugid_opt,
@@ -375,6 +388,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
  * @param force_write 1 for forced r/w, 0 for forced r/o, -1 for kernel default
  * @param iocharset charset to use for file name conversion; NULL for mount
  *        default
+ * @param utf8 is true if the option utf8 should be used for VFAT
  * @param umask User specified umask (NULL for default)
  * @param fmask User specified fmask (NULL for umask)
  * @param dmask User specified dmask (NULL for umask)
@@ -382,8 +396,9 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
  */
 int
 do_mount_auto( const char* device, const char* mntpt, int async, 
-        int noatime, int exec, int force_write, const char* iocharset, 
-        const char* umask, const char *fmask, const char *dmask )
+	       int noatime, int exec, int force_write, const char* iocharset, 
+	       int utf8, 
+	       const char* umask, const char *fmask, const char *dmask )
 {
     const struct FS* fs;
     int nostderr = 1;
@@ -403,7 +418,7 @@ do_mount_auto( const char* device, const char* mntpt, int async,
 	tp = "ntfs-3g";
       }
       result = do_mount( device, mntpt, tp, async, noatime, exec, 
-			 force_write, iocharset, umask, fmask, 
+			 force_write, iocharset, utf8, umask, fmask, 
 			 dmask, nostderr );
       if(result == 0)
 	return result;
@@ -425,14 +440,14 @@ do_mount_auto( const char* device, const char* mntpt, int async,
       if( (fs+1)->fsname == NULL )
 	nostderr = 0;
       result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-			 force_write, iocharset, umask, fmask, dmask, nostderr );
+			 force_write, iocharset, utf8, umask, fmask, dmask, nostderr );
       if( result == 0 )
 	break;
 
       /* sometimes VFAT fails when using iocharset; try again without */
       if( iocharset )
 	result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-			   force_write, NULL, umask, fmask, dmask, nostderr );
+			   force_write, NULL, utf8, umask, fmask, dmask, nostderr );
       if( result <= 0 )
 	break;
     }
@@ -604,6 +619,7 @@ main( int argc, char** argv )
     const char* fmask = NULL;
     const char* dmask = NULL;
     const char* passphrase = NULL;
+    int utf8 = -1; 		/* Whether we live in a UTF-8 world or not */
     int result;
 
     enum { MOUNT, LOCK, UNLOCK } mode = MOUNT;
@@ -793,6 +809,17 @@ main( int argc, char** argv )
                     iocharset = "utf8";
                 }
             }
+	    /* If user did not choose explicitly for or against utf8 */
+	    if( utf8 == -1 ) {
+	      const char* codeset;
+	      codeset = nl_langinfo( CODESET );
+	      if( codeset && !strcmp( codeset, "UTF-8" ) ) {
+		debug( "locale encoding uses UTF-8: will mount FAT with utf8 option" );
+		utf8 = 1;
+	      } else {
+		utf8 = 0;
+	      }
+	    }
 
             /* clean stale locks */
             clean_lock_dir( device );
@@ -835,10 +862,10 @@ main( int argc, char** argv )
             /* off we go */
             if( use_fstype )
                 result = do_mount( decrypted_device, mntpt, use_fstype, async, noatime,
-                        exec, force_write, iocharset, umask, fmask, dmask, 0 );
+				   exec, force_write, iocharset, utf8, umask, fmask, dmask, 0 );
             else
                 result = do_mount_auto( decrypted_device, mntpt, async, noatime, exec,
-                        force_write, iocharset, umask, fmask, dmask ); 
+                        force_write, iocharset, utf8, umask, fmask, dmask ); 
 
             /* unlock the mount point again */
             debug( "unlocking mount point directory\n" );
