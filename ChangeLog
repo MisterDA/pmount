@@ -4,7 +4,11 @@
   try to provide a better error message when a mountpoint is found
   in /etc/fstab
 - vfat now uses utf8 rather than iocharset=utf8 when applicable, to
-  avoid getting a case-sensitive filesystem
+  avoid getting a case-sensitive filesystem. In addition, charset
+  iso8859-1 is now used for VFAT for all cases when the charset is not
+  specified, or is utf8
+- finally fix the symlinks in /etc/fstab problem.
+- pulling new translations from Rosetta.
 	
 0.9.17
 -----------
