@@ -184,6 +184,14 @@ for NTFS). This option is ignored for file systems that do not
 support setting the character set (see
 .B mount
 (8) for details).
+.B Important note:
+.B pmount
+will now mount VFAT filesystems with 
+.I iocharset=iso8859-1
+as 
+.I iocharset=utf8
+currently makes the filesystem case-sensitive (which is pretty
+bad...). 
 
 .TP
 .B \-u \fIumask\fR, \fB\-\-umask \fIumask\fR

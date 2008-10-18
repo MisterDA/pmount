@@ -362,9 +362,14 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 		  fs->iocharset_format, iocharset );
 	}
     }
-    /* Unfortunately, debian's mount now defaults to iocharset=utf8
-       for VFAT, which is very bad...
-    */
+    else if(! strcmp(fsname, "vfat") && fs->iocharset_format) {
+      /* We still make a special case for vfat, as in certain cases,
+	 mount will mount it with iocharset=utf8, some times without
+	 warning. So, in the absence of a specified charset, we
+	 force iocharset=iso8859-1*/
+      snprintf( iocharset_opt, sizeof( iocharset_opt ), 
+		fs->iocharset_format, "iso8859-1");
+    }
 
     snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s%s", 
             fs->options, sync_opt, atime_opt, exec_opt, access_opt, ugid_opt,
