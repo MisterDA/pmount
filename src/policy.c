@@ -465,16 +465,24 @@ device_removable( const char* device )
   return removable;
 }
 
+/**
+   Checks whether a given device is whitelisted in /etc/pmount.allow
+   (or any other value the WHITELIST has). 
+   @param device : the device name
+ */
 int
 device_whitelisted( const char* device )
 {
     FILE* fwl;
     char line[1024];
+    char full_path[1024];
     char *d;
     regex_t re;
     regmatch_t match[3];
     int result;
-    const char* whitelist_regex = "^[[:space:]]*([][:alnum:]/_+.[*?-]+)[[:space:]]*(#.*)?$";
+    /* (Vincent Fourmond 6/1/2009): Adding :, as it comes in often in
+       device names */
+    const char* whitelist_regex = "^[[:space:]]*([][:alnum:]/:_+.[*?-]+)[[:space:]]*(#.*)?$";
 
     fwl = fopen( WHITELIST, "r" );
     if( !fwl )
@@ -501,10 +509,24 @@ device_whitelisted( const char* device )
            d = line+match[1].rm_so;
            debug( "comparing %s against whitelisted '%s'\n", device, d);
 	   if( !fnmatch(d, device, FNM_PATHNAME) ) {
-               debug( "device_whitlisted(): match, returning 1\n" );
-               fclose( fwl );
-               return 1;
+	     debug( "device_whitelisted(): %s matches, returning 1\n",
+		    d);
+	     fclose( fwl );
+	     return 1;
            }
+	   else {
+	     /* We use realpath on the specification in order to follow
+		symlinks. See bug #507038 */
+	     if( realpath(d, full_path)) {
+	       if(! strcmp(device, full_path)) {
+		 debug( "device_whitelisted(): %s matches after "
+			"realpath expansion, returning 1\n",
+			d);
+		 fclose( fwl );
+		 return 1;
+	       }
+	     }
+	   }
        }
     }
 
