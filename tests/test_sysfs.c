@@ -32,15 +32,18 @@ int find_sysfs_device( const char* dev, char* blockdevpath,
 int is_blockdev_attr_true( const char* blockdevpath, 
 			   const char* attr );
 
-int get_blockdev_bus( const char* blockdevpath, 
-		      char* bus, size_t bus_size );
+const char * bus_has_ancestry(const char * blockdevpath, 
+			      char** buses);
+
+static char* hotplug_buses[] = { "usb", "ieee1394", 
+				 "mmc", "pcmcia", NULL };
 
 
 
 int main(int argc, char *argv[])
 {
   char device_path[512];
-  char bus[100];
+  const char * bus;
   struct stat devstat;
   if(argc != 2) {
     fprintf(stderr, "Usage: %s device\n", argv[0]);
@@ -61,10 +64,11 @@ int main(int argc, char *argv[])
     fprintf(stdout, "Device %s is removable: %s\n",
 	    argv[1], is_blockdev_attr_true(device_path,"removable") ?
 	    "yes" :"no");
-    if(get_blockdev_bus(device_path, bus, sizeof(bus)))
-      fprintf(stdout, "Bus for device %s is %s\n", argv[1], bus);
-    else
-      fprintf(stdout, "Bus not found for device %s\n", argv[1]);
+    bus = bus_has_ancestry(device_path, hotplug_buses);
+    if(bus) 
+      fprintf(stdout, "Found whitelisted bus: %s\n", bus);
+    else 
+      fprintf(stdout, "No whitelisted bus found\n", bus);
     return 0;
   }
   else {

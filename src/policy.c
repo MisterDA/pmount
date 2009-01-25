@@ -37,93 +37,15 @@
  *
  *************************************************************************/
 
-/* We drop the 'bus' stuff, as, quoting  Documentation/sysfs-rules.txt, 
-
-   - devices are only "devices"
-   There is no such thing like class-, bus-, physical devices,
-   interfaces, and such that you can rely on in userspace. Everything is
-   just simply a "device". Class-, bus-, physical, ... types are just
-   kernel implementation details which should not be expected by
-   applications that look for devices in sysfs.
-
-   Therefore, we shouldn't rely on the notion of 'bus'.
-*/
-
-
-/* /\** */
-/*  * Check whether a bus occurs anywhere in the ancestry of a device. */
-/*  * @param dev sysfs device */
-/*  * @param buses NULL-terminated array of bus names to scan for */
-/*  * @return 0 if not found, 1 if found */
-/*  *\/ */
-/* int */
-/* find_bus_ancestry( struct sysfs_device* dev, char** buses ) { */
-/*     char **i; */
-/*     struct sysfs_bus * bus; */
-/*     struct sysfs_device * found; */
-
-/*     if( !buses ) { */
-/*         debug ( "find_bus_ancestry: no buses to check, fail\n" ); */
-/*         return 0; */
-/*     } */
-
-/*     if( !dev ) { */
-/*         debug ( "find_bus_ancestry: dev == NULL, fail\n" ); */
-/*         return 0; */
-/*     } */
-
-/*     for( i = buses; *i; ++i ) { */
-/*         if( !strcmp( dev->bus, *i ) ) { */
-/*             debug ( "find_bus_ancestry: device %s (path %s, bus %s) matches query, success\n",  */
-/*                     dev->name, dev->path, dev->bus ); */
-/*             return 1; */
-/*         } */
-/*     } */
-/*     /\* Try the hard way *\/ */
-/*     if(find_device_in_buses(dev, buses)) */
-/*       return 1; */
-
-/*     debug ( "find_bus_ancestry: device '%s' (path '%s', bus '%s') " */
-/* 	    "does not match, trying parent\n",  */
-/*             dev->name, dev->path, dev->bus ); */
-/*     return find_bus_ancestry( sysfs_get_device_parent( dev ), buses ); */
-/* } */
-
-/* /\** */
-/*  * Check whether a particular device is found in a list of buses. */
-/*  * @param dev sysfs device */
-/*  * @param buses NULL-terminated array of bus names to scan for */
-/*  * @return 0 if not found, 1 if found */
-/*  *\/ */
-
-/* int */
-/* find_device_in_buses( struct sysfs_device * dev, char** buses) { */
-/*   struct sysfs_bus * bus; */
-/*   struct sysfs_device * found; */
-/*   char ** i; */
-
-/*   for(i = buses; *i; ++i)  */
-/*     { */
-/*       bus = sysfs_open_bus(*i); */
-/*       if(bus) */
-/* 	{ */
-/* 	  debug("find_device_in_buses : " */
-/* 		"successfully opened bus '%s' path '%s'\n", */
-/* 		bus->name, bus->path); */
-/* 	  found = sysfs_get_bus_device(bus,dev->bus_id); */
-/* 	  if(found) */
-/* 	    { */
-/* 	      debug("find_device_in_buses : " */
-/* 		    "found '%s' in bus '%s'\n", */
-/* 		    dev->name, *i); */
-/* 	      sysfs_close_bus(bus); */
-/* 	      return 1;		/\* We found  it !*\/ */
-/* 	    } */
-/* 	  sysfs_close_bus(bus); */
-/* 	} */
-/*     } */
-/*   return 0; */
-/* } */
+/**
+   The directories to search for to find the block subsystem. Null-terminated. 
+ */
+static const char * block_subsystem_directories[] = { 
+  "/sys/subsystem/block",
+  "/sys/class/block",
+  "/sys/block",
+  NULL
+};
 
 
 
@@ -154,16 +76,6 @@
    The rationale of the steps found in this function are based on my
    own experience and on Documentation/sysfs-rules.txt
  */
-
-/**
-   The directories to search for to find the block subsystem. Null-terminated. 
- */
-static const char * block_subsystem_directories[] = { 
-  "/sys/subsystem/block",
-  "/sys/class/block",
-  "/sys/block",
-  NULL
-};
 
 int find_sysfs_device( const char* dev, char* blockdevpath, 
 		       size_t blockdevpathsize ) 
@@ -341,39 +253,96 @@ is_blockdev_attr_true( const char* blockdevpath, const char* attr )
     return value == '1';
 }
 
+
+/*************************************************************************/
+/* Bus-related functions
+
+   WARNING. Quoting Documentation/sysfs-rules.txt:
+
+   - devices are only "devices"
+   There is no such thing like class-, bus-, physical devices,
+   interfaces, and such that you can rely on in userspace. Everything is
+   just simply a "device". Class-, bus-, physical, ... types are just
+   kernel implementation details which should not be expected by
+   applications that look for devices in sysfs.
+
+   Therefore, the notion of 'bus' is at best not reliable. But I still
+   keep the information, as it could help in corner cases.
+*/
+
+
 /**
-   Tries to find the 'bus' of the given blockdevpath, and stores is into
-   the bus string.
+   Tries to find the 'bus' of the given *device* (ie, under
+   /sys/devices), and stores is into the bus string.
 
    Note that this function is in no way guaranteed to work, as the bus
    attribute is "fragile". But I'm not aware of anything better for
    now. 
  */
-int get_blockdev_bus( const char* blockdevpath, 
+int get_device_bus( const char* devicepath, 
 		      char* bus, size_t bus_size )
 {
     char path[PATH_MAX];
     char link[PATH_MAX];
+    char * tmp;
     ssize_t link_size;
 
-    snprintf( path, sizeof( path ), "%s/device/bus", blockdevpath);
+    snprintf( path, sizeof( path ), "%s/bus", devicepath);
     link_size = readlink(path, link, sizeof(link) - 1 /* for the 0-byte*/);
     if(link_size == -1) {
       debug( "Could not read link at %s\n", link);
       return 0; 		/* Failed */
     }
 
+    /* That is necessary, as readlink is not supposed to return a
+       0-terminated string */
     link[link_size--] = 0;
-    while(link_size >= 0) {
-      if(link[link_size] == '/')
-	break;
-      link_size--;
-    }
-    if(link_size >= 0) {
-      snprintf( bus, bus_size, "%s", link + link_size + 1);
+    tmp = strrchr(link, '/');
+    if(tmp) {
+      snprintf( bus, bus_size, "%s", tmp + 1);
       return 1;
     }
     return 0;
+}
+
+/**
+ * Check whether a bus occurs anywhere in the ancestry of a device.
+ * @param blockdevpath is a device as returned by 
+ * @param buses NULL-terminated array of bus names to scan for
+ * @return the name of the bus found, or NULL
+ */
+const char * bus_has_ancestry(const char * blockdevpath, const char** buses) {
+  char path[1024];
+  char full_device[1024];
+  char * tmp;
+  const char **i;
+  char bus[1024];
+
+  snprintf(path, sizeof(path), "%s/device", blockdevpath);
+  if(! realpath(path, full_device)) {
+    debug("Realpath failed to resolve %s\n", path);
+    return NULL;
+  }
+  
+  /* We now have a full path to the device */
+
+  /* We loop on full_device until we are on the root directory */
+  while(full_device[0]) {
+    if(get_device_bus(full_device, bus, sizeof(bus))) {
+      debug("Found bus %s for device %s\n", bus, full_device);
+      for( i = buses; *i; ++i ) {
+	if(! strcmp(bus, *i)) {
+	  debug(" -> this is one of the buses we were looking for\n");
+	  return *i;
+	}
+      }
+    }
+    tmp = strrchr(full_device, '/');
+    if(! tmp)
+      break;
+    *tmp = 0;
+  }
+  return NULL;
 }
 
 
@@ -531,38 +500,38 @@ device_mounted( const char* device, int expect, char* mntpt )
 /* The silent version of the device_removable function. */
 int device_removable_silent(const char * device)
 {
-  static char* hotplug_buses[] = { "usb", "ieee1394", "mmc", "pcmcia", NULL };
+  static char* hotplug_buses[] = { "usb", "ieee1394", "mmc", 
+				   "pcmcia", NULL };
   int removable;
-  int dev;
   char blockdevpath[PATH_MAX];
-  char bus[100];
-  
-  /* In real, we don't need dev here. That can be slightly modified... */
-  /* TODO!!! modify here ! */
-  dev = find_sysfs_device( device, blockdevpath, sizeof( blockdevpath ) );
-  if( !dev ) {
-    debug( "device_removable: could not find a sysfs device for %s\n", device );
+  const char * whitelisted_bus;
+
+  if(! find_sysfs_device(device, blockdevpath, sizeof(blockdevpath))) {
+    debug("device_removable: could not find a sysfs device for %s\n", 
+	  device );
     return 0; 
   }
   
-  debug( "device_removable: corresponding block device for %s is %s\n",
-	 device, blockdevpath );
+  debug("device_removable: corresponding block device for %s is %s\n",
+	device, blockdevpath);
   
   /* check whether device has "removable" attribute with value '1' */
-  removable = is_blockdev_attr_true( blockdevpath, "removable" );
-
+  removable = is_blockdev_attr_true(blockdevpath, "removable");
+  
   /* 
      If not, fall back to bus scanning (regard USB and FireWire as
-     removable).
+     removable, see above).
   */
-  if( !removable) {
-    
+  if(! removable) {
+    whitelisted_bus = bus_has_ancestry(blockdevpath, hotplug_buses);
+    if(whitelisted_bus) {
+      removable = 1;
+      debug("Found that device %s belong to whitelisted bus %s\n", 
+	    blockdevpath, whitelisted_bus);
+    }
+    else
+      debug("Device %s does not belong to any whitelisted bus\n");
   } 
-  
-  /* TODO: put back bus checking */ 
-/*   if( !removable ) */
-/*     removable = find_bus_ancestry( dev, hotplug_buses ); */
-/*   sysfs_close_device( dev ); */
   return removable;
 }
 
