@@ -29,11 +29,18 @@
 int find_sysfs_device( const char* dev, char* blockdevpath, 
 		       size_t blockdevpathsize );
 
+int is_blockdev_attr_true( const char* blockdevpath, 
+			   const char* attr );
+
+int get_blockdev_bus( const char* blockdevpath, 
+		      char* bus, size_t bus_size );
+
 
 
 int main(int argc, char *argv[])
 {
   char device_path[512];
+  char bus[100];
   struct stat devstat;
   if(argc != 2) {
     fprintf(stderr, "Usage: %s device\n", argv[0]);
@@ -51,6 +58,13 @@ int main(int argc, char *argv[])
   if(! find_sysfs_device(argv[1], device_path, sizeof(device_path))) {
     fprintf(stdout, "Found sysfs device for %s : %s\n", 
 	    argv[1], device_path);
+    fprintf(stdout, "Device %s is removable: %s\n",
+	    argv[1], is_blockdev_attr_true(device_path,"removable") ?
+	    "yes" :"no");
+    if(get_blockdev_bus(device_path, bus, sizeof(bus)))
+      fprintf(stdout, "Bus for device %s is %s\n", argv[1], bus);
+    else
+      fprintf(stdout, "Bus not found for device %s\n", argv[1]);
     return 0;
   }
   else {

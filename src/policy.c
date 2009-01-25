@@ -165,8 +165,9 @@ static const char * block_subsystem_directories[] = {
   NULL
 };
 
-int
-find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize ) {
+int find_sysfs_device( const char* dev, char* blockdevpath, 
+		       size_t blockdevpathsize ) 
+{
     unsigned char devmajor, devminor;
     unsigned char sysmajor, sysminor;
     char blockdirname[255];
@@ -287,18 +288,15 @@ find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize 
 
             snprintf( devfilename, sizeof( devfilename ), "%s/device", devdirname );
 
-            /* read out the link */
-	    /* Hmmmmm... According to Documentation/sysfs-rules.txt, the idea
-	       to use libsysfs is a bad one...
-
-	       This is probably why things now fail.
+	    /* 
+	       return /sys/block/<drive> if requested
 	    */
-
-            /* return /sys/block/<drive> if requested */
             if( blockdevpath )
-                snprintf( blockdevpath, blockdevpathsize, "%s", devdirname );
+	      snprintf( blockdevpath, blockdevpathsize, "%s", devdirname );
+	    else
+	      debug( "WARNING: find_sysfs_device is called without blockdevpath argument\n");
 
-	    ret_val = 0; 	/* We managed ! */
+	    ret_val = 0; 	/* We found it ! */
             break;
         }
     }
@@ -309,10 +307,13 @@ find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize 
 }
 
 /**
- * Return whether attribute attr in blockdevpath exists and has value '1'.
+   Return whether attribute attr in blockdevpath exists and has value '1'.
+
+   Or, in other words, if blockdevpath/attr exists and contains a '1' as
+   its first character.
  */
 int
-get_blockdev_attr( const char* blockdevpath, const char* attr )
+is_blockdev_attr_true( const char* blockdevpath, const char* attr )
 {
     char path[PATH_MAX];
     FILE* f;
@@ -323,7 +324,7 @@ get_blockdev_attr( const char* blockdevpath, const char* attr )
 
     f = fopen( path, "r" );
     if( !f ) {
-        debug( "get_blockdev_attr: could not open %s\n", path );
+        debug( "is_blockdev_attr_true: could not open %s\n", path );
         return 0;
     }
 
@@ -331,14 +332,50 @@ get_blockdev_attr( const char* blockdevpath, const char* attr )
     fclose( f );
 
     if( result != 1 ) {
-        debug( "get_blockdev_attr: could not read %s\n", path );
+        debug( "is_blockdev_attr_true: could not read %s\n", path );
         return 0;
     }
 
-    debug( "get_blockdev_attr: value of %s == %c\n", path, value );
+    debug( "is_blockdev_attr_true: value of %s == %c\n", path, value );
 
     return value == '1';
 }
+
+/**
+   Tries to find the 'bus' of the given blockdevpath, and stores is into
+   the bus string.
+
+   Note that this function is in no way guaranteed to work, as the bus
+   attribute is "fragile". But I'm not aware of anything better for
+   now. 
+ */
+int get_blockdev_bus( const char* blockdevpath, 
+		      char* bus, size_t bus_size )
+{
+    char path[PATH_MAX];
+    char link[PATH_MAX];
+    ssize_t link_size;
+
+    snprintf( path, sizeof( path ), "%s/device/bus", blockdevpath);
+    link_size = readlink(path, link, sizeof(link) - 1 /* for the 0-byte*/);
+    if(link_size == -1) {
+      debug( "Could not read link at %s\n", link);
+      return 0; 		/* Failed */
+    }
+
+    link[link_size--] = 0;
+    while(link_size >= 0) {
+      if(link[link_size] == '/')
+	break;
+      link_size--;
+    }
+    if(link_size >= 0) {
+      snprintf( bus, bus_size, "%s", link + link_size + 1);
+      return 1;
+    }
+    return 0;
+}
+
 
 /*************************************************************************
  *
@@ -498,6 +535,7 @@ int device_removable_silent(const char * device)
   int removable;
   int dev;
   char blockdevpath[PATH_MAX];
+  char bus[100];
   
   /* In real, we don't need dev here. That can be slightly modified... */
   /* TODO!!! modify here ! */
@@ -511,9 +549,16 @@ int device_removable_silent(const char * device)
 	 device, blockdevpath );
   
   /* check whether device has "removable" attribute with value '1' */
-  removable = get_blockdev_attr( blockdevpath, "removable" );
+  removable = is_blockdev_attr_true( blockdevpath, "removable" );
+
+  /* 
+     If not, fall back to bus scanning (regard USB and FireWire as
+     removable).
+  */
+  if( !removable) {
+    
+  } 
   
-  /* if not, fall back to bus scanning (regard USB and FireWire as removable) */
   /* TODO: put back bus checking */ 
 /*   if( !removable ) */
 /*     removable = find_bus_ancestry( dev, hotplug_buses ); */
