@@ -3,7 +3,8 @@
  *
  * Authors: Martin Pitt <martin.pitt@canonical.com>,
  *          Vincent Fourmond <fourmond@debian.org
- * (c) 2004 Canonical Ltd, 2007, 2008 by Vincent Fourmond
+ * (c) 2004 Canonical Ltd,
+ *     2007, 2008, 2009 by Vincent Fourmond
  *
  * This software is distributed under the terms and conditions of the 
  * GNU General Public License. See file GPL for the full text of the license.
@@ -134,7 +135,7 @@
  *        is written into this buffer; this can be used to query additional
  *        attributes
  * @param blockdevpathsize size of blockdevpath buffer (if not NULL)
- * @return Matching sysfs_device node (NULL if not found)
+ * @return 0 if device was found and -1 if it was not.
  */
 
 /* This function needs a major rewrite to get rid of the
@@ -148,18 +149,36 @@
    Problem: assumes too much about the directory structure, but is
    already better and that would drop the dependency on libsysfs
 */
-struct sysfs_device*
+
+/* 
+   The rationale of the steps found in this function are based on my
+   own experience and on Documentation/sysfs-rules.txt
+ */
+
+/**
+   The directories to search for to find the block subsystem. Null-terminated. 
+ */
+static const char * block_subsystem_directories[] = { 
+  "/sys/subsystem/block",
+  "/sys/class/block",
+  "/sys/block",
+  NULL
+};
+
+int
 find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize ) {
     unsigned char devmajor, devminor;
     unsigned char sysmajor, sysminor;
-    char mntpath[PATH_MAX];
     char blockdirname[255];
     char devdirname[512]; // < 255 chars blockdir + max. 255 chars subdir
     char devfilename[PATH_MAX];
-    char linkfilename[1024];
+
+    int ret_val = -1; 		/* Failing by default. */
+
+    const char ** looking_for_block = block_subsystem_directories;
+
     DIR *devdir, *partdir;
     struct dirent *devdirent, *partdirent;
-    struct sysfs_device *sysdev = NULL;
     struct stat devstat;
     
     /* determine major and minor of dev */
@@ -173,12 +192,27 @@ find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize 
     debug( "find_sysfs_device: looking for sysfs directory for device %u:%u\n",
                 (unsigned) devmajor, (unsigned) devminor );
 
-    /* get /sys/block/ */
-    if( sysfs_get_mnt_path( mntpath, sizeof(mntpath) ) ) {
-        fputs( _("Error: could not get sysfs directory\n"), stderr );
-        exit( -1 );
+    /* We first need to find one of
+       
+       /sys/subsystem/block, /sys/class/block or /sys/block
+
+       And then, we look for the right device number.
+       
+    */
+    while(*looking_for_block) {
+      if(! stat( *looking_for_block, &devstat)) {
+	debug( "found block subsystem at: %s\n", *looking_for_block);
+	snprintf( blockdirname, sizeof( blockdirname ),
+		  "%s/", *looking_for_block);
+	break;
+      }
+      looking_for_block++;
     }
-    snprintf( blockdirname, sizeof( blockdirname ), "%s/block/", mntpath );
+    
+    if(! *looking_for_block) {
+      perror( _("Error: could find the block subsystem directory") );
+      exit( -1 );
+    }
 
     devdir = opendir( blockdirname );
     if( !devdir ) {
@@ -259,19 +293,19 @@ find_sysfs_device( const char* dev, char* blockdevpath, size_t blockdevpathsize 
 
 	       This is probably why things now fail.
 	    */
-            if( !sysfs_get_link( devfilename, linkfilename, 1024 ) )
-                sysdev = sysfs_open_device_path( linkfilename );
 
             /* return /sys/block/<drive> if requested */
             if( blockdevpath )
                 snprintf( blockdevpath, blockdevpathsize, "%s", devdirname );
+
+	    ret_val = 0; 	/* We managed ! */
             break;
         }
     }
 
     closedir( devdir );
 
-    return sysdev;
+    return ret_val;
 }
 
 /**
@@ -460,12 +494,13 @@ device_mounted( const char* device, int expect, char* mntpt )
 /* The silent version of the device_removable function. */
 int device_removable_silent(const char * device)
 {
-  struct sysfs_device *dev;
   static char* hotplug_buses[] = { "usb", "ieee1394", "mmc", "pcmcia", NULL };
   int removable;
+  int dev;
   char blockdevpath[PATH_MAX];
   
   /* In real, we don't need dev here. That can be slightly modified... */
+  /* TODO!!! modify here ! */
   dev = find_sysfs_device( device, blockdevpath, sizeof( blockdevpath ) );
   if( !dev ) {
     debug( "device_removable: could not find a sysfs device for %s\n", device );
@@ -479,9 +514,10 @@ int device_removable_silent(const char * device)
   removable = get_blockdev_attr( blockdevpath, "removable" );
   
   /* if not, fall back to bus scanning (regard USB and FireWire as removable) */
-  if( !removable )
-    removable = find_bus_ancestry( dev, hotplug_buses );
-  sysfs_close_device( dev );
+  /* TODO: put back bus checking */ 
+/*   if( !removable ) */
+/*     removable = find_bus_ancestry( dev, hotplug_buses ); */
+/*   sysfs_close_device( dev ); */
   return removable;
 }
 

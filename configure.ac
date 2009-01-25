@@ -22,6 +22,7 @@ dnl 		[LIBS="$LIBS -lsysfs"],
 dnl 		[AC_MSG_ERROR([Missing sysfs library (install libsysfs-dev or similar?)])])],
 dnl 	[AC_MSG_ERROR([Missing /usr/include/sysfs/libsysfs.h (install libsysfs-dev or similar?)])])
 
+
 AC_CHECK_HEADER(blkid/blkid.h,
 	[AC_CHECK_LIB(blkid, blkid_get_cache,
 		[AC_DEFINE(HAVE_BLKID) LIBS="$LIBS -lblkid"],
@@ -81,6 +82,8 @@ GETTEXT_PACKAGE="pmount"
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
 AM_GLIB_GNU_GETTEXT
+
+AC_MSG_WARN([This branch of pmount is experimental and currently does not work, USE WITH CARE !])
 
 AC_OUTPUT([
 Makefile
