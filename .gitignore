@@ -1,0 +1,38 @@
+# -*- mode: conf; -*-
+
+# Backup files:
+*~
+
+# Don't track generated files:
+*.gmo
+*.o
+*.a
+Makefile
+Makefile.in*
+/config.h*
+.deps
+/configure
+
+# Generated programs:
+src/pmount
+src/pmount-hal
+src/pumount
+tests/test_sysfs
+
+
+# Automake-provided files:
+/COPYING
+/INSTALL
+/config.*
+/ltmain.sh
+/missing
+/compile
+/aclocal.m4
+/autom4te.cache
+/depcomp
+/install-sh
+/libtool
+/intltool-*
+
+# This one I'm not sure where it is coming from:
+/mkinstalldirs
