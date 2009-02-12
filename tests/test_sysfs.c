@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  if(! find_sysfs_device(argv[1], device_path, sizeof(device_path))) {
+  if(find_sysfs_device(argv[1], device_path, sizeof(device_path))) {
     fprintf(stdout, "Found sysfs device for %s : %s\n", 
 	    argv[1], device_path);
     fprintf(stdout, "Device %s is removable: %s\n",

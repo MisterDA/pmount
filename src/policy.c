@@ -86,7 +86,7 @@ int find_sysfs_device( const char* dev, char* blockdevpath,
     char devdirname[512]; // < 255 chars blockdir + max. 255 chars subdir
     char devfilename[PATH_MAX];
 
-    int ret_val = -1; 		/* Failing by default. */
+    int ret_val = 0; 		/* Failing by default. */
 
     const char ** looking_for_block = block_subsystem_directories;
 
@@ -198,8 +198,6 @@ int find_sysfs_device( const char* dev, char* blockdevpath,
                             dev );
 
 
-            snprintf( devfilename, sizeof( devfilename ), "%s/device", devdirname );
-
 	    /* 
 	       return /sys/block/<drive> if requested
 	    */
@@ -208,7 +206,7 @@ int find_sysfs_device( const char* dev, char* blockdevpath,
 	    else
 	      debug( "WARNING: find_sysfs_device is called without blockdevpath argument\n");
 
-	    ret_val = 0; 	/* We found it ! */
+	    ret_val = 1; 	/* We found it ! */
             break;
         }
     }
@@ -278,32 +276,50 @@ is_blockdev_attr_true( const char* blockdevpath, const char* attr )
    Note that this function is in no way guaranteed to work, as the bus
    attribute is "fragile". But I'm not aware of anything better for
    now. 
+
+   This function was rewritten from scratch by 
+   Heinz-Ado Arnolds <arnolds@mpa-garching.mpg.de>, with a much better
+   knowledge than me about the newer sysfs architecture.
+
+   Many thanks !
  */
-int get_device_bus( const char* devicepath, 
-		      char* bus, size_t bus_size )
+
+const char * get_device_bus( const char* devicepath, const char **buses)
 {
-    char path[PATH_MAX];
     char link[PATH_MAX];
-    char * tmp;
+    char path[PATH_MAX];
+    char devfilename[PATH_MAX];
     ssize_t link_size;
+    const char *res = NULL;
+    const char **i;
+    DIR *busdir;
+    struct dirent *busdirent;
 
-    snprintf( path, sizeof( path ), "%s/bus", devicepath);
-    link_size = readlink(path, link, sizeof(link) - 1 /* for the 0-byte*/);
-    if(link_size == -1) {
-      debug( "Could not read link at %s\n", link);
-      return 0; 		/* Failed */
+    for ( i = buses; *i; i++ ) {
+      snprintf(path, sizeof(path), "/sys/bus/%s/devices", *i);
+      if ( !(busdir = opendir(path)) ) {
+        debug( "can't open bus/devicedir: %s\n", path);
+        continue;
+      }
+      while( ( busdirent = readdir( busdir ) ) != NULL ) {
+        snprintf( devfilename, sizeof( devfilename ), "%s/%s", path, busdirent->d_name);
+        if(! realpath(devfilename, link)) {
+          debug( "Could not read link at %s/%s\n", path, busdirent->d_name);
+          continue;
+        }
+        if ( ! strcmp(devicepath, link) ) {
+          res = *i;
+          break;
+        }
+      }
+      closedir(busdir);
+      if ( res )
+        break;
     }
 
-    /* That is necessary, as readlink is not supposed to return a
-       0-terminated string */
-    link[link_size--] = 0;
-    tmp = strrchr(link, '/');
-    if(tmp) {
-      snprintf( bus, bus_size, "%s", tmp + 1);
-      return 1;
-    }
-    return 0;
+    return res;
 }
+
 
 /**
  * Check whether a bus occurs anywhere in the ancestry of a device.
@@ -314,11 +330,19 @@ int get_device_bus( const char* devicepath,
 const char * bus_has_ancestry(const char * blockdevpath, const char** buses) {
   char path[1024];
   char full_device[1024];
-  char * tmp;
-  const char **i;
-  char bus[1024];
+  char * tmp = "";
+  const char *bus;
+  struct stat sb;
 
-  snprintf(path, sizeof(path), "%s/device", blockdevpath);
+  // The sysfs structure has changed:
+  // in former times /sys/block/<dev> was a directory and
+  // /sys/block/<dev>/device a link to the real device dir.
+  // Now (linux-2.6.27.9) /sys/block/<dev> is a link to the
+  // real device dir.
+  lstat(blockdevpath, &sb);
+  if ( !S_ISLNK(sb.st_mode) )
+    tmp = "/device";
+  snprintf(path, sizeof(path), "%s%s", blockdevpath, tmp);
   if(! realpath(path, full_device)) {
     debug("Realpath failed to resolve %s\n", path);
     return NULL;
@@ -328,14 +352,9 @@ const char * bus_has_ancestry(const char * blockdevpath, const char** buses) {
 
   /* We loop on full_device until we are on the root directory */
   while(full_device[0]) {
-    if(get_device_bus(full_device, bus, sizeof(bus))) {
+    if(bus = get_device_bus(full_device, buses)) {
       debug("Found bus %s for device %s\n", bus, full_device);
-      for( i = buses; *i; ++i ) {
-	if(! strcmp(bus, *i)) {
-	  debug(" -> this is one of the buses we were looking for\n");
-	  return *i;
-	}
-      }
+      return bus;
     }
     tmp = strrchr(full_device, '/');
     if(! tmp)
@@ -500,7 +519,7 @@ device_mounted( const char* device, int expect, char* mntpt )
 /* The silent version of the device_removable function. */
 int device_removable_silent(const char * device)
 {
-  static char* hotplug_buses[] = { "usb", "ieee1394", "mmc", 
+  static const char* hotplug_buses[] = { "usb", "ieee1394", "mmc", 
 				   "pcmcia", NULL };
   int removable;
   char blockdevpath[PATH_MAX];
