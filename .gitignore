@@ -12,6 +12,10 @@ Makefile.in*
 /config.h*
 .deps
 /configure
+po/POTFILES
+po/stamp-it
+stamp-h1
+
 
 # Generated programs:
 src/pmount
