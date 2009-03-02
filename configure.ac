@@ -3,7 +3,7 @@ AC_PREREQ(2.52)
 AC_INIT(src/pmount.c)
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_SRCDIR(src)
-AM_INIT_AUTOMAKE(pmount, 0.9.18)
+AM_INIT_AUTOMAKE(pmount, 0.9.19)
 
 AC_PROG_INTLTOOL([0.21])
 
@@ -15,12 +15,6 @@ AC_PROG_INSTALL
 
 
 AC_DEFINE([HAVE_BLKID], [], [Description])
-
-dnl AC_CHECK_HEADER(sysfs/libsysfs.h,
-dnl 	[AC_CHECK_LIB(sysfs, sysfs_open_attribute,
-dnl 		[LIBS="$LIBS -lsysfs"],
-dnl 		[AC_MSG_ERROR([Missing sysfs library (install libsysfs-dev or similar?)])])],
-dnl 	[AC_MSG_ERROR([Missing /usr/include/sysfs/libsysfs.h (install libsysfs-dev or similar?)])])
 
 
 AC_CHECK_HEADER(blkid/blkid.h,
@@ -82,8 +76,6 @@ GETTEXT_PACKAGE="pmount"
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
 AM_GLIB_GNU_GETTEXT
-
-AC_MSG_WARN([This branch of pmount is experimental and currently does not work, USE WITH CARE !])
 
 AC_OUTPUT([
 Makefile

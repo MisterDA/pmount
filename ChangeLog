@@ -1,3 +1,12 @@
+0.9.19
+-----------
+- drop the dependency on libsysfs and also fix failure to recognise
+  that a device is removable with newer kernels
+- do realpath expansion on devices whitelisted in /etc/pmount.allow,
+  which enables the use of symlinks inside it.
+- fixed few problems in the manual page
+- pulled newer translations from Rosetta
+
 0.9.18
 -----------
 - clarify the position about symlinks in /etc/fstab in pmount.1 and 
