@@ -1,28 +1,37 @@
 /**
- * utils.h - helper functions for pmount
+ * @file utils.h - helper functions for pmount
  *
- * Author: Martin Pitt <martin.pitt@canonical.com>
- * (c) 2004 Canonical Ltd.
+ * Authors: Martin Pitt <martin.pitt@canonical.com>
+ *          (c) 2004 Canonical Ltd.
+ *          Vincent Fourmond <fourmond@debian.org>
+ *          (c) 2007-2009 by Vincent Fourmond
  *
- * This software is distributed under the terms and conditions of the 
- * GNU General Public License. See file GPL for the full text of the license.
+ * This software is distributed under the terms and conditions of the
+ * GNU General Public License. See file GPL for the full text of the
+ * license.
  */
 
 #ifndef __utils_h
 #define __utils_h
 
-/* gettext abbreviation */
+/** 
+ * gettext abbreviation 
+ */
 #define _(String) gettext(String)
 
-/* global flag whether to print debug messages (false by default) */
+/**
+ * global flag whether to print debug messages (false by default) 
+ */
 extern int enable_debug;
 
-/* printf() wrapper, only does anything if enable_debug != 0 */
+/**
+ * printf() wrapper, only does anything if enable_debug != 0 
+ */
 int debug( const char* format, ... );
 
 /**
- * Return a copy of string s with each occurrence of char 'from' replaced by char 
- * 'to'. Exit program immediately if out of memory.
+ * Return a copy of string s with each occurrence of char 'from'
+ * replaced by char 'to'. Exit program immediately if out of memory.
  */
 char* strreplace( const char* s, char from, char to );
 
@@ -42,13 +51,13 @@ int assert_emptydir( const char* dirname );
 
 /**
  * Return whether given path is a directory.
- @ return 1 = directory, 0 = no directory
+ * @return 1 = directory, 0 = no directory
  */
 int is_dir( const char* path );
 
 /**
  * Return whether given path is a block device.
- @ return 1 = block device, 0 = no block device
+ * @return 1 = block device, 0 = no block device
  */
 int is_block( const char* path );
 
@@ -109,20 +118,20 @@ int is_word_str( const char* s );
 void get_root();
 
 /**
- * Change effective user id back to getuid(). If this fails, print an error
- * message and exit with status 100.
+ * Change effective user id back to getuid(). If this fails, print an
+ * error message and exit with status 100.
  */
 void drop_root();
 
 /**
- * Change effective group id to root. If this fails, print an error message and
- * exit with status 100.
+ * Change effective group id to root. If this fails, print an error
+ * message and exit with status 100.
  */
 void get_groot();
 
 /**
- * Change effective group id back to getgid(). If this fails, print an error
- * message and exit with status 100.
+ * Change effective group id back to getgid(). If this fails, print an
+ * error message and exit with status 100.
  */
 void drop_groot();
 

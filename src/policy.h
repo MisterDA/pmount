@@ -1,5 +1,5 @@
 /**
- * policy.h - functions for testing various policy parts for pmount
+ * @file policy.h - functions for testing various policy parts for pmount
  *
  * Author: Martin Pitt <martin.pitt@canonical.com>
  * (c) 2004 Canonical Ltd.
@@ -99,6 +99,8 @@ make_lockdir_name( const char* device, char* name, size_t name_size );
 /**
  * Prints the removable devices that are currently mounted.
  * Takes no arguments. Based on a patch from Dan Keder <keder@fi.muni.cz>
+ *
+ * @todo this shouldn't probably be in the policy.h header.
  */
 void print_mounted_removable_devices();
 

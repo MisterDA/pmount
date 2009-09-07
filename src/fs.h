@@ -1,8 +1,10 @@
 /**
- * fs.h - data type and interface function for supported file systems
+ * @file fs.h - data type and interface function for supported file systems
  *
  * Author: Martin Pitt <martin.pitt@canonical.com>
- * (c) 2004 Canonical Ltd.
+ *         (c) 2004 Canonical Ltd.
+ *         Vincent Fourmond <fourmond@debian.org>
+ *         (c) 2007-2009 by Vincent Fourmond
  * 
  * This software is distributed under the terms and conditions of the 
  * GNU General Public License. See file GPL for the full text of the license.
@@ -15,16 +17,23 @@
  * Structure with information about a supported file system
  */
 struct FS {
-  const char* fsname;    /* file system name (e. g. 'ext2') */
-  const char* options;   /* standard mount options (must not be empty) */
-  int support_ugid;      /* whether the fs supports uid and gid options */
-  const char* umask;     /* umask value (NULL if umask is not supported) */
+  /** File system name (e. g. 'ext2') */
+  const char* fsname;
+  /** Standard mount options (must not be empty) */
+  const char* options;   
+  /** Whether the fs supports uid and gid options */
+  int support_ugid;      
+  /** umask value (NULL if umask is not supported) */
+  const char* umask;     
+  /** The printf-like format to be used for iocharset option -- NULL means
+      iocharset=%s */
   const char* iocharset_format;	 
-  /* the format to be used for iocharset option -- NULL = iocharset=%s */
-  const char* fdmask;    /* how to actually implement the fdmask format. 
-			    Takes two unsigned ints as arguments: fmask then 
-			    dmask */
-  int skip_autodetect;   /* whether or not to skip this fs for detection */
+  /** A printf-like format for actually implementing the fdmaskx.  If
+      not null, the format should take two unsigned ints as arguments:
+      fmask then dmask */
+  const char* fdmask;    
+  /** Whether or not to skip this fs for detection */
+  int skip_autodetect;   
 };
 
 /**
