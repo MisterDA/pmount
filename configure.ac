@@ -42,7 +42,7 @@ AC_ARG_WITH(mount-prog,
 	AC_DEFINE_UNQUOTED(MOUNTPROG, "/bin/mount", [path to mount]))
 AC_ARG_WITH(umount-prog, 
 	AC_HELP_STRING([--with-umount-prog=PATH], [Path to umount program (default: /bin/umount)]),
-	AC_DEFINE_UNQUOTED(MOUNTPROG, "$withval", [path to umount]),
+	AC_DEFINE_UNQUOTED(UMOUNTPROG, "$withval", [path to umount]),
 	AC_DEFINE_UNQUOTED(UMOUNTPROG, "/bin/umount", [path to umount]))
 AC_ARG_WITH(cryptsetup-prog, 
 	AC_HELP_STRING([--with-cryptsetup-prog=PATH], [Path to cryptsetup program (default: /sbin/cryptsetup)]),
