@@ -3,6 +3,9 @@
 # Backup files:
 *~
 
+# Tarballs
+*.tar.gz
+
 # Don't track generated files:
 *.gmo
 *.o
@@ -40,3 +43,6 @@ tests/test_sysfs
 
 # This one I'm not sure where it is coming from:
 /mkinstalldirs
+
+# Doxygen-generated documentation
+/doc
