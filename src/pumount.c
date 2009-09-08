@@ -167,6 +167,7 @@ main( int argc, char** argv )
         { "help", 0, NULL, 'h'},
         { "debug", 0, NULL, 'd'},
         { "lazy", 0, NULL, 'l'},
+        { "yes-I-really-want-lazy-unmount", 0, NULL, 'R'},
         { "luks-force", 0, NULL, 'L'},
         { "version", 0, NULL, 'V' },
         { NULL, 0, NULL, 0}
@@ -196,7 +197,15 @@ main( int argc, char** argv )
 
             case 'd':   enable_debug = 1; break;
 
-            case 'l':        do_lazy = 1; break;
+            case 'l':
+	      fprintf(stderr, 
+		      _("WARNING: Lazy unmount are likely to jeopardize data "
+			"integrity on removable devices.\n"
+			"If that's what you really want, run pumount with "
+			"--yes-I-really-want-lazy-unmount\nAborting."));
+	      return 1;
+	    case 'R':
+	      do_lazy = 1; break;
 
             case 'L':        luks_force = 1; break;
 

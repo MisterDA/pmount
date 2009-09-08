@@ -52,7 +52,17 @@ part.
 Lazy unmount. Detach the filesystem from the filesystem hierarchy now,
 and cleanup all references to the filesystem as soon as it is not busy
 anymore.  (Requires kernel 2.4.11 or later.)
-
+.B IMPORTANT NOTES
+This option should not be used unless you 
+.B really
+know what you are doing, as chances are high that it will result in
+data loss on the removable drive. Please run
+.B pumount
+manually and wait until it finishes. In addition, 
+.B pumount
+will not
+.I luksClose
+a device which was unmounted lazily.
 
 .TP
 .B \-\-luks\-force
