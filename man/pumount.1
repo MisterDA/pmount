@@ -110,6 +110,14 @@ is mounted according to /etc/mtab and /proc/mounts with the calling user's uid
 .IP \(bu
 mount point is in /media
 
+.SH PUMOUNT AND MISSING DEVICES
+
+.B pumount
+now supports unmounting devices that have gone missing for some
+reason, such as a brutal removal of the device, or a kernel/hardware
+problem. Just specify the mount point as argument for
+.B pumount\fR.
+
 .SH SEE ALSO
 
 .BR pmount (1),
