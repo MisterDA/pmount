@@ -1,3 +1,12 @@
+0.9.20
+-----------
+- fix few typos (in man/pmount.1 and configure.ac)
+- severely discourage lazy unmount
+- switch to errors=remount-ro to avoid massive FS corruption when a
+  problem is found
+- allow unmounting of devices which do not exist anymore
+- pulled newer translations from Rosatta
+
 0.9.19
 -----------
 - drop the dependency on libsysfs and also fix failure to recognise
