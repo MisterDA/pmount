@@ -9,12 +9,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
 "PO-Revision-Date: 2007-08-01 22:13+0000\n"
-"Last-Translator: Kamil Páral <ripper42@gmail.com>\n"
+"Last-Translator: Kamil Páral <kamil.paral@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-03-02 18:12+0000\n"
+"X-Launchpad-Export-Date: 2009-09-10 21:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -400,51 +400,3 @@ msgstr "Vnitřní chyba: nelze změnit na skutečné gid roota"
 #: ../src/utils.c:282
 msgid "Internal error: could not change effective group id to real group id"
 msgstr "Vnitřní chyba: nelze změnit id užívané skupiny na id pravé skupiny"
-
-#, c-format
-#~ msgid "Error: make_mountpoint_name: invalid device %s (must be in /dev/)\n"
-#~ msgstr "Chyba: make_mount_name: neplatné zařízení %s (musí být v /dev/)\n"
-
-#~ msgid "Error: could not raise to full root uid privileges"
-#~ msgstr "Chyba: nelze získat plná práva superuživatele"
-
-#~ msgid "Error: could not wait for executed mount process"
-#~ msgstr "Chyba: nelze čekat na spuštěný proces připojení"
-
-#, c-format
-#~ msgid ""
-#~ "Usage:\n"
-#~ "\n"
-#~ "%s [options] <device>\n"
-#~ "  Umount <device> from a directory below %s if policy requirements\n"
-#~ "  are met (see pumount(1) for details). The mount point directory is "
-#~ "removed\n"
-#~ "  afterwards.\n"
-#~ "\n"
-#~ "Options:\n"
-#~ "  -l, --lazy : umount lazily, see umount(8)\n"
-#~ "  -d, --debug : enable debug output (very verbose)\n"
-#~ "  -h, --help  : print help message and exit successfuly\n"
-#~ msgstr ""
-#~ "Použití:\n"
-#~ "\n"
-#~ "%s [parametry] <zařízení>\n"
-#~ "  Odpojenit <zařízení> z adresáře pod %s jestliže \n"
-#~ "  jsou nastavená požadovná práva (podrobnosti viz pumount(1)). \n"
-#~ "  Adresář připojovacího bodu je poté odstraněn.\n"
-#~ "\n"
-#~ "Parametry:\n"
-#~ "  -l, --lazy : odpojit líně, viz umount(8)\n"
-#~ "  -d, --debug : povolit ladící výstupy (velmi ukecané)\n"
-#~ "  -h, --help : vytiskne nápovědu a ukončí se\n"
-
-#~ msgid "Error: could not wait for executed umount process"
-#~ msgstr "Chyba: nelze čekat na spuštěný proces umount"
-
-#, c-format
-#~ msgid "Error: could not connect to hal\n"
-#~ msgstr "Chyba: nelze se připojit na hal\n"
-
-#, c-format
-#~ msgid "Error: given UDI does not exist\n"
-#~ msgstr "Chyba: dané UDI neexistuje\n"
