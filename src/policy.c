@@ -441,7 +441,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
                     } else
                         *uid = -1;
                 }
-		debug(" -> found as '%s'", fstab_device);
+		debug(" -> found as '%s'\n", fstab_device);
                 return fstab_device;
         }
     }
@@ -451,7 +451,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
         *mntpt = 0; 
 
     endmntent( f );
-    debug(" -> not found");
+    debug(" -> not found\n");
     return NULL;
 }
 

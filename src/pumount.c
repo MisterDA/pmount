@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; -*- */
 /**
  * pumount.c - policy wrapper around 'umount' to allow mounting removable
  *             devices for normal users
@@ -55,17 +56,18 @@ usage( const char* exename )
 
 /**
  * Check whether the user is allowed to umount the given device.
- * @param do_lazy Flag if a lazy unmount is requested (in this case the device
- *        node does not need to exist)
+ * @param ok_if_inexistant whether it is allowed for the device to not
+ *        exist, as should be the case when the device has gone
+ *        missing for some reason
  * @return 0 on success, -1 on failure
  */
 int
-check_umount_policy( const char* device, int do_lazy ) 
+check_umount_policy( const char* device, int ok_if_inexistant ) 
 {
     int devvalid;
     char mediadir[PATH_MAX];
-
-    devvalid = ( do_lazy || device_valid( device ) ) &&
+    
+    devvalid = ( ok_if_inexistant || device_valid( device ) ) &&
         device_mounted( device, 1, mntpt );
 
     if( !devvalid )
@@ -126,7 +128,8 @@ do_umount_fstab( const char* device, int lazy, const char * fstab_mntpt )
 
 /**
  * Raise to full privileges and mounts device to mntpt.
- * @param lazy 0 for normal umount, 1 for lazy umount
+ * @param device full device name
+ * @param do_lazy 0 for normal umount, 1 for lazy umount
  * @return 0 on success, -1 if UMOUNTPROG could not be executed.
  */
 int
@@ -151,6 +154,7 @@ do_umount( const char* device, int do_lazy )
 
 /**
  * Entry point.
+ *
  */
 int
 main( int argc, char** argv )
@@ -198,11 +202,11 @@ main( int argc, char** argv )
             case 'd':   enable_debug = 1; break;
 
             case 'l':
-	      fprintf(stderr, 
-		      _("WARNING: Lazy unmount are likely to jeopardize data "
-			"integrity on removable devices.\n"
-			"If that's what you really want, run pumount with "
-			"--yes-I-really-want-lazy-unmount\nAborting."));
+	      fputs(_("WARNING: Lazy unmount are likely to jeopardize data "
+		      "integrity on removable devices.\n"
+		      "If that's what you really want, run pumount with "
+		      "--yes-I-really-want-lazy-unmount\nAborting.\n"), 
+		    stderr);
 	      return 1;
 	    case 'R':
 	      do_lazy = 1; break;
@@ -287,7 +291,8 @@ main( int argc, char** argv )
     if( luks_get_mapped_device( device, device, sizeof( device ) ) )
         debug( "Unmounting mapped device %s instead.\n", device );
 
-    if( check_umount_policy( device, do_lazy ) )
+    /* Now, we accept when devices have gone missing */
+    if( check_umount_policy( device, 1 ) )
         return E_POLICY;
 
     /* go for it */
