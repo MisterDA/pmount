@@ -6,7 +6,8 @@ libpmount_util_a_SOURCES = \
 	luks.c   \
 	policy.c \
 	utils.c  \
-	realpath.c
+	realpath.c \
+	conffile.c
 
 if PMOUNT_HAL
 EXTRABIN=pmount-hal
