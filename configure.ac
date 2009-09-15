@@ -71,6 +71,13 @@ else
         BUILD_HAL=""
 fi
 AM_CONDITIONAL(PMOUNT_HAL, test -n "$BUILD_HAL")
+
+dnl Checking for regular expressions.
+dnl TODO: allow disabling the reading of the configuration file at compile
+dnl time ? (and if regular expressions are not found)
+AC_CHECK_HEADER(regex.h,
+	[],
+	[AC_MSG_ERROR([Cannot use POSIX regular expressions !])])
 													   
 GETTEXT_PACKAGE="pmount"
 AC_SUBST(GETTEXT_PACKAGE)

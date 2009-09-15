@@ -11,3 +11,8 @@ test_sysfs_SOURCES = test_sysfs.c
 test_sysfs_LDADD = ../src/libpmount-util.a
 test_sysfs_CPPFLAGS = -I../src
 
+EXTRA_PROGRAMS = parse_cf
+parse_cf_SOURCES = ../src/conffile.c parse_cf.c
+parse_cf_LDADD = ../src/libpmount-util.a
+parse_cf_CPPFLAGS = -I../src
+
