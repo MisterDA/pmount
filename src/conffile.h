@@ -37,7 +37,27 @@ void conffile_init(ConfFile * cf);
 
    @return 0 if everything went fine
 */
+
 int conffile_read(const char * file, ConfFile * cf);
+
+/**
+   The system configuration, as read by conffile_system_read.
+ */
+
+extern ConfFile system_configuration;
+
+#define SYSTEM_CONFFILE "/etc/pmount.conf"
+
+/**
+   Reads the system configuration file into system_configuration. It
+   does not complain on the absence of the system configuration
+   file. In this case, the system_configuration file is populated with
+   default values (everything potentially dangerous disallowed).
+
+   @return 0 if everything went fine.
+ */
+
+int conffile_system_read();
 
 #endif /* !defined( __config_file_h) */
 

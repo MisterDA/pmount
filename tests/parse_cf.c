@@ -17,6 +17,7 @@
 #include "conffile.h"
 #include <stdio.h>
 
+#define DUMP(x) printf(#x ": %s\n", (cf.x ? "yes" :"no"))
 
 int main(int argc, char *argv[])
 {
@@ -28,4 +29,5 @@ int main(int argc, char *argv[])
   
   conffile_init(&cf);
   conffile_read(argv[1], &cf);
+  DUMP(allow_fsck);
 }

@@ -12,11 +12,14 @@
 #include <string.h>
 /* For regular expression parsing... */
 #include <regex.h>
+
 #include <libintl.h>
+#include <sys/stat.h>
 
 #include "conffile.h"
 #include "utils.h"
 
+ConfFile system_configuration = { .allow_fsck = 0 };
 
 void conffile_init(ConfFile * cf)
 {
@@ -39,7 +42,7 @@ int conffile_read(const char * file, ConfFile * cf)
 
   if( regcomp(&boolean_RE, 
 	      "^[[:blank:]]*([a-zA-Z_]+)[[:blank:]]*"
-	      "=[[:blank:]]*(.*)\n$",
+	      "=[[:blank:]]*(.*)$",
 	      REG_EXTENDED )) {
     perror(_("Could not compile regular expression for values"));
     return -1;
@@ -89,7 +92,9 @@ int conffile_read(const char * file, ConfFile * cf)
     if( ! regexec( &boolean_RE, line_buffer, 3, m, 0) ) {
       /* Value line */
       int value;
-      strncpy(buffer, line_buffer + m[2].rm_so, m[2].rm_eo - m[2].rm_so);
+      /* We use memcpy as strncpy does not add null when necessary */
+      memcpy(buffer, line_buffer + m[2].rm_so, m[2].rm_eo - m[2].rm_so);
+      buffer[m[2].rm_eo - m[2].rm_so] = 0;
       if( ! regexec( &false_RE, buffer, 0, NULL, 0) ) {
 	value = 0;
       }
@@ -102,12 +107,13 @@ int conffile_read(const char * file, ConfFile * cf)
       }
 
       /* Now, checking the name of the feature */
-      strncpy(buffer, line_buffer + m[2].rm_so, m[2].rm_eo - m[2].rm_so);
+      memcpy(buffer, line_buffer + m[1].rm_so, m[1].rm_eo - m[1].rm_so);
+      buffer[m[1].rm_eo - m[1].rm_so] = 0;
       if(! strcmp(buffer, "allow_fsck")) {
 	cf->allow_fsck = value;
       }
       else {
-	fprintf(stderr, "Invalid configuration item: %s\n", buffer);
+	fprintf(stderr, "Invalid configuration item: '%s'\n", buffer);
 	return -4;
       }
       
@@ -128,4 +134,17 @@ int conffile_read(const char * file, ConfFile * cf)
   regfree(&false_RE);
 
   return 0;
+}
+
+int conffile_system_read()
+{
+  struct stat st;
+  /* First set to defaults */
+  conffile_init(&system_configuration);
+  
+  /* If the system configuration file does not exist, we don't
+     complain... */
+  if( stat( SYSTEM_CONFFILE, &st) )
+    return 0;
+  return conffile_read( SYSTEM_CONFFILE, &system_configuration);
 }
