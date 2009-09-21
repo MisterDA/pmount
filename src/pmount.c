@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; -*- */
 /**
  * pmount.c - policy wrapper around 'mount' to allow mounting removable devices
  *            for normal users
@@ -29,6 +30,9 @@
 #include "utils.h"
 #include "luks.h"
 #include "config.h"
+
+/* Configuration file handling */
+#include "conffile.h"
 
 /* Enable autodetection if possible */
 #ifdef HAVE_BLKID
@@ -670,6 +674,12 @@ main( int argc, char** argv )
     if( geteuid() ) {
         fputs( _("Error: this program needs to be installed suid root\n"), stderr );
         return E_INTERNAL;
+    }
+    
+    if( ! conffile_system_read() ) {
+	fputs( _("Error while reading system configuration file\n"), stderr );
+	return E_INTERNAL;
+      
     }
 
     /* drop root privileges until we really need them (still available as saved uid) */
