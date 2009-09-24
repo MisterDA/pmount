@@ -32,10 +32,19 @@ AC_ARG_WITH(lock-dir,
 	AC_HELP_STRING([--with-lock-dir=DIR], [Directory for mount locks (default: /var/lock/pmount)]),
 	AC_DEFINE_UNQUOTED(LOCKDIR, "$withval", [directory for locks]),
 	AC_DEFINE_UNQUOTED(LOCKDIR, "/var/lock/pmount", [directory for locks]))
+
+# Path to configuration files
 AC_ARG_WITH(whitelist, 
 	AC_HELP_STRING([--with-whitelist=PATH], [Path of whitelist configuration file (default: /etc/pmount.allow)]),
 	AC_DEFINE_UNQUOTED(WHITELIST, "$withval", [whitelist configuration file]),
 	AC_DEFINE_UNQUOTED(WHITELIST, "/etc/pmount.allow", [whitelist configuration file]))
+AC_ARG_WITH(conffile, 
+	AC_HELP_STRING([--with-conffile=PATH], [Path of system configuration file (default: /etc/pmount.conf)]),
+	AC_DEFINE_UNQUOTED(SYSTEM_CONFFILE, "$withval", [system configuration file]),
+	AC_DEFINE_UNQUOTED(SYSTEM_CONFFILE, "/etc/pmount.conf", [system configuration file]))
+
+
+# Path to programs
 AC_ARG_WITH(mount-prog, 
 	AC_HELP_STRING([--with-mount-prog=PATH], [Path to mount program (default: /bin/mount)]),
 	AC_DEFINE_UNQUOTED(MOUNTPROG, "$withval", [path to mount]),
@@ -52,6 +61,11 @@ AC_ARG_WITH(mount-ntfs3g,
 	AC_HELP_STRING([--with-mount-ntfs3g=PATH], [Where to look for mount.ntfs-3g (default: /sbin/mount.ntfs-3g)]),
 	AC_DEFINE_UNQUOTED(MOUNT_NTFS_3G, "$withval", [location of mount.ntfs-3g]),
 	AC_DEFINE_UNQUOTED(MOUNT_NTFS_3G, "/sbin/mount.ntfs-3g", [location of mount.ntfs-3g]))
+AC_ARG_WITH(fsck-prog, 
+	AC_HELP_STRING([--with-fsck-prog=PATH], [Path to fsck program (default: /sbin/fsck)]),
+	AC_DEFINE_UNQUOTED(FSCKPROG, "$withval", [path to fsck]),
+	AC_DEFINE_UNQUOTED(FSCKPROG, "/sbin/fsck", [path to fsck]))
+
 
 AC_ARG_ENABLE(hal,
   AC_HELP_STRING([--enable-hal],[build pmount-hal frontend, if hal is available]),

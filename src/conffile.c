@@ -17,6 +17,7 @@
 #include <sys/stat.h>
 
 #include "conffile.h"
+#include "config.h"
 #include "utils.h"
 
 ConfFile system_configuration = { .allow_fsck = 0 };

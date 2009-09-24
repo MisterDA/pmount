@@ -46,8 +46,6 @@ int conffile_read(const char * file, ConfFile * cf);
 
 extern ConfFile system_configuration;
 
-#define SYSTEM_CONFFILE "/etc/pmount.conf"
-
 /**
    Reads the system configuration file into system_configuration. It
    does not complain on the absence of the system configuration

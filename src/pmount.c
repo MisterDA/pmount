@@ -51,6 +51,10 @@ const int E_EXECMOUNT = 5;
 const int E_UNLOCK = 6;
 const int E_PID = 7;
 const int E_LOCKED = 8;
+/**
+   Something not explicitly allowed from within the system configuration file 
+*/
+const int E_DISALLOWED = 9;
 const int E_INTERNAL = 100;
 
 #define OPT_FMASK 128
@@ -563,6 +567,35 @@ do_unlock( const char* device, pid_t pid )
 }
 
 /**
+ * Runs fsck on the device. Will fail if fsck returns an error code
+ * greater than 1 (1 is fine, it just means that problems were
+ * corrected).
+ *
+ * @return 0 on success, -1 on error.
+ */
+int
+do_fsck( const char* device )
+{
+    int result;
+    debug( "running fsck on %s\n", device );
+
+    result = spawnl( SPAWN_EROOT | SPAWN_RROOT,
+		     FSCKPROG, FSCKPROG, "-C1", device, NULL );
+    if( result < -1 ) {
+	perror(_("Error: could not execute fsck"));
+	return -1;
+    }
+    else if(result > 1) {
+	fputs(_("fsck returned error code above 1: "
+		"something went wrong\n"), stderr);
+	return -1;
+	      
+    }
+    /* Error code of 0 or 1 is fine. */
+    return 0;
+}
+
+/**
  * Remove stale pid locks from device's lock directory.
  */
 void
@@ -622,6 +655,9 @@ main( int argc, char** argv )
     int noatime = 0;
     int exec = 0;
     int force_write = -1; /* 0: ro, 1: rw, -1: default */
+    
+    int run_fsck = 0; 		/* Whether or not to run fsck before
+				   mounting. */
     const char* use_fstype = NULL;
     const char* iocharset = NULL;
     const char* umask = NULL;
@@ -651,6 +687,7 @@ main( int argc, char** argv )
         { "read-only", 0, NULL, 'r' },
         { "read-write", 0, NULL, 'w' },
         { "version", 0, NULL, 'V' },
+        { "fsck", 0, NULL, 'F' },
         { NULL, 0, NULL, 0}
     };
 
@@ -688,46 +725,57 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdelLsArwp:t:c:u:V", long_opts, NULL ) ) {
-            case -1:  break;          /* end of arguments */
-            case ':':
-            case '?': return E_ARGS;  /* unknown argument */
-
-            case 'h': usage( argv[0] ); return 0;
-
-            case 'd': enable_debug = 1; break;
-
-            case 'l': mode = LOCK; break;
-
-            case 'L': mode = UNLOCK; break;
-
-            case 's': async = 0; break;
-
-            case 'A': noatime = 1; break;
-
-            case 'e': exec = 1; break;
-
-            case 't': use_fstype = optarg; break;
-
-            case 'c': iocharset = optarg; break;
-
-            case 'u': umask = optarg; break;
+        switch( option = getopt_long( argc, argv, "+hdelFLsArwp:t:c:u:V", 
+				      long_opts, NULL ) ) {
+	case -1:  break;          /* end of arguments */
+	case ':':
+	case '?': return E_ARGS;  /* unknown argument */
+	
+	case 'h': usage( argv[0] ); return 0;
 	    
-	    case OPT_FMASK: fmask = optarg; break;
+	case 'd': enable_debug = 1; break;
 	    
-	    case OPT_DMASK: dmask = optarg; break;
+	case 'l': mode = LOCK; break;
+	    
+	case 'L': mode = UNLOCK; break;
 
-            case 'p': passphrase = optarg; break;
+	case 's': async = 0; break;
 
-            case 'r': force_write = 0; break;
+	case 'A': noatime = 1; break;
 
-            case 'w': force_write = 1; break;
+	case 'e': exec = 1; break;
 
-            case 'V': puts(VERSION); return 0;
+	case 't': use_fstype = optarg; break;
 
-            default:
-                fprintf( stderr, _("Internal error: getopt_long() returned unknown value\n") );
-                return E_INTERNAL;
+	case 'c': iocharset = optarg; break;
+
+	case 'u': umask = optarg; break;
+	    
+	case OPT_FMASK: fmask = optarg; break;
+	    
+	case OPT_DMASK: dmask = optarg; break;
+
+	case 'p': passphrase = optarg; break;
+
+	case 'r': force_write = 0; break;
+
+	case 'w': force_write = 1; break;
+
+	case 'F': 
+	    if(system_configuration.allow_fsck)
+		run_fsck = 1;
+	    else {
+		fputs(_("Your system administrator does not "
+			"allow users to run fsck, aborting\n"), stderr);
+		return E_DISALLOWED;
+	    }
+	    break;
+
+	case 'V': puts(VERSION); return 0;
+
+	default:
+	    fprintf( stderr, _("Internal error: getopt_long() returned unknown value\n") );
+	    return E_INTERNAL;
         }
     } while( option != -1 );
 
@@ -874,13 +922,30 @@ main( int argc, char** argv )
             }
             debug( "mount point directory locked\n" );
 
-            /* off we go */
-            if( use_fstype )
-                result = do_mount( decrypted_device, mntpt, use_fstype, async, noatime,
-				   exec, force_write, iocharset, utf8, umask, fmask, dmask, 0 );
-            else
-                result = do_mount_auto( decrypted_device, mntpt, async, noatime, exec,
-                        force_write, iocharset, utf8, umask, fmask, dmask ); 
+	    /* Now starting fsck if requested. */
+	    if(run_fsck) {
+		result = do_fsck( decrypted_device );
+		if(result)
+		    fputs(_("Error: fsck failed, not mounting\n"), 
+			  stderr);
+	    }
+	    else 
+		result = 0;
+
+	    /* Only mount if fsck went fine */
+	    if(! result) {
+		/* off we go */
+		if( use_fstype )
+		    result = do_mount( decrypted_device, mntpt, use_fstype, 
+				       async, noatime, exec, force_write, 
+				       iocharset, utf8, umask, 
+				       fmask, dmask, 0 );
+		else
+		    result = do_mount_auto( decrypted_device, mntpt, async, 
+					    noatime, exec, force_write, 
+					    iocharset, utf8, umask, 
+					    fmask, dmask ); 
+	    }
 
             /* unlock the mount point again */
             debug( "unlocking mount point directory\n" );
