@@ -713,10 +713,9 @@ main( int argc, char** argv )
         return E_INTERNAL;
     }
     
-    if( ! conffile_system_read() ) {
+    if( conffile_system_read() ) {
 	fputs( _("Error while reading system configuration file\n"), stderr );
 	return E_INTERNAL;
-      
     }
 
     /* drop root privileges until we really need them (still available as saved uid) */
