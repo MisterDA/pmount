@@ -1,0 +1,67 @@
+.\" This is the manual page for pmount.conf
+.\"
+.\" Copyright 2009 by Vincent Fourmond
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or
+.\" (at your option) any later version.
+.\"  
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details (in the COPYING file).
+.\"
+.TH PMOUNT.CONF 5 "2009-09-26" "Vincent Fourmond"
+
+
+.SH NAME
+pmount.conf \- configuration file for 
+.B pmount
+
+
+.SH DESCRIPTION
+
+.B pmount
+now supports various operations that can be considered as unsafe from
+a strict point of view, but that are in general relatively safe, or at
+least very much acceptable on a personal computers.
+
+All these operations are disallowed by default; you need to explicitly
+allow them using values found in this file. It follows standard Unix
+configuration file syntax: lines beginning with a # are
+ignored. Configuration values take the values
+.I yes
+or
+.I no\fR. 
+.I yes 
+always means increased security risk. 
+.I no
+is always the default value.
+
+
+.SH CONFIGURATION ITEMS
+
+.TP
+.B allow_fsck
+allows a user to run 
+.B fsck
+right before mounting the device using the 
+.I --fsck
+option of
+.B pmount\fR(1).
+It is run with the option
+.I -C1
+to provide progress reports to the user. No other options are allowed,
+as those are more-or-less filesystem-dependent and too much subject to
+change.
+
+
+
+
+
+
+
+.SH "SEE ALSO"
+
+.BR pmount (1)

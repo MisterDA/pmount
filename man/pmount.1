@@ -244,6 +244,18 @@ Print a help message and exit successfully.
 Enable verbose debug messages.
 
 .TP
+.B \-F, \-\-fsck
+Runs 
+.B fsck\fR(1)
+on the device before mounting. This operation is not allowed unless
+your system administrator explicitly allowed it in the 
+.I /etc/pmount.conf
+configuration file. Please see
+.B pmount.conf\fR(5)
+for more information.
+
+
+.TP
 .B \-V, \-\-version
 Print the current version number and exit successfully.
 
@@ -258,10 +270,18 @@ are permitted. See see
 .B glob
 (7) for a more complete syntax.
 
+.TP
+.B /etc/pmount.conf
+Configuration file for allowing potentially less secure but useful
+operations. See 
+.BR pmount.conf (5).
+
 .SH SEE ALSO
 
 .BR pumount (1),
-.BR mount (8)
+.BR mount (8),
+.BR pmount.conf (5)
+
 
 .SH SUPPORTED FILESYSTEMS
 

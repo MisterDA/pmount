@@ -105,6 +105,7 @@ usage( const char* exename )
     "                (only for LUKS encrypted devices)\n"
     "  -d, --debug : enable debug output (very verbose)\n"
     "  -h, --help  : print this help message and exit successfuly\n"
+    "  -F, --fsck  : runs fsck on the device before mounting\n"
     "  -V, --version\n"
     "                print version number and exit successfully") );
 }
