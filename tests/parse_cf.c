@@ -18,6 +18,7 @@
 #include <stdio.h>
 
 #define DUMP(x) printf(#x ": %s\n", (cf.x ? "yes" :"no"))
+#define DUMPI(x) printf(#x ": %d\n", cf.x)
 
 int main(int argc, char *argv[])
 {
@@ -30,4 +31,6 @@ int main(int argc, char *argv[])
   conffile_init(&cf);
   conffile_read(argv[1], &cf);
   DUMP(allow_fsck);
+  DUMP(allow_loop);
+  DUMPI(max_loop_device);
 }

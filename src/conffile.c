@@ -30,7 +30,7 @@ void conffile_init(ConfFile * cf)
 
 int conffile_read(const char * file, ConfFile * cf)
 {
-  regex_t comment_RE, boolean_RE, blank_RE, true_RE, false_RE;   
+  regex_t comment_RE, boolean_RE, uint_RE, blank_RE, true_RE, false_RE;   
   char line_buffer[200];
   char buffer[200];
   FILE * f;
@@ -44,6 +44,14 @@ int conffile_read(const char * file, ConfFile * cf)
   if( regcomp(&boolean_RE, 
 	      "^[[:blank:]]*([a-zA-Z_]+)[[:blank:]]*"
 	      "=[[:blank:]]*(.*)$",
+	      REG_EXTENDED )) {
+    perror(_("Could not compile regular expression for values"));
+    return -1;
+  }
+
+  if( regcomp(&uint_RE, 
+	      "^[[:blank:]]*([a-zA-Z_]+)[[:blank:]]*"
+	      "=[[:blank:]]*([0-9]+)$",
 	      REG_EXTENDED )) {
     perror(_("Could not compile regular expression for values"));
     return -1;
@@ -86,9 +94,29 @@ int conffile_read(const char * file, ConfFile * cf)
       continue;
     }
 
-    /** @todo if there is a need for non-boolean data, insert a check
-	with a validating regexp 
-    */
+    if( ! regexec( &uint_RE, line_buffer, 3, m, 0) ) {
+      /* Value line */
+      int value;
+      /* We use memcpy as strncpy does not add null when necessary */
+      memcpy(buffer, line_buffer + m[2].rm_so, m[2].rm_eo - m[2].rm_so);
+      buffer[m[2].rm_eo - m[2].rm_so] = 0;
+      value = atol(buffer);
+
+      /* Now, checking the name of the feature */
+      memcpy(buffer, line_buffer + m[1].rm_so, m[1].rm_eo - m[1].rm_so);
+      buffer[m[1].rm_eo - m[1].rm_so] = 0;
+
+      if(! strcmp(buffer, "max_loop_device")) {
+	cf->max_loop_device = value;
+      }
+
+      else {
+	fprintf(stderr, "Invalid configuration item: '%s'\n", buffer);
+	return -4;
+      }
+      continue;
+    }
+
 
     if( ! regexec( &boolean_RE, line_buffer, 3, m, 0) ) {
       /* Value line */
@@ -113,6 +141,11 @@ int conffile_read(const char * file, ConfFile * cf)
       if(! strcmp(buffer, "allow_fsck")) {
 	cf->allow_fsck = value;
       }
+
+      else if(! strcmp(buffer, "allow_loop")) {
+	cf->allow_loop = value;
+      }
+
       else {
 	fprintf(stderr, "Invalid configuration item: '%s'\n", buffer);
 	return -4;
@@ -129,6 +162,7 @@ int conffile_read(const char * file, ConfFile * cf)
   }
   fclose(f);
   regfree(&comment_RE);
+  regfree(&uint_RE);
   regfree(&boolean_RE);
   regfree(&blank_RE);
   regfree(&true_RE);

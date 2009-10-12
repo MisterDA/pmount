@@ -14,7 +14,7 @@
 /**
  * Information that can be read from a configuration file.
  *
- * For now, all of these fields are booleans; false always means more
+ * Most of these fields are booleans; false always means more
  * security.
  */
 typedef struct {
@@ -23,6 +23,21 @@ typedef struct {
      before they are mounted.
    */
   int allow_fsck;
+
+  /**
+     Whether or not the users are allowed mount normal files using
+     loopback devices.
+   */
+  int allow_loop;
+
+  /**
+     pmount will probe /dev/loop0, /dev/loop1... until /dev/loopN
+     where N is max_loop_device for unused loop devices, and fail if
+     it does not find one. This is to avoid DoS by loop device
+     exhaustion. Defaults to 0, which means that only /dev/loop0 is
+     probed (but of course only if allow_loop is true).
+   */
+  int max_loop_device;
   
 } ConfFile;
 
