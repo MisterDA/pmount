@@ -9,12 +9,27 @@
  */
 
 #include "luks.h"
+#include "config.h"
 #include "utils.h"
 #include "policy.h"
 #include <stdio.h>
 #include <limits.h>
 #include <sys/stat.h>
 #include <libintl.h>
+
+
+/* If CRYPTSETUP_RUID is set, we run cryptsetup with ruid = euid = 0.
+   This is due to a recent *feature* in libgcrypt, dropping privileges
+   if ruid != euid.
+
+   See http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=551540 for
+   more information
+ */
+#ifdef CRYPTSETUP_RUID
+#define CRYPTSETUP_SPAWN_OPTIONS (SPAWN_EROOT|SPAWN_RROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR)
+#else
+#define CRYPTSETUP_SPAWN_OPTIONS (SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR)
+#endif
 
 enum decrypt_status
 luks_decrypt( const char* device, char* decrypted, int decrypted_size, 
@@ -26,7 +41,7 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
     struct stat st;
 
     /* check if encrypted */
-    status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+    status = spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
             CRYPTSETUP, CRYPTSETUP, "isLuks", device, NULL );
     if( status != 0 ) {
         /* just return device */
@@ -45,20 +60,20 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
     /* open LUKS device */
     if( password_file )
         if( readonly == 1 )
-            status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
                     CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
                     password_file, "--readonly", device, label, NULL );
         else
-            status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
                     CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
                     password_file, device, label, NULL );
     else
         if( readonly == 1 )
-            status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
                     CRYPTSETUP, CRYPTSETUP, "--readonly", "luksOpen",
                     device, label, NULL );
         else
-            status = spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, 
+            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
                     CRYPTSETUP, CRYPTSETUP, "luksOpen", device, label, NULL );
 
     if( status == 0 )
@@ -79,7 +94,7 @@ void
 luks_release( const char* device, int force )
 {
   if(force || luks_has_lockfile(device)) {
-    spawnl( SPAWN_EROOT|SPAWN_NO_STDOUT|SPAWN_NO_STDERR, CRYPTSETUP, CRYPTSETUP,
+    spawnl( CRYPTSETUP_SPAWN_OPTIONS, CRYPTSETUP,
             "luksClose", device, NULL );
     luks_remove_lockfile(device);
   }

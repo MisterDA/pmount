@@ -71,7 +71,20 @@ else
         BUILD_HAL=""
 fi
 AM_CONDITIONAL(PMOUNT_HAL, test -n "$BUILD_HAL")
-													   
+
+AC_ARG_ENABLE(ruid-root-cryptsetup,
+  AC_HELP_STRING([--enable-ruid-root-cryptsetup],[Run cryptsetup with RUID = root]),
+  [case $enableval in
+     yes) CS_RUID=yes ;;
+     no)  CS_RUID=no ;;
+     *) AC_MSG_ERROR(bad value $enableval for --enable-ruid-root-cryptsetup) ;;
+   esac],
+   [CS_RUID=yes])
+if test x"$CS_RUID" = xyes; then
+   AC_MSG_NOTICE([Will be running cryptsetup with EUID = RUID = 0. Use --disable-ruid-root-cryptsetup ])
+   AC_DEFINE(CRYPTSETUP_RUID, 1, [Define this parameter to run cryptsetup with RUID = EUID = root])
+fi
+
 GETTEXT_PACKAGE="pmount"
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
