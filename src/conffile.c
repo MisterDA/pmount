@@ -27,7 +27,6 @@ void conffile_init(ConfFile * cf)
   memset(cf, 0, sizeof(ConfFile));
 }
 
-
 int conffile_read(const char * file, ConfFile * cf)
 {
   regex_t comment_RE, boolean_RE, uint_RE, blank_RE, true_RE, false_RE;   
@@ -45,7 +44,7 @@ int conffile_read(const char * file, ConfFile * cf)
 	      "^[[:blank:]]*([a-zA-Z_]+)[[:blank:]]*"
 	      "=[[:blank:]]*(.*)$",
 	      REG_EXTENDED )) {
-    perror(_("Could not compile regular expression for values"));
+    perror(_("Could not compile regular expression for boolean values"));
     return -1;
   }
 
@@ -53,7 +52,7 @@ int conffile_read(const char * file, ConfFile * cf)
 	      "^[[:blank:]]*([a-zA-Z_]+)[[:blank:]]*"
 	      "=[[:blank:]]*([0-9]+)$",
 	      REG_EXTENDED )) {
-    perror(_("Could not compile regular expression for values"));
+    perror(_("Could not compile regular expression for integer values"));
     return -1;
   }
 

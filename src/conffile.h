@@ -50,6 +50,10 @@ void conffile_init(ConfFile * cf);
    Reads configuration information from the given file into the
    structure.
 
+   @todo This function should be able to handle more subtle effect,
+   such as allowing only specific users/groups, or forbidding given
+   users. Maybe this is not an emergency for now.
+
    @return 0 if everything went fine
 */
 
