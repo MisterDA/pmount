@@ -1,3 +1,14 @@
+0.9.21
+-----------
+- now whitelisting ext4 
+- few configure.ac tweaks
+- now, cryptsetup is run by default with ruid = euid = 0 to work
+  around a libgcrypt "feature"
+  (see http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=551540)
+  This can be disabled with the --disable-ruid-root-cryptsetup
+  ./configure option
+- pulling new translations from Rosetta
+
 0.9.20
 -----------
 - fix few typos (in man/pmount.1 and configure.ac)
