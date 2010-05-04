@@ -29,6 +29,7 @@ void conffile_init(ConfFile * cf)
 
 int conffile_read(const char * file, ConfFile * cf)
 {
+  /** @todo for now, no cleanup is performed on error...*/
   regex_t comment_RE, boolean_RE, uint_RE, blank_RE, true_RE, false_RE;   
   char line_buffer[200];
   char buffer[200];

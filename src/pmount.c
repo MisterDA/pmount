@@ -847,6 +847,10 @@ main( int argc, char** argv )
     }
 
     /* does the device start with DEVDIR? */
+    /**
+       @todo here we should relax this policy if the target file is
+       owned! by the real uid.
+     */
     if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) { 
         fprintf( stderr, _("Error: invalid device %s (must be in /dev/)\n"), device ); 
         return E_DEVICE;
