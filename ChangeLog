@@ -1,6 +1,10 @@
+0.9.22
+-----------
+- fix the problem with pumount failing to call luksClose
+
 0.9.21
 -----------
-- now whitelisting ext4 
+- now whitelisting ext4
 - few configure.ac tweaks
 - now, cryptsetup is run by default with ruid = euid = 0 to work
   around a libgcrypt "feature"
