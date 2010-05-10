@@ -94,8 +94,8 @@ void
 luks_release( const char* device, int force )
 {
   if(force || luks_has_lockfile(device)) {
-    spawnl( CRYPTSETUP_SPAWN_OPTIONS, CRYPTSETUP,
-            "luksClose", device, NULL );
+    spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
+	    CRYPTSETUP, CRYPTSETUP, "luksClose", device, NULL );
     luks_remove_lockfile(device);
   }
   else
