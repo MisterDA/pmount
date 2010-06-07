@@ -10,3 +10,10 @@ CLEANFILES = \
        intltool-extract    \
        intltool-update     \
        intltool-merge
+
+
+# We make sure the lock directory exists and is owned by root:root
+install-exec-hook:
+	mkdir -p $(DESTDIR)$(LOCKDIR)
+	chown root:root $(DESTDIR)$(LOCKDIR)
+
