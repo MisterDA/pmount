@@ -16,4 +16,5 @@ CLEANFILES = \
 install-exec-hook:
 	mkdir -p $(DESTDIR)$(LOCKDIR)
 	chown root:root $(DESTDIR)$(LOCKDIR)
+	chmod 755 $(DESTDIR)$(LOCKDIR)
 
