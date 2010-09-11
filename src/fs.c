@@ -29,6 +29,7 @@ static struct FS supported_fs[] = {
     { "ext3", "nodev,noauto,nosuid,user,errors=remount-ro", 0, NULL, 0 },
     { "ext2", "nodev,noauto,nosuid,user,errors=remount-ro", 0, NULL, 0 },
     { "ext4", "nodev,noauto,nosuid,user,errors=remount-ro", 0, NULL, 0 },
+    { "btrfs", "nodev,noauto,nosuid", 0, NULL, 0 },
     { "reiserfs", "nodev,noauto,nosuid,user", 0, NULL, 0 },
     { "reiser4", "nodev,noauto,nosuid,user", 0, NULL, 0 },
     { "xfs", "nodev,noauto,nosuid,user", 0, NULL, 0 },
