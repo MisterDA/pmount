@@ -3,7 +3,7 @@ AC_PREREQ(2.52)
 AC_INIT(src/pmount.c)
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_SRCDIR(src)
-AM_INIT_AUTOMAKE(pmount, 0.9.20)
+AM_INIT_AUTOMAKE(pmount, 0.9.23)
 
 AC_PROG_INTLTOOL([0.21])
 
@@ -21,7 +21,7 @@ AC_CHECK_HEADER(blkid/blkid.h,
 	[AC_CHECK_LIB(blkid, blkid_get_cache,
 		[AC_DEFINE(HAVE_BLKID) LIBS="$LIBS -lblkid"],
 		[AC_MSG_WARN([Missing blkid library: you will not have fs autodetection (install libblkid-dev or similar?)])])],
-	[AC_MSG_WARN([Missing /usr/include/blkid/blkid.h: you will not have fs autodetection (install libblkid-dev or similar?)])])
+	[AC_MSG_ERROR([Missing /usr/include/blkid/blkid.h: you will not have fs autodetection (install libblkid-dev or similar?)])])
 
 # directory configuration
 AC_ARG_WITH(media-dir, 
@@ -29,11 +29,9 @@ AC_ARG_WITH(media-dir,
 	AC_DEFINE_UNQUOTED(MEDIADIR, "$withval", [directory for mounts]),
 	AC_DEFINE_UNQUOTED(MEDIADIR, "/media/", [directory for mounts]))
 AC_ARG_WITH(lock-dir, 
-	AC_HELP_STRING([--with-lock-dir=DIR], [Directory for mount locks (default: /var/lock/pmount)]),
+	AC_HELP_STRING([--with-lock-dir=DIR], [Directory for mount locks (default: /var/lib/pmount-locks)]),
 	AC_DEFINE_UNQUOTED(LOCKDIR, "$withval", [directory for locks]),
-	AC_DEFINE_UNQUOTED(LOCKDIR, "/var/lock/pmount", [directory for locks]))
-
-# Path to configuration files
+	AC_DEFINE_UNQUOTED(LOCKDIR, "/var/lib/pmount-locks", [directory for locks]))
 AC_ARG_WITH(whitelist, 
 	AC_HELP_STRING([--with-whitelist=PATH], [Path of whitelist configuration file (default: /etc/pmount.allow)]),
 	AC_DEFINE_UNQUOTED(WHITELIST, "$withval", [whitelist configuration file]),
@@ -91,8 +89,21 @@ dnl TODO: allow disabling the reading of the configuration file at compile
 dnl time ? (and if regular expressions are not found)
 AC_CHECK_HEADER(regex.h,
 	[],
-	[AC_MSG_ERROR([Cannot use POSIX regular expressions !])])
-													   
+	[AC_MSG_ERROR([Cannot use POSIX regular expressions !])])	   
+
+AC_ARG_ENABLE(ruid-root-cryptsetup,
+  AC_HELP_STRING([--enable-ruid-root-cryptsetup],[Run cryptsetup with RUID = root]),
+  [case $enableval in
+     yes) CS_RUID=yes ;;
+     no)  CS_RUID=no ;;
+     *) AC_MSG_ERROR(bad value $enableval for --enable-ruid-root-cryptsetup) ;;
+   esac],
+   [CS_RUID=yes])
+if test x"$CS_RUID" = xyes; then
+   AC_MSG_NOTICE([Will be running cryptsetup with EUID = RUID = 0. Use --disable-ruid-root-cryptsetup ])
+   AC_DEFINE(CRYPTSETUP_RUID, 1, [Define this parameter to run cryptsetup with RUID = EUID = root])
+fi
+
 GETTEXT_PACKAGE="pmount"
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])

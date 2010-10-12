@@ -1,3 +1,23 @@
+0.9.23
+-----------
+- fix a security hole (see CVE-2010-2192 for more
+  information). Upgrading is seriously recommended.
+
+0.9.22
+-----------
+- fix the problem with pumount failing to call luksClose
+
+0.9.21
+-----------
+- now whitelisting ext4
+- few configure.ac tweaks
+- now, cryptsetup is run by default with ruid = euid = 0 to work
+  around a libgcrypt "feature"
+  (see http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=551540)
+  This can be disabled with the --disable-ruid-root-cryptsetup
+  ./configure option
+- pulling new translations from Rosetta
+
 0.9.20
 -----------
 - fix few typos (in man/pmount.1 and configure.ac)

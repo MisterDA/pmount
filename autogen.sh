@@ -22,16 +22,26 @@ DIE=0
 
 AUTOMAKE=automake-1.9
 ACLOCAL=aclocal-1.9
+INTLTOOLIZE=intltoolize-0.40
 
 ($AUTOMAKE --version) < /dev/null > /dev/null 2>&1 || {
         AUTOMAKE=automake
         ACLOCAL=aclocal
+        INTLTOOLIZE=intltoolize
 }
 
 ($AUTOMAKE --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "You must have automake installed to compile $PROJECT."
 	echo "Get ftp://sourceware.cygnus.com/pub/automake/automake-1.9.tar.gz"
+	echo "(or a newer version if it is available)"
+	DIE=1
+}
+
+($INTLTOOLIZE --version) < /dev/null > /dev/null 2>&1 || {
+	echo
+	echo "You must have intltool installed to compile $PROJECT."
+	echo "Get http://freshmeat.net/urls/1aa3b96c7f49a6e49fb2a10b722bba39"
 	echo "(or a newer version if it is available)"
 	DIE=1
 }
@@ -140,14 +150,14 @@ do
   fi
 done
 
-conf_flags="--enable-maintainer-mode --enable-compile-warnings" #--enable-iso-c
+conf_flags="--enable-maintainer-mode " #--enable-compile-warnings" #--enable-iso-c
 
 cd "$ORIGDIR"
 
 if test x$NOCONFIGURE = x; then
   echo Running $srcdir/configure $conf_flags "$@" ...
   $srcdir/configure $conf_flags "$@" \
-  && echo Now type \`make\' to compile $PROJECT  || exit 1
+  && echo "Now type \`make\' to compile $PROJECT"  || exit 1
 else
   echo Skipping configure process.
 fi

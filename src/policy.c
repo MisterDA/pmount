@@ -681,9 +681,13 @@ mntpt_mounted( const char* mntpt, int expect )
 void make_lockdir_name( const char* device, char* name, size_t name_size )
 {
     char* devname;
+    /* Strip an initial whitespace in device, will look better */
+    if(*device == '/')
+      device++;
 
     devname = strreplace( device, '/', '_' );
-    snprintf( name, name_size, "%s%s", LOCKDIR, devname );
+    /* Make the lockdir a subdirectory of LOCKDIR ! */
+    snprintf( name, name_size, "%s/%s", LOCKDIR, devname );
     free( devname );
 }
 

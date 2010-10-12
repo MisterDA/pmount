@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: mount removable devices as normal user\n"
 "Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
-"PO-Revision-Date: 2007-08-01 22:13+0000\n"
-"Last-Translator: Kamil Páral <kamil.paral@gmail.com>\n"
+"PO-Revision-Date: 2010-02-16 09:17+0000\n"
+"Last-Translator: Konki <pavel.konkol@seznam.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-09-10 21:56+0000\n"
+"X-Launchpad-Export-Date: 2010-05-04 20:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -91,6 +91,25 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully"
 msgstr ""
+"Volby:\n"
+"  -r          : vynutí připojení <zařízení> pouze pro čtení\n"
+"  -w          : vynutí připojení <zařízení> pro čtení a zápis\n"
+"  -s, --sync  : připojí <zařízení> s volbou 'sync' (implicitně: 'async')\n"
+"  --noatime   : připojí <zařízení> s volbou 'noatime' (implicitně: 'atime')\n"
+"  -e, --exec  : připojí <zařízení> s volbou 'exec' (implicitně: 'noexec')\n"
+"  -t <fs>     : připojí jako souborový systém typu <fs> (implicitně: "
+"autodetected)\n"
+"  -c <charset>: použije zadanou I/O znakovou sadu (implicitně: 'utf8' při "
+"volání\n"
+"                v UTF-8 lokalitě, jinak použije implicitní pro připojování)\n"
+"  -u <umask>  : použije zvolený umask místo implicitního (pouze pro\n"
+"                souborové systémy podporující nastavení umask)\n"
+" --passphrase <file>\n"
+"                načte passphrase ze souboru namísto z terminálu\n"
+"                (pouze pro zařizení zašifrovaná pomocí LUKS)\n"
+"  -d, --debug : umožní ladící výstup (velmi upovídaný)\n"
+"  -h, --help  : vytiskne nápovědu a úspěšně skončí\n"
+"  --version   : vytiskne číslo verze a úspěšně skončí"
 
 #: ../src/pmount.c:134
 #, c-format
@@ -118,7 +137,7 @@ msgstr "Chyba: nelze zapsat všechna uid oprávnění"
 
 #: ../src/pmount.c:186
 msgid "Error: could not execute mount"
-msgstr ""
+msgstr "Chyba: nemohu spustit připojení"
 
 #: ../src/pmount.c:225
 #, c-format
@@ -189,7 +208,7 @@ msgstr "Chyba: neplatné zařízení %s (musí být v /dev/)\n"
 #: ../src/pmount.c:679
 #, c-format
 msgid "Error: could not decrypt device (wrong passphrase?)\n"
-msgstr ""
+msgstr "Chyba: nelze dekódovat zařízení (špatné heslo?)\n"
 
 #: ../src/pmount.c:682
 #, c-format
@@ -334,6 +353,18 @@ msgid ""
 "  -h, --help  : print help message and exit successfuly\n"
 "  --version   : print version number and exit successfully\n"
 msgstr ""
+"Použití:\n"
+"\n"
+"%s [volby] <zařízení>\n"
+"  Odpojí <zařízení> z adresáře pod %s, jestliže jsou splněny požadavky\n"
+"  politiky (viz pumount(1) pro detaily). Adresář přípojného bodu je poté\n"
+"  odstraněn.\n"
+"\n"
+"Volby:\n"
+"  -l, --lazy  : odpojí pomalu, viz umount(8)\n"
+"  -d, --debug : umožní ladící výstup (velmi upovídaný)\n"
+"  -h, --help  : vytiskne nápovědu a úspěšně skončí\n"
+"  --version   : vytiskne číslo verze a úspěšně skončí\n"
 
 #: ../src/pumount.c:74
 msgid "Internal error: could not determine mount point\n"
@@ -392,6 +423,7 @@ msgstr "Vnitřní chyba: nelze změnit úspěšně na uid roota"
 #: ../src/utils.c:264
 msgid "Internal error: could not change effective user uid to real user id"
 msgstr ""
+"Vnitřní chyba: nelze změnit skutečné uživatelské id na pravé uživatelské id"
 
 #: ../src/utils.c:273
 msgid "Internal error: could not change to effective gid root"

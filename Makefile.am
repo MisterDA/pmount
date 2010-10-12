@@ -10,3 +10,4 @@ CLEANFILES = \
        intltool-extract    \
        intltool-update     \
        intltool-merge
+
