@@ -16,6 +16,17 @@
  *
  * Most of these fields are booleans; false always means more
  * security.
+ *
+ * @todo This isn't the right way to go. Rather, we should use boolean
+ * functions, such as conf_do_i_have_the_right_to_do_this (although
+ * maybe in a slightly more compact way ?): this would also handle the
+ * complex case when performing an action depends on uid/gid.
+ *
+ * @todo Eventually, the file system list will be made customizable
+ * using the configuration file. Idea: make it possible to overwrite
+ * some of the default values ?
+ *
+ * @todo Make a function that dumps "my permissions" ?
  */
 typedef struct {
   /**
@@ -57,7 +68,7 @@ void conffile_init(ConfFile * cf);
    @return 0 if everything went fine
 */
 
-int conffile_read(const char * file, ConfFile * cf);
+int conffile_read(const char * file);
 
 /**
    The system configuration, as read by conffile_system_read.

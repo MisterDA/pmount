@@ -22,30 +22,78 @@
 
 ConfFile system_configuration = { .allow_fsck = 0 };
 
+/* 
+   \todo This system is bad and needs a complete rewrite into
+   something more easy to handle and more easy to factorize.
+*/
+
 void conffile_init(ConfFile * cf)
 {
   memset(cf, 0, sizeof(ConfFile));
 }
 
-int conffile_read(const char * file, ConfFile * cf)
+/**
+   Reads a line of configuration file into the given target buffer.
+
+   Though for now it isn't the case, it will eventually handle:
+   * removing the last \n character (a la chomp)
+   * escaping the end-of-line with a \
+*/
+static int conffile_read_line(FILE * file, char * dest, size_t nb)
 {
-  /** @todo for now, no cleanup is performed on error...*/
-  regex_t comment_RE, boolean_RE, uint_RE, blank_RE, true_RE, false_RE;   
-  char line_buffer[200];
-  char buffer[200];
-  FILE * f;
-  regmatch_t m[3];
-  /** @todo free regular expressions on error - must use gotos ? */
+  int len;
+  if( ! fgets(dest, nb, file) ) {
+    perror(_("Failed to read configuration file"));
+    return -1;
+  }
+  /* Here, we should perform backslash escape, and basic checking that
+     the line isn't too long */
+  len = strlen(dest);
+  if(dest[len-1] != '\n' && ! feof(file)) {
+    fprintf(stderr, _("Line too long in configuration file: %s\n"),
+	    dest);
+    return -1;
+  }
+  return 0;
+}
+
+/**
+   Patterns
+*/
+static int regex_compiled = 0;
+regex_t comment_RE, declaration_RE, uint_RE, blank_RE, true_RE, false_RE;   
+
+
+/**
+   Initialize all the patterns necessary for parsing the configuration
+   file.
+*/
+static int conffile_prepare_regexps()
+{
+  /* A regexp matching comment lines */
   if( regcomp(&comment_RE, "^[[:blank:]]*#", REG_EXTENDED)) {
     perror(_("Could not compile regular expression for comments"));
     return -1;
   }
+  /* A regexp matching a boolean value*/
 
-  if( regcomp(&boolean_RE, 
+  if( regcomp(&declaration_RE, 
 	      "^[[:blank:]]*([a-zA-Z_]+)[[:blank:]]*"
 	      "=[[:blank:]]*(.*)$",
 	      REG_EXTENDED )) {
     perror(_("Could not compile regular expression for boolean values"));
+    return -1;
+  }
+
+  if( regcomp(&true_RE, "[[:blank:]]*(true|yes)[[:blank:]]*", 
+	      REG_EXTENDED | REG_ICASE | REG_NOSUB)) {
+    perror(_("Could not compile regular expression for true values"));
+    return -1;
+  }
+
+  if( regcomp(&false_RE, "[[:blank:]]*(false|no)[[:blank:]]*", 
+	      REG_EXTENDED | REG_ICASE | REG_NOSUB)) {
+    perror(_("Could not compile regular expression for false values"));
     return -1;
   }
 
@@ -62,111 +110,100 @@ int conffile_read(const char * file, ConfFile * cf)
     return -1;
   }
 
-  if( regcomp(&true_RE, "[[:blank:]]*(true|yes)[[:blank:]]*", 
-	      REG_EXTENDED | REG_ICASE | REG_NOSUB)) {
-    perror(_("Could not compile regular expression for true values"));
-    return -1;
-  }
+  return 0;
+}
 
-  if( regcomp(&false_RE, "[[:blank:]]*(false|no)[[:blank:]]*", 
-	      REG_EXTENDED | REG_ICASE | REG_NOSUB)) {
-    perror(_("Could not compile regular expression for false values"));
-    return -1;
+#define BLANK_LINE 0
+#define DECLARATION_LINE 1
+
+
+/**
+   Classifies the given line into several categories:
+
+   * blank or comment (0)
+   * a declaration
+   * beginning of a FS specification ? (later on)
+
+   When applicable, this function puts the adress of the relevant bits
+   into the pointer variables.
+
+   Returns -1 when failed.
+ */
+static int conffile_classify_line(char * line, char ** name_ptr,
+				  char ** value_ptr)
+{
+  regmatch_t m[3];
+  if( ! regexec( &comment_RE, line, 0, NULL, 0) ||
+      ! regexec( &blank_RE, line, 0, NULL, 0))
+    return BLANK_LINE;
+
+  if( ! regexec( &declaration_RE, line, 3, m, 0) ) {
+    /* OK, we found a line containing something */
+    if(m[1].rm_so < 0) {
+      fprintf(stderr, "There sure was a problem, it is in principle impossible that this happens\n");
+      return -1;
+    }
+    *name_ptr = line + m[1].rm_so;
+    *(line + m[1].rm_eo) = 0;	/* Make it NULL-terminated */
+
+    if(m[2].rm_so < 0) {
+      fprintf(stderr, "There sure was a problem, it is in principle impossible that this happens\n");
+      return -1;
+    }
+    *value_ptr = line + m[2].rm_so;
+    *(line + m[2].rm_eo) = 0;	/* Make it NULL-terminated */
+    if(*(line + m[2].rm_eo - 1) == '\n')
+      *(line + m[2].rm_eo - 1) = 0; /* Strip trailing newline when
+				       applicable */
+    return DECLARATION_LINE;
   }
+  return -1;			/* Should never be reached. */
+}
+
+
+int conffile_read(const char * file)
+{
+  /** @todo for now, no cleanup is performed on error...*/
+  char line_buffer[1000];
+  char * name;
+  char * value;
+  FILE * f;
+
+  /* Compile regular expressions when necessary */
+  conffile_prepare_regexps();
+
 
   f = fopen( file, "r" );
   if(! f) {
     perror(_("Failed to open configuration file"));
     return -2;
   }
+  fprintf(stdout, "Reading file: %s\n", file);
 
   while(! feof(f)) {
-    if( ! fgets(line_buffer, sizeof(line_buffer), f) ) {
-      perror(_("Failed to read configuration file"));
-      fclose(f);
-      return -3;
+    if(conffile_read_line(f, line_buffer, sizeof(line_buffer)))
+      return -1;
+    int line_type = conffile_classify_line(line_buffer, &name, &value);
+    switch(line_type) {
+    case BLANK_LINE:
+      break;
+    case DECLARATION_LINE:
+      /* Do something */
+      fprintf(stderr, "Value %s = '%s'\n", name, value);
+      break;
+    default:
+      fprintf(stderr, "Error parsing configuration file line: %s", 
+	      line_buffer);
+      return -1;
     }
-    /** @todo check that lines are not too long...*/
-    if( ! regexec( &comment_RE, line_buffer, 0, NULL, 0) ||
-	! regexec( &blank_RE, line_buffer, 0, NULL, 0)
-	) {
-      /* Comment/blank */
-      continue;
-    }
-
-    if( ! regexec( &uint_RE, line_buffer, 3, m, 0) ) {
-      /* Value line */
-      int value;
-      /* We use memcpy as strncpy does not add null when necessary */
-      memcpy(buffer, line_buffer + m[2].rm_so, m[2].rm_eo - m[2].rm_so);
-      buffer[m[2].rm_eo - m[2].rm_so] = 0;
-      value = atol(buffer);
-
-      /* Now, checking the name of the feature */
-      memcpy(buffer, line_buffer + m[1].rm_so, m[1].rm_eo - m[1].rm_so);
-      buffer[m[1].rm_eo - m[1].rm_so] = 0;
-
-      if(! strcmp(buffer, "max_loop_device")) {
-	cf->max_loop_device = value;
-      }
-
-      else {
-	fprintf(stderr, "Invalid configuration item: '%s'\n", buffer);
-	return -4;
-      }
-      continue;
-    }
-
-
-    if( ! regexec( &boolean_RE, line_buffer, 3, m, 0) ) {
-      /* Value line */
-      int value;
-      /* We use memcpy as strncpy does not add null when necessary */
-      memcpy(buffer, line_buffer + m[2].rm_so, m[2].rm_eo - m[2].rm_so);
-      buffer[m[2].rm_eo - m[2].rm_so] = 0;
-      if( ! regexec( &false_RE, buffer, 0, NULL, 0) ) {
-	value = 0;
-      }
-      else if( ! regexec( &true_RE, buffer, 0, NULL, 0) ) {
-	value = 1;
-      }
-      else {
-	fprintf(stderr, "Value %s is not a boolean\n", buffer);
-	return -4;
-      }
-
-      /* Now, checking the name of the feature */
-      memcpy(buffer, line_buffer + m[1].rm_so, m[1].rm_eo - m[1].rm_so);
-      buffer[m[1].rm_eo - m[1].rm_so] = 0;
-      if(! strcmp(buffer, "allow_fsck")) {
-	cf->allow_fsck = value;
-      }
-
-      else if(! strcmp(buffer, "allow_loop")) {
-	cf->allow_loop = value;
-      }
-
-      else {
-	fprintf(stderr, "Invalid configuration item: '%s'\n", buffer);
-	return -4;
-      }
-      
-    }
-    else {
-      fprintf(stderr, "Invalid line in configuration file %s:\n\t'%s'\n",
-	      file, line_buffer);
-      return -4;
-    }
-      
-    
   }
   fclose(f);
-  regfree(&comment_RE);
-  regfree(&uint_RE);
-  regfree(&boolean_RE);
-  regfree(&blank_RE);
-  regfree(&true_RE);
-  regfree(&false_RE);
+  /* regfree(&comment_RE); */
+  /* regfree(&uint_RE); */
+  /* regfree(&boolean_RE); */
+  /* regfree(&blank_RE); */
+  /* regfree(&true_RE); */
+  /* regfree(&false_RE); */
 
   return 0;
 }
@@ -174,12 +211,9 @@ int conffile_read(const char * file, ConfFile * cf)
 int conffile_system_read()
 {
   struct stat st;
-  /* First set to defaults */
-  conffile_init(&system_configuration);
-  
   /* If the system configuration file does not exist, we don't
      complain... */
   if( stat( SYSTEM_CONFFILE, &st) )
     return 0;
-  return conffile_read( SYSTEM_CONFFILE, &system_configuration);
+  return 0;
 }

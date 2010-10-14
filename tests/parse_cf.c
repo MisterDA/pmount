@@ -22,15 +22,10 @@
 
 int main(int argc, char *argv[])
 {
-  ConfFile cf;
   if(argc != 2) {
     fprintf(stderr, "Usage: parse_cf file\n");
     return 1;
   }
   
-  conffile_init(&cf);
-  conffile_read(argv[1], &cf);
-  DUMP(allow_fsck);
-  DUMP(allow_loop);
-  DUMPI(max_loop_device);
+  conffile_read(argv[1]);
 }
