@@ -762,7 +762,7 @@ main( int argc, char** argv )
 	case 'w': force_write = 1; break;
 
 	case 'F': 
-	    if(system_configuration.allow_fsck)
+	    if(conffile_allow_fsck())
 		run_fsck = 1;
 	    else {
 		fputs(_("Your system administrator does not "

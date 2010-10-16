@@ -20,17 +20,24 @@
 #include "config.h"
 #include "utils.h"
 
-ConfFile system_configuration = { .allow_fsck = 0 };
+/**********************************************************************/
+/* Configuration items  */
 
-/* 
-   \todo This system is bad and needs a complete rewrite into
-   something more easy to handle and more easy to factorize.
+/**
+   Whether or not the user is allowed to run fsck or not.
 */
+static int configuration_allow_fsck = 0;
 
-void conffile_init(ConfFile * cf)
+int conffile_allow_fsck()
 {
-  memset(cf, 0, sizeof(ConfFile));
+  return configuration_allow_fsck;
 }
+
+
+
+
+/**********************************************************************/
+/* Helper functions for parsing the configuration file. */
 
 /**
    Reads a line of configuration file into the given target buffer.
@@ -58,11 +65,10 @@ static int conffile_read_line(FILE * file, char * dest, size_t nb)
 }
 
 /**
-   Patterns
+   Patterns for parsing the configuration files.
 */
 static int regex_compiled = 0;
 regex_t comment_RE, declaration_RE, uint_RE, blank_RE, true_RE, false_RE;   
-
 
 /**
    Initialize all the patterns necessary for parsing the configuration
@@ -85,13 +91,13 @@ static int conffile_prepare_regexps()
     return -1;
   }
 
-  if( regcomp(&true_RE, "[[:blank:]]*(true|yes)[[:blank:]]*", 
+  if( regcomp(&true_RE, "^[[:blank:]]*(true|yes|on)[[:blank:]]*", 
 	      REG_EXTENDED | REG_ICASE | REG_NOSUB)) {
     perror(_("Could not compile regular expression for true values"));
     return -1;
   }
 
-  if( regcomp(&false_RE, "[[:blank:]]*(false|no)[[:blank:]]*", 
+  if( regcomp(&false_RE, "^[[:blank:]]*(false|no|off)[[:blank:]]*", 
 	      REG_EXTENDED | REG_ICASE | REG_NOSUB)) {
     perror(_("Could not compile regular expression for false values"));
     return -1;
@@ -112,6 +118,20 @@ static int conffile_prepare_regexps()
 
   return 0;
 }
+
+/**
+   Frees the pattern space of the allocated regular expressions
+*/
+static void conffile_free_regexps()
+{
+  regfree(&comment_RE);
+  regfree(&uint_RE);
+  regfree(&declaration_RE);
+  regfree(&blank_RE);
+  regfree(&true_RE);
+  regfree(&false_RE);
+}
+
 
 #define BLANK_LINE 0
 #define DECLARATION_LINE 1
@@ -154,10 +174,28 @@ static int conffile_classify_line(char * line, char ** name_ptr,
     *(line + m[2].rm_eo) = 0;	/* Make it NULL-terminated */
     if(*(line + m[2].rm_eo - 1) == '\n')
       *(line + m[2].rm_eo - 1) = 0; /* Strip trailing newline when
-				       applicable */
+				       applicable */    
     return DECLARATION_LINE;
   }
   return -1;			/* Should never be reached. */
+}
+
+/**
+   Checks that the given value is a boolean and store is value in
+   target.
+ */
+int conffile_get_boolean(const char * value, int * target)
+{
+  if( ! regexec( &true_RE, value, 0, NULL, 0))
+    *target = 1;
+  else if( ! regexec( &false_RE, value, 0, NULL, 0))
+    *target = 0;
+  else {
+    fprintf(stderr, _("Error while reading configuration file: '%s' "
+		      "is not a boolean value"), value);
+    return -1;
+  }
+  return 0;
 }
 
 
@@ -188,22 +226,26 @@ int conffile_read(const char * file)
     case BLANK_LINE:
       break;
     case DECLARATION_LINE:
-      /* Do something */
-      fprintf(stderr, "Value %s = '%s'\n", name, value);
+      /* Now, another switch-like  */
+      fprintf(stderr, "Name: '%s' -- value: '%s'\n", name, value);
+      if(! strcmp(name, "allow_fsck")) {
+	if(conffile_get_boolean(value, &configuration_allow_fsck))
+	  return -1;
+      }
+      else {
+	fprintf(stderr, _("Error parsing configuration file: "
+			  "unknown field '%s'\n"),
+		name);
+	return -1;
+      }
       break;
     default:
-      fprintf(stderr, "Error parsing configuration file line: %s", 
+      fprintf(stderr, "Error parsing configuration file line: %s\n", 
 	      line_buffer);
       return -1;
     }
   }
   fclose(f);
-  /* regfree(&comment_RE); */
-  /* regfree(&uint_RE); */
-  /* regfree(&boolean_RE); */
-  /* regfree(&blank_RE); */
-  /* regfree(&true_RE); */
-  /* regfree(&false_RE); */
 
   return 0;
 }
