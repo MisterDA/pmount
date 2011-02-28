@@ -9,12 +9,19 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 /* For regular expression parsing... */
 #include <regex.h>
 
 #include <libintl.h>
 #include <sys/stat.h>
+
+
+/* For getting uids... */
+#include <sys/types.h>
+#include <pwd.h>
+#include <grp.h>
 
 #include "conffile.h"
 #include "config.h"
@@ -126,16 +133,25 @@ static cf_key * cf_spec_build_keys(cf_spec * specs)
 }
 
 /**
-   @todo write some clean up code
+   Free the key structure.
 */
 static void cf_key_free_keys(cf_key * keys)
 {
+  cf_key * k = keys;
+  while(k->key) {
+    free(k->key);
+    k++;
+  }
+  free(keys);
 }
 
 
 /**
    Finds withing the given pairs the cf_spec corresponding to the
-   given key 
+   given key.
+
+   Yes, it's inefficient, but do we really need more efficient than
+   this ?
 */
 static cf_key * cf_key_find(const char * key, cf_key * keys)
 {
@@ -299,7 +315,7 @@ static int cf_classify_line(char * line, char ** name_ptr,
    Checks that the given value is a boolean and store is value in
    target.
  */
-int cf_get_boolean(const char * value, int * target)
+static int cf_get_boolean(const char * value, int * target)
 {
   if( ! regexec( &true_RE, value, 0, NULL, 0))
     *target = 1;
@@ -309,6 +325,86 @@ int cf_get_boolean(const char * value, int * target)
     fprintf(stderr, _("Error while reading configuration file: '%s' "
 		      "is not a boolean value"), value);
     return -1;
+  }
+  return 0;
+}
+
+/**
+   Returns the number of characters within the which set in str
+*/
+static size_t cf_count_chars(const char * str, const char * which)
+{
+  size_t val = 0;
+  while(1) {
+    str = strpbrk(str, which);
+    if(! str)
+      break;
+    str++;
+    val++;
+  }
+  return val;
+}
+
+/**
+   Trim white space while copying from one string to another.
+*/
+static void cf_trim_anew(const char * source, char * dest, size_t nb)
+{
+  size_t l = strspn(source, " \t\n");
+  source += l;
+  /* this is like strncpy, but without the security problems */
+  snprintf(dest, nb, "%s", source);
+  dest = strpbrk(dest, " \t\n");
+  if(dest)
+    *dest = 0;
+}
+
+static uid_t cf_get_uid(const char * uid)
+{
+  char buffer[1024];		/* To trim the string */
+  cf_trim_anew(uid, buffer, sizeof(buffer));
+  struct passwd * pwd = getpwnam(buffer);
+  if(pwd)
+    return pwd->pw_uid;
+
+  fprintf(stderr, _("Could not find user named '%s'\n"), buffer);
+  return -1;
+}
+
+static gid_t cf_get_gid(const char * gid)
+{
+  char buffer[1024];		/* To trim the string */
+  cf_trim_anew(gid, buffer, sizeof(buffer));
+  struct group * group = getgrnam(buffer);
+  if(group)
+    return group->gr_gid;
+
+  fprintf(stderr, _("Could not find group named '%s'\n"), buffer);
+  return -1;
+}
+
+/**
+   Reads a comma-separated list of uid and store it into the pointer
+   pointed to by target
+ */
+static int cf_get_uidlist(char * value, uid_t ** target)
+{
+  /* First, compute the number of commas in the list. */
+  size_t nb = cf_count_chars(value, ",");
+  char * end;
+  uid_t * vals = malloc(sizeof(uid_t) * (nb+2));
+  *target = vals;
+
+  while(1) {
+    end = strchr(value, ',');
+    if(end)
+      *end = 0;
+    *vals = cf_get_uid(value);
+    if(*vals == -1)
+      return -1;		/* Something went wrong */
+    if(! end)
+      break;
+    value = end+1;
   }
   return 0;
 }
@@ -338,18 +434,23 @@ int cf_read_file(FILE * file, cf_spec * specs)
   char line_buffer[1000];
   char * name;
   char * value;
-  cf_key * keys = cf_spec_build_keys(specs);
+  int retval = 0;
+  cf_key * keys;
 
   /* Compile regular expressions when necessary */
   if(cf_prepare_regexps()) 
     return -1;
+  keys = cf_spec_build_keys(specs);
 
 
-  while(! feof(file)) {
+  while(! feof(file) && !retval) {
     int line_type;
     cf_key * key;
-    if(cf_read_line(file, line_buffer, sizeof(line_buffer)))
-      return -1;
+    if(cf_read_line(file, line_buffer, sizeof(line_buffer))) {
+      retval = -1;
+      break;
+    }
+
     line_type = cf_classify_line(line_buffer, &name, &value);
     switch(line_type) {
     case BLANK_LINE:
@@ -357,18 +458,23 @@ int cf_read_file(FILE * file, cf_spec * specs)
     case DECLARATION_LINE:
       key = cf_key_find(name, keys);
       if(key) {
-	if(cf_key_assign_value(key, value)) 
-	  return -2;
+	if(cf_key_assign_value(key, value)) {
+	  retval = -2;
+	  break;
+	}
       }
       else {
 	fprintf(stderr, "Error: key '%s' is unknown\n", name);
+	retval = -2;
       }
       break;
     default:
       fprintf(stderr, "Error parsing configuration file line: %s\n", 
 	      line_buffer);
-      return -1;
+      retval = -1;
     }
   }
+
+  cf_key_free_keys(keys);
   return 0;
 }

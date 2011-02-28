@@ -24,6 +24,15 @@
 typedef struct {
   /** Default value */
   int def;
+
+  /** List of allowed groups. NULL = none*/
+  gid_t * allowed_groups;
+
+  /** List of allowed users. NULL = none*/
+  uid_t * allowed_users;
+
+  /** List of denied users. NULL = none*/
+  uid_t * denied_users;
 } ci_bool;
 
 /**
