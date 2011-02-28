@@ -2,7 +2,7 @@
  * conffile.c -- parsing of the configuration file
  *
  * Author: Vincent Fourmond <fourmond@debian.org>
- *         (c) 2009 by Vincent Fourmond
+ *         (c) 2009, 2011 by Vincent Fourmond
  * 
  * This software is distributed under the terms and conditions of the 
  * GNU General Public License. See file GPL for the full text of the license.
@@ -20,36 +20,148 @@
 #include "config.h"
 #include "utils.h"
 
-/**********************************************************************/
-/* Configuration items  */
 
 /**
-   Whether or not the user is allowed to run fsck or not.
+   First, we have a whole set of configuration items, that is objects
+   that represent a "value" of the configuration file.
 */
-static int configuration_allow_fsck = 0;
 
-int conffile_allow_fsck()
-{
-  return configuration_allow_fsck;
+void ci_bool_set_default(ci_bool * c, int val) {
+  c->def = val;
+}
+
+int ci_bool_allowed(ci_bool * c) {
+  return c->def;
 }
 
 
+/**************************************************/
+
+/**
+   Returns the number of keys for a given cf_spec.
+*/
+static size_t cf_spec_key_number(const cf_spec * spec)
+{
+  switch(spec->type) {
+  case boolean_item:
+    return 1;			/* But this will change */
+  default:
+    return 0;
+  };
+}
+
+/**
+   A structure used to associate a configuration key to the target
+   configuration item
+*/
+typedef struct {
+  /**
+     The key
+  */
+  char * key;
+  
+  /**
+     The target
+  */
+  cf_spec * target;
+
+  /**
+     Additional info, in the form of a void pointer
+  */
+  void * info;
+} cf_key;
+
+/**
+   Prepares the pairs key/target for the given spec into the area
+   pointed to by pairs. Enough space must have been reserved
+   beforehand.
+*/
+static void cf_spec_prepare_keys(cf_spec * spec, cf_key * keys)
+{
+  /* I guess this will be common to everything. */
+  int l,l2;
+  switch(spec->type) {
+  case boolean_item:
+    /* We create a "base"_allow key*/
+    l = strlen(spec->base);
+    l2 = l + strlen("_allow") +1;
+    keys->key = malloc(l2);
+    snprintf(keys->key,l2, "%s_allow", spec->base);
+    keys->target = spec;
+    keys->info = NULL;
+    /* Then, we could create "base"_allow_user, "base"_allow_group and
+       "base"_deny_user 
+    */
+    return;
+  default:
+    return;
+  };
+}
+
+/**
+   Takes a "null"-terminated list of cf_spec objects and returns a
+   newly allocated cf_pair array.
+*/
+static cf_key * cf_spec_build_keys(cf_spec * specs) 
+{
+  cf_spec * s = specs;
+  cf_key * keys;
+  cf_key * k;
+  size_t nb = 0;
+  while(s->base) {
+    nb += cf_spec_key_number(s);
+    s++;
+  }
+  
+  keys = malloc(sizeof(cf_key) * (nb+1));
+  k = keys;
+  s = specs;
+  while(s->base) {
+    cf_spec_prepare_keys(s, keys);
+    keys += cf_spec_key_number(s);
+    s++;
+  }
+  keys->key = NULL;
+  return k;
+}
+
+/**
+   @todo write some clean up code
+*/
+static void cf_key_free_keys(cf_key * keys)
+{
+}
 
 
-/**********************************************************************/
-/* Helper functions for parsing the configuration file. */
+/**
+   Finds withing the given pairs the cf_spec corresponding to the
+   given key 
+*/
+static cf_key * cf_key_find(const char * key, cf_key * keys)
+{
+  while(keys->key) {
+    if(! strcmp(key, keys->key))
+      return keys;
+    keys++;
+  }
+  return NULL;
+}
+
 
 /**
    Reads a line of configuration file into the given target buffer.
 
    Though for now it isn't the case, it will eventually handle:
-   * removing the last \n character (a la chomp)
    * escaping the end-of-line with a \
 */
-static int conffile_read_line(FILE * file, char * dest, size_t nb)
+static int cf_read_line(FILE * file, char * dest, size_t nb)
 {
   int len;
-  if( ! fgets(dest, nb, file) ) {
+  if( ! fgets(dest, nb, file)) {
+    if(feof(file)) {
+      *dest = 0;
+      return 0;
+    }
     perror(_("Failed to read configuration file"));
     return -1;
   }
@@ -68,13 +180,14 @@ static int conffile_read_line(FILE * file, char * dest, size_t nb)
    Patterns for parsing the configuration files.
 */
 static int regex_compiled = 0;
-regex_t comment_RE, declaration_RE, uint_RE, blank_RE, true_RE, false_RE;   
+static regex_t comment_RE, declaration_RE, uint_RE, 
+  blank_RE, true_RE, false_RE;   
 
 /**
    Initialize all the patterns necessary for parsing the configuration
    file.
 */
-static int conffile_prepare_regexps()
+static int cf_prepare_regexps()
 {
   /* A regexp matching comment lines */
   if( regcomp(&comment_RE, "^[[:blank:]]*#", REG_EXTENDED)) {
@@ -84,7 +197,7 @@ static int conffile_prepare_regexps()
   /* A regexp matching a boolean value*/
 
   if( regcomp(&declaration_RE, 
-	      "^[[:blank:]]*([a-zA-Z_]+)[[:blank:]]*"
+	      "^[[:blank:]]*([-a-zA-Z_]+)[[:blank:]]*"
 	      "=[[:blank:]]*(.*)$",
 	      REG_EXTENDED )) {
     perror(_("Could not compile regular expression for boolean values"));
@@ -122,7 +235,7 @@ static int conffile_prepare_regexps()
 /**
    Frees the pattern space of the allocated regular expressions
 */
-static void conffile_free_regexps()
+static void cf_free_regexps()
 {
   regfree(&comment_RE);
   regfree(&uint_RE);
@@ -145,16 +258,18 @@ static void conffile_free_regexps()
    * beginning of a FS specification ? (later on)
 
    When applicable, this function puts the adress of the relevant bits
-   into the pointer variables.
+   into the pointer variables; in that case, it modifies the buffer
+   in-place.
 
    Returns -1 when failed.
  */
-static int conffile_classify_line(char * line, char ** name_ptr,
+static int cf_classify_line(char * line, char ** name_ptr,
 				  char ** value_ptr)
 {
   regmatch_t m[3];
-  if( ! regexec( &comment_RE, line, 0, NULL, 0) ||
-      ! regexec( &blank_RE, line, 0, NULL, 0))
+  if(! (*line) ||
+     ! regexec( &comment_RE, line, 0, NULL, 0) ||
+     ! regexec( &blank_RE, line, 0, NULL, 0))
     return BLANK_LINE;
 
   if( ! regexec( &declaration_RE, line, 3, m, 0) ) {
@@ -184,7 +299,7 @@ static int conffile_classify_line(char * line, char ** name_ptr,
    Checks that the given value is a boolean and store is value in
    target.
  */
-int conffile_get_boolean(const char * value, int * target)
+int cf_get_boolean(const char * value, int * target)
 {
   if( ! regexec( &true_RE, value, 0, NULL, 0))
     *target = 1;
@@ -198,45 +313,55 @@ int conffile_get_boolean(const char * value, int * target)
   return 0;
 }
 
-
-int conffile_read(const char * file)
+/**
+   Assigns the value to the given key, ensuring that the value match.
+*/
+static int cf_key_assign_value(cf_key * key, const char * value)
 {
-  /** @todo for now, no cleanup is performed on error...*/
+  switch(key->target->type) {
+    int val;
+  case boolean_item:
+    /* Implement groups/users... */
+    if(! cf_get_boolean(value, &val)) {
+      ci_bool_set_default((ci_bool *)key->target->target, val);
+      return 0;
+    }
+    return -1;
+  default:
+    break;
+  }
+}
+
+
+int cf_read_file(FILE * file, cf_spec * specs)
+{
   char line_buffer[1000];
   char * name;
   char * value;
-  FILE * f;
+  cf_key * keys = cf_spec_build_keys(specs);
 
   /* Compile regular expressions when necessary */
-  conffile_prepare_regexps();
+  if(cf_prepare_regexps()) 
+    return -1;
 
 
-  f = fopen( file, "r" );
-  if(! f) {
-    perror(_("Failed to open configuration file"));
-    return -2;
-  }
-  fprintf(stdout, "Reading file: %s\n", file);
-
-  while(! feof(f)) {
-    if(conffile_read_line(f, line_buffer, sizeof(line_buffer)))
+  while(! feof(file)) {
+    int line_type;
+    cf_key * key;
+    if(cf_read_line(file, line_buffer, sizeof(line_buffer)))
       return -1;
-    int line_type = conffile_classify_line(line_buffer, &name, &value);
+    line_type = cf_classify_line(line_buffer, &name, &value);
     switch(line_type) {
     case BLANK_LINE:
       break;
     case DECLARATION_LINE:
-      /* Now, another switch-like  */
-      fprintf(stderr, "Name: '%s' -- value: '%s'\n", name, value);
-      if(! strcmp(name, "allow_fsck")) {
-	if(conffile_get_boolean(value, &configuration_allow_fsck))
-	  return -1;
+      key = cf_key_find(name, keys);
+      if(key) {
+	if(cf_key_assign_value(key, value)) 
+	  return -2;
       }
       else {
-	fprintf(stderr, _("Error parsing configuration file: "
-			  "unknown field '%s'\n"),
-		name);
-	return -1;
+	fprintf(stderr, "Error: key '%s' is unknown\n", name);
       }
       break;
     default:
@@ -245,17 +370,5 @@ int conffile_read(const char * file)
       return -1;
     }
   }
-  fclose(f);
-
-  return 0;
-}
-
-int conffile_system_read()
-{
-  struct stat st;
-  /* If the system configuration file does not exist, we don't
-     complain... */
-  if( stat( SYSTEM_CONFFILE, &st) )
-    return 0;
   return 0;
 }

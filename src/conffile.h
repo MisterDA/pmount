@@ -1,8 +1,8 @@
 /**
- * @file conffile.h parsing of the configuration file
+ * @file conffile.h generic library for parsing of configuration files
  *
  * @author Vincent Fourmond <fourmond@debian.org>
- *         (c) 2009 by Vincent Fourmond
+ *         Copyright 2009,2011 by Vincent Fourmond
  * 
  * This software is distributed under the terms and conditions of the 
  * GNU General Public License. See file GPL for the full text of the license.
@@ -11,36 +11,74 @@
 #ifndef __conffile_h
 #define __conffile_h
 
-/**
-   Returns true if the user is allowed to run fsck
-*/
-int conffile_allow_fsck();
-
-
 
 /**
-   Reads configuration information from the given file into the
-   structure.
-
-   @todo This function should be able to handle more subtle effect,
-   such as allowing only specific users/groups, or forbidding given
-   users. Maybe this is not an emergency for now.
-
-   @return 0 if everything went fine
+   Some elements usable for configuration
 */
 
-int conffile_read(const char * file);
+/**
+   A boolean value, possibly depending on membership to groups and
+   user value. (this isn't implemented yet).
+*/
+
+typedef struct {
+  /** Default value */
+  int def;
+} ci_bool;
 
 /**
-   Reads the system configuration file into system_configuration. It
-   does not complain on the absence of the system configuration
-   file. In this case, the system_configuration file is populated with
-   default values (everything potentially dangerous disallowed).
+   Accessors
+*/
+void ci_bool_set_default(ci_bool * c, int val);
+int ci_bool_allowed(ci_bool * c); 
 
-   @return 0 if everything went fine.
+
+
+/**
+    @todo provide macros for the initialization/declaration of the
+    ci_ items?
+*/
+
+/**********************************************************************/
+
+
+/**
+   The type of configuration items 
+*/
+typedef enum {
+  boolean_item
+} ci_type;
+
+
+/**
+   Specification of a configuration item.
+*/
+typedef struct {
+  /**
+     The base name of the configuration item. 
+     NULL for an invalid item terminating the configuration file.
+  */
+  const char * base;
+
+  /**
+     The type of the configuration item.
+  */
+  ci_type type;
+
+  /**
+     The target of the configuration item. Actual type depends on
+     the item type
+  */
+  void * target;
+} cf_spec;
+
+
+/**
+   Reads the given file and parse it according to the specification
+   written in specs, which must be terminated by the first occurence
+   of a NULL as base.
  */
+int cf_read_file(FILE * file, cf_spec * specs);
 
-int conffile_system_read();
-
-#endif /* !defined( __config_file_h) */
+#endif
 

@@ -7,7 +7,8 @@ libpmount_util_a_SOURCES = \
 	policy.c \
 	utils.c  \
 	realpath.c \
-	conffile.c
+	conffile.c \
+	configuration.c
 
 if PMOUNT_HAL
 EXTRABIN=pmount-hal
@@ -30,7 +31,9 @@ EXTRA_DIST = \
 	luks.h   \
 	policy.h \
 	utils.h  \
-	realpath.h
+	realpath.h \
+	conffile.h \
+	configuration.h
 
 INSTALL_DIR = $(DESTDIR)/$(prefix)/bin
 INSTALL_SRC = $(top_builddir)/src

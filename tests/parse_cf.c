@@ -1,10 +1,5 @@
 /* 
-   This program parses a configuration file and displays results. For
-   debugging purposes only.
-*/
-
-/* 
- * Copyright (c) 2009 Vincent Fourmond <fourmond@debian.org>
+ * Copyright (c) 2011 Vincent Fourmond <fourmond@debian.org>
  *
  * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the
@@ -14,18 +9,35 @@
 
 #include "policy.h"
 #include "utils.h"
-#include "conffile.h"
 #include <stdio.h>
+#include "conffile.h"
 
-#define DUMP(x) printf(#x ": %s\n", (cf.x ? "yes" :"no"))
-#define DUMPI(x) printf(#x ": %d\n", cf.x)
+/* 
+   This program checks the configuration file parsing works.
 
-int main(int argc, char *argv[])
+   It reads the parse_cf.conf configuration file.
+*/
+
+ci_bool a = {.def = 0};
+ci_bool truc = {.def = 0};
+
+cf_spec config[] = {
+  {"a", boolean_item, &a},
+  {"truc", boolean_item, &truc},
+  {NULL}
+};
+
+
+int main()
 {
-  if(argc != 2) {
-    fprintf(stderr, "Usage: parse_cf file\n");
-    return 1;
-  }
-  
-  conffile_read(argv[1]);
+  FILE * f = fopen("parse_cf.conf", "r");
+  fprintf(stderr, "An unknown key error must occur "
+	  "in the parsing of the file\n");
+  cf_read_file(f, config);
+
+  /* Now, testing the values: */
+  fprintf(stderr, "a = %s\n", ci_bool_allowed(&a) ? "true" : "false");
+  fprintf(stderr, "truc = %s\n", ci_bool_allowed(&truc) ? "true" : "false");
+
+  fclose(f);
 }
