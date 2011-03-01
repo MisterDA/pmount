@@ -20,10 +20,12 @@
 
 ci_bool a = {.def = 0};
 ci_bool truc = {.def = 0};
+ci_bool machin = {.def = 0};
 
 cf_spec config[] = {
   {"a", boolean_item, &a},
   {"truc", boolean_item, &truc},
+  {"machin", boolean_item, &machin},
   {NULL}
 };
 
@@ -40,6 +42,9 @@ int main()
 
   fprintf(stderr, "\ntruc values:\n");
   ci_bool_dump(&truc, stderr);
+
+  fprintf(stderr, "\nmachin values:\n");
+  ci_bool_dump(&machin, stderr);
 
   fclose(f);
 }

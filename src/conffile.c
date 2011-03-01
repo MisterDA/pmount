@@ -29,6 +29,87 @@
 
 
 /**
+   Whether the given uid is in the -1-terminated list
+ */
+static int cf_uid_in_list(uid_t value, uid_t * list)
+{
+  if(! list)
+    return 0;
+  while(*list != -1) {
+    if(*list == value)
+      return 1;
+    else
+      list++;
+  }
+  return 0;
+}
+
+/**
+   The groups the user belongs to. We use a cache to avoid querying
+   too often.
+*/
+static gid_t * user_groups = NULL;
+
+static int cf_get_groups()
+{
+  int nb;
+  if(user_groups)
+    return 0;			/* Everything fine */
+  nb = getgroups(0, NULL);
+  if(nb < 0)
+    return -1;
+  user_groups = malloc((nb + 1) * sizeof(gid_t));
+  nb = getgroups(nb, user_groups);
+  if(nb < 0)
+    return -1;
+  user_groups[nb] = -1;		/* -1 -terminated string */
+  return 0;
+}
+
+
+/**
+   Whether the given group belongs to the user's groups.
+ */
+static int cf_gid_within_groups(gid_t gid)
+{
+  gid_t * grp;
+  if(cf_get_groups() < 0) {
+    perror("Failed to get group information");
+    exit(1);			/* Violent, but, well... */
+  }
+  grp = user_groups;
+  while(*grp != -1) {
+    if(*grp == gid)
+      return 1;
+    grp++;
+  } 
+  return 0;
+}
+
+/**
+   Whether the user's group contain at least one of those listed in
+   the -1 -terminated list of gids.
+
+   Yes, I know that this function is inefficient, and that sorting
+   both lists beforehand would do miracles. On the other hand, unless
+   both group lists are huge, the time spent here isn't very large.
+ */
+static int cf_user_has_groups(gid_t * gid_list)
+{
+  if(! gid_list)
+    return 0;
+  while(*gid_list != -1) {
+    if(cf_gid_within_groups(*gid_list))
+      return 1;
+    gid_list++;
+  }
+  return 0;
+}
+
+
+
+
+/**
    First, we have a whole set of configuration items, that is objects
    that represent a "value" of the configuration file.
 */
@@ -40,7 +121,20 @@ void ci_bool_set_default(ci_bool * c, int val)
 
 int ci_bool_allowed(ci_bool * c) 
 {
-  return c->def;
+  if(c->def) {
+    /* Allowed by default, we just check the uid isn't in the
+       denied user list */
+    if(cf_uid_in_list(getuid(), c->denied_users))
+      return 0;			/* Denied.. */
+    return 1;
+  }
+  else {
+    if(cf_uid_in_list(getuid(), c->allowed_users))
+      return 1;
+    if(cf_user_has_groups(c->allowed_groups))
+      return 1;
+    return 0;
+  }
 }
 
 void ci_bool_dump(ci_bool * c, FILE * out)
@@ -75,6 +169,7 @@ void ci_bool_dump(ci_bool * c, FILE * out)
     }
     fprintf(out, "\n");
   }
+  fprintf(out, "-> result: %s\n", (ci_bool_allowed(c) ? "allowed" : "denied"));
 }
 
 /**************************************************/
