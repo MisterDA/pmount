@@ -35,9 +35,11 @@ int main()
 	  "in the parsing of the file\n");
   cf_read_file(f, config);
 
-  /* Now, testing the values: */
-  fprintf(stderr, "a = %s\n", ci_bool_allowed(&a) ? "true" : "false");
-  fprintf(stderr, "truc = %s\n", ci_bool_allowed(&truc) ? "true" : "false");
+  fprintf(stderr, "a values:\n");
+  ci_bool_dump(&a, stderr);
+
+  fprintf(stderr, "\ntruc values:\n");
+  ci_bool_dump(&truc, stderr);
 
   fclose(f);
 }

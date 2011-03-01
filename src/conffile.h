@@ -40,6 +40,7 @@ typedef struct {
 */
 void ci_bool_set_default(ci_bool * c, int val);
 int ci_bool_allowed(ci_bool * c); 
+void ci_bool_dump(ci_bool * c, FILE * out);
 
 
 

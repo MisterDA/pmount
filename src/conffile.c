@@ -33,14 +33,49 @@
    that represent a "value" of the configuration file.
 */
 
-void ci_bool_set_default(ci_bool * c, int val) {
+void ci_bool_set_default(ci_bool * c, int val) 
+{
   c->def = val;
 }
 
-int ci_bool_allowed(ci_bool * c) {
+int ci_bool_allowed(ci_bool * c) 
+{
   return c->def;
 }
 
+void ci_bool_dump(ci_bool * c, FILE * out)
+{
+  fprintf(out, "Default: %s\n", (c->def ? "allowed" : "denied"));
+  if(c->allowed_groups) {
+    fprintf(out, "Allowed groups:");
+    gid_t * g = c->allowed_groups;
+    while(*g != -1) {
+      fprintf(out, " %d", *g);
+      g++;
+    }
+    fprintf(out, "\n");
+  }
+
+  if(c->allowed_users) {
+    fprintf(out, "Allowed users:");
+    uid_t * g = c->allowed_users;
+    while(*g != -1) {
+      fprintf(out, " %d", *g);
+      g++;
+    }
+    fprintf(out, "\n");
+  }
+
+  if(c->denied_users) {
+    fprintf(out, "Denied users:");
+    uid_t * g = c->denied_users;
+    while(*g != -1) {
+      fprintf(out, " %d", *g);
+      g++;
+    }
+    fprintf(out, "\n");
+  }
+}
 
 /**************************************************/
 
@@ -51,7 +86,7 @@ static size_t cf_spec_key_number(const cf_spec * spec)
 {
   switch(spec->type) {
   case boolean_item:
-    return 1;			/* But this will change */
+    return 4;
   default:
     return 0;
   };
@@ -96,9 +131,27 @@ static void cf_spec_prepare_keys(cf_spec * spec, cf_key * keys)
     snprintf(keys->key,l2, "%s_allow", spec->base);
     keys->target = spec;
     keys->info = NULL;
-    /* Then, we could create "base"_allow_user, "base"_allow_group and
-       "base"_deny_user 
-    */
+    keys++;
+
+    l2 = l + strlen("_allow_user") +1;
+    keys->key = malloc(l2);
+    snprintf(keys->key,l2, "%s_allow_user", spec->base);
+    keys->target = spec;
+    keys->info = (void*)1L;
+    keys++;
+
+    l2 = l + strlen("_allow_group") +1;
+    keys->key = malloc(l2);
+    snprintf(keys->key,l2, "%s_allow_group", spec->base);
+    keys->target = spec;
+    keys->info = (void*)2L;
+    keys++;
+
+    l2 = l + strlen("_deny_user") +1;
+    keys->key = malloc(l2);
+    snprintf(keys->key,l2, "%s_deny_user", spec->base);
+    keys->target = spec;
+    keys->info = (void*)3L;
     return;
   default:
     return;
@@ -400,29 +453,79 @@ static int cf_get_uidlist(char * value, uid_t ** target)
     if(end)
       *end = 0;
     *vals = cf_get_uid(value);
+    vals++;
     if(*vals == -1)
       return -1;		/* Something went wrong */
     if(! end)
       break;
     value = end+1;
   }
+  *vals = -1;
   return 0;
 }
+
+
+/**
+   Reads a comma-separated list of gids and store it into the pointer
+   pointed to by target
+ */
+static int cf_get_gidlist(char * value, gid_t ** target)
+{
+  /* First, compute the number of commas in the list. */
+  size_t nb = cf_count_chars(value, ",");
+  char * end;
+  gid_t * vals = malloc(sizeof(gid_t) * (nb+2));
+  *target = vals;
+
+  while(1) {
+    end = strchr(value, ',');
+    if(end)
+      *end = 0;
+    *vals = cf_get_gid(value);
+    if(*vals == -1)
+      return -1;		/* Something went wrong */
+    vals++;
+    if(! end)
+      break;
+    value = end+1;
+  }
+  *vals = -1;
+  return 0;
+}
+
 
 /**
    Assigns the value to the given key, ensuring that the value match.
 */
-static int cf_key_assign_value(cf_key * key, const char * value)
+static int cf_key_assign_value(cf_key * key, char * value)
 {
   switch(key->target->type) {
     int val;
-  case boolean_item:
-    /* Implement groups/users... */
-    if(! cf_get_boolean(value, &val)) {
-      ci_bool_set_default((ci_bool *)key->target->target, val);
+  case boolean_item: {
+    ci_bool * t = (ci_bool *)key->target->target;
+    switch((long)key->info) {
+    case 0:			/* Normal */
+      if(! cf_get_boolean(value, &val)) {
+	ci_bool_set_default(t, val); /* Or directly use the internals ? */
+	return 0;
+      }
+    case 1:			/* Allow_user */
+      if(cf_get_uidlist(value, &(t->allowed_users)))
+	return -1;
       return 0;
+    case 2:			/* Allow_group */
+      if(cf_get_gidlist(value, &(t->allowed_groups)))
+	return -1;
+      return 0;
+    case 3:			/* Allow_user */
+      if(cf_get_uidlist(value, &(t->denied_users)))
+	return -1;
+      return 0;
+    default:
+      return -1;
     }
     return -1;
+  }
   default:
     break;
   }
