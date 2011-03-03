@@ -104,5 +104,16 @@ make_lockdir_name( const char* device, char* name, size_t name_size );
  */
 void print_mounted_removable_devices();
 
+/**
+   Checks if the user is physically logged in, by looking for an utmp
+   record pointing to a real tty.
+
+   Returns 1 if the user is physically logged in, and 0 if not.
+
+   It exits with an error message if the user could not be found in
+   the database.
+*/
+int user_physically_logged_in();
+
 #endif /* __policy_h */
 

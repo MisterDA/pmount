@@ -27,6 +27,11 @@
 /* For globs in /etc/pmount.allow */
 #include <fnmatch.h>
 
+/* For passwd and utmp parsing */
+#include <sys/types.h>
+#include <pwd.h>
+#include <utmpx.h>
+
 
 /* We use our own safe version of realpath */
 #include "realpath.h"
@@ -740,4 +745,35 @@ void print_mounted_removable_devices()
     }
   }
   endmntent(f);
+}
+
+int user_physically_logged_in()
+{
+  /* First, get the user name */
+  char username[100];
+  int retval = 0;
+  struct passwd * pw;
+  pw = getpwuid(getuid());
+  if(! pw || pw->pw_uid != getuid()) {
+    fprintf(stderr, _("Impossible to find passwd record for current user\n"));
+    exit(10);
+  }
+  safe_strcpy(username, pw->pw_name);
+
+  /* Then parse the utmpx database  */
+  struct utmpx * s;
+  setutxent();			/* rewind */
+  while(s = getutxent()) {
+    if(s->ut_type != USER_PROCESS)
+      continue;
+    if(! strcmp(s->ut_user, username)) {
+      if(! strncmp(s->ut_line, "tty", 3) && is_digit(s->ut_line[3])) {
+	/* Logged to a tty ! */
+	retval = 1;
+	break;
+      }
+    }
+  }
+  endutxent();
+  return retval;
 }
