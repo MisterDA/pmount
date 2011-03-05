@@ -315,27 +315,32 @@ static cf_key * cf_key_find(const char * key, cf_key * keys)
 /**
    Reads a line of configuration file into the given target buffer.
 
-   Though for now it isn't the case, it will eventually handle:
-   * escaping the end-of-line with a \
 */
 static int cf_read_line(FILE * file, char * dest, size_t nb)
 {
   int len;
-  if( ! fgets(dest, nb, file)) {
-    if(feof(file)) {
-      *dest = 0;
-      return 0;
+  while(1) {
+    if( ! fgets(dest, nb, file)) {
+      if(feof(file)) {
+	*dest = 0;
+	return 0;
+      }
+      perror(_("Failed to read configuration file"));
+      return -1;
     }
-    perror(_("Failed to read configuration file"));
-    return -1;
-  }
-  /* Here, we should perform backslash escape, and basic checking that
-     the line isn't too long */
-  len = strlen(dest);
-  if(dest[len-1] != '\n' && ! feof(file)) {
-    fprintf(stderr, _("Line too long in configuration file: %s\n"),
-	    dest);
-    return -1;
+
+    len = strlen(dest);
+    if(dest[len-1] != '\n' && ! feof(file)) {
+      fprintf(stderr, _("Line too long in configuration file: %s\n"),
+	      dest);
+      return -1;
+    }
+    if(dest[len-2] != '\\')
+      return 0;
+    
+    /* Multi-line, we go on. */
+    dest += (len - 2);
+    nb -= (len - 2);
   }
   return 0;
 }
@@ -648,7 +653,7 @@ int cf_read_file(FILE * file, cf_spec * specs)
       retval = -1;
       break;
     }
-
+    
     line_type = cf_classify_line(line_buffer, &name, &value);
     switch(line_type) {
     case BLANK_LINE:
