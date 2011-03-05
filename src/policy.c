@@ -767,7 +767,7 @@ int user_physically_logged_in()
     if(s->ut_type != USER_PROCESS)
       continue;
     if(! strcmp(s->ut_user, username)) {
-      if(! strncmp(s->ut_line, "tty", 3) && is_digit(s->ut_line[3])) {
+      if(! strncmp(s->ut_line, "tty", 3) && isdigit(s->ut_line[3])) {
 	/* Logged to a tty ! */
 	retval = 1;
 	break;
