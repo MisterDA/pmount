@@ -16,6 +16,12 @@
 */
 int conffile_allow_fsck();
 
+/**
+   Returns true if the user is allowed to use pmount/pumount even 
+   if not phyiscally logged in
+*/
+int conffile_allow_not_physically_logged();
+
 
 /**
    Reads configuration information from the given file into the

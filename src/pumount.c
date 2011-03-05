@@ -30,6 +30,7 @@ const int E_ARGS = 1;
 const int E_DEVICE = 2;
 const int E_POLICY = 4;
 const int E_EXECUMOUNT = 5;
+const int E_DISALLOWED = 9;
 const int E_INTERNAL = 100;
 
 static char mntpt[MEDIA_STRING_SIZE];
@@ -226,6 +227,17 @@ main( int argc, char** argv )
         usage( argv[0] );
         return E_ARGS;
     }
+
+    /* Check if the user is physically logged in */
+    if( ! user_physically_logged_in() && 
+	! conffile_allow_not_physically_logged()) {
+	fprintf(stderr, 
+		_("You are not physically logged in and your"
+		  "system administrator does not "
+		  "allow remote users to run %s, aborting\n"), argv[0]);
+	return E_DISALLOWED;
+    }
+
 
     /* if we got a mount point, convert it to a device */
     debug ("checking whether %s is a mounted directory\n", argv[optind]);

@@ -792,6 +792,16 @@ main( int argc, char** argv )
         return E_ARGS;
     }
 
+    /* Check if the user is physically logged in */
+    if( ! user_physically_logged_in() && 
+	! conffile_allow_not_physically_logged()) {
+	fprintf(stderr, 
+		_("You are not physically logged in and your"
+		  "system administrator does not "
+		  "allow remote users to run %s, aborting\n"), argv[0]);
+	return E_DISALLOWED;
+    }
+
     /* Lookup in /etc/fstab if devarg is a mount point, unless we already
        have a block device -- this way, pmount shouldn't choke on stale
        network mounts. */

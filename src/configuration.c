@@ -37,8 +37,18 @@ int conffile_allow_fsck()
   return ci_bool_allowed(&conf_allow_fsck);
 }
 
+static ci_bool conf_allow_not_physically_logged = {
+  .def = 0
+};
+
+int conffile_allow_not_physically_logged()
+{
+  return ci_bool_allowed(&conf_allow_fsck);
+}
+
 cf_spec config[] = {
   {"fsck", boolean_item, &conf_allow_fsck},
+  {"not_physically_logged", boolean_item, &conf_allow_not_physically_logged},
   {NULL}
 };
 
