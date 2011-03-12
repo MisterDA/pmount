@@ -232,7 +232,7 @@ main( int argc, char** argv )
     if( ! user_physically_logged_in() && 
 	! conffile_allow_not_physically_logged()) {
 	fprintf(stderr, 
-		_("You are not physically logged in and your"
+		_("You are not physically logged in and your "
 		  "system administrator does not "
 		  "allow remote users to run %s, aborting\n"), argv[0]);
 	return E_DISALLOWED;
