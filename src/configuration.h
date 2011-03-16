@@ -22,6 +22,12 @@ int conffile_allow_fsck();
 */
 int conffile_allow_not_physically_logged();
 
+/**
+   Returns true if the user is allowed to use pmount/pumount to setup
+   loopback devices.
+*/
+int conffile_allow_loop();
+
 
 /**
    Reads configuration information from the given file into the
