@@ -182,6 +182,8 @@ static size_t cf_spec_key_number(const cf_spec * spec)
   switch(spec->type) {
   case boolean_item:
     return 4;
+  case string_list:
+    return 1;
   default:
     return 0;
   };
@@ -248,6 +250,10 @@ static void cf_spec_prepare_keys(cf_spec * spec, cf_key * keys)
     keys->target = spec;
     keys->info = (void*)3L;
     return;
+  case string_list:
+    keys->key = strdup(spec->base);
+    keys->target = spec;
+    keys->info = NULL;
   default:
     return;
   };
@@ -512,6 +518,19 @@ static void cf_trim_anew(const char * source, char * dest, size_t nb)
     *dest = 0;
 }
 
+/**
+   Copies a trimmed versino into newly allocated string
+*/
+static char * cf_trim_dup(const char * source) 
+{
+  size_t l = strlen(source);
+  char * buf = malloc(l + 1);
+  if(! buf)
+    return NULL;
+  cf_trim_anew(source, buf, l+1);
+  return buf;
+}
+
 static uid_t cf_get_uid(const char * uid)
 {
   char buffer[1024];		/* To trim the string */
@@ -553,9 +572,10 @@ static int cf_get_uidlist(char * value, uid_t ** target)
     if(end)
       *end = 0;
     *vals = cf_get_uid(value);
-    vals++;
     if(*vals == -1)
       return -1;		/* Something went wrong */
+
+    vals++;
     if(! end)
       break;
     value = end+1;
@@ -584,6 +604,7 @@ static int cf_get_gidlist(char * value, gid_t ** target)
     *vals = cf_get_gid(value);
     if(*vals == -1)
       return -1;		/* Something went wrong */
+
     vals++;
     if(! end)
       break;
@@ -593,6 +614,35 @@ static int cf_get_gidlist(char * value, gid_t ** target)
   return 0;
 }
 
+
+/**
+   Reads a list of strings into the target
+*/
+static int cf_read_stringlist(char * value, ci_string_list * target)
+{
+  size_t nb = cf_count_chars(value, ",");
+  char * end;
+  char ** strings;
+
+  target->strings = malloc(sizeof(char *) * (nb+2));
+  if(! target->strings)
+    return -1;
+  strings = target->strings;
+  while(1) {
+    end = strchr(value, ',');
+    if(end)
+      *end = 0;
+    *strings = cf_trim_dup(value);
+    if(! *strings)
+      return -1;
+    strings++;
+    if(! end)
+      break;
+    value = end+1;
+  }
+  *strings = 0;
+  return 0;
+}
 
 /**
    Assigns the value to the given key, ensuring that the value match.
@@ -625,6 +675,10 @@ static int cf_key_assign_value(cf_key * key, char * value)
       return -1;
     }
     return -1;
+  }
+  case string_list:  {
+    ci_string_list * t = (ci_string_list *) key->target->target;
+    return cf_read_stringlist(value, t);
   }
   default:
     break;

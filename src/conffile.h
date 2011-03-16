@@ -18,7 +18,7 @@
 
 /**
    A boolean value, possibly depending on membership to groups and
-   user value. (this isn't implemented yet).
+   user value.
 */
 
 typedef struct {
@@ -45,8 +45,22 @@ void ci_bool_dump(ci_bool * c, FILE * out);
 
 
 /**
-    @todo provide macros for the initialization/declaration of the
-    ci_ items?
+   A list of strings
+*/
+
+typedef struct {
+  /**
+     A NULL-terminated list of pointers to newly allocated strings, or
+     NULL if there are no elements.
+  */
+  char ** strings;
+} ci_string_list;
+
+
+
+/**
+   @todo provide macros for the initialization/declaration of the
+   ci_ items?
 */
 
 /**********************************************************************/
@@ -56,7 +70,8 @@ void ci_bool_dump(ci_bool * c, FILE * out);
    The type of configuration items 
 */
 typedef enum {
-  boolean_item
+  boolean_item,
+  string_list
 } ci_type;
 
 
