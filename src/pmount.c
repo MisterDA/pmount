@@ -805,6 +805,39 @@ main( int argc, char** argv )
     /* Lookup in /etc/fstab if devarg is a mount point, unless we already
        have a block device -- this way, pmount shouldn't choke on stale
        network mounts. */
+
+    /**
+       @todo here the code should be modified to check, if devarg is
+       neither a mount point nor a block device if loop permissions
+       are fine, and run losetup to attach to the loop device.
+
+       Then a flag should be added to circumvent policy check later
+       on.
+
+       After that, devarg should be set to the loop device that was
+       successfully attached.
+
+       Idea: to avoid security problems linked to the user swapping
+       the file between the call to stat and the call to losetup, I
+       will use the following setup:
+
+       * first, stat the file before, and store the results
+
+       * then, call losetup
+
+       * then, stat the file afterwards and checks the results are
+         identical to the first call (but that is not enough)
+	 
+       * finally, call losetup to get information about the device and
+         inode of the looped file and check it is the one stated.
+
+       This setup should be failsafe. The only problem with that is
+       with the loop device being associated to a file the user isn't
+       allowed to touch for a short while. (problems like this should
+       be logged) If the whitelisted loop devices have conservative
+       permissions, this should be fine.
+       
+    */
     if( (! is_block(devarg)) && 
 	fstab_has_mntpt( "/etc/fstab", devarg, mntptdev, sizeof(mntptdev) ) ) {
         debug( "resolved mount point %s to device %s\n", devarg, mntptdev );
@@ -857,10 +890,6 @@ main( int argc, char** argv )
     }
 
     /* does the device start with DEVDIR? */
-    /**
-       @todo here we should relax this policy if the target file is
-       owned! by the real uid.
-     */
     if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) { 
         fprintf( stderr, _("Error: invalid device %s (must be in /dev/)\n"), device ); 
         return E_DEVICE;
@@ -901,6 +930,9 @@ main( int argc, char** argv )
             /* clean stale locks */
             clean_lock_dir( device );
 
+	    /**
+	       @todo circumvent policy check for loop devices setup earlier.
+	    */
             if( check_mount_policy( device, mntpt )  )
                 return E_POLICY;
 
@@ -969,6 +1001,11 @@ main( int argc, char** argv )
             if( result ) {
                 if( decrypt == DECRYPT_OK )
                     luks_release( decrypted_device, 0 ); 
+
+		/**
+		   @todo in case of mount failure, the loop device
+		   should be unattached.
+		*/
 
                 /* mount failed, delete the mount point again */
                 if( remove_pmount_mntpt( mntpt ) ) {
