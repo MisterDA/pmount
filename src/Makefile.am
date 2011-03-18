@@ -8,7 +8,16 @@ libpmount_util_a_SOURCES = \
 	utils.c  \
 	realpath.c \
 	conffile.c \
-	configuration.c
+	configuration.c \
+	loop.c \
+	fs.h     \
+	luks.h   \
+	policy.h \
+	utils.h  \
+	realpath.h \
+	conffile.h \
+	configuration.h \
+	loop.h 
 
 if PMOUNT_HAL
 EXTRABIN=pmount-hal
@@ -26,14 +35,6 @@ pmount_hal_LDADD = libpmount-util.a $(HAL_LIBS)
 pumount_SOURCES = pumount.c
 pumount_LDADD = libpmount-util.a
 
-EXTRA_DIST = \
-	fs.h     \
-	luks.h   \
-	policy.h \
-	utils.h  \
-	realpath.h \
-	conffile.h \
-	configuration.h
 
 INSTALL_DIR = $(DESTDIR)/$(prefix)/bin
 INSTALL_SRC = $(top_builddir)/src

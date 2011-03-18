@@ -64,6 +64,11 @@ AC_ARG_WITH(fsck-prog,
 	AC_DEFINE_UNQUOTED(FSCKPROG, "$withval", [path to fsck]),
 	AC_DEFINE_UNQUOTED(FSCKPROG, "/sbin/fsck", [path to fsck]))
 
+AC_ARG_WITH(losetup-prog, 
+	AC_HELP_STRING([--with-losetup-prog=PATH], [Path to losetup program (default: /sbin/losetup)]),
+	AC_DEFINE_UNQUOTED(LOSETUPPROG, "$withval", [path to losetup]),
+	AC_DEFINE_UNQUOTED(LOSETUPPROG, "/sbin/losetup", [path to losetup]))
+
 
 AC_ARG_ENABLE(hal,
   AC_HELP_STRING([--enable-hal],[build pmount-hal frontend, if hal is available]),

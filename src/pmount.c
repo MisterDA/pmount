@@ -32,7 +32,7 @@
 #include "config.h"
 
 /* Configuration file handling */
-#include "conffile.h"
+#include "configuration.h"
 
 /* Enable autodetection if possible */
 #ifdef HAVE_BLKID
@@ -659,6 +659,7 @@ main( int argc, char** argv )
     
     int run_fsck = 0; 		/* Whether or not to run fsck before
 				   mounting. */
+    int doing_loop_mount = 0;
     const char* use_fstype = NULL;
     const char* iocharset = NULL;
     const char* umask = NULL;
@@ -838,10 +839,24 @@ main( int argc, char** argv )
        permissions, this should be fine.
        
     */
-    if( (! is_block(devarg)) && 
-	fstab_has_mntpt( "/etc/fstab", devarg, mntptdev, sizeof(mntptdev) ) ) {
-        debug( "resolved mount point %s to device %s\n", devarg, mntptdev );
-        devarg = mntptdev;
+    if(! is_block(devarg)) {
+	if(fstab_has_mntpt( "/etc/fstab", devarg, mntptdev, 
+			    sizeof(mntptdev) ) ) {
+	    debug( "resolved mount point %s to device %s\n", devarg, mntptdev );
+	    devarg = mntptdev;
+	}
+	else {
+	    /* 
+	       We have neither a mount point nor a block device: a request
+	       for loop mounting.
+	    */
+	    if(! conffile_allow_loop()) {
+		fprintf(stderr, _("You are trying to mount %s as a loopback device. \n"
+				  "However, you are not allowed to use loopback mount\n."), devarg);
+		return E_DISALLOWED;
+	    }
+	    
+	}
     }
 
     /* get real path, if possible */
