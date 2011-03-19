@@ -59,6 +59,11 @@ static ci_string_list conf_loop_devices = {
   .strings = NULL
 };
 
+char ** conffile_loop_devices()
+{
+  return conf_loop_devices.strings;
+}
+
 
 cf_spec config[] = {
   {"fsck", boolean_item, &conf_allow_fsck},

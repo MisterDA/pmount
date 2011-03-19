@@ -55,6 +55,8 @@ const int E_LOCKED = 8;
    Something not explicitly allowed from within the system configuration file 
 */
 const int E_DISALLOWED = 9;
+/* Something failed with loop devices */
+const int E_LOSETUP = 10;
 const int E_INTERNAL = 100;
 
 #define OPT_FMASK 128
@@ -116,11 +118,12 @@ usage( const char* exename )
  * @return 0 on success, -1 on failure
  */
 int
-check_mount_policy( const char* device, const char* mntpt ) 
+check_mount_policy( const char* device, const char* mntpt, int doing_loop ) 
 {
     int result = device_valid( device ) &&
         !device_mounted( device, 0, NULL ) &&
-        ( device_whitelisted( device ) || device_removable( device ) ) &&
+        ( doing_loop || 
+	  device_whitelisted( device ) || device_removable( device )) &&
         !device_locked( device ) &&
         mntpt_valid( mntpt ) &&
         !mntpt_mounted( mntpt, 0 );
@@ -424,7 +427,9 @@ do_mount_auto( const char* device, const char* mntpt, int async,
     const char * tp;
     blkid_cache c;
     blkid_get_cache(&c, "/dev/null");
+    get_root();
     tp = blkid_get_tag_value(c, "TYPE", device);
+    drop_root();
     if(tp) {
       debug("blkid gave FS %s for '%s'\n", tp, device);
       if(! strcmp(tp, "ntfs") && !stat(MOUNT_NTFS_3G, &buf)) {
@@ -807,56 +812,10 @@ main( int argc, char** argv )
        have a block device -- this way, pmount shouldn't choke on stale
        network mounts. */
 
-    /**
-       @todo here the code should be modified to check, if devarg is
-       neither a mount point nor a block device if loop permissions
-       are fine, and run losetup to attach to the loop device.
-
-       Then a flag should be added to circumvent policy check later
-       on.
-
-       After that, devarg should be set to the loop device that was
-       successfully attached.
-
-       Idea: to avoid security problems linked to the user swapping
-       the file between the call to stat and the call to losetup, I
-       will use the following setup:
-
-       * first, stat the file before, and store the results
-
-       * then, call losetup
-
-       * then, stat the file afterwards and checks the results are
-         identical to the first call (but that is not enough)
-	 
-       * finally, call losetup to get information about the device and
-         inode of the looped file and check it is the one stated.
-
-       This setup should be failsafe. The only problem with that is
-       with the loop device being associated to a file the user isn't
-       allowed to touch for a short while. (problems like this should
-       be logged) If the whitelisted loop devices have conservative
-       permissions, this should be fine.
-       
-    */
-    if(! is_block(devarg)) {
-	if(fstab_has_mntpt( "/etc/fstab", devarg, mntptdev, 
-			    sizeof(mntptdev) ) ) {
-	    debug( "resolved mount point %s to device %s\n", devarg, mntptdev );
-	    devarg = mntptdev;
-	}
-	else {
-	    /* 
-	       We have neither a mount point nor a block device: a request
-	       for loop mounting.
-	    */
-	    if(! conffile_allow_loop()) {
-		fprintf(stderr, _("You are trying to mount %s as a loopback device. \n"
-				  "However, you are not allowed to use loopback mount\n."), devarg);
-		return E_DISALLOWED;
-	    }
-	    
-	}
+    if(! is_block(devarg) && fstab_has_mntpt( "/etc/fstab", devarg, mntptdev, 
+					      sizeof(mntptdev) ) ) {
+	debug( "resolved mount point %s to device %s\n", devarg, mntptdev );
+	devarg = mntptdev;
     }
 
     /* get real path, if possible */
@@ -867,6 +826,7 @@ main( int argc, char** argv )
         debug( "%s cannot be resolved to a proper device node\n", devarg );
         snprintf( device, sizeof( device ), "%s", devarg );
     }
+
 
     /* is the device already handled by fstab? We allow is_real_path == 0 here
      * to transparently mount things like NFS and SMB drives */
@@ -879,6 +839,24 @@ main( int argc, char** argv )
         do_mount_fstab( fstab_device );
         return E_EXECMOUNT;
     }
+
+    if( is_real_path && (! is_block(device))) {
+	if(! conffile_allow_loop()) {
+	    fprintf(stderr, _("You are trying to mount %s as a loopback device. \n"
+			      "However, you are not allowed to use loopback mount.\n"), devarg);
+	    return E_DISALLOWED;
+	}
+	if(loopdev_associate(device, device, sizeof(device))) {
+	    fprintf(stderr, _("Failed to setup loop device for %s, aborting\n"),
+		    devarg);
+	    return E_LOSETUP;
+	}
+	/* For bypassing policy check afterwards, we've done
+	   everything already.
+	*/
+	doing_loop_mount = 1;
+    }
+
 
     /* pmounted devices really have to be a proper local device */
     if( !is_real_path ) {
@@ -915,8 +893,11 @@ main( int argc, char** argv )
             /* determine mount point name; note that we use devarg instead of
              * device to preserve symlink names (like '/dev/usbflash' instead
              * of '/dev/sda1') */
-            if( make_mountpoint_name( devarg, arg2, mntpt, sizeof( mntpt ) ) )
+            if( make_mountpoint_name( devarg, arg2, mntpt, sizeof( mntpt ) ) ) {
+		if(doing_loop_mount)
+		    loopdev_dissociate(device);
                 return E_MNTPT;
+	    }
 
             /* if no charset was set explicitly, autodetect UTF-8 */
             if( !iocharset ) {
@@ -945,11 +926,11 @@ main( int argc, char** argv )
             /* clean stale locks */
             clean_lock_dir( device );
 
-	    /**
-	       @todo circumvent policy check for loop devices setup earlier.
-	    */
-            if( check_mount_policy( device, mntpt )  )
+            if( check_mount_policy( device, mntpt, doing_loop_mount ) ) {
+		if(doing_loop_mount)
+		    loopdev_dissociate(device);
                 return E_POLICY;
+	    }
 
             /* check for encrypted device */
             enum decrypt_status decrypt = luks_decrypt( device,
@@ -959,9 +940,13 @@ main( int argc, char** argv )
             switch (decrypt) {
                 case DECRYPT_FAILED:
                     fprintf( stderr, _("Error: could not decrypt device (wrong passphrase?)\n") );
+		    if(doing_loop_mount)
+			loopdev_dissociate(device);
                     exit( E_POLICY );
                 case DECRYPT_EXISTS:
                     fprintf( stderr, _("Error: mapped device already exists\n") );
+		    if(doing_loop_mount)
+			loopdev_dissociate(device);
                     exit( E_POLICY );
                 case DECRYPT_OK:
 		  /* We create a luks lockfile _on the decrypted device !_*/
@@ -979,6 +964,9 @@ main( int argc, char** argv )
             debug( "locking mount point directory\n" );
             if( lock_dir( mntpt ) < 0) {
                 fprintf( stderr, _("Error: could not lock the mount directory. Another pmount is probably running for this mount point.\n"));
+		if(doing_loop_mount)
+		    loopdev_dissociate(device);
+
                 exit( E_LOCKED );
             }
             debug( "mount point directory locked\n" );
@@ -1017,10 +1005,8 @@ main( int argc, char** argv )
                 if( decrypt == DECRYPT_OK )
                     luks_release( decrypted_device, 0 ); 
 
-		/**
-		   @todo in case of mount failure, the loop device
-		   should be unattached.
-		*/
+		if(doing_loop_mount)
+		    loopdev_dissociate(device);
 
                 /* mount failed, delete the mount point again */
                 if( remove_pmount_mntpt( mntpt ) ) {

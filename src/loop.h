@@ -20,6 +20,8 @@
    * that read-write access is allowed
    * that the file hasn't been tampered with during the call to losetup.
 
+   It is safe to call this function with source = target
+
    @todo maybe implement read-only possibilities ?
 
    Returns 0 on success and -1 on errors.
@@ -27,7 +29,12 @@
 int loopdev_associate(const char * source, char * target, size_t size);
 
 
-/* int loopdev_dissociate(const char * dev); */
+/**
+   Dissociates the given loop device
+
+   Returns 0 on success and -1 on errors.
+*/
+int loopdev_dissociate(const char * dev); 
 
 #endif
 
