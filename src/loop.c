@@ -53,6 +53,20 @@ static const char * loopdev_find_unused()
   }
 }
 
+int loopdev_is_whitelisted(const char * device)
+{
+  char ** devices = conffile_loop_devices();
+  if(! devices)
+    return 0;
+
+  while(*devices) {
+    if(! strcmp(*devices, device))
+      return 1;
+    devices++;
+  }
+  return 0;
+}
+
 int loopdev_dissociate(const char * device)
 {
   int result = 1 ;

@@ -189,6 +189,12 @@ main( int argc, char** argv )
         return E_INTERNAL;
     }
 
+    if( conffile_system_read() ) {
+	fputs( _("Error while reading system configuration file\n"), stderr );
+	return E_INTERNAL;
+    }
+
+
     /* drop root privileges until we really need them (still available as saved uid) */
     seteuid( getuid() );
 
@@ -313,6 +319,12 @@ main( int argc, char** argv )
 
     /* release LUKS device, if appropriate */
     luks_release( device, 1 );
+
+    /* Release loop, if applicable */
+    if(loopdev_is_whitelisted( device )) {
+	debug("%s is a whitelisted loop device, dissociating it\n", device);
+	loopdev_dissociate( device );
+    }
 
     /* delete mount point */
     remove_pmount_mntpt( mntpt );
