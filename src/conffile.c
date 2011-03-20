@@ -341,7 +341,7 @@ static int cf_read_line(FILE * file, char * dest, size_t nb)
 	      dest);
       return -1;
     }
-    if(dest[len-2] != '\\')
+    if(len < 2 || dest[len-2] != '\\')
       return 0;
     
     /* Multi-line, we go on. */
