@@ -141,6 +141,21 @@ void drop_groot();
 #define SPAWN_NO_STDOUT 0x04
 #define SPAWN_NO_STDERR 0x08
 #define SPAWN_SEARCHPATH 0x10
+#define SPAWN_SLURP_STDOUT 0x20
+#define SPAWN_SLURP_STDERR 0x40
+
+/**
+   A buffer in which the slurped stdout/stderr are stored.
+
+   It is nul-terminated. (although zeros may occur before the end, see
+   slurp_size).
+ */
+extern char slurp_buffer[];
+
+/**
+   The size of the contents of slurp_buffer.
+ */
+extern size_t slurp_size;
 
 /**
  * Synchronously spawn a subprocess and return its exit status.

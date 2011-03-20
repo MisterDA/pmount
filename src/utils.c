@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; -*- */
 /**
  * utils.c - helper functions for pmount
  *
@@ -8,7 +9,6 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
-#include "utils.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,6 +22,10 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <libintl.h>
+
+#include <unistd.h>
+
+#include "utils.h"
 
 /* File name used to tag directories created by pmount */
 #define CREATED_DIR_STAMP ".created_by_pmount"
@@ -319,12 +323,26 @@ spawnl( int options, const char* path, ... )
     return spawnv( options, path, argv );
 }
 
+char slurp_buffer[2048];
+
+size_t slurp_size = 0;
+
+#define DEVNULL_MASK (SPAWN_NO_STDOUT | SPAWN_NO_STDERR)
+#define SLURP_MASK (SPAWN_SLURP_STDOUT | SPAWN_SLURP_STDERR)
+
 int 
 spawnv( int options, const char* path, char *const argv[] )
 {
     int devnull;
     int status;
     int i;
+    pid_t new_pid;
+    int fds[2];
+
+    if( (options & SLURP_MASK) && ! pipe(fds) ) {
+	perror(_("Impossible to setup pipes for subprocess communication"));
+	exit( 100 );
+    }
 
     if( enable_debug ) {
         printf( "spawnv(): executing %s", path );
@@ -333,22 +351,42 @@ spawnv( int options, const char* path, char *const argv[] )
         printf( "\n" );
     }
 
-    if( !fork() ) {
+    new_pid = fork();
+    if(new_pid == -1) {
+	perror(_("Impossible to fork"));
+	exit( 100 );
+    }
+
+    if( ! new_pid ) {
         if( options & SPAWN_EROOT )
             get_root();
         if( options & SPAWN_RROOT )
             if( setreuid( 0, -1 ) ) {
-                perror( "Error: could not raise to full root uid privileges" );
+                perror( _("Error: could not raise to full root uid privileges") );
                 exit( 100 );
             }
 
-        devnull = open( "/dev/null", O_WRONLY );
-        if( devnull > 0 ) {
-            if( options & SPAWN_NO_STDOUT )
-                dup2( devnull, 1 );
-            if( options & SPAWN_NO_STDERR )
-                dup2( devnull, 2 );
-        }
+	/* Performing redirections */
+
+	if( options & DEVNULL_MASK ) {
+	    devnull = open( "/dev/null", O_WRONLY );
+	    if( devnull > 0 ) {
+		if( options & SPAWN_NO_STDOUT )
+		    dup2( devnull, 1 );
+		if( options & SPAWN_NO_STDERR )
+		    dup2( devnull, 2 );
+	    }
+	    close( devnull );	/* Now useless */
+	}
+	if( options & SLURP_MASK ) {
+	    close( fds[0] );	/* Close the read end of the pipe */
+
+	    if( options & SPAWN_SLURP_STDOUT )
+		dup2( fds[1], 1 );
+	    if( options & SPAWN_SLURP_STDERR )
+		dup2( fds[1], 2 );
+	    close( fds[1] );	/* Now useless */
+	}
 
         if( options & SPAWN_SEARCHPATH )
             execvp( path, argv );
@@ -356,6 +394,31 @@ spawnv( int options, const char* path, char *const argv[] )
             execv( path, argv );
         exit( -1 );
     } else {
+
+	/* First, slurp all data */
+	if( options & SLURP_MASK ) {
+	    close( fds[1] );	/* We don't need it */
+	    int nb_read = 0;
+	    slurp_size = 0;
+	    do {
+		nb_read = read(fds[0], slurp_buffer + slurp_size, 
+			    sizeof(slurp_buffer) - 1 - slurp_size);
+	    	if(nb_read < 0) {
+		    perror(_("Error while reading from child process"));
+		    exit( 100 );
+		}
+		slurp_size += nb_read;
+		if(slurp_size == sizeof(slurp_buffer) - 1)
+		    break;
+	    } while(nb_read);
+	    
+	    if(nb_read) {
+		fprintf(stderr, _("Child process output has exceeded buffer size, please file a bug report"));
+	    }
+	    close( fds[0] );	/* We close the reading end of the pipe */
+	    slurp_buffer[slurp_size] = 0; /* Make it nul-terminated */
+	}
+
         if( wait( &status ) < 0 ) {
             perror( "Error: could not wait for executed subprocess" );
             exit( 100 );
