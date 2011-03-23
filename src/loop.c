@@ -20,6 +20,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 
 #include "configuration.h"
@@ -85,14 +86,29 @@ int loopdev_dissociate(const char * device)
 
 int loopdev_associate(const char * source, char * target, size_t size)
 {
-  struct stat before, after;
+  struct stat before;
   const char * device;
+  char buffer[1024];
   int result;
+  int fd;
+
+  fd = open(source, O_RDONLY);
+  if( fd == -1 ) {
+    snprintf(buffer, sizeof(buffer), 
+	     _("Failed to open file '%s' for reading"), 
+	     source);
+    perror(buffer);
+    return -1;
+  }
   
   /* First, stat the file and check the permissions:
      owner + read/write*/
-  if(stat(source, &before)) {
-    perror(_("Failed to stat file %s"));
+  if(fstat(fd, &before)) {
+    snprintf(buffer, sizeof(buffer), 
+	     _("Failed to stat file '%s'"), 
+	     source);
+    perror(buffer);
+    close(fd);
     return -1;
   }
     
@@ -107,53 +123,32 @@ int loopdev_associate(const char * source, char * target, size_t size)
      */
     fprintf(stderr, _("For loop mounting, you must be the owner of %s and "
 		      "have read-write permissions on it\n"), source);
+    close(fd);
     return -1;
   }
+
   device = loopdev_find_unused();
   if(! device) {
     fprintf(stderr, _("No whitelisted loop device available\n"));
+    close(fd);
     return -1;
   }
   debug("Found an unused loop device: %s\n", device);
   
-  /* This code is vulnerable to a race condition: it is possible for
-     the loop device to have been used up before running losetup. But
-     that doesn't cause any security problems.
-  */
+
+  /* We use /dev/fd/... to ensure that the file used is the statted
+     one  */
+  snprintf(buffer, sizeof(buffer), "/dev/fd/%d", fd);
 
   result = spawnl(SPAWN_EROOT, LOSETUPPROG, LOSETUPPROG, 
-		  device, source, NULL);
+		  device, buffer, NULL);
+  close(fd); 			/* Now useless */
+
   if(result) {
     fprintf(stderr, _("Failed to setup loopback device\n"));
     return -1;
   }
 
-  /* Now, we need to check that the file didn't change... */
-  result = stat(source, &after);
-  if(result ||
-     (after.st_dev != before.st_dev) ||
-     (after.st_dev != before.st_dev) ||
-     (after.st_mode != before.st_mode) ||
-     (after.st_uid != before.st_uid)) {
-    fprintf(stderr, _("File %s changed during the call to losetup, aborting\n"),
-	    source);
-    /*  */
-    result = loopdev_dissociate(device);
-    /* Hmmm... I don't know what to do in case losetup -d fails*/
-    return -1;
-  }
-
-  /* The last thing we should do is to check using losetup that the
-     dev/inode numbers of the file the loop is associated to is
-     correct, else it is still possible for an attacker to swap the
-     file just before the call to losetup and to switch it back just
-     after.
-
-     This however requires "backquotes", so it will have to wait.
-   */
-
-  if(0)
-    ;
 
   /* Copy the device to the target */
   snprintf(target, size, "%s", device);
