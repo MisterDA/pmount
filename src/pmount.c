@@ -932,6 +932,20 @@ main( int argc, char** argv )
                 return E_POLICY;
 	    }
 
+	    /* 
+	       Here, we try to open the device, in order to check that
+	       for instance medium is present.
+	    */
+#ifdef ENOMEDIUM
+	    get_root();
+	    int fd = open(device, O_RDONLY);
+	    if( fd == -1) {
+		perror(_("Could not open device"));
+		return E_DEVICE;
+	    }
+	    drop_root();
+#endif
+
             /* check for encrypted device */
             enum decrypt_status decrypt = luks_decrypt( device,
                     decrypted_device, sizeof( decrypted_device ), passphrase,
