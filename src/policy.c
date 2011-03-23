@@ -520,7 +520,7 @@ device_mounted( const char* device, int expect, char* mntpt )
 int device_removable_silent(const char * device)
 {
   static const char* hotplug_buses[] = { "usb", "ieee1394", "mmc", 
-				   "pcmcia", NULL };
+					 "pcmcia", "firewire", NULL };
   int removable;
   char blockdevpath[PATH_MAX];
   const char * whitelisted_bus;
