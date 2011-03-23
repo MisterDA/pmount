@@ -43,7 +43,7 @@ static ci_bool conf_allow_not_physically_logged = {
 
 int conffile_allow_not_physically_logged()
 {
-  return ci_bool_allowed(&conf_allow_fsck);
+  return ci_bool_allowed(&conf_allow_not_physically_logged);
 }
 
 static ci_bool conf_allow_loop = {
