@@ -1,6 +1,6 @@
 .\" This is the manual page for pmount.conf
 .\"
-.\" Copyright 2009 by Vincent Fourmond
+.\" Copyright 2009, 2011 by Vincent Fourmond
 .\"
 .\" This program is free software; you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
 .\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 .\" GNU General Public License for more details (in the COPYING file).
 .\"
-.TH PMOUNT.CONF 5 "2009-09-26" "Vincent Fourmond"
+.TH PMOUNT.CONF 5 "2011-03-24" "Vincent Fourmond"
 
 
 .SH NAME
@@ -30,23 +30,41 @@ least very much acceptable on a personal computers.
 All these operations are disallowed by default; you need to explicitly
 allow them using values found in this file. It follows standard Unix
 configuration file syntax: lines beginning with a # are
-ignored. Configuration values take the values
+ignored. 
+
+Most configuration elements take several forms, one that finishes in
+.I _allow
+that allows to all users (possible values: 
 .I yes
-or
-.I no\fR. 
-.I yes 
-always means increased security risk. 
-.I no
-is always the default value.
+or 
+.IR no ),
+.I _allow_user
+and 
+.I _allow_group
+that respectively take a comma-separated list of user names and group
+names and give permissions to specified users or member of groups and
+finally a
+.I _deny_user
+that denies the feature to the specified comma-separated list of users
+even if 
+.I _allow
+is 
+.IR yes .
 
 
 .SH CONFIGURATION ITEMS
 
 .TP
-.B allow_fsck
-allows a user to run 
+.BR fsck_allow, 
+.TP
+.BR fsck_allow_user,
+.TP
+.BR fsck_allow_group,
+.TP
+.BR fsck_deny_user,
+controls the permission for a given user to use
 .B fsck
-right before mounting the device using the 
+right before mounting the device though the
 .I --fsck
 option of
 .B pmount\fR(1).
@@ -54,14 +72,69 @@ It is run with the option
 .I -C1
 to provide progress reports to the user. No other options are allowed,
 as those are more-or-less filesystem-dependent and too much subject to
-change.
+change. The use of 
+.B fsck
+should not expose too many security problems.
 
 
+.TP
+.BR not_physically_logged_allow, 
+.TP
+.BR not_physically_logged_allow_user,
+.TP
+.BR not_physically_logged_allow_group,
+.TP
+.BR not_physically_logged_deny_user,
+control whether a user that is not physically logged in (ie that does
+not own a real TTY) is allowed to use 
+.B pmount
+and 
+.BR pumount .
+The default used to be true, but now it defaults to false. In any
+case, it is very seldom necessary to use a removable media while not
+physically around the machine, so you may just as well leave it off.
 
 
+.TP
+.BR loop_allow, 
+.TP
+.BR loop_allow_user,
+.TP
+.BR loop_allow_group,
+.TP
+.BR loop_deny_user,
+controls whether the user is allowed to mount personal FS image files
+as loopback devices. 
+.B Warning:
+while this can come in quite handy some times, it is
+.B strongly recommended to turn this feature off
+on any machine for which security is even only remotely important.
+While all care has been taken to prevent the use of
+.B pmount
+with loopback devices to bypass file permissions, having a user
+control completly the contents of a mounted filesystem can potentially
+expose vulnerabilities in the kernel. You have been warned.
+
+.TP
+.B loop_devices
+To prevent loop device exhaustion, 
+.B pmount
+will only use devices given in this list. A reasonable choice may be:
+
+.I /dev/loop0, /dev/loop1, /dev/loop2
+
+as this still leaves some 5 devices reserved for root. If this list
+stays blanks (the default), no user will be able to use loop mounts,
+even if you used
+.I loop_allow = yes \fR.
 
 
 
 .SH "SEE ALSO"
 
-.BR pmount (1)
+.BR pmount (1), 
+.BR pumount (1),
+.BR mount (8),
+.BR umount (8),
+.BR fsck (8),
+.BR losetup (8)
