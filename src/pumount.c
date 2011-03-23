@@ -139,10 +139,12 @@ do_umount( const char* device, int do_lazy )
     int status;
 
     if( do_lazy )
-        status = spawnl( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG, "-l",
+        status = spawnl( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG, 
+			 "-d", "-l",
                 device, NULL );
     else
         status = spawnl( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG,
+			 "-d", 
                 device, NULL );
 
     if( status != 0 ) {
@@ -235,15 +237,7 @@ main( int argc, char** argv )
     }
 
     /* Check if the user is physically logged in */
-    if( ! user_physically_logged_in() && 
-	! conffile_allow_not_physically_logged()) {
-	fprintf(stderr, 
-		_("You are not physically logged in and your "
-		  "system administrator does not "
-		  "allow remote users to run %s, aborting\n"), argv[0]);
-	return E_DISALLOWED;
-    }
-
+    ensure_user_physically_logged_in(argv[0]);
 
     /* if we got a mount point, convert it to a device */
     debug ("checking whether %s is a mounted directory\n", argv[optind]);
@@ -319,12 +313,6 @@ main( int argc, char** argv )
 
     /* release LUKS device, if appropriate */
     luks_release( device, 1 );
-
-    /* Release loop, if applicable */
-    if(loopdev_is_whitelisted( device )) {
-	debug("%s is a whitelisted loop device, dissociating it\n", device);
-	loopdev_dissociate( device );
-    }
 
     /* delete mount point */
     remove_pmount_mntpt( mntpt );

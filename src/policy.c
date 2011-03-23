@@ -747,6 +747,10 @@ void print_mounted_removable_devices()
   endmntent(f);
 }
 
+/**
+   Checks if the user is physically logged in, by looking for an utmp
+   record pointing to a real tty.
+*/
 int user_physically_logged_in()
 {
   /* First, get the user name */
@@ -776,4 +780,21 @@ int user_physically_logged_in()
   }
   endutxent();
   return retval;
+}
+
+#define E_DISALLOWED 9
+
+
+void ensure_user_physically_logged_in(const char * progname)
+{
+  /* Check if the user is physically logged in */
+  if(conffile_allow_not_physically_logged())
+    return;
+  if(user_physically_logged_in())
+    return;
+  fprintf(stderr, 
+	  _("You are not physically logged in and your "
+	    "system administrator does not "
+	    "allow remote users to run %s, aborting\n"), progname);
+  exit(E_DISALLOWED);
 }
