@@ -92,7 +92,7 @@ int loopdev_associate(const char * source, char * target, size_t size)
   int result;
   int fd;
 
-  fd = open(source, O_RDONLY);
+  fd = open(source, O_RDWR);
   if( fd == -1 ) {
     snprintf(buffer, sizeof(buffer), 
 	     _("Failed to open file '%s' for reading"), 
@@ -101,8 +101,14 @@ int loopdev_associate(const char * source, char * target, size_t size)
     return -1;
   }
   
-  /* First, stat the file and check the permissions:
-     owner + read/write*/
+  /**
+     First, stat the file and check the permissions:
+     owner + read/write
+     
+     @todo Maybe the simple fact that the above open will fail if
+     the user does not have read/write permissions is enough ?
+     
+  */
   if(fstat(fd, &before)) {
     snprintf(buffer, sizeof(buffer), 
 	     _("Failed to stat file '%s'"), 
@@ -116,11 +122,6 @@ int loopdev_associate(const char * source, char * target, size_t size)
 	(before.st_mode & S_IRUSR) && /* readable */
 	(before.st_mode & S_IWUSR)    /* writable */
 	)) {
-    /**
-       @todo Maybe this check will have to evolve some day to
-       supporting read-only mounts and files with a different owner
-       (but maybe not for read-write mount ?)
-     */
     fprintf(stderr, _("For loop mounting, you must be the owner of %s and "
 		      "have read-write permissions on it\n"), source);
     close(fd);
