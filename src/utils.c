@@ -3,7 +3,8 @@
  * utils.c - helper functions for pmount
  *
  * Author: Martin Pitt <martin.pitt@canonical.com>
- * (c) 2004 Canonical Ltd.
+ * Copyright 2004 Canonical Ltd.
+ * Copyright 2009-2011 Vincent Fourmond
  *
  * This software is distributed under the terms and conditions of the 
  * GNU General Public License. See file GPL for the full text of the license.
@@ -339,7 +340,7 @@ spawnv( int options, const char* path, char *const argv[] )
     pid_t new_pid;
     int fds[2];
 
-    if( (options & SLURP_MASK) && ! pipe(fds) ) {
+    if( (options & SLURP_MASK) && pipe(fds) ) {
 	perror(_("Impossible to setup pipes for subprocess communication"));
 	exit( 100 );
     }

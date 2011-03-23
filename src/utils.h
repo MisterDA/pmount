@@ -4,7 +4,7 @@
  * Authors: Martin Pitt <martin.pitt@canonical.com>
  *          (c) 2004 Canonical Ltd.
  *          Vincent Fourmond <fourmond@debian.org>
- *          (c) 2007-2009 by Vincent Fourmond
+ *          (c) 2007-2011 by Vincent Fourmond
  *
  * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the

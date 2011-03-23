@@ -26,6 +26,7 @@ src/pmount-hal
 src/pumount
 tests/test_sysfs
 tests/parse_cf
+tests/test_spawn
 
 # Automake-provided files:
 /COPYING
