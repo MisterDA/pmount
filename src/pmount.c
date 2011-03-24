@@ -643,6 +643,7 @@ clean_lock_dir( const char* device )
     get_root();
     rmdir( lockdirpath );
     drop_root();
+    closedir( lockdir );
 }
 
 /**
