@@ -20,3 +20,11 @@ parse_cf_SOURCES = parse_cf.c
 parse_cf_LDADD = ../src/libpmount-util.a
 parse_cf_CPPFLAGS = -I../src
 
+EXTRA_DIST = README parse_cf.conf
+
+# This won't work for now.
+# EXTRA_DIST = check_fstab/a \
+# 	check_fstab/b \
+# 	check_fstab/d \
+# 	check_fstab/c \
+# 	check_fstab/fstab
