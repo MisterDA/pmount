@@ -1,3 +1,22 @@
+0.9.99-alpha
+------------
+- EXPERIMENTAL RELEASE, use at your own risks !
+- introducing a new /etc/pmount.conf file in which potentially
+  security-weak operations can be allowed:
+  * running fsck
+  * mounting while not physically logged (that was the default)
+  * loopback device mounting
+- pulling in new Russian translation from Rosetta
+- now checking if root can open the device before attempting any
+  mount, to avoid very long hangs on "no medium found" and the like.
+- whitelisting the "firewire" bus as a hotplug bus.
+
+
+  As noticed above, this is an experimental release. Please use with
+  care: even if the parsing of configuration files should be safe, it
+  has not been extensively tried.
+
+
 0.9.23
 -----------
 - fix a security hole (see CVE-2010-2192 for more
