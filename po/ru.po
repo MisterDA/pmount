@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: pmount 0.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-15 23:38+0200\n"
-"PO-Revision-Date: 2007-12-21 12:32+0000\n"
-"Last-Translator: Rogowsky Alexander <Unknown>\n"
+"PO-Revision-Date: 2010-10-17 13:03+0000\n"
+"Last-Translator: Ivan Y <Unknown>\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-04 20:48+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-03-24 22:00+0000\n"
+"X-Generator: Launchpad (build 12633)\n"
 
 #: ../src/pmount.c:51
 #, c-format
@@ -51,6 +51,9 @@ msgid ""
 "  Remove the lock on <device> for process <pid> again.\n"
 "\n"
 msgstr ""
+"%s --unlock <device> <pid>\n"
+"  Снимает блокировку <устройства> процессом c идентификатором <pid>.\n"
+"\n"
 
 #: ../src/pmount.c:68
 msgid ""
@@ -109,7 +112,7 @@ msgstr "Ошибка: слишком длинная метка\n"
 #: ../src/pmount.c:143
 #, c-format
 msgid "Error: '/' must not occur in label name\n"
-msgstr ""
+msgstr "Ошибка: метка не может содержать символ '/'\n"
 
 #: ../src/pmount.c:150
 #, c-format
@@ -143,7 +146,7 @@ msgstr "Ошибка: некорректная инверсная маска '%s
 #: ../src/pmount.c:285
 #, c-format
 msgid "Error: invalid charset name '%s'\n"
-msgstr ""
+msgstr "Ошибка: Неверная кодировка '%s'\n"
 
 #: ../src/pmount.c:366
 #, c-format
@@ -262,11 +265,11 @@ msgstr "Ошибка: невозможно определить каталог s
 
 #: ../src/policy.c:110
 msgid "Error: could not open <sysfs dir>/block/"
-msgstr ""
+msgstr "Ошибка: невозможно открыть <sysfs dir>/block/"
 
 #: ../src/policy.c:141
 msgid "Error: could not open <sysfs dir>/block/<device>/"
-msgstr ""
+msgstr "Ошибка: невозможно открыть <sysfs dir>/block/<device>/"
 
 #: ../src/policy.c:241
 #, c-format
@@ -285,7 +288,7 @@ msgstr "Ошибка: невозможно открыть файл типа fsta
 #: ../src/policy.c:351
 #, c-format
 msgid "Error: device %s is already mounted to %s\n"
-msgstr ""
+msgstr "Ошибка: устройство %s уже присоединено к %s\n"
 
 #: ../src/policy.c:353
 #, c-format
@@ -356,12 +359,12 @@ msgstr "Ошибка: невозможно выполнить команду umo
 #: ../src/pumount.c:131
 #, c-format
 msgid "Error: umount failed\n"
-msgstr ""
+msgstr "Ошибка: отсоединение не удалось\n"
 
 #: ../src/utils.c:52
 #, c-format
 msgid "Error: out of memory\n"
-msgstr ""
+msgstr "Ошибка: нехватка памяти\n"
 
 #: ../src/utils.c:108
 msgid "Error: could not create directory"
@@ -374,7 +377,7 @@ msgstr "Ошибка: невозможно создать файл-отметк�
 #: ../src/utils.c:132
 #, c-format
 msgid "Error: %s is not a directory\n"
-msgstr ""
+msgstr "Ошибка:%s - не каталог\n"
 
 #: ../src/utils.c:152
 msgid "Error: could not open directory"
