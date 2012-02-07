@@ -439,3 +439,27 @@ unlock_dir( const char* dir ) {
     drop_root();
 }
 
+int
+root_write_to_file( const char* path, const char* data )
+{
+    FILE *f;
+    size_t expected, actual;
+    
+    get_root();
+    f = fopen( path, "w" );
+    drop_root();
+    if( !f ) {
+        debug( "could not open %s\n", path );
+        return -1;
+    }
+    expected = sizeof( char ) * strlen( data );
+    actual = fwrite( data, sizeof( char ), strlen( data ), f );
+    if( actual != expected ) {
+        fclose( f );
+        debug( "error when writing to %s; expected %d bytes, only %d written\n",
+                path, expected, actual );
+        return -1;
+    }
+    fclose( f );
+    return 0;
+}

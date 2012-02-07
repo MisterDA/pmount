@@ -28,6 +28,7 @@
 #include "policy.h"
 #include "utils.h"
 #include "luks.h"
+#include "conf.h"
 #include "config.h"
 
 /* Enable autodetection if possible */
@@ -82,6 +83,7 @@ usage( const char* exename )
     "  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
     "  -A, --noatime\n"
     "                mount <device> with the 'noatime' option (default: 'atime')\n"
+    "  -D          : mount all partitions of <device> (or its parent, if a partition)\n"
     "  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
     "  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
     "  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
@@ -223,6 +225,7 @@ do_mount_fstab( const char* device )
  * @param fmask User specified fmask (NULL for umask)
  * @param dmask User specified dmask (NULL for umask)
  * @param suppress_errors: if true, stderr is redirected to /dev/null
+ * @param fs_options Options to use instead of the default from FS (if not NULL)
  * @return exit status of mount, or -1 on failure.
  */
 int
@@ -230,7 +233,8 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 	  int noatime, int exec, int force_write, const char* iocharset, 
 	  int utf8, 
 	  const char* umask, const char *fmask, const char *dmask, 
-	  int suppress_errors )
+	  int suppress_errors,
+          const char *fs_options )
 {
     const struct FS* fs;
     char ugid_opt[100];
@@ -370,9 +374,13 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
       snprintf( iocharset_opt, sizeof( iocharset_opt ), 
 		fs->iocharset_format, "iso8859-1");
     }
+    
+    if( NULL == fs_options ) {
+        fs_options = fs->options;
+    }
 
     snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s%s", 
-            fs->options, sync_opt, atime_opt, exec_opt, access_opt, ugid_opt,
+            fs_options, sync_opt, atime_opt, exec_opt, access_opt, ugid_opt,
             umask_opt, fdmask_opt, iocharset_opt );
 
     /* go for it */
@@ -397,13 +405,15 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
  * @param umask User specified umask (NULL for default)
  * @param fmask User specified fmask (NULL for umask)
  * @param dmask User specified dmask (NULL for umask)
+ * @param fs_options Options to use instead of the default from FS (if not NULL)
  * @return last return value of do_mount (i. e. 0 on success, != 0 on error)
  */
 int
 do_mount_auto( const char* device, const char* mntpt, int async, 
 	       int noatime, int exec, int force_write, const char* iocharset, 
 	       int utf8, 
-	       const char* umask, const char *fmask, const char *dmask )
+	       const char* umask, const char *fmask, const char *dmask,
+               const char *fs_options )
 {
     const struct FS* fs;
     int nostderr = 1;
@@ -424,7 +434,7 @@ do_mount_auto( const char* device, const char* mntpt, int async,
       }
       result = do_mount( device, mntpt, tp, async, noatime, exec, 
 			 force_write, iocharset, utf8, umask, fmask, 
-			 dmask, nostderr );
+			 dmask, nostderr, fs_options );
       if(result == 0)
 	return result;
       debug("blkid-detected FS failed, trying manually \n");
@@ -445,14 +455,16 @@ do_mount_auto( const char* device, const char* mntpt, int async,
       if( (fs+1)->fsname == NULL )
 	nostderr = 0;
       result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-			 force_write, iocharset, utf8, umask, fmask, dmask, nostderr );
+			 force_write, iocharset, utf8, umask, fmask, dmask, nostderr,
+                          fs_options );
       if( result == 0 )
 	break;
 
       /* sometimes VFAT fails when using iocharset; try again without */
       if( iocharset )
 	result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-			   force_write, NULL, utf8, umask, fmask, dmask, nostderr );
+			   force_write, NULL, utf8, umask, fmask, dmask, nostderr,
+                           fs_options );
       if( result <= 0 )
 	break;
     }
@@ -602,33 +614,207 @@ clean_lock_dir( const char* device )
     drop_root();
 }
 
+
+static char *devarg = NULL, *arg2 = NULL;
+static char mntpt[MEDIA_STRING_SIZE];
+static char device[PATH_MAX], mntptdev[PATH_MAX];
+static int async = 1;
+static int noatime = 0;
+static int exec = 0;
+static int force_write = -1; /* 0: ro, 1: rw, -1: default */
+static const char* use_fstype = NULL;
+static const char* iocharset = NULL;
+static const char* _umask = NULL;
+static const char* _fmask = NULL;
+static const char* _dmask = NULL;
+static const char* passphrase = NULL;
+
+static enum { MOUNT, LOCK, UNLOCK } mode = MOUNT;
+
+int
+mount_device( void )
+{
+    char decrypted_device[PATH_MAX];
+    int utf8 = -1; 		/* Whether we live in a UTF-8 world or not */
+    int result;
+    
+    static const char *l_use_fstype;
+    static const char *l_iocharset;
+    static const char *l_passphrase;
+    
+    char *o_fs = NULL;
+    char *o_charset = NULL;
+    char *o_passphrase = NULL;
+    char *o_mntpt = NULL;
+    char *o_options = NULL;
+    
+    l_use_fstype = use_fstype;
+    l_iocharset = iocharset;
+    l_passphrase = passphrase;
+
+    switch( mode ) {
+        case MOUNT:
+            /* let's see if there are options in CONF_FILE */
+            if( !get_conf_for_device( device, &o_fs, &o_charset, &o_passphrase,
+                    &o_mntpt, &o_options ) ) {
+                if( NULL != o_fs ) {
+                    l_use_fstype = (const char *) o_fs;
+                }
+                if( NULL != o_charset ) {
+                    l_iocharset = (const char *) o_charset;
+                }
+                if( NULL != o_passphrase ) {
+                    l_passphrase = (const char *) o_passphrase;
+                }
+                if( NULL != o_mntpt ) {
+                    snprintf( mntpt, sizeof (mntpt ), "%s", o_mntpt );
+                }
+            }
+            
+            /* determine mount point name; note that we use devarg instead of
+             * device to preserve symlink names (like '/dev/usbflash' instead
+             * of '/dev/sda1') */
+            if( NULL == o_mntpt && make_mountpoint_name( devarg, arg2, mntpt,
+                    sizeof( mntpt ) ) )
+                return E_MNTPT;
+
+            /* if no charset was set explicitly, autodetect UTF-8 */
+            if( !l_iocharset ) {
+                const char* codeset;
+                codeset = nl_langinfo( CODESET );
+
+                debug( "no iocharset given, current locale encoding is %s\n", codeset );
+
+                if( codeset && !strcmp( codeset, "UTF-8" ) ) {
+                    debug( "locale encoding uses UTF-8, setting iocharset to 'utf8'\n" );
+                    l_iocharset = "utf8";
+                }
+            }
+	    /* If user did not choose explicitly for or against utf8 */
+	    if( utf8 == -1 ) {
+	      const char* codeset;
+	      codeset = nl_langinfo( CODESET );
+	      if( codeset && !strcmp( codeset, "UTF-8" ) ) {
+		debug( "locale encoding uses UTF-8: will mount FAT with utf8 option" );
+		utf8 = 1;
+	      } else {
+		utf8 = 0;
+	      }
+	    }
+
+            /* clean stale locks */
+            clean_lock_dir( device );
+
+            if( check_mount_policy( device, mntpt )  )
+                return E_POLICY;
+
+            /* check for encrypted device */
+            enum decrypt_status decrypt = luks_decrypt( device,
+                    decrypted_device, sizeof( decrypted_device ), l_passphrase,
+                    force_write == 0 ? 1 : 0 ); 
+
+            switch (decrypt) {
+                case DECRYPT_FAILED:
+                    fprintf( stderr, _("Error: could not decrypt device (wrong passphrase?)\n") );
+                    return E_POLICY;
+                case DECRYPT_EXISTS:
+                    fprintf( stderr, _("Error: mapped device already exists\n") );
+                    return E_POLICY;
+                case DECRYPT_OK:
+		  /* We create a luks lockfile _on the decrypted device !_*/
+		  if(! luks_create_lockfile(decrypted_device))
+		    fprintf(stderr, _("Warning: could not create luks lockfile\n"));
+                case DECRYPT_NOTENCRYPTED:
+                    break;
+                default:
+                    fprintf( stderr, "Internal error: unhandled decrypt_status %i\n", 
+                        (int) decrypt);
+                    return E_INTERNAL;
+            }
+
+            /* lock the mount directory */
+            debug( "locking mount point directory\n" );
+            if( lock_dir( mntpt ) < 0) {
+                fprintf( stderr, _("Error: could not lock the mount directory. Another pmount is probably running for this mount point.\n"));
+                return E_LOCKED;
+            }
+            debug( "mount point directory locked\n" );
+
+            /* off we go */
+            if( l_use_fstype )
+                result = do_mount( decrypted_device, mntpt, l_use_fstype, async, noatime,
+				   exec, force_write, l_iocharset, utf8, _umask, _fmask, _dmask, 0,
+                                   o_options);
+            else
+                result = do_mount_auto( decrypted_device, mntpt, async, noatime, exec,
+                        force_write, l_iocharset, utf8, _umask, _fmask, _dmask, o_options ); 
+
+            /* unlock the mount point again */
+            debug( "unlocking mount point directory\n" );
+            unlock_dir( mntpt );
+            debug( "mount point directory unlocked\n" );
+            
+            if( NULL != o_fs ) {
+               free( o_fs ); 
+            }
+            if( NULL != o_charset ) {
+               free( o_charset ); 
+            }
+            if( NULL != o_passphrase ) {
+               free( o_passphrase ); 
+            }
+            if( NULL != o_mntpt ) {
+               free( o_mntpt ); 
+            }
+            if( NULL != o_options ) {
+               free( o_options ); 
+            }
+
+            if( result ) {
+                if( decrypt == DECRYPT_OK )
+                    luks_release( decrypted_device, 0 ); 
+
+                /* mount failed, delete the mount point again */
+                if( remove_pmount_mntpt( mntpt ) ) {
+                    perror( _("Error: could not delete mount point") );
+                    return -1;
+                }
+                return E_EXECMOUNT;
+            }
+
+            return 0;
+
+        case LOCK:
+            if( device_valid( device ) )
+                if( do_lock( device, parse_unsigned( arg2, E_PID ) ) )
+                    return E_INTERNAL;
+            return 0;
+
+        case UNLOCK:
+            if( device_valid( device ) )
+                if( do_unlock( device, parse_unsigned( arg2, E_PID ) ) )
+                    return E_UNLOCK;
+            return 0;
+    }
+
+    fprintf( stderr, _("Internal error: mode %i not handled.\n"), (int) mode );
+    return E_INTERNAL;
+}
+
+
+
 /**
  * Entry point.
  */
 int
 main( int argc, char** argv )
 {
-    char *devarg = NULL, *arg2 = NULL;
-    char mntpt[MEDIA_STRING_SIZE];
-    char device[PATH_MAX], mntptdev[PATH_MAX];
-    char decrypted_device[PATH_MAX];
     const char* fstab_device;
     int is_real_path = 0;
-    int async = 1;
-    int noatime = 0;
-    int exec = 0;
-    int force_write = -1; /* 0: ro, 1: rw, -1: default */
-    const char* use_fstype = NULL;
-    const char* iocharset = NULL;
-    const char* umask = NULL;
-    const char* fmask = NULL;
-    const char* dmask = NULL;
-    const char* passphrase = NULL;
-    int utf8 = -1; 		/* Whether we live in a UTF-8 world or not */
-    int result;
+    int full_device = 0;
 
-    enum { MOUNT, LOCK, UNLOCK } mode = MOUNT;
-
+    int result, error_occurred = 0;
+    
     int  option;
     static struct option long_opts[] = {
         { "help", 0, NULL, 'h'},
@@ -647,6 +833,7 @@ main( int argc, char** argv )
         { "read-only", 0, NULL, 'r' },
         { "read-write", 0, NULL, 'w' },
         { "version", 0, NULL, 'V' },
+        { "full-device", 0, NULL, 'D' },
         { NULL, 0, NULL, 0}
     };
 
@@ -678,7 +865,7 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdelLsArwp:t:c:u:V", long_opts, NULL ) ) {
+        switch( option = getopt_long( argc, argv, "+hdelLsArwp:t:c:u:DV", long_opts, NULL ) ) {
             case -1:  break;          /* end of arguments */
             case ':':
             case '?': return E_ARGS;  /* unknown argument */
@@ -701,17 +888,19 @@ main( int argc, char** argv )
 
             case 'c': iocharset = optarg; break;
 
-            case 'u': umask = optarg; break;
+            case 'u': _umask = optarg; break;
 	    
-	    case OPT_FMASK: fmask = optarg; break;
+	    case OPT_FMASK: _fmask = optarg; break;
 	    
-	    case OPT_DMASK: dmask = optarg; break;
+	    case OPT_DMASK: _dmask = optarg; break;
 
             case 'p': passphrase = optarg; break;
 
             case 'r': force_write = 0; break;
 
             case 'w': force_write = 1; break;
+            
+            case 'D': full_device = 1; break;
 
             case 'V': puts(VERSION); return 0;
 
@@ -793,117 +982,76 @@ main( int argc, char** argv )
         fprintf( stderr, _("Error: invalid device %s (must be in /dev/)\n"), device ); 
         return E_DEVICE;
     }
+    
+    /* we need to get the full device name (e.g. /dev/sde), get list of all its
+     partitions, and try to mount them all... */
+    if( full_device ) {
+        char devdirname[MEDIA_STRING_SIZE];
+        if( !find_sysfs_device( device, devdirname, MEDIA_STRING_SIZE) ) {
+            fprintf( stderr, _("Warning: unable to find device path for %s,"
+                    " full-device mode disabled\n"), device );
+            full_device = 0;
+        } else {
+            debug( "device path for %s is %s\n", device, devdirname );
+            
+            DIR *partdir;
+            struct dirent *partdirent;
+            char partdirname[MEDIA_STRING_SIZE];
+            struct stat stat_info;
+            
+            partdir = opendir( devdirname );
+            if( !partdir ) {
+                perror( _("Error: could not open <sysfs dir>/block/<device>/") );
+                exit( -1 );
+            }
+            while( ( partdirent = readdir( partdir ) ) != NULL ) {
+                if( partdirent->d_type != DT_DIR
+                        || !strcmp( partdirent->d_name, "." )
+                        || !strcmp( partdirent->d_name, ".." ) )
+                    continue;
+                
+                /* construct /sys/block/<device>/<partition>/dev */
+                snprintf( partdirname, sizeof( partdirname ), "%s/%s/%s",
+                        devdirname, partdirent->d_name, "dev" );
 
-    switch( mode ) {
-        case MOUNT:
-            /* determine mount point name; note that we use devarg instead of
-             * device to preserve symlink names (like '/dev/usbflash' instead
-             * of '/dev/sda1') */
-            if( make_mountpoint_name( devarg, arg2, mntpt, sizeof( mntpt ) ) )
-                return E_MNTPT;
+                /* make sure it is a device, i.e has a file dev */
+                if( 0 != stat( partdirname, &stat_info ) ) {
+                    /* ENOENT (does not exist) is "okay" we just ignore this one */
+                    if( ENOENT != errno ) {
+                        perror( _("Error: could not stat <sysfs dir>/block/<device>/<part>/dev") );
+                        exit( -1 );
+                    }
+                    continue;
+                }
+                /* must be a file */
+                if( !S_ISREG( stat_info.st_mode ) ) {
+                    continue;
+                }
 
-            /* if no charset was set explicitly, autodetect UTF-8 */
-            if( !iocharset ) {
-                const char* codeset;
-                codeset = nl_langinfo( CODESET );
-
-                debug( "no iocharset given, current locale encoding is %s\n", codeset );
-
-                if( codeset && !strcmp( codeset, "UTF-8" ) ) {
-                    debug( "locale encoding uses UTF-8, setting iocharset to 'utf8'\n" );
-                    iocharset = "utf8";
+                /* construct /dev/<partition> */
+                snprintf( device, sizeof( device ), "%s%s", DEVDIR, partdirent->d_name );
+                debug( "processing found partition: %s\n", device );
+                
+                /* We need to lookup again in fstab: */
+                fstab_device = fstab_has_device( "/etc/fstab", device, NULL, NULL );
+                if( mode == MOUNT && fstab_device ) {
+                  fprintf( stderr, _("Error: device %s handled by fstab\n"), fstab_device );
+                  exit( -1 );
+                }
+                
+                devarg = device;
+                result = mount_device();
+                if( result != 0 ) {
+                    fprintf( stderr, _("Failed to mount device %s : error %d\n"), device, result );
+                    error_occurred = -1;
+                } else {
+                    printf( _("Device %s mounted\n"), device );
                 }
             }
-	    /* If user did not choose explicitly for or against utf8 */
-	    if( utf8 == -1 ) {
-	      const char* codeset;
-	      codeset = nl_langinfo( CODESET );
-	      if( codeset && !strcmp( codeset, "UTF-8" ) ) {
-		debug( "locale encoding uses UTF-8: will mount FAT with utf8 option" );
-		utf8 = 1;
-	      } else {
-		utf8 = 0;
-	      }
-	    }
-
-            /* clean stale locks */
-            clean_lock_dir( device );
-
-            if( check_mount_policy( device, mntpt )  )
-                return E_POLICY;
-
-            /* check for encrypted device */
-            enum decrypt_status decrypt = luks_decrypt( device,
-                    decrypted_device, sizeof( decrypted_device ), passphrase,
-                    force_write == 0 ? 1 : 0 ); 
-
-            switch (decrypt) {
-                case DECRYPT_FAILED:
-                    fprintf( stderr, _("Error: could not decrypt device (wrong passphrase?)\n") );
-                    exit( E_POLICY );
-                case DECRYPT_EXISTS:
-                    fprintf( stderr, _("Error: mapped device already exists\n") );
-                    exit( E_POLICY );
-                case DECRYPT_OK:
-		  /* We create a luks lockfile _on the decrypted device !_*/
-		  if(! luks_create_lockfile(decrypted_device))
-		    fprintf(stderr, _("Warning: could not create luks lockfile\n"));
-                case DECRYPT_NOTENCRYPTED:
-                    break;
-                default:
-                    fprintf( stderr, "Internal error: unhandled decrypt_status %i\n", 
-                        (int) decrypt);
-                    exit( E_INTERNAL );
-            }
-
-            /* lock the mount directory */
-            debug( "locking mount point directory\n" );
-            if( lock_dir( mntpt ) < 0) {
-                fprintf( stderr, _("Error: could not lock the mount directory. Another pmount is probably running for this mount point.\n"));
-                exit( E_LOCKED );
-            }
-            debug( "mount point directory locked\n" );
-
-            /* off we go */
-            if( use_fstype )
-                result = do_mount( decrypted_device, mntpt, use_fstype, async, noatime,
-				   exec, force_write, iocharset, utf8, umask, fmask, dmask, 0 );
-            else
-                result = do_mount_auto( decrypted_device, mntpt, async, noatime, exec,
-                        force_write, iocharset, utf8, umask, fmask, dmask ); 
-
-            /* unlock the mount point again */
-            debug( "unlocking mount point directory\n" );
-            unlock_dir( mntpt );
-            debug( "mount point directory unlocked\n" );
-
-            if( result ) {
-                if( decrypt == DECRYPT_OK )
-                    luks_release( decrypted_device, 0 ); 
-
-                /* mount failed, delete the mount point again */
-                if( remove_pmount_mntpt( mntpt ) ) {
-                    perror( _("Error: could not delete mount point") );
-                    return -1;
-                }
-                return E_EXECMOUNT;
-            }
-
-            return 0;
-
-        case LOCK:
-            if( device_valid( device ) )
-                if( do_lock( device, parse_unsigned( arg2, E_PID ) ) )
-                    return E_INTERNAL;
-            return 0;
-
-        case UNLOCK:
-            if( device_valid( device ) )
-                if( do_unlock( device, parse_unsigned( arg2, E_PID ) ) )
-                    return E_UNLOCK;
-            return 0;
+            closedir( partdir );
+            return error_occurred;
+        }
     }
-
-    fprintf( stderr, _("Internal error: mode %i not handled.\n"), (int) mode );
-    return E_INTERNAL;
+    
+    return mount_device();
 }

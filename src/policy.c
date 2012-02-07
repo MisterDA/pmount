@@ -164,7 +164,9 @@ int find_sysfs_device( const char* dev, char* blockdevpath,
                     exit( -1 );
                 }
                 while( ( partdirent = readdir( partdir ) ) != NULL ) {
-                    if( partdirent->d_type != DT_DIR )
+                    if( partdirent->d_type != DT_DIR
+                            || !strcmp( partdirent->d_name, "." )
+                            || !strcmp( partdirent->d_name, ".." ) )
                         continue;
 
                     /* construct /sys/block/<device>/<partition>/dev */
@@ -549,7 +551,7 @@ int device_removable_silent(const char * device)
 	    blockdevpath, whitelisted_bus);
     }
     else
-      debug("Device %s does not belong to any whitelisted bus\n");
+      debug("Device %s does not belong to any whitelisted bus\n", blockdevpath);
   } 
   return removable;
 }

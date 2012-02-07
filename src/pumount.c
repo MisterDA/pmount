@@ -19,10 +19,14 @@
 #include <getopt.h>
 #include <libintl.h>
 #include <locale.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <dirent.h>
 
 #include "policy.h"
 #include "utils.h"
 #include "luks.h"
+#include "conf.h"
 #include "config.h"
 
 /* error codes */
@@ -46,11 +50,12 @@ usage( const char* exename )
     "  are met (see pumount(1) for details). The mount point directory is removed\n"
     "  afterwards.\n\n"
     "Options:\n"
-    "  -l, --lazy   : umount lazily, see umount(8)\n"
-    "  --luks-force : luksClose devices pmount didn't open\n"
-    "  -d, --debug  : enable debug output (very verbose)\n"
-    "  -h, --help   : print help message and exit successfuly\n"
-    "  --version    : print version number and exit successfully\n"),
+    "  -l, --lazy    : umount lazily, see umount(8)\n"
+    "  --luks-force  : luksClose devices pmount didn't open\n"
+    "  -D            : umount all partitions of the device, then stops it for safe removal\n"
+    "  -d, --debug   : enable debug output (very verbose)\n"
+    "  -h, --help    : print help message and exit successfuly\n"
+    "  -V, --version : print version number and exit successfully\n"),
         exename, MEDIADIR );
 }
 
@@ -88,9 +93,23 @@ check_umount_policy( const char* device, int ok_if_inexistant )
 
     /* mount point must be below MEDIADIR */
     if( strncmp( mntpt, mediadir, strlen( mediadir ) ) ) {
-        fprintf( stderr, _("Error: mount point %s is not below %s\n"), mntpt,
-                MEDIADIR );
-        return -1;
+        /* check CONF_FILE, it might be okay */
+        char *o_mntpt = NULL;
+        int passed = 0;
+        if( !get_conf_for_device( device, NULL, NULL, NULL, &o_mntpt, NULL ) ) {
+            if( NULL != o_mntpt ) {
+                if( !strcmp( mntpt, o_mntpt ) ) {
+                    debug( "mount point allowed from config: %s\n", mntpt );
+                    passed = 1;
+                }
+                free( o_mntpt );
+            }
+        }
+        if( !passed ) {
+            fprintf( stderr, _("Error: mount point %s is not below %s\n"), mntpt,
+                    MEDIADIR );
+            return -1;
+        }
     }
 
     debug( "policy check passed\n" );
@@ -98,13 +117,15 @@ check_umount_policy( const char* device, int ok_if_inexistant )
 }
 
 /**
- * Drop all privileges and exec 'umount device'. Does not return on success, if
- * it returns, UMOUNTPROG could not be executed.
+ * Drop all privileges and exec 'umount device'.
  * @param lazy 0 for normal umount, 1 for lazy umount
+ * @return 0 on success, E_EXECUMOUNT if UMOUNTPROG could not be executed.
  */
-void
+int
 do_umount_fstab( const char* device, int lazy, const char * fstab_mntpt )
 {
+    int status;
+    
     /* drop all privileges */
     get_root();
     if( setuid( getuid() ) ) {
@@ -120,10 +141,16 @@ do_umount_fstab( const char* device, int lazy, const char * fstab_mntpt )
     }
 
     if( lazy )
-        execl( UMOUNTPROG, UMOUNTPROG, "-l", device, NULL );
+        status = spawnl( 0, UMOUNTPROG, UMOUNTPROG, "-l", device, NULL );
     else
-        execl( UMOUNTPROG, UMOUNTPROG, device, NULL );
-    perror( _("Error: could not execute umount") );
+        status = spawnl( 0, UMOUNTPROG, UMOUNTPROG, device, NULL );
+    
+    if( status != 0 ) {
+        perror( _("Error: could not execute umount") );
+        return E_EXECUMOUNT;
+    }
+    
+    return 0;
 }
 
 /**
@@ -152,6 +179,41 @@ do_umount( const char* device, int do_lazy )
     return 0;
 }
 
+int
+umount_device( const char* device, size_t devicesize, const char* mntpt,
+        int do_lazy, int full_device )
+{
+    const char* fstab_device;
+    char fstab_mntpt[MEDIA_STRING_SIZE];
+
+    /* in full device mode, we need to check is the device is handled by fstab */
+    if( full_device ) {
+        fstab_device = fstab_has_device( "/etc/fstab", device, fstab_mntpt, NULL );
+        if( fstab_device && device_mounted( device, 1, NULL ) ) {
+            return do_umount_fstab( fstab_device, do_lazy, fstab_mntpt );
+        }
+    /* in regular mode, we check if we have a dmcrypt device */
+    } else if( luks_get_mapped_device( device, (char *) device, devicesize ) ) {
+        debug( "Unmounting mapped device %s instead.\n", device );
+    }
+
+    /* Now, we accept when devices have gone missing */
+    if( check_umount_policy( device, 1 ) )
+        return E_POLICY;
+
+    /* go for it */
+    if( do_umount( device, do_lazy ) )
+        return E_EXECUMOUNT;
+
+    /* release LUKS device, if appropriate */
+    luks_release( device, 1 );
+
+    /* delete mount point */
+    remove_pmount_mntpt( mntpt );
+    
+    return 0;
+}
+
 /**
  * Entry point.
  *
@@ -165,6 +227,10 @@ main( int argc, char** argv )
     int is_real_path = 0;
     int do_lazy = 0;
     int luks_force = 0;
+    int full_device = 0;
+    
+    int error_occurred = 0;
+    int result;
 
     int  option;
     static struct option long_opts[] = {
@@ -173,6 +239,7 @@ main( int argc, char** argv )
         { "lazy", 0, NULL, 'l'},
         { "yes-I-really-want-lazy-unmount", 0, NULL, 'R'},
         { "luks-force", 0, NULL, 'L'},
+        { "full-device", 0, NULL, 'D'},
         { "version", 0, NULL, 'V' },
         { NULL, 0, NULL, 0}
     };
@@ -193,7 +260,7 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdluV", long_opts, NULL ) ) {
+        switch( option = getopt_long( argc, argv, "+hdluDV", long_opts, NULL ) ) {
             case -1:        break;          /* end of arguments */
             case '?':        return E_ARGS;  /* unknown argument */
 
@@ -212,6 +279,8 @@ main( int argc, char** argv )
 	      do_lazy = 1; break;
 
             case 'L':        luks_force = 1; break;
+            
+            case 'D':   full_device = 1; break;
 
             case 'V': puts(VERSION); return 0;
 
@@ -251,11 +320,17 @@ main( int argc, char** argv )
         snprintf( device, sizeof( device ), "%s", argv[optind] );
     }
 
-    /* is the device already handled by fstab? */
-    fstab_device = fstab_has_device( "/etc/fstab", device, fstab_mntpt, NULL );
-    if( fstab_device ) {
-        do_umount_fstab( fstab_device, do_lazy, fstab_mntpt );
-        return E_EXECUMOUNT;
+    /* in full_device mode, we'll deal with all partitions anyways */
+    if( !full_device ) {
+        /* is the device already handled by fstab? */
+        fstab_device = fstab_has_device( "/etc/fstab", device, fstab_mntpt, NULL );
+        if( fstab_device ) {
+            if( device_mounted( device, 1, NULL ) ) {
+                return do_umount_fstab( fstab_device, do_lazy, fstab_mntpt );
+            } else {
+                return 0;
+            }
+        }
     }
 
     /* we cannot really check the real path when unmounting lazily since the
@@ -271,13 +346,18 @@ main( int argc, char** argv )
             }
             debug( "trying to prepend '" DEVDIR 
 		   "' to device argument, now '%s'\n", device );
-	    /* We need to lookup again in fstab: */
-	    fstab_device = fstab_has_device( "/etc/fstab", device, 
-					     fstab_mntpt, NULL );
-	    if( fstab_device ) {
-	      do_umount_fstab( fstab_device, do_lazy, fstab_mntpt );
-	      return E_EXECUMOUNT;
-	    }
+            if( !full_device ) {
+                /* We need to lookup again in fstab: */
+                fstab_device = fstab_has_device( "/etc/fstab", device, 
+                                                 fstab_mntpt, NULL );
+                if( fstab_device ) {
+                  if( device_mounted( device, 1, NULL ) ) {
+                      return do_umount_fstab( fstab_device, do_lazy, fstab_mntpt );
+                  } else {
+                      return 0;
+                  }
+                }
+            }
 	}
     }
 
@@ -286,24 +366,151 @@ main( int argc, char** argv )
         fprintf( stderr, _("Error: invalid device %s (must be in /dev/)\n"), device );
         return E_DEVICE;
     }
+    
+    /* we need to get the full device name (e.g. /dev/sde), get list of all its
+     partitions, and try to unmount them all... */
+    if( full_device ) {
+        char devdirname[MEDIA_STRING_SIZE];
+        if( !find_sysfs_device( device, devdirname, MEDIA_STRING_SIZE) ) {
+            fprintf( stderr, _("Warning: unable to find device path for %s, "
+                    "full-device mode disabled\n"),
+                    device );
+            full_device = 0;
+        } else {
+            debug( "device path for %s is %s\n", device, devdirname );
+            
+            DIR *partdir;
+            struct dirent *partdirent;
+            char partdirname[MEDIA_STRING_SIZE];
+            struct stat stat_info;
+            
+            partdir = opendir( devdirname );
+            if( !partdir ) {
+                perror( _("Error: could not open <sysfs dir>/block/<device>/") );
+                exit( -1 );
+            }
+            while( ( partdirent = readdir( partdir ) ) != NULL ) {
+                if( partdirent->d_type != DT_DIR
+                        || !strcmp( partdirent->d_name, "." )
+                        || !strcmp( partdirent->d_name, ".." ) )
+                    continue;
+                
+                /* construct /sys/block/<device>/<partition>/dev */
+                snprintf( partdirname, sizeof( partdirname ), "%s/%s/%s",
+                        devdirname, partdirent->d_name, "dev" );
 
-    /* check if we have a dmcrypt device */
-    if( luks_get_mapped_device( device, device, sizeof( device ) ) )
-        debug( "Unmounting mapped device %s instead.\n", device );
+                /* make sure it is a device, i.e has a file dev */
+                if( 0 != stat( partdirname, &stat_info ) ) {
+                    /* ENOENT (does not exist) is "okay" we just ignore this one */
+                    if( ENOENT != errno ) {
+                        perror( _("Error: could not stat <sysfs dir>/block/<device>/<part>/dev") );
+                        exit( -1 );
+                    }
+                    continue;
+                }
+                /* must be a file */
+                if( !S_ISREG( stat_info.st_mode ) ) {
+                    continue;
+                }
 
-    /* Now, we accept when devices have gone missing */
-    if( check_umount_policy( device, 1 ) )
-        return E_POLICY;
+                /* construct /dev/<partition> */
+                snprintf( device, sizeof( device ), "%s%s", DEVDIR, partdirent->d_name );
+                debug( "processing found partition: %s\n", device );
+                
+                /* check if we have a dmcrypt device */
+                if( luks_get_mapped_device( device, device, sizeof( device ) ) )
+                    debug( "Using mapped device %s instead.\n", device );
 
-    /* go for it */
-    if( do_umount( device, do_lazy ) )
-        return E_EXECUMOUNT;
+                if( device_mounted( device, 1, mntpt ) ) {
+                    debug( "device %s mounted, unmounting\n", device );
+                    result = umount_device( device, sizeof( device ), mntpt,
+                            do_lazy, full_device );
+                    if( result != 0 ) {
+                        fprintf( stderr, _("Failed to umount device %s : error %d\n"),
+                                device, result );
+                        error_occurred = -1;
+                    } else {
+                        printf( _("Device %s umounted\n"), device );
+                    }
+                }
+            }
+            closedir( partdir );
+            
+            /* no errors: let's stop the device completely, for safe removal */
+            if ( !error_occurred ) {
+                char *c;
+                FILE *f;
 
-    /* release LUKS device, if appropriate */
-    luks_release( device, 1 );
+                /* flush buffers */
+                sync();
+                
+                /* resolve devdirname (<sysfs>/block/<device> to something like:
+                 * /sys/devices/pci0000:00/0000:00:06.0/usb1/1-2/1-2:1.0/host5/target5:0:0/5:0:0:0/block/sdd */
+                if( !realpath( devdirname, device ) ) {
+                    debug( "unable to resolve %s\n", device );
+                    goto err_stop;
+                }
+                debug( "device %s resolved to %s\n", devdirname, device );
+                
+                /* now extract the part we want, up to the grand-parent of the host
+                 e.g: /sys/devices/pci0000:00/0000:00:06.0/usb1/1-2 */
+                while( c = strrchr( device, '/' ) ) {
+                    /* end the string there, to move back */
+                    *c = 0;
+                    /* found the host part? */
+                    if( !strncmp( c + 1, "host", 4 ) ) {
+                        break;
+                    }
+                }
+                if( c == NULL ) {
+                    debug( "unable to find host for %s\n", device );
+                    goto err_stop;
+                }
+                /* we need to move back one more time */
+                if( NULL == ( c = strrchr( device, '/' ) ) ) {
+                    debug( "cannot move back one last time in %s\n", device );
+                    goto err_stop;
+                }
+                /* end the string there */
+                *c = 0;
+                debug( "full name is %s\n", device );
+                /* now we need the last component, aka the bus id */
+                if( NULL == ( c = strrchr( device, '/' ) ) ) {
+                    debug( "cannot extract last component of %s\n", device );
+                    goto err_stop;
+                }
+                /* move up, so this points to the name only, e.g. 1-2 */
+                ++c;
+                
+                /* unbind driver: write the bus id to <device>/driver/unbind */
+                snprintf( path, sizeof( path ), "%s/driver/unbind", device );
+                if ( root_write_to_file( path, c ) ) {
+                    goto err_stop;
+                }
+                
+                /* suspend device. step 1: write "0" to <device>/power/autosuspend */
+                snprintf( path, sizeof( path ), "%s/power/autosuspend", device );
+                if ( root_write_to_file( path, "0" ) ) {
+                    goto err_stop;
+                }
+                /* step 2: write "auto" to <device>/power/control */
+                snprintf( path, sizeof( path ), "%s/power/control", device );
+                if ( root_write_to_file( path, "auto" ) ) {
+                    goto err_stop;
+                }
+                
+                c = strrchr( devdirname, '/' );
+                printf( _("Device %s%s stopped, you should now be able to safely unplug it\n"),
+                        DEVDIR, c + 1);
+            }
+            
+            return error_occurred;
 
-    /* delete mount point */
-    remove_pmount_mntpt( mntpt );
+err_stop:
+            fputs( _("Error: Unable to stop device\n"), stderr );
+            return -1;
+        }
+    }
 
-    return 0; 
+    return umount_device( device, sizeof( device ), mntpt, do_lazy, full_device );
 }

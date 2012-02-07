@@ -90,6 +90,16 @@ void unlock_dir (const char* dir );
 int read_number_colon_number( const char* file, unsigned char* first, unsigned char* second );
 
 /**
+ * Writes given data to the specified, opening it as root
+ * (this is used to unbind driver, etc)
+ * @param path path/file to write to
+ * @param data data to write
+ * @return 0 on success, else -1
+ */
+int
+root_write_to_file( const char* path, const char* data );
+
+/**
  * Parse s as nonnegative number. Exits the program immediately if s cannot be
  * parsed as a number.
  * @param s string to parse as a number

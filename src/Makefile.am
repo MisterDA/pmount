@@ -2,11 +2,12 @@ INCLUDES = $(HAL_CFLAGS)
 
 noinst_LIBRARIES = libpmount-util.a
 libpmount_util_a_SOURCES = \
-	fs.c     \
-	luks.c   \
-	policy.c \
-	utils.c  \
-	realpath.c
+	fs.c       \
+	luks.c     \
+	policy.c   \
+	utils.c    \
+	realpath.c \
+	conf.c
 
 if PMOUNT_HAL
 EXTRABIN=pmount-hal
@@ -25,11 +26,12 @@ pumount_SOURCES = pumount.c
 pumount_LDADD = libpmount-util.a
 
 EXTRA_DIST = \
-	fs.h     \
-	luks.h   \
-	policy.h \
-	utils.h  \
-	realpath.h
+	fs.h       \
+	luks.h     \
+	policy.h   \
+	utils.h    \
+	realpath.h \
+	conf.h
 
 INSTALL_DIR = $(DESTDIR)/$(prefix)/bin
 INSTALL_SRC = $(top_builddir)/src
