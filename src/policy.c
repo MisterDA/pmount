@@ -554,7 +554,7 @@ int device_removable_silent(const char * device)
 	    blockdevpath, whitelisted_bus);
     }
     else
-      debug("Device %s does not belong to any whitelisted bus\n");
+      debug("Device %s does not belong to any whitelisted bus\n", device);
   } 
   return removable;
 }
