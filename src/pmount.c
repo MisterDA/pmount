@@ -51,6 +51,7 @@ const int E_INTERNAL = 100;
 
 #define OPT_FMASK 128
 #define OPT_DMASK 129
+#define OPT_UTC   130
 
 /**
  * Print some help.
@@ -228,7 +229,7 @@ do_mount_fstab( const char* device )
 int
 do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 	  int noatime, int exec, int force_write, const char* iocharset, 
-	  int utf8, 
+	  int utf8, int utc,
 	  const char* umask, const char *fmask, const char *dmask, 
 	  int suppress_errors )
 {
@@ -237,6 +238,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     char umask_opt[100];
     char fdmask_opt[100];
     char iocharset_opt[100];
+    const char* utc_opt = "";
     const char* sync_opt = ",sync";
     const char* atime_opt = ",atime";
     const char* exec_opt = ",noexec";
@@ -338,6 +340,9 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     else
         access_opt = "";
 
+    if(! strcmp(fsname, "vfat") && utc )
+	utc_opt = ",tz=UTC";
+
     if( iocharset && fs->iocharset_format ) {
         if( !is_word_str( iocharset ) ) {
             fprintf( stderr, _("Error: invalid charset name '%s'\n"), iocharset );
@@ -371,9 +376,9 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 		fs->iocharset_format, "iso8859-1");
     }
 
-    snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s%s", 
+    snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s%s%s",
             fs->options, sync_opt, atime_opt, exec_opt, access_opt, ugid_opt,
-            umask_opt, fdmask_opt, iocharset_opt );
+            umask_opt, fdmask_opt, iocharset_opt, utc_opt );
 
     /* go for it */
     return spawnl( SPAWN_EROOT | SPAWN_RROOT | (suppress_errors ? SPAWN_NO_STDERR : 0 ),
@@ -402,7 +407,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 int
 do_mount_auto( const char* device, const char* mntpt, int async, 
 	       int noatime, int exec, int force_write, const char* iocharset, 
-	       int utf8, 
+	       int utf8, int utc,
 	       const char* umask, const char *fmask, const char *dmask )
 {
     const struct FS* fs;
@@ -423,7 +428,7 @@ do_mount_auto( const char* device, const char* mntpt, int async,
 	tp = "ntfs-3g";
       }
       result = do_mount( device, mntpt, tp, async, noatime, exec, 
-			 force_write, iocharset, utf8, umask, fmask, 
+			 force_write, iocharset, utf8, utc, umask, fmask,
 			 dmask, nostderr );
       if(result == 0)
 	return result;
@@ -445,14 +450,14 @@ do_mount_auto( const char* device, const char* mntpt, int async,
       if( (fs+1)->fsname == NULL )
 	nostderr = 0;
       result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-			 force_write, iocharset, utf8, umask, fmask, dmask, nostderr );
+			 force_write, iocharset, utf8, utc, umask, fmask, dmask, nostderr );
       if( result == 0 )
 	break;
 
       /* sometimes VFAT fails when using iocharset; try again without */
       if( iocharset )
 	result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-			   force_write, NULL, utf8, umask, fmask, dmask, nostderr );
+			   force_write, NULL, utf8, utc, umask, fmask, dmask, nostderr );
       if( result <= 0 )
 	break;
     }
@@ -625,6 +630,7 @@ main( int argc, char** argv )
     const char* dmask = NULL;
     const char* passphrase = NULL;
     int utf8 = -1; 		/* Whether we live in a UTF-8 world or not */
+    int utc = 0; /* Whether the timestamps are stored in UTC rather than local time */
     int result;
 
     enum { MOUNT, LOCK, UNLOCK } mode = MOUNT;
@@ -640,6 +646,7 @@ main( int argc, char** argv )
         { "exec", 0, NULL, 'e' },
         { "type", 1, NULL, 't' },
         { "charset", 1, NULL, 'c' },
+        { "utc", 0, NULL, OPT_UTC },
         { "umask", 1, NULL, 'u' },
         { "fmask", 1, NULL, OPT_FMASK },
         { "dmask", 1, NULL, OPT_DMASK },
@@ -703,6 +710,8 @@ main( int argc, char** argv )
             case 't': use_fstype = optarg; break;
 
             case 'c': iocharset = optarg; break;
+
+            case OPT_UTC: utc = 1; printf("coucou\n"); break;
 
             case 'u': umask = optarg; break;
 	    
@@ -870,10 +879,10 @@ main( int argc, char** argv )
             /* off we go */
             if( use_fstype )
                 result = do_mount( decrypted_device, mntpt, use_fstype, async, noatime,
-				   exec, force_write, iocharset, utf8, umask, fmask, dmask, 0 );
+				   exec, force_write, iocharset, utf8, utc, umask, fmask, dmask, 0 );
             else
                 result = do_mount_auto( decrypted_device, mntpt, async, noatime, exec,
-                        force_write, iocharset, utf8, umask, fmask, dmask ); 
+                        force_write, iocharset, utf8, utc, umask, fmask, dmask );
 
             /* unlock the mount point again */
             debug( "unlocking mount point directory\n" );
