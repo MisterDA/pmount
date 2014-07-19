@@ -194,6 +194,14 @@ currently makes the filesystem case-sensitive (which is pretty
 bad...).
 
 .TP
+.B  \fB\-\-utc
+Use UTC for the timestamps on the filesystem.
+Some filesystems (essentially VFAT) store the timestamps without a
+timezone indication.
+By default, the timestamps are interpreted relative to the
+current kernel time zone without DST correction.
+
+.TP
 .B \-u \fIumask\fR, \fB\-\-umask \fIumask\fR
 Use specified umask instead of the default one. For UDF, the default
 is '000', for VFAT and NTFS the default is '077'. This value is
