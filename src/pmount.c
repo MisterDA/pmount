@@ -68,9 +68,9 @@ usage( const char* exename )
 
     printf( _("%s --lock <device> <pid>\n"
     "  Prevent further pmounts of <device> until it is unlocked again. <pid>\n"
-    "  specifies the process id the lock holds for. This allows to lock a device\n"
+    "  specifies the process id the lock holds for. This allows one to lock a device\n"
     "  by several independent processes and avoids indefinite locks of crashed\n"
-    "  processes (nonexistant pids are cleaned before attempting a mount).\n\n"),
+    "  processes (nonexistent pids are cleaned before attempting a mount).\n\n"),
         exename );
 
     printf( _("%s --unlock <device> <pid>\n"
@@ -533,7 +533,7 @@ do_unlock( const char* device, pid_t pid )
         drop_root();
 
         if( result ) {
-            /* ignore nonexistant lock files, but report other errors */
+            /* ignore nonexistent lock files, but report other errors */
             if( errno != ENOENT ) {
                 fprintf( stderr, _("Error: could not remove pid lock file %s: %s\n"),
                          lockfilepath, strerror( errno ) );
