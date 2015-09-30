@@ -398,7 +398,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
     char pathbuf_arg[PATH_MAX];
     static char fstab_device[PATH_MAX];
     char* realdev;
-    char* realdev_arg;
+    const char* realdev_arg;
     char* uidopt;
 
     debug("Checking for device '%s' in '%s'\n", device, fname);

@@ -673,7 +673,10 @@ main( int argc, char** argv )
     }
 
     /* drop root privileges until we really need them (still available as saved uid) */
-    seteuid( getuid() );
+    if( seteuid( getuid() ) ) {
+        perror( _("Error: could not drop all effective uid privileges") );
+        exit(1);
+    }
 
 
     /* parse command line options */
