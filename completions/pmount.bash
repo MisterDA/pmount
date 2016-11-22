@@ -22,7 +22,9 @@
 have pmount &&
 _pmount() {
 
-   local cur prev options devices fslist
+   local cur prev options devices fslist mdir
+
+   mdir="$(readlink -f /media)"
 
    options=' -r --read-only -w --read-write -s --sync -A --noatime -e --exec \
    -t filesystem --type filesystem -c charset --charset charset -u umask \
