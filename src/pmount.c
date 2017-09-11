@@ -156,6 +156,12 @@ make_mountpoint_name( const char* device, const char* label, char* mntpt,
     int media_dir_len = strlen( MEDIADIR );
 
     if( label ) {
+        if( label[0] == '/' && strncmp( label, MEDIADIR, media_dir_len ) ) {
+            fputs( _("Error: mount point must be in the " MEDIADIR
+                     " directory\n"), stderr );
+            return -1;
+        }
+
         /* ignore a leading MEDIADIR */
         if( !strncmp( label, MEDIADIR, media_dir_len ) )
             label += media_dir_len;
