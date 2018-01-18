@@ -96,6 +96,7 @@ usage( const char* exename )
     "  -p <file>, --passphrase <file>\n"
     "                read passphrase from file instead of the terminal\n"
     "                (only for LUKS encrypted devices)\n"
+    "  -o          : mount fs with SELinux context system_u:object_r:removable_t:s0\n"
     "  -d, --debug : enable debug output (very verbose)\n"
     "  -h, --help  : print this help message and exit successfuly\n"
     "  -V, --version\n"
@@ -224,6 +225,8 @@ do_mount_fstab( const char* device )
  * @param fmask User specified fmask (NULL for umask)
  * @param dmask User specified dmask (NULL for umask)
  * @param suppress_errors: if true, stderr is redirected to /dev/null
+ * @param use_selinux_context if true, mount with
+ *        context="system_u:object_r:removable_t:s0"
  * @return exit status of mount, or -1 on failure.
  */
 int
@@ -231,7 +234,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 	  int noatime, int exec, int force_write, const char* iocharset, 
 	  int utf8, int utc,
 	  const char* umask, const char *fmask, const char *dmask, 
-	  int suppress_errors )
+	  int suppress_errors, int use_selinux_context )
 {
     const struct FS* fs;
     char ugid_opt[100];
@@ -243,6 +246,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     const char* atime_opt = ",atime";
     const char* exec_opt = ",noexec";
     const char* access_opt = NULL;
+    const char* selinux_context_opt = "";
     char options[1000];
     /* We deal with masks in another way now: */
     unsigned i_umask, i_dmask, i_fmask;
@@ -340,6 +344,9 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     else
         access_opt = "";
 
+    if ( use_selinux_context )
+      selinux_context_opt = ",context=system_u:object_r:removable_t:s0";
+
     if(! strcmp(fsname, "vfat") && utc )
 	utc_opt = ",tz=UTC";
 
@@ -376,9 +383,9 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 		fs->iocharset_format, "iso8859-1");
     }
 
-    snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s%s%s",
+    snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s%s%s%s",
             fs->options, sync_opt, atime_opt, exec_opt, access_opt, ugid_opt,
-            umask_opt, fdmask_opt, iocharset_opt, utc_opt );
+            umask_opt, fdmask_opt, iocharset_opt, utc_opt, selinux_context_opt );
 
     /* go for it */
     return spawnl( SPAWN_EROOT | SPAWN_RROOT | (suppress_errors ? SPAWN_NO_STDERR : 0 ),
@@ -402,13 +409,16 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
  * @param umask User specified umask (NULL for default)
  * @param fmask User specified fmask (NULL for umask)
  * @param dmask User specified dmask (NULL for umask)
+ * @param use_selinux_context if true, mount with
+ *        context="system_u:object_r:removable_t:s0"
  * @return last return value of do_mount (i. e. 0 on success, != 0 on error)
  */
 int
 do_mount_auto( const char* device, const char* mntpt, int async, 
 	       int noatime, int exec, int force_write, const char* iocharset, 
 	       int utf8, int utc,
-	       const char* umask, const char *fmask, const char *dmask )
+	       const char* umask, const char *fmask, const char *dmask,
+               int use_selinux_context )
 {
     const struct FS* fs;
     int nostderr = 1;
@@ -429,7 +439,7 @@ do_mount_auto( const char* device, const char* mntpt, int async,
       }
       result = do_mount( device, mntpt, tp, async, noatime, exec, 
 			 force_write, iocharset, utf8, utc, umask, fmask,
-			 dmask, nostderr );
+			 dmask, nostderr, use_selinux_context );
       if(result == 0)
 	return result;
       debug("blkid-detected FS failed, trying manually \n");
@@ -450,14 +460,16 @@ do_mount_auto( const char* device, const char* mntpt, int async,
       if( (fs+1)->fsname == NULL )
 	nostderr = 0;
       result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-			 force_write, iocharset, utf8, utc, umask, fmask, dmask, nostderr );
+			 force_write, iocharset, utf8, utc, umask, fmask, dmask, nostderr,
+                         use_selinux_context );
       if( result == 0 )
 	break;
 
       /* sometimes VFAT fails when using iocharset; try again without */
       if( iocharset )
 	result = do_mount( device, mntpt, fs->fsname, async, noatime, exec,
-			   force_write, NULL, utf8, utc, umask, fmask, dmask, nostderr );
+			   force_write, NULL, utf8, utc, umask, fmask, dmask, nostderr,
+                           use_selinux_context );
       if( result <= 0 )
 	break;
     }
@@ -623,6 +635,7 @@ main( int argc, char** argv )
     int noatime = 0;
     int exec = 0;
     int force_write = -1; /* 0: ro, 1: rw, -1: default */
+    int use_selinux_context = 0;
     const char* use_fstype = NULL;
     const char* iocharset = NULL;
     const char* umask = NULL;
@@ -653,6 +666,7 @@ main( int argc, char** argv )
         { "passphrase", 1, NULL, 'p' },
         { "read-only", 0, NULL, 'r' },
         { "read-write", 0, NULL, 'w' },
+        { "selinux-context", 0, NULL, 'o' },
         { "version", 0, NULL, 'V' },
         { NULL, 0, NULL, 0}
     };
@@ -688,7 +702,7 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdelLsArwp:t:c:u:V", long_opts, NULL ) ) {
+        switch( option = getopt_long( argc, argv, "+hdelLsArwop:t:c:u:V", long_opts, NULL ) ) {
             case -1:  break;          /* end of arguments */
             case ':':
             case '?': return E_ARGS;  /* unknown argument */
@@ -724,6 +738,8 @@ main( int argc, char** argv )
             case 'r': force_write = 0; break;
 
             case 'w': force_write = 1; break;
+
+            case 'o': use_selinux_context = 1; break;
 
             case 'V': puts(VERSION); return 0;
 
@@ -879,10 +895,12 @@ main( int argc, char** argv )
             /* off we go */
             if( use_fstype )
                 result = do_mount( decrypted_device, mntpt, use_fstype, async, noatime,
-				   exec, force_write, iocharset, utf8, utc, umask, fmask, dmask, 0 );
+                                   exec, force_write, iocharset, utf8, utc, umask, fmask, dmask, 0,
+                                   use_selinux_context );
             else
                 result = do_mount_auto( decrypted_device, mntpt, async, noatime, exec,
-                        force_write, iocharset, utf8, utc, umask, fmask, dmask );
+                                        force_write, iocharset, utf8, utc, umask, fmask, dmask,
+                                        use_selinux_context );
 
             /* unlock the mount point again */
             debug( "unlocking mount point directory\n" );
