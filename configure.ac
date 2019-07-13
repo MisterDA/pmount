@@ -106,11 +106,16 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
 AM_GLIB_GNU_GETTEXT
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 	Makefile
-	po/Makefile.in
-	man/Makefile
 	etc/Makefile
+	man/Makefile
+	po/Makefile.in
 	src/Makefile
 	tests/Makefile
 ])
+
+AC_DEFUN([AC_CONFIG_TEST_SH], [AC_CONFIG_FILES([$1], [chmod -- +x $1])])
+AC_CONFIG_TEST_SH([tests/test_policy.sh])
+
+AC_OUTPUT

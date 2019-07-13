@@ -1,0 +1,4 @@
+#!@SHELL@
+
+cp -av -- "@srcdir@"/check_fstab "@builddir@"
+"@builddir@"/test_policy
