@@ -16,6 +16,7 @@
 #include "policy.h"
 #include "utils.h"
 #include <stdio.h>
+#include <string.h>
 
 int testsFailed = 0;
 int totalTests = 0;

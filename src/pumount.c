@@ -38,7 +38,7 @@ static char mntpt[MEDIA_STRING_SIZE];
  * Print some help.
  * @param exename Name of the executable (argv[0]).
  */
-void
+static void
 usage( const char* exename )
 {
     printf( _("Usage:\n\n%s [options] <device>\n"
@@ -61,7 +61,7 @@ usage( const char* exename )
  *        missing for some reason
  * @return 0 on success, -1 on failure
  */
-int
+static int
 check_umount_policy( const char* device, int ok_if_inexistant ) 
 {
     int devvalid;
@@ -74,7 +74,7 @@ check_umount_policy( const char* device, int ok_if_inexistant )
         return -1;
 
     /* paranoid check */
-    if( !mntpt || !*mntpt ) {
+    if( !*mntpt ) {
         fputs( _("Internal error: could not determine mount point\n"), stderr );
         exit( E_INTERNAL );
     }
@@ -102,7 +102,7 @@ check_umount_policy( const char* device, int ok_if_inexistant )
  * it returns, UMOUNTPROG could not be executed.
  * @param lazy 0 for normal umount, 1 for lazy umount
  */
-void
+static void
 do_umount_fstab( const char* device, int lazy, const char * fstab_mntpt )
 {
     /* drop all privileges */
@@ -132,7 +132,7 @@ do_umount_fstab( const char* device, int lazy, const char * fstab_mntpt )
  * @param do_lazy 0 for normal umount, 1 for lazy umount
  * @return 0 on success, -1 if UMOUNTPROG could not be executed.
  */
-int
+static int
 do_umount( const char* device, int do_lazy )
 {
     int status;
@@ -164,7 +164,6 @@ main( int argc, char** argv )
     char fstab_mntpt[MEDIA_STRING_SIZE]; 
     int is_real_path = 0;
     int do_lazy = 0;
-    int luks_force = 0;
 
     int  option;
     static struct option long_opts[] = {
@@ -211,7 +210,7 @@ main( int argc, char** argv )
 	    case 'R':
 	      do_lazy = 1; break;
 
-            case 'L':        luks_force = 1; break;
+            case 'L': /* was not used, keep the option as NOP */; break;
 
             case 'V': puts(VERSION); return 0;
 

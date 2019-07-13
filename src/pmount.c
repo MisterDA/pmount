@@ -56,7 +56,7 @@ const int E_INTERNAL = 100;
  * Print some help.
  * @param exename Name of the executable (argv[0]).
  */
-void
+static void
 usage( const char* exename )
 {
     printf( _("Usage:\n\n%s [options] <device> [<label>]\n\n"
@@ -106,7 +106,7 @@ usage( const char* exename )
  * mount point. Creates the mount point if it does not exist yet. 
  * @return 0 on success, -1 on failure
  */
-int
+static int
 check_mount_policy( const char* device, const char* mntpt ) 
 {
     int result = device_valid( device ) &&
@@ -135,7 +135,7 @@ check_mount_policy( const char* device, const char* mntpt )
  * @param mntpt_size size of mntpt in characters
  * @return 0 on success, -1 on failure
  */
-int
+static int
 make_mountpoint_name( const char* device, const char* label, char* mntpt,
         size_t mntpt_size )
 {
@@ -187,7 +187,7 @@ make_mountpoint_name( const char* device, const char* label, char* mntpt,
  * Drop all privileges and exec 'mount device'. Does not return on success, if
  * it returns, MOUNTPROG could not be executed.
  */
-void
+static void
 do_mount_fstab( const char* device )
 {
     debug( "device %s handled by fstab, calling mount\n", device );
@@ -225,7 +225,7 @@ do_mount_fstab( const char* device )
  * @param suppress_errors: if true, stderr is redirected to /dev/null
  * @return exit status of mount, or -1 on failure.
  */
-int
+static int
 do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 	  int noatime, int exec, int force_write, const char* iocharset, 
 	  int utf8, 
@@ -399,7 +399,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
  * @param dmask User specified dmask (NULL for umask)
  * @return last return value of do_mount (i. e. 0 on success, != 0 on error)
  */
-int
+static int
 do_mount_auto( const char* device, const char* mntpt, int async, 
 	       int noatime, int exec, int force_write, const char* iocharset, 
 	       int utf8, 
@@ -464,7 +464,7 @@ do_mount_auto( const char* device, const char* mntpt, int async,
  * param pid pid of program that holds the lock
  * @return 0 on success, -1 on error (message is printed in this case).
  */
-int
+static int
 do_lock( const char* device, pid_t pid )
 {
     char lockdirpath[PATH_MAX];
@@ -510,7 +510,7 @@ do_lock( const char* device, pid_t pid )
  * param pid pid of program that holds the lock
  * @return 0 on success, -1 on error (message is printed in this case).
  */
-int
+static int
 do_unlock( const char* device, pid_t pid )
 {
     char lockdirpath[PATH_MAX];
@@ -561,7 +561,7 @@ do_unlock( const char* device, pid_t pid )
 /**
  * Remove stale pid locks from device's lock directory.
  */
-void
+static void
 clean_lock_dir( const char* device )
 {
     char lockdirpath[PATH_MAX];

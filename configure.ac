@@ -93,6 +93,14 @@ if test x"$CS_RUID" = xyes; then
    AC_DEFINE(CRYPTSETUP_RUID, 1, [Define this parameter to run cryptsetup with RUID = EUID = root])
 fi
 
+AC_ARG_ENABLE(
+	devel,
+	[  --enable-devel   Enable development compilation flags],
+	[AM_CONDITIONAL(DEVEL_MODE, test 0 -eq 0)],
+	[AM_CONDITIONAL(DEVEL_MODE, test 0 -ne 0)],
+)
+
+
 GETTEXT_PACKAGE="pmount"
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])

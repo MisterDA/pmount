@@ -1,0 +1,6 @@
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# <file system> <dir> <type> <options> <dump> <pass>
+check_fstab/a   /foo  btrfs  ""        0      0
+check_fstab/e   /foo  btrfs  ""        0      0

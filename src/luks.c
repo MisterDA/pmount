@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include <limits.h>
 #include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <libintl.h>
 
 
@@ -121,7 +123,7 @@ luks_get_mapped_device( const char* device, char* mapped_device,
 
 #define LUKS_LOCKDIR LOCKDIR "_luks"
 
-void luks_lockfile_name(const char *device, char * target, size_t t_s)
+static void luks_lockfile_name(const char *device, char * target, size_t t_s)
 {
   char* dmlabel = strreplace( device, '/', '_' );
   snprintf(target, t_s, "%s/%s", LUKS_LOCKDIR, dmlabel);
