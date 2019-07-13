@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I m4
+
 SUBDIRS = etc man po src tests
 
 EXTRA_DIST = \
@@ -10,4 +12,3 @@ CLEANFILES = \
        intltool-extract    \
        intltool-update     \
        intltool-merge
-

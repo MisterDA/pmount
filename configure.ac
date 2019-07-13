@@ -1,21 +1,29 @@
-AC_PREREQ(2.52)
+AC_PREREQ(2.69)
 
-AC_INIT(src/pmount.c)
-AM_CONFIG_HEADER(config.h)
-AC_CONFIG_SRCDIR(src)
-AM_INIT_AUTOMAKE(pmount, 0.9.23)
+AC_INIT([pmount], [0.9.23], [pmount@wolfsden.cz])
 
-AC_PROG_INTLTOOL([0.21])
+AC_CONFIG_SRCDIR([src/pmount.c])
 
-AM_MAINTAINER_MODE
-AC_ISC_POSIX
-AC_HEADER_STDC
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIRS([m4])
+
+AM_INIT_AUTOMAKE([-Wall -Werror dist-xz color-tests subdir-objects])
+
+AC_PROG_CC
+AC_PROG_CC_STDC
+if test "$ac_cv_prog_cc_stdc" == "no"; then
+	AC_MSG_ERROR([C compiler does not support std mode.])
+fi
+AC_PROG_CPP
+AC_PROG_CPP_WERROR
+
+AM_PROG_AR
+AC_PROG_INTLTOOL([0.51])
 AM_PROG_LIBTOOL
 AC_PROG_INSTALL
 
-
 AC_DEFINE([HAVE_BLKID], [], [Description])
-
 
 AC_CHECK_HEADER(blkid/blkid.h,
 	[AC_CHECK_LIB(blkid, blkid_get_cache,
@@ -91,11 +99,10 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
 AM_GLIB_GNU_GETTEXT
 
 AC_OUTPUT([
-Makefile
-po/Makefile.in
-man/Makefile
-etc/Makefile
-src/Makefile
-tests/Makefile
+	Makefile
+	po/Makefile.in
+	man/Makefile
+	etc/Makefile
+	src/Makefile
+	tests/Makefile
 ])
-

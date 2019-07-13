@@ -1,4 +1,4 @@
-INCLUDES = $(HAL_CFLAGS)
+AM_CFLAGS = $(HAL_CFLAGS)
 
 noinst_LIBRARIES = libpmount-util.a
 libpmount_util_a_SOURCES = \
