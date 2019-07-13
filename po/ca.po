@@ -1,0 +1,452 @@
+# Catalan translation for mount removable devices as normal user
+# Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
+# This file is distributed under the same license as the mount removable devices as normal user package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+msgid ""
+msgstr ""
+"Project-Id-Version: mount removable devices as normal user\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"PO-Revision-Date: 2007-01-25 23:42+0000\n"
+"Last-Translator: Orestes Mas <orestes@caliu.cat>\n"
+"Language-Team: Catalan <ca@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-05-04 20:48+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"X-Rosetta-Version: 0.1\n"
+
+#: ../src/pmount.c:51
+#, c-format
+msgid ""
+"Usage:\n"
+"\n"
+"%s [options] <device> [<label>]\n"
+"\n"
+"  Mount <device> to a directory below %s if policy requirements\n"
+"  are met (see pmount(1) for details). If <label> is given, the mount point\n"
+"  will be %s/<label>, otherwise it will be %s<device>.\n"
+"  If the mount point does not exist, it will be created.\n"
+"\n"
+msgstr ""
+"Ús:\n"
+"\n"
+"%s [opcions] <dispositiu> [<etiqueta>]\n"
+"\n"
+"  Munta <dispositiu> al directori sota %s si es compleixen\n"
+"  els requeriments (vegeu pmount(1) per més detalls). Si es facilita "
+"<etiqueta>, el punt de muntatge\n"
+"  serà %s/<etiqueta>, en cas contrari, serà %s<dispositiu>.\n"
+"  Si el punt de muntatge no existeix, es crearà.\n"
+"\n"
+
+#: ../src/pmount.c:58
+#, c-format
+msgid ""
+"%s --lock <device> <pid>\n"
+"  Prevent further pmounts of <device> until it is unlocked again. <pid>\n"
+"  specifies the process id the lock holds for. This allows to lock a device\n"
+"  by several independent processes and avoids indefinite locks of crashed\n"
+"  processes (nonexistant pids are cleaned before attempting a mount).\n"
+"\n"
+msgstr ""
+"%s --lock <dispositiu> <pid>\n"
+"  Evita més pmounts del <dispositiu> fins que no es desbloqui altra vegada.\n"
+"  <pid> especifica l'identificador del procés al qual actua el blocatge. "
+"Això permet\n"
+"  bloquejar un dispositiu  per diversos processos independents i evita "
+"bloquejos indefinits \n"
+"  de processos fallits (els pids no existents es netegen abans d'intentar "
+"muntar-los).\n"
+"\n"
+
+#: ../src/pmount.c:65
+#, c-format
+msgid ""
+"%s --unlock <device> <pid>\n"
+"  Remove the lock on <device> for process <pid> again.\n"
+"\n"
+msgstr ""
+"%s --unlock <device> <pid>\n"
+"  Torna a llevar el blocatge del procés <pid> sobre el dispositiu <device>\n"
+"\n"
+
+#: ../src/pmount.c:68
+msgid ""
+"Options:\n"
+"  -r          : force <device> to be mounted read-only\n"
+"  -w          : force <device> to be mounted read-write\n"
+"  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
+"  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+"  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
+"  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
+"  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
+"                in an UTF-8 locale, otherwise mount default)\n"
+"  -u <umask>  : use specified umask instead of the default (only for\n"
+"                file sytems which actually support umask setting)\n"
+" --passphrase <file>\n"
+"                read passphrase from file instead of the terminal\n"
+"                (only for LUKS encrypted devices)\n"
+"  -d, --debug : enable debug output (very verbose)\n"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully"
+msgstr ""
+"Opcions:\n"
+"  -r          : força el muntatge de <dispositiu> en mode només-lectura\n"
+"  -w          : força el muntatge de <dispositiu> en mode lectura-"
+"escriptura\n"
+"  -s, --sync  : munta <dispositiu> amb l'opció 'sync' (per omissió: "
+"'async')\n"
+"  --noatime   : munta <dispositiu> amb l'opció 'noatime' (per omissió: "
+"'atime')\n"
+"  -e, --exec  : munta <dispositiu> amb l'opció 'exec' (per omissió: "
+"'noexec')\n"
+"  -t <fs>     : munta com a sistema de fitxers <fs> (per omissió: "
+"autodetecta)\n"
+"  -c <charset>: empra la codificació de caràcters indicada (per omissió: "
+"'utf8' si s'invoca\n"
+"                des d'un locale UTF-8 locale, altrament muntatge per "
+"omissió)\n"
+"  -u <umask>  : empra la \"umask\" especificada en lloc del valor per "
+"omissió (només per\n"
+"                sistemes de fitxers que suportin realment les umask)\n"
+" --passphrase <file>\n"
+"                llegeix el mot de pas d'un fitxer enlloc del terminal\n"
+"                (només per a dispositius xifrats amb LUKS)\n"
+"  -d, --debug : habilita la sortida de depuració (molt loquaç)\n"
+"  -h, --help  : imprimeix un missatge d'ajuda i retorna sense error\n"
+"  --version   : imprimeix el número de versió i retorna sense error"
+
+#: ../src/pmount.c:134
+#, c-format
+msgid "Error: label must not be empty\n"
+msgstr "Error: l'etiqueta no pot estar buida\n"
+
+#: ../src/pmount.c:138
+#, c-format
+msgid "Error: label too long\n"
+msgstr "Error: etiqueta massa llarga\n"
+
+#: ../src/pmount.c:143
+#, c-format
+msgid "Error: '/' must not occur in label name\n"
+msgstr "Error: '/' no ha d'estar al nom de l'etiqueta\n"
+
+#: ../src/pmount.c:150
+#, c-format
+msgid "Error: device name too long\n"
+msgstr "Error: nom de dispositiu massa llarg\n"
+
+#: ../src/pmount.c:181 ../src/pumount.c:100
+msgid "Error: could not drop all uid privileges"
+msgstr "Error: no es poden eliminar tots els privilegis uid"
+
+#: ../src/pmount.c:186
+msgid "Error: could not execute mount"
+msgstr "Error: no es pot executar mount"
+
+#: ../src/pmount.c:225
+#, c-format
+msgid "Internal error: mount_attempt: given file system name is NULL\n"
+msgstr ""
+"error intern: mount_attempt: el nom del sistema de fitxers indicat és NULL\n"
+
+#: ../src/pmount.c:231
+#, c-format
+msgid "Error: invalid file system name '%s'\n"
+msgstr "Error: el nom %s de sistema de fitxers és invàlid\n"
+
+#: ../src/pmount.c:237
+#, c-format
+msgid "Error: invalid umask %s\n"
+msgstr "Error: umask invàlida %s\n"
+
+#: ../src/pmount.c:285
+#, c-format
+msgid "Error: invalid charset name '%s'\n"
+msgstr "Error: el nom %s del joc de caràcters és invàlid\n"
+
+#: ../src/pmount.c:366
+#, c-format
+msgid "Error: cannot lock for pid %u, this process does not exist\n"
+msgstr "Error: no s'ha pogut blocar el pid  %u. Aquest procés no existeix\n"
+
+#: ../src/pmount.c:380
+#, c-format
+msgid "Error: could not create pid lock file %s: %s\n"
+msgstr "Error: no s'ha pogut crear el fitxer de blocatge de pid %s: %s\n"
+
+#: ../src/pmount.c:420
+#, c-format
+msgid "Error: could not remove pid lock file %s: %s\n"
+msgstr "Error: no s'ha pogut eliminar el fitxer de blocatge de pid %s: %s\n"
+
+#: ../src/pmount.c:436
+msgid "Error: do_unlock: could not remove lock directory"
+msgstr "Error: do_unlock: no s'ha pogut eliminar el blocatge del directori"
+
+#: ../src/pmount.c:537 ../src/pumount.c:165
+msgid "Error: this program needs to be installed suid root\n"
+msgstr ""
+"Error: aquest programa necessita ser instal·lar amb suid de super-usuari\n"
+
+#: ../src/pmount.c:580 ../src/pumount.c:187
+#, c-format
+msgid "Internal error: getopt_long() returned unknown value\n"
+msgstr "error intern: getopt_long() ha retornat un valor desconegut\n"
+
+#: ../src/pmount.c:618
+#, c-format
+msgid ""
+"Warning: device %s is already handled by /etc/fstab, supplied label is "
+"ignored\n"
+msgstr ""
+"Avís: el dispositiu %s ja és gestionat per /etc/fstab, s'ignorarà l'etiqueta "
+"donada\n"
+
+#: ../src/pmount.c:632 ../src/pumount.c:232
+msgid "Error: could not determine real path of the device"
+msgstr "Error: no s'ha pogut determinar el camí real del dispositiu"
+
+#: ../src/pmount.c:641 ../src/pumount.c:238
+#, c-format
+msgid "Error: invalid device %s (must be in /dev/)\n"
+msgstr "Error: dispositiu %s invàlid (ha d'estar a /dev/)\n"
+
+#: ../src/pmount.c:679
+#, c-format
+msgid "Error: could not decrypt device (wrong passphrase?)\n"
+msgstr "Error: no es pot desxifrar el dispositiu (mot de pas erroni?)\n"
+
+#: ../src/pmount.c:682
+#, c-format
+msgid "Error: mapped device already exists\n"
+msgstr "Error: el dispositiu mapejat ja existeix\n"
+
+#: ../src/pmount.c:696
+#, c-format
+msgid ""
+"Error: could not lock the mount directory. Another pmount is probably "
+"running for this mount point.\n"
+msgstr ""
+"Error: no es pot blocar el directori de muntatge. Probablement hi ha un "
+"altre pmount en aquest punt de muntatge.\n"
+
+#: ../src/pmount.c:720
+msgid "Error: could not delete mount point"
+msgstr "Error: no s'ha pogut eliminar el punt de muntatge"
+
+#: ../src/pmount.c:741
+#, c-format
+msgid "Internal error: mode %i not handled.\n"
+msgstr "error intern: el mode %i no s'ha gestionat.\n"
+
+#: ../src/pmount-hal.c:31
+msgid ""
+"pmount-hal - execute pmount with additional information from hal\n"
+"\n"
+"Usage: pmount-hal <device> [pmount options]\n"
+"\n"
+"This command mounts the device described by the given device or UDI using\n"
+"pmount. The file system type, the volume storage policy and the desired "
+"label\n"
+"will be read out from hal and passed to pmount."
+msgstr ""
+"pmount-hal - executa pmount amb informació addicional de la capa "
+"d'abstracció del maquinari (hal)\n"
+"\n"
+"Ús: pmount-hal <device> [opcions de pmount]\n"
+"\n"
+"Aquesta ordre munta amb pmount el dispositiu indicat. El tipus de sistema de "
+"fitxers,\n"
+"la política d'emmagatzematge del volum i l'etiqueta desitjada es llegiran "
+"des de la HAL\n"
+"i es passaran a pmount."
+
+#: ../src/pmount-hal.c:167
+msgid "Error: could not execute pmount\n"
+msgstr "Error: no s'ha pogut executar pmount\n"
+
+#: ../src/pmount-hal.c:210
+#, c-format
+msgid "Error: could not connect to dbus: %s: %s\n"
+msgstr "Error: no es pot connectar a dbus: %s: %s\n"
+
+#: ../src/pmount-hal.c:244
+#, c-format
+msgid "Error: given UDI is not a mountable volume\n"
+msgstr "Error: l'UDI donat no és un volum muntable\n"
+
+#: ../src/policy.c:92
+msgid "Error: could not get status of device"
+msgstr "Error: no s'ha pogut aconseguir l'estat del dispositiu"
+
+#: ../src/policy.c:103
+msgid "Error: could not get sysfs directory\n"
+msgstr "Error: no s'ha pogut aconseguir el directori sysfs\n"
+
+#: ../src/policy.c:110
+msgid "Error: could not open <sysfs dir>/block/"
+msgstr "Error: no s'ha pogut obrir <sysfs dir>/block/"
+
+#: ../src/policy.c:141
+msgid "Error: could not open <sysfs dir>/block/<device>/"
+msgstr "Error: no s'ha pogut obrir <sysfs dir>/block/<dispositiu>/"
+
+#: ../src/policy.c:241
+#, c-format
+msgid "Error: device %s does not exist\n"
+msgstr "Error: el dispositiu %s no existeix\n"
+
+#: ../src/policy.c:246
+#, c-format
+msgid "Error: %s is not a block device\n"
+msgstr "Error: %s no és un dispositiu de blocs\n"
+
+#: ../src/policy.c:264 ../src/policy.c:320
+msgid "Error: could not open fstab-type file"
+msgstr "Error: no s'ha pogut obrir el fitxer de tipus fstab"
+
+#: ../src/policy.c:351
+#, c-format
+msgid "Error: device %s is already mounted to %s\n"
+msgstr "Error: el dispositiu %s ja està muntat a %s\n"
+
+#: ../src/policy.c:353
+#, c-format
+msgid "Error: device %s is not mounted\n"
+msgstr "Error: el dispositiu %s no està muntat\n"
+
+#: ../src/policy.c:355
+#, c-format
+msgid "Error: device %s was not mounted by you\n"
+msgstr "Error: el dispositiu %s no ha estat muntat per vós\n"
+
+#: ../src/policy.c:391
+#, c-format
+msgid "Error: device %s is not removable\n"
+msgstr "Error: el dispositiu %s no és removible\n"
+
+#: ../src/policy.c:454
+#, c-format
+msgid "Error: device %s is locked\n"
+msgstr "Error: el dispositiu %s està blocat\n"
+
+#: ../src/policy.c:463
+#, c-format
+msgid "Error: mount point %s is already in /etc/fstab\n"
+msgstr "Error: el punt de muntatge %s ja es a /etc/fstab\n"
+
+#: ../src/policy.c:476
+#, c-format
+msgid "Error: directory %s already contains a mounted file system\n"
+msgstr "Error: el directori %s ja conté un sistema de fitxers muntat\n"
+
+#: ../src/policy.c:478
+#, c-format
+msgid "Error: directory %s does not contain a mounted file system\n"
+msgstr "Error: el directori %s no conté un sistema de fitxers muntat\n"
+
+#: ../src/pumount.c:43
+#, c-format
+msgid ""
+"Usage:\n"
+"\n"
+"%s [options] <device>\n"
+"  Umount <device> from a directory below %s if policy requirements\n"
+"  are met (see pumount(1) for details). The mount point directory is "
+"removed\n"
+"  afterwards.\n"
+"\n"
+"Options:\n"
+"  -l, --lazy  : umount lazily, see umount(8)\n"
+"  -d, --debug : enable debug output (very verbose)\n"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully\n"
+msgstr ""
+"Ús:\n"
+"\n"
+"%s [opcions] <dispositiu>\n"
+"  Desmunta <dispositiu> del directori sota %s si es verifiquen els "
+"requeriments\n"
+"  de la política (vegeu pumount(8) per als detalls). En acabar, s'elimina el "
+"directori\n"
+"  de muntatge.\n"
+"\n"
+"Opcions:\n"
+"\n"
+"  -l, --lazy : desmuntat mandrós, vegeu umount(8)\n"
+"  -d, --debug : habilita la sortida de depuració (molt loquaç)\n"
+"  -h, --help : imprimeix missatge d'ajuda i surt sense error\n"
+"  --version : imprimeix el número de versió i surt sense error\n"
+
+#: ../src/pumount.c:74
+msgid "Internal error: could not determine mount point\n"
+msgstr "Error intern: no s'ha pogut determinar el punt de muntatge\n"
+
+#: ../src/pumount.c:80
+#, c-format
+msgid "Error: mount point %s is not below %s\n"
+msgstr "Error: el punt de muntatge %s no és a sota %s\n"
+
+#: ../src/pumount.c:110
+msgid "Error: could not execute umount"
+msgstr "Error: no s'ha pogut executar umount"
+
+#: ../src/pumount.c:131
+#, c-format
+msgid "Error: umount failed\n"
+msgstr "Error: ha fallat umount\n"
+
+#: ../src/utils.c:52
+#, c-format
+msgid "Error: out of memory\n"
+msgstr "Error: sense memòria\n"
+
+#: ../src/utils.c:108
+msgid "Error: could not create directory"
+msgstr "Error: no es pot crear el directori"
+
+#: ../src/utils.c:124
+msgid "Error: could not create stamp file in directory"
+msgstr "Error: no es pot crear un fitxer de marca al directori"
+
+#: ../src/utils.c:132
+#, c-format
+msgid "Error: %s is not a directory\n"
+msgstr "Error: %s no és un directori\n"
+
+#: ../src/utils.c:152
+msgid "Error: could not open directory"
+msgstr "Error, no es pot obrir el directori"
+
+#: ../src/utils.c:161
+#, c-format
+msgid "Error: directory %s is not empty\n"
+msgstr "Error: el directori %s no és buit\n"
+
+#: ../src/utils.c:213
+#, c-format
+msgid "Error: '%s' is not a valid number\n"
+msgstr "Error: '%s' no és un número vàlid\n"
+
+#: ../src/utils.c:255
+msgid "Internal error: could not change to effective uid root"
+msgstr "Error intern: no s'ha pogut canviar a uid de superusuari efectiva"
+
+#: ../src/utils.c:264
+msgid "Internal error: could not change effective user uid to real user id"
+msgstr ""
+"Error intern: no s'ha pogut canviar uid d'usuari efectiva a identificació "
+"d'usuari real"
+
+#: ../src/utils.c:273
+msgid "Internal error: could not change to effective gid root"
+msgstr "Error intern: no s'ha pogut canviar a gid superusuari efectiu"
+
+#: ../src/utils.c:282
+msgid "Internal error: could not change effective group id to real group id"
+msgstr ""
+"Error intern: no s'ha pogut canviar l'identificació de grup efectiva a una "
+"identificació real de grup"

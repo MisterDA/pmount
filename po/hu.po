@@ -1,0 +1,451 @@
+# Hungarian translation for pmount
+# Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
+# This file is distributed under the same license as the pmount package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: pmount\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"PO-Revision-Date: 2009-11-10 10:05+0000\n"
+"Last-Translator: Muszela Balázs <Unknown>\n"
+"Language-Team: Hungarian <hu@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-05-04 20:48+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"X-Rosetta-Version: 0.1\n"
+
+#: ../src/pmount.c:51
+#, c-format
+msgid ""
+"Usage:\n"
+"\n"
+"%s [options] <device> [<label>]\n"
+"\n"
+"  Mount <device> to a directory below %s if policy requirements\n"
+"  are met (see pmount(1) for details). If <label> is given, the mount point\n"
+"  will be %s/<label>, otherwise it will be %s<device>.\n"
+"  If the mount point does not exist, it will be created.\n"
+"\n"
+msgstr ""
+"Használat:\n"
+"\n"
+"%s [opciók] <eszköz> [<címke>]\n"
+"\n"
+"Felcsatolja az <eszköz> nevű eszközt %s egy alkönyvtárába, ha\n"
+"a szabályok teljesülnek (ld. pmount(1) a további részletekért).\n"
+"Ha a <címke> meg van adva, a csatolási pont neve %s/<címke> lesz,\n"
+"egyébként %s<eszköz>.\n"
+"Ha a csatolási pont nem létezik, létre lesz hozva.\n"
+"\n"
+
+#: ../src/pmount.c:58
+#, c-format
+msgid ""
+"%s --lock <device> <pid>\n"
+"  Prevent further pmounts of <device> until it is unlocked again. <pid>\n"
+"  specifies the process id the lock holds for. This allows to lock a device\n"
+"  by several independent processes and avoids indefinite locks of crashed\n"
+"  processes (nonexistant pids are cleaned before attempting a mount).\n"
+"\n"
+msgstr ""
+"%s --lock <eszköz> <pid>\n"
+"  Letiltja az <eszköz> további pmount-olását, amíg a zárolás feloldásra\n"
+"  nem kerül. <pid> adja meg annak a folyamatnak az azonosítóját, amely\n"
+"  a zárolást kérte. Ez lehetővé teszi, hogy több folyamat egymástól\n"
+"  függetlenül zárolja az eszközt és elkerüli a programhiba miatt\n"
+"  leállt folyamatok által tartott határozatlan zárakat (a nem létező\n"
+"  folyamatazonosítók ugyanis a felcsatolás megkísérlése előtt el\n"
+"  lesznek takarítva).\n"
+"\n"
+
+#: ../src/pmount.c:65
+#, c-format
+msgid ""
+"%s --unlock <device> <pid>\n"
+"  Remove the lock on <device> for process <pid> again.\n"
+"\n"
+msgstr ""
+"%s --unlock <eszköz> <pid>\n"
+"  Eltávolítja az <eszköz>ről a <pid> azonosítójú folyamat által\n"
+"  elhelyezett zárat.\n"
+"\n"
+
+#: ../src/pmount.c:68
+msgid ""
+"Options:\n"
+"  -r          : force <device> to be mounted read-only\n"
+"  -w          : force <device> to be mounted read-write\n"
+"  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
+"  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+"  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
+"  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
+"  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
+"                in an UTF-8 locale, otherwise mount default)\n"
+"  -u <umask>  : use specified umask instead of the default (only for\n"
+"                file sytems which actually support umask setting)\n"
+" --passphrase <file>\n"
+"                read passphrase from file instead of the terminal\n"
+"                (only for LUKS encrypted devices)\n"
+"  -d, --debug : enable debug output (very verbose)\n"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully"
+msgstr ""
+"Opciók:\n"
+"  -r : az <eszköz> csak olvasható módban kerüljön felcsatolásra\n"
+"  -w : az <eszköz> olvasható és írható módban kerüljön felcsatolásra\n"
+"  -s, --sync : <eszköz> felcsatolása a 'sync' opcióval\n"
+"               (alapértelmezés: 'async')\n"
+"  --noatime : <eszköz> felcsatolása a 'noatime' opcióval\n"
+"              (alapértelmezés: 'atime')\n"
+"  -e, --exec : <eszköz> felcsatolása az 'exec' opcióval\n"
+"               (alapértelmezés: 'noexec')\n"
+"  -t <fs> : <fs> típusú fájlrendszerként való felcsatolás\n"
+"            (alapértelmezés: automatikus)\n"
+"  -c <készlet> : a megadott I/O karakterkészlet használata\n"
+"                 (alapértelmezés: 'utf8' az UTF-8 locale alatt, egyébként\n"
+"                 a mount alapértelmezése)\n"
+"  -u <umask> : a megadott umask használata az alapértelmezett helyett\n"
+"               (csak azoknál a fájlrendszereknél, ahol ez támogatott)\n"
+" --passphrase <file> : jelszó olvasása fájlból a terminál helyett\n"
+"                       (csak LUKS kódolt eszközöknél)\n"
+"  -d, --debug : hibakeresési kimenet bekapcsolása (nagyon részletes)\n"
+"  -h, --help : súgó üzenet megjelenítése és kilépés\n"
+"  --version : verziószám megjelenítése és kilépés"
+
+#: ../src/pmount.c:134
+#, c-format
+msgid "Error: label must not be empty\n"
+msgstr "Hiba: a címke nem lehet üres\n"
+
+#: ../src/pmount.c:138
+#, c-format
+msgid "Error: label too long\n"
+msgstr "Hiba: a címke túl hosszú\n"
+
+#: ../src/pmount.c:143
+#, c-format
+msgid "Error: '/' must not occur in label name\n"
+msgstr "Hiba: '/' nem fordulhat elő a címkében\n"
+
+#: ../src/pmount.c:150
+#, c-format
+msgid "Error: device name too long\n"
+msgstr "Hiba: az eszköz neve túl hosszú\n"
+
+#: ../src/pmount.c:181 ../src/pumount.c:100
+msgid "Error: could not drop all uid privileges"
+msgstr "Hiba: nem tudok megszabadulni az összes uid jogosultságtól"
+
+#: ../src/pmount.c:186
+msgid "Error: could not execute mount"
+msgstr "Hiba: mount nem hajtható végre"
+
+#: ../src/pmount.c:225
+#, c-format
+msgid "Internal error: mount_attempt: given file system name is NULL\n"
+msgstr "Belső hiba: mount_attempt: a megadott fájlrendszer neve NULL\n"
+
+#: ../src/pmount.c:231
+#, c-format
+msgid "Error: invalid file system name '%s'\n"
+msgstr "Hiba: érvénytelen fájlrendszernév: '%s'\n"
+
+#: ../src/pmount.c:237
+#, c-format
+msgid "Error: invalid umask %s\n"
+msgstr "Hiba: érvénytelen umask: %s\n"
+
+#: ../src/pmount.c:285
+#, c-format
+msgid "Error: invalid charset name '%s'\n"
+msgstr "Hiba: érvénytelen karakterkészlet név: '%s'\n"
+
+#: ../src/pmount.c:366
+#, c-format
+msgid "Error: cannot lock for pid %u, this process does not exist\n"
+msgstr ""
+"Hiba: nem helyezhető el zár a %u azonosítójú folyamat számára, ilyen "
+"folyamat ugyanis nem létezik\n"
+
+#: ../src/pmount.c:380
+#, c-format
+msgid "Error: could not create pid lock file %s: %s\n"
+msgstr "Hiba: nem hozható létre a %s folyamat zárfájl: %s\n"
+
+#: ../src/pmount.c:420
+#, c-format
+msgid "Error: could not remove pid lock file %s: %s\n"
+msgstr "Hiba: nem távolítható el a %s folyamat zárfájl: %s\n"
+
+#: ../src/pmount.c:436
+msgid "Error: do_unlock: could not remove lock directory"
+msgstr "Hiba: do_unlock: a zárkönyvtár nem távolítható el"
+
+#: ../src/pmount.c:537 ../src/pumount.c:165
+msgid "Error: this program needs to be installed suid root\n"
+msgstr "Hiba: ezt a programot suid root-ként kell telepíteni\n"
+
+#: ../src/pmount.c:580 ../src/pumount.c:187
+#, c-format
+msgid "Internal error: getopt_long() returned unknown value\n"
+msgstr "Belső hiba: a getopt_long() ismeretlen értéket adott vissza\n"
+
+#: ../src/pmount.c:618
+#, c-format
+msgid ""
+"Warning: device %s is already handled by /etc/fstab, supplied label is "
+"ignored\n"
+msgstr ""
+"Figyelem: a megadott eszközt (%s) az /etc/fstab már kezeli, a megadott "
+"címkét figyelmen kívül hagyom\n"
+
+#: ../src/pmount.c:632 ../src/pumount.c:232
+msgid "Error: could not determine real path of the device"
+msgstr "Hiba: nem tudom megállapítani az eszköz valódi elérési útját"
+
+#: ../src/pmount.c:641 ../src/pumount.c:238
+#, c-format
+msgid "Error: invalid device %s (must be in /dev/)\n"
+msgstr ""
+"Hiba: a megadott eszköz (%s) érvénytelen (a /dev/ könyvtárban kellene "
+"lennie)\n"
+
+#: ../src/pmount.c:679
+#, c-format
+msgid "Error: could not decrypt device (wrong passphrase?)\n"
+msgstr "Hiba: nem tudom dekódolni az eszközt (hibás jelszó?)\n"
+
+#: ../src/pmount.c:682
+#, c-format
+msgid "Error: mapped device already exists\n"
+msgstr "Hiba: a leképezett eszköz már létezik\n"
+
+#: ../src/pmount.c:696
+#, c-format
+msgid ""
+"Error: could not lock the mount directory. Another pmount is probably "
+"running for this mount point.\n"
+msgstr ""
+"Hiba: a csatolási pont nem zárolható. Valószínűleg egy másik pmount folyamat "
+"már kezeli ezt a csatolási pontot.\n"
+
+#: ../src/pmount.c:720
+msgid "Error: could not delete mount point"
+msgstr "Hiba: a csatolási pont nem törölhető"
+
+#: ../src/pmount.c:741
+#, c-format
+msgid "Internal error: mode %i not handled.\n"
+msgstr "Belső hiba: %i mód nincs kezelve.\n"
+
+#: ../src/pmount-hal.c:31
+msgid ""
+"pmount-hal - execute pmount with additional information from hal\n"
+"\n"
+"Usage: pmount-hal <device> [pmount options]\n"
+"\n"
+"This command mounts the device described by the given device or UDI using\n"
+"pmount. The file system type, the volume storage policy and the desired "
+"label\n"
+"will be read out from hal and passed to pmount."
+msgstr ""
+"pmount-hal - pmount végrehajtása a hal-tól származó további információkkal\n"
+"\n"
+"Használat: pmount-hal <eszköz> [pmount opciók]\n"
+"\n"
+"Ez a parancs a pmount segítségével felcsatolja a megadott eszközt\n"
+"vagy UDI által jelölt eszközt. A fájlrendszer típusa, a kötet tárolási "
+"szabályzata és a címke a hal-ból származik és a pmount-hoz kerül "
+"továbbadásra."
+
+#: ../src/pmount-hal.c:167
+msgid "Error: could not execute pmount\n"
+msgstr "Hiba: a pmount programot nem lehet elindítani\n"
+
+#: ../src/pmount-hal.c:210
+#, c-format
+msgid "Error: could not connect to dbus: %s: %s\n"
+msgstr "Hiba: nem tudok csatlakozni a dbus-hoz: %s: %s\n"
+
+#: ../src/pmount-hal.c:244
+#, c-format
+msgid "Error: given UDI is not a mountable volume\n"
+msgstr "Hiba: a megadott UDI nem egy csatlakoztatható kötet\n"
+
+#: ../src/policy.c:92
+msgid "Error: could not get status of device"
+msgstr "Hiba: az eszköz állapota nem állapítható meg"
+
+#: ../src/policy.c:103
+msgid "Error: could not get sysfs directory\n"
+msgstr "Hiba: nem található a sysfs könyvtár\n"
+
+#: ../src/policy.c:110
+msgid "Error: could not open <sysfs dir>/block/"
+msgstr "Hiba: nem nyitható a <sysfs könyvtár>/block/ alkönyvtár"
+
+#: ../src/policy.c:141
+msgid "Error: could not open <sysfs dir>/block/<device>/"
+msgstr "Hiba: nem nyitható a <sysfs könyvtár>/block/<eszköz>/ alkönyvtár"
+
+#: ../src/policy.c:241
+#, c-format
+msgid "Error: device %s does not exist\n"
+msgstr "Hiba: az eszköz (%s) nem létezik\n"
+
+#: ../src/policy.c:246
+#, c-format
+msgid "Error: %s is not a block device\n"
+msgstr "Hiba: az eszköz (%s) nem blokkos eszköz\n"
+
+#: ../src/policy.c:264 ../src/policy.c:320
+msgid "Error: could not open fstab-type file"
+msgstr "Hiba: az fstab-típus fájl nem nyitható meg"
+
+#: ../src/policy.c:351
+#, c-format
+msgid "Error: device %s is already mounted to %s\n"
+msgstr "Hiba: az eszköz (%s) már csatlakoztatva van ide: %s\n"
+
+#: ../src/policy.c:353
+#, c-format
+msgid "Error: device %s is not mounted\n"
+msgstr "Hiba: az eszköz (%s) nincs csatlakoztatva\n"
+
+#: ../src/policy.c:355
+#, c-format
+msgid "Error: device %s was not mounted by you\n"
+msgstr "Hiba: az eszköz (%s) nem Ön által lett csatlakoztatva\n"
+
+#: ../src/policy.c:391
+#, c-format
+msgid "Error: device %s is not removable\n"
+msgstr "Hiba: az eszköz (%s) nem cserélhető eszköz\n"
+
+#: ../src/policy.c:454
+#, c-format
+msgid "Error: device %s is locked\n"
+msgstr "Hiba: az eszköz (%s) zárolva van\n"
+
+#: ../src/policy.c:463
+#, c-format
+msgid "Error: mount point %s is already in /etc/fstab\n"
+msgstr ""
+"Hiba: a(z) %s csatlakozatási pont már szerepel az /etc/fstab fájlban\n"
+
+#: ../src/policy.c:476
+#, c-format
+msgid "Error: directory %s already contains a mounted file system\n"
+msgstr ""
+"Hiba: az eszköz (%s) már tartalmaz egy csatlakoztatott fájlrendszert\n"
+
+#: ../src/policy.c:478
+#, c-format
+msgid "Error: directory %s does not contain a mounted file system\n"
+msgstr "Hiba: a könyvtár (%s) nem tartalmaz csatlakoztatott fájlrendszert\n"
+
+#: ../src/pumount.c:43
+#, c-format
+msgid ""
+"Usage:\n"
+"\n"
+"%s [options] <device>\n"
+"  Umount <device> from a directory below %s if policy requirements\n"
+"  are met (see pumount(1) for details). The mount point directory is "
+"removed\n"
+"  afterwards.\n"
+"\n"
+"Options:\n"
+"  -l, --lazy  : umount lazily, see umount(8)\n"
+"  -d, --debug : enable debug output (very verbose)\n"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully\n"
+msgstr ""
+"Használat:\n"
+"\n"
+"%s [opciók] <eszköz>\n"
+"  Eltávolítja az <eszköz>t a következő könyvtár alól: %s,\n"
+"  ha a biztonsági szabályzat előfeltételei teljesülnek (ld. pumount(1)\n"
+"  a további részletekért). A csatolási pont is eltávolításra kerül a\n"
+"  művelet befejezése után.\n"
+"\n"
+"Opciók:\n"
+"  -l, --lazy : lusta eltávolítás, ld. umount(8)\n"
+"  -d, --debug : hibakeresési kimenet bekapcsolása (nagyon részletes)\n"
+"  -h, --help : súgóüzenet megjelenítése és kilépés\n"
+"  --version : verziószám megjelenítése és kilépés\n"
+
+#: ../src/pumount.c:74
+msgid "Internal error: could not determine mount point\n"
+msgstr "Belső hiba: nem tudom meghatározni a csatolási pontot\n"
+
+#: ../src/pumount.c:80
+#, c-format
+msgid "Error: mount point %s is not below %s\n"
+msgstr ""
+"Hiba: a megadott csatolási pont (%s) nem ezen könyvtár alatt van: %s\n"
+
+#: ../src/pumount.c:110
+msgid "Error: could not execute umount"
+msgstr "Hiba: az umount parancs nem hajtható végre"
+
+#: ../src/pumount.c:131
+#, c-format
+msgid "Error: umount failed\n"
+msgstr "Hiba: az umount parancs sikertelen\n"
+
+#: ../src/utils.c:52
+#, c-format
+msgid "Error: out of memory\n"
+msgstr "Hiba: nincs elég memória\n"
+
+#: ../src/utils.c:108
+msgid "Error: could not create directory"
+msgstr "Hiba: a könyvtár nem hozható létre"
+
+#: ../src/utils.c:124
+msgid "Error: could not create stamp file in directory"
+msgstr "Hiba: az időbélyeg fájl nem hozható létre a könyvtárban"
+
+#: ../src/utils.c:132
+#, c-format
+msgid "Error: %s is not a directory\n"
+msgstr "Hiba: %s nem könyvtár\n"
+
+#: ../src/utils.c:152
+msgid "Error: could not open directory"
+msgstr "Hiba: a könyvtár nem nyitható meg"
+
+#: ../src/utils.c:161
+#, c-format
+msgid "Error: directory %s is not empty\n"
+msgstr "Hiba: a könyvtár (%s) nem üres\n"
+
+#: ../src/utils.c:213
+#, c-format
+msgid "Error: '%s' is not a valid number\n"
+msgstr "Hiba: '%s' nem érvényes szám\n"
+
+#: ../src/utils.c:255
+msgid "Internal error: could not change to effective uid root"
+msgstr "Belső hiba: nem tudom az effektív uid-et root-ra állítani"
+
+#: ../src/utils.c:264
+msgid "Internal error: could not change effective user uid to real user id"
+msgstr ""
+"Belső hiba: nem tudom az effektív uid-et a valódi felhasználói azonosítóra "
+"állítani"
+
+#: ../src/utils.c:273
+msgid "Internal error: could not change to effective gid root"
+msgstr "Belső hiba: nem tudom root-ra állítani az effektív csoportazonosítót"
+
+#: ../src/utils.c:282
+msgid "Internal error: could not change effective group id to real group id"
+msgstr ""
+"Hiba: nem tudom a valódi csoportazonosítóra állítani az effektív "
+"csoportazonosítót"

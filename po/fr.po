@@ -1,0 +1,451 @@
+# French translation for mount removable devices as normal user
+# Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
+# This file is distributed under the same license as the mount removable devices as normal user package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mount removable devices as normal user\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"PO-Revision-Date: 2008-04-28 21:55+0000\n"
+"Last-Translator: Vincent Batoufflet <Unknown>\n"
+"Language-Team: French <fr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-05-04 20:48+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"X-Rosetta-Version: 0.1\n"
+
+#: ../src/pmount.c:51
+#, c-format
+msgid ""
+"Usage:\n"
+"\n"
+"%s [options] <device> [<label>]\n"
+"\n"
+"  Mount <device> to a directory below %s if policy requirements\n"
+"  are met (see pmount(1) for details). If <label> is given, the mount point\n"
+"  will be %s/<label>, otherwise it will be %s<device>.\n"
+"  If the mount point does not exist, it will be created.\n"
+"\n"
+msgstr ""
+"Usage :\n"
+"\n"
+"%s [options] <périphérique> [<label>]\n"
+"\n"
+"  Monte le <périphérique> sur un répertoire sous %s si les contraintes\n"
+"  sont satisfaites (voir pmount(1)). Si <label> est précisé, le point\n"
+"  de montage sera %s/<label>, autrement ce sera %s<périphérique>.\n"
+"  Si le point de montage n'existe pas, il sera créé.\n"
+"\n"
+
+#: ../src/pmount.c:58
+#, c-format
+msgid ""
+"%s --lock <device> <pid>\n"
+"  Prevent further pmounts of <device> until it is unlocked again. <pid>\n"
+"  specifies the process id the lock holds for. This allows to lock a device\n"
+"  by several independent processes and avoids indefinite locks of crashed\n"
+"  processes (nonexistant pids are cleaned before attempting a mount).\n"
+"\n"
+msgstr ""
+"%s --lock <périphérique> <pid>\n"
+"  Empèche tout p-montage du <périphérique> jusqu'à ce qu'il\n"
+"  soit déverrouillé. <pid> indique le numéro de processus pour\n"
+"  lequel le verrou est pris. Ceci permet de verrouiller un\n"
+"  périphérique pour plusieurs processus indépendants et évite\n"
+"  de créer des verrouillage indéfinis pour des processus qui\n"
+"  ont échoué (les pids inexistants sont nettoyés avant de\n"
+"  tenter un montage).\n"
+"\n"
+
+#: ../src/pmount.c:65
+#, c-format
+msgid ""
+"%s --unlock <device> <pid>\n"
+"  Remove the lock on <device> for process <pid> again.\n"
+"\n"
+msgstr ""
+"%s --unlock <périphérique> <pid>\n"
+"  Retire le verrou sur le <périphérique> pour le processus <pid>.\n"
+"\n"
+
+#: ../src/pmount.c:68
+msgid ""
+"Options:\n"
+"  -r          : force <device> to be mounted read-only\n"
+"  -w          : force <device> to be mounted read-write\n"
+"  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
+"  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+"  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
+"  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
+"  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
+"                in an UTF-8 locale, otherwise mount default)\n"
+"  -u <umask>  : use specified umask instead of the default (only for\n"
+"                file sytems which actually support umask setting)\n"
+" --passphrase <file>\n"
+"                read passphrase from file instead of the terminal\n"
+"                (only for LUKS encrypted devices)\n"
+"  -d, --debug : enable debug output (very verbose)\n"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully"
+msgstr ""
+"Options :\n"
+"  -r : force le montage de <device> en mode lecture seule\n"
+"  -w : force le montage de <device> en mode lecture-écriture\n"
+"  -s, --sync : monte <device> avec l'option 'sync' (par défaut: 'async')\n"
+"  --noatime : monte <device> avec l'option 'noatime' (par défaut: 'atime')\n"
+"  -e, --exec : monte <device> avec l'option 'exec' (par défaut: 'noexec')\n"
+"  -t <fs> : monte en tant que système de fichiers <fs> (par défaut: "
+"autodetected)\n"
+"  -c <charset>: utilise le jeu de caractères fourni (par défaut: 'utf8' est "
+"utilisé\n"
+"                dans un environnement UTF-8, sinon le jeu par défaut est "
+"utilisé)\n"
+"  -u <umask> : utilise le 'umask' spécifié à la place de celui par défaut "
+"(seulement pour\n"
+"                les systèmes de fichier supportant le réglage 'umask')\n"
+" --passphrase <file>\n"
+"                lit passphrase depuis le fichier au lieu du terminal\n"
+"                (uniquement pour les périphériques cryptés de type LUKS)\n"
+"  -d, --debug : active la sortie debug (très locace)\n"
+"  -h, --help : affiche le message d'aide et quitte\n"
+"  --version : affiche le numéro de version et quitte"
+
+#: ../src/pmount.c:134
+#, c-format
+msgid "Error: label must not be empty\n"
+msgstr "Erreur : l'étiquette ne doit pas être vide\n"
+
+#: ../src/pmount.c:138
+#, c-format
+msgid "Error: label too long\n"
+msgstr "Erreur : label trop long\n"
+
+#: ../src/pmount.c:143
+#, c-format
+msgid "Error: '/' must not occur in label name\n"
+msgstr "Erreur : '/' ne doit pas apparaitre dans un nom de label\n"
+
+#: ../src/pmount.c:150
+#, c-format
+msgid "Error: device name too long\n"
+msgstr "Erreur : nom du périphérique trop long\n"
+
+#: ../src/pmount.c:181 ../src/pumount.c:100
+msgid "Error: could not drop all uid privileges"
+msgstr "Erreur : impossible de révoquer tous les privilèges"
+
+#: ../src/pmount.c:186
+msgid "Error: could not execute mount"
+msgstr "Erreur : impossible d'exécuter mount"
+
+#: ../src/pmount.c:225
+#, c-format
+msgid "Internal error: mount_attempt: given file system name is NULL\n"
+msgstr ""
+"Erreur interne : mount_attempt : le nom du système de fichiers est NULL\n"
+
+#: ../src/pmount.c:231
+#, c-format
+msgid "Error: invalid file system name '%s'\n"
+msgstr "Erreur : nom de système de fichiers invalide '%s'\n"
+
+#: ../src/pmount.c:237
+#, c-format
+msgid "Error: invalid umask %s\n"
+msgstr "Erreur : umask %s invalide\n"
+
+#: ../src/pmount.c:285
+#, c-format
+msgid "Error: invalid charset name '%s'\n"
+msgstr "Erreur : nom de jeu de caractères invalide '%s'\n"
+
+#: ../src/pmount.c:366
+#, c-format
+msgid "Error: cannot lock for pid %u, this process does not exist\n"
+msgstr ""
+"Erreur : impossible de verrouiller pour le pid %u, ce processus n'existe "
+"pas\n"
+
+#: ../src/pmount.c:380
+#, c-format
+msgid "Error: could not create pid lock file %s: %s\n"
+msgstr "Erreur : impossible de créer le fichier de verrou de pid %s : %s\n"
+
+#: ../src/pmount.c:420
+#, c-format
+msgid "Error: could not remove pid lock file %s: %s\n"
+msgstr "Erreur : impossible d'ôter le fichier de verrou pid %s : %s\n"
+
+#: ../src/pmount.c:436
+msgid "Error: do_unlock: could not remove lock directory"
+msgstr "Erreur : do_unlock: impossible d'ôter le verrou du répertoire"
+
+#: ../src/pmount.c:537 ../src/pumount.c:165
+msgid "Error: this program needs to be installed suid root\n"
+msgstr "Erreur : ce programme a besoin d'être installé en suid root\n"
+
+#: ../src/pmount.c:580 ../src/pumount.c:187
+#, c-format
+msgid "Internal error: getopt_long() returned unknown value\n"
+msgstr "Erreur interne : getopt_long() a retourné une valeur inconnue\n"
+
+#: ../src/pmount.c:618
+#, c-format
+msgid ""
+"Warning: device %s is already handled by /etc/fstab, supplied label is "
+"ignored\n"
+msgstr ""
+"Avertissement : le périphérique %s est déjà pris en charge par /etc/fstab, "
+"l'étiquette fournie est ignorée\n"
+
+#: ../src/pmount.c:632 ../src/pumount.c:232
+msgid "Error: could not determine real path of the device"
+msgstr ""
+"Erreur : impossible de déterminer le véritable chemin d'accès à ce "
+"périphérique"
+
+#: ../src/pmount.c:641 ../src/pumount.c:238
+#, c-format
+msgid "Error: invalid device %s (must be in /dev/)\n"
+msgstr "Erreur : périphérique invalide %s (doit être dans /dev/)\n"
+
+#: ../src/pmount.c:679
+#, c-format
+msgid "Error: could not decrypt device (wrong passphrase?)\n"
+msgstr ""
+"Erreur ne peut pas décrypter le périphérique (mauvaise phrase secrète ?)\n"
+
+#: ../src/pmount.c:682
+#, c-format
+msgid "Error: mapped device already exists\n"
+msgstr "Erreur : le périphérique mappé existe déjà\n"
+
+#: ../src/pmount.c:696
+#, c-format
+msgid ""
+"Error: could not lock the mount directory. Another pmount is probably "
+"running for this mount point.\n"
+msgstr ""
+"Erreur : impossible de verrouiller le répertoire de montage. Une autre "
+"instance de pmount est probablement en cours d'utilisation sur ce point de "
+"montage.\n"
+
+#: ../src/pmount.c:720
+msgid "Error: could not delete mount point"
+msgstr "Erreur : impossible de détruire le point de montage"
+
+#: ../src/pmount.c:741
+#, c-format
+msgid "Internal error: mode %i not handled.\n"
+msgstr "Erreur interne : le mode %i n'est pas pris en charge.\n"
+
+#: ../src/pmount-hal.c:31
+msgid ""
+"pmount-hal - execute pmount with additional information from hal\n"
+"\n"
+"Usage: pmount-hal <device> [pmount options]\n"
+"\n"
+"This command mounts the device described by the given device or UDI using\n"
+"pmount. The file system type, the volume storage policy and the desired "
+"label\n"
+"will be read out from hal and passed to pmount."
+msgstr ""
+"pmount-hal - exécute pmount avec les informations additionnelles de HAL\n"
+"\n"
+"Exemple : pmount-hal <peripherique> [options de pmount ]\n"
+"\n"
+"Cette commande monte le périphérique décrit par le périphérique ou l'UDI "
+"fourni en utilisant pmount. Le type de système de fichiers, la politique de "
+"sécurité et le nom du volume seront récupérés par HAL et passés à pmount."
+
+#: ../src/pmount-hal.c:167
+msgid "Error: could not execute pmount\n"
+msgstr "Erreur: impossible d'exécuter pmount\n"
+
+#: ../src/pmount-hal.c:210
+#, c-format
+msgid "Error: could not connect to dbus: %s: %s\n"
+msgstr "Erreur : impossible de se connecter à dbus:%s : %s\n"
+
+#: ../src/pmount-hal.c:244
+#, c-format
+msgid "Error: given UDI is not a mountable volume\n"
+msgstr "Erreur : L'UDI fourni n'est pas un volume montable\n"
+
+#: ../src/policy.c:92
+msgid "Error: could not get status of device"
+msgstr "Erreur : n'a pas pu obtenir l'état du périphérique"
+
+#: ../src/policy.c:103
+msgid "Error: could not get sysfs directory\n"
+msgstr "Erreur : impossible de trouver le répertoire sysfs\n"
+
+#: ../src/policy.c:110
+msgid "Error: could not open <sysfs dir>/block/"
+msgstr "Erreur : impossible d'ouvrir <sysfs dir>/block/"
+
+#: ../src/policy.c:141
+msgid "Error: could not open <sysfs dir>/block/<device>/"
+msgstr "Erreur : impossible d'ouvrir <sysfs dir>/block/<device>/"
+
+#: ../src/policy.c:241
+#, c-format
+msgid "Error: device %s does not exist\n"
+msgstr "Erreur : le périphérique %s n'existe pas\n"
+
+#: ../src/policy.c:246
+#, c-format
+msgid "Error: %s is not a block device\n"
+msgstr "Erreur : %s n'est pas un périphérique de bloc\n"
+
+#: ../src/policy.c:264 ../src/policy.c:320
+msgid "Error: could not open fstab-type file"
+msgstr "Erreur : impossible d'ouvrir le fichier fstab-type"
+
+#: ../src/policy.c:351
+#, c-format
+msgid "Error: device %s is already mounted to %s\n"
+msgstr "Erreur : le périphérique %s est déja monté sur %s\n"
+
+#: ../src/policy.c:353
+#, c-format
+msgid "Error: device %s is not mounted\n"
+msgstr "Erreur : le périphérique %s n'est pas monté\n"
+
+#: ../src/policy.c:355
+#, c-format
+msgid "Error: device %s was not mounted by you\n"
+msgstr "Erreur : le périphérique %s n'a pas été monté par vous\n"
+
+#: ../src/policy.c:391
+#, c-format
+msgid "Error: device %s is not removable\n"
+msgstr "Erreur : le périphérique %s n'est pas amovible\n"
+
+#: ../src/policy.c:454
+#, c-format
+msgid "Error: device %s is locked\n"
+msgstr "Erreur : le périphérique %s est verrouillé\n"
+
+#: ../src/policy.c:463
+#, c-format
+msgid "Error: mount point %s is already in /etc/fstab\n"
+msgstr "Erreur : le point de montage %s est déjà dans /etc/fstab\n"
+
+#: ../src/policy.c:476
+#, c-format
+msgid "Error: directory %s already contains a mounted file system\n"
+msgstr ""
+"Erreur : le répertoire %s contient déjà un système de fichiers monté\n"
+
+#: ../src/policy.c:478
+#, c-format
+msgid "Error: directory %s does not contain a mounted file system\n"
+msgstr ""
+"Erreur : le répertoire %s ne contient pas de système de fichiers monté\n"
+
+#: ../src/pumount.c:43
+#, c-format
+msgid ""
+"Usage:\n"
+"\n"
+"%s [options] <device>\n"
+"  Umount <device> from a directory below %s if policy requirements\n"
+"  are met (see pumount(1) for details). The mount point directory is "
+"removed\n"
+"  afterwards.\n"
+"\n"
+"Options:\n"
+"  -l, --lazy  : umount lazily, see umount(8)\n"
+"  -d, --debug : enable debug output (very verbose)\n"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully\n"
+msgstr ""
+"Utilisation :\n"
+"\n"
+"%s [options] <peripherique>\n"
+"  Démonte le <peripherique> du répertoire %s si la politique requise est "
+"satisfaite\n"
+"  (voir pumount(1) pour les détails). Le point de montage est ensuite\n"
+"  supprimé.\n"
+"\n"
+"Options:\n"
+"  -l, --lazy : Démontage paresseux, voir umount(8)\n"
+"  -d, --debug : Active le mode debug (très loquace)\n"
+"  -h, --help : affiche l'aide et quitte avec succès\n"
+"  --version : affiche le numéro de version et quitte avec succès\n"
+
+#: ../src/pumount.c:74
+msgid "Internal error: could not determine mount point\n"
+msgstr "Erreur interne : impossible de déterminer le point de montage\n"
+
+#: ../src/pumount.c:80
+#, c-format
+msgid "Error: mount point %s is not below %s\n"
+msgstr "Erreur : le point de montage %s n'est pas sous %s\n"
+
+#: ../src/pumount.c:110
+msgid "Error: could not execute umount"
+msgstr "Erreur : impossible d'exécuter umount"
+
+#: ../src/pumount.c:131
+#, c-format
+msgid "Error: umount failed\n"
+msgstr "Erreur : échec de umount\n"
+
+#: ../src/utils.c:52
+#, c-format
+msgid "Error: out of memory\n"
+msgstr "Erreur : plus de mémoire disponible\n"
+
+#: ../src/utils.c:108
+msgid "Error: could not create directory"
+msgstr "Erreur : impossible de créer le répertoire"
+
+#: ../src/utils.c:124
+msgid "Error: could not create stamp file in directory"
+msgstr ""
+"Erreur : impossible de créer un fichier estampillé dans le répertoire"
+
+#: ../src/utils.c:132
+#, c-format
+msgid "Error: %s is not a directory\n"
+msgstr "Erreur : %s n'est pas un répertoire\n"
+
+#: ../src/utils.c:152
+msgid "Error: could not open directory"
+msgstr "Erreur : impossible d'ouvrir le répertoire"
+
+#: ../src/utils.c:161
+#, c-format
+msgid "Error: directory %s is not empty\n"
+msgstr "Erreur : le répertoire %s n'est pas vide\n"
+
+#: ../src/utils.c:213
+#, c-format
+msgid "Error: '%s' is not a valid number\n"
+msgstr "Erreur : %s n'est pas un nombre valide\n"
+
+#: ../src/utils.c:255
+msgid "Internal error: could not change to effective uid root"
+msgstr "Erreur interne : impossible de passer à l'uid effectif de root"
+
+#: ../src/utils.c:264
+msgid "Internal error: could not change effective user uid to real user id"
+msgstr ""
+"Erreur interne : impossible de changer l'uid effectif pour le véritable id "
+"de l'utilisateur"
+
+#: ../src/utils.c:273
+msgid "Internal error: could not change to effective gid root"
+msgstr "Erreur interne : impossible de changer pour le gid effectif de root"
+
+#: ../src/utils.c:282
+msgid "Internal error: could not change effective group id to real group id"
+msgstr ""
+"Erreur interne : impossible de changer de l'id effectif de groupe pour le "
+"véritable id du groupe"

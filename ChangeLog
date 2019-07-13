@@ -1,0 +1,396 @@
+0.9.23
+-----------
+- fix a security hole (see CVE-2010-2192 for more
+  information). Upgrading is seriously recommended.
+
+0.9.22
+-----------
+- fix the problem with pumount failing to call luksClose
+
+0.9.21
+-----------
+- now whitelisting ext4
+- few configure.ac tweaks
+- now, cryptsetup is run by default with ruid = euid = 0 to work
+  around a libgcrypt "feature"
+  (see http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=551540)
+  This can be disabled with the --disable-ruid-root-cryptsetup
+  ./configure option
+- pulling new translations from Rosetta
+
+0.9.20
+-----------
+- fix few typos (in man/pmount.1 and configure.ac)
+- severely discourage lazy unmount
+- switch to errors=remount-ro to avoid massive FS corruption when a
+  problem is found
+- allow unmounting of devices which do not exist anymore
+- pulled newer translations from Rosatta
+
+0.9.19
+-----------
+- drop the dependency on libsysfs and also fix failure to recognise
+  that a device is removable with newer kernels
+- do realpath expansion on devices whitelisted in /etc/pmount.allow,
+  which enables the use of symlinks inside it.
+- fixed few problems in the manual page
+- pulled newer translations from Rosetta
+
+0.9.18
+-----------
+- clarify the position about symlinks in /etc/fstab in pmount.1 and 
+  try to provide a better error message when a mountpoint is found
+  in /etc/fstab
+- vfat now uses utf8 rather than iocharset=utf8 when applicable, to
+  avoid getting a case-sensitive filesystem. In addition, charset
+  iso8859-1 is now used for VFAT for all cases when the charset is not
+  specified, or is utf8
+- finally fix the symlinks in /etc/fstab problem.
+- pulling new translations from Rosetta.
+	
+0.9.17
+-----------
+- removed obnoxious symlink lookup for fstab entries.
+- now using libblkid where available to detect FS type (that's what
+  mount is doing). This way we'll have less error messages (nearly
+  none, AFAICS), and we won't have wrong FS detection (it happens).
+- fix a problem with lookup for fstab entries
+- do not look for a mountpoint in etc/fstab if we know a path is
+  a device (prevents hanging on stale network mounts)
+- pulled translations from Rosetta
+- using ntfs-3g if /sbin/mount.ntfs-3g is found.
+
+0.9.16
+-----------
+- added support for fmask and dmask for filesystems that support it,
+  based on a patch by Suren A. Chilingaryan <csa@dside.dyndns.org>
+- NTFS now uses nls= instead of iocharset=
+- support for ntfsmount (via the ntfs-fuse fs type) and ntfs-3g 
+  (via ntfs-3g)
+- included the patch by Dan Keder <keder@fi.muni.cz> for listing 
+  mounted removable devices, in the fashion of mount (with some edits)
+- pumount now works with uuids/labels.
+- /etc/pmount.allow now supports fully globs (7)
+
+0.9.15
+-----------
+- fix problems with the missing bus symlink in recent kernels
+- now, pmount keeps track of the encrypted volume it did luksOpen, and
+  pumount won't luksClose them unless explicitly asked to (with the
+  --luks-force option).
+
+0.9.14
+-----------
+- pmount: support the 'omfs' file system
+- applied patch from Tim Phipps <tim@phipps-hutton.freeserve.co.uk> to
+  fix pumount when /media is a symlink.
+- use errors=continue when applicable to prevent carefully crafted fs 
+  to cause kernel panics.
+- some typo fixes
+- -p is now a shortcut for --passphrase
+- document why for some filesystems, pmount makes the kernel complain.
+- use the realpath implementation from the mount utility for security
+  reasons (man 3 realpath says 'Avoid using this function.')
+- pulling recent translations from Rosetta; adding (partial)
+  translations for: 
+  * Basque
+  * Persian
+  * Norwegian
+  * Telugu
+  * Turkish
+
+0.9.13
+------
+- pmount-hal: minor change to build with dbus 0.91
+- pmount: if pmount is installed setgid, use pmount's group for gid mount
+  option, otherwise use the user's group, as usual (patch from Wilhelm Meier
+  <wilhelm.meier@fh-kl.de>)
+- pmount: consider devices on pcmcia bus as hotpluggable (and thus pmountable)
+- fix automake file to ship README.devel
+- fix default path of /etc/pmount.allow (regression from 0.9.12)
+- update translations from Rosetta
+- remove ALL_LINGUAGS from configure.ac, move them to po/LINGUAS
+
+0.9.12
+------
+- fix pmount.allow parsing regular expression (it failed in some ISO locales)
+- pmount-hal: honour iocharset mount option from hal policy
+- pmount-hal: replace slashes with underscores in label
+- pmount: mount UDF with default umask 000, so that the UDF permissions are not
+  altered
+- check for HAL libraries at configure time and conditionally build pmount-hal
+- add configure options for external programs and paths, so that policy.h does
+  not need to be altered for installation customizations any more
+- update translations from Rosetta
+
+0.9.11
+------
+- pmount: refuse to mount devices to a mount point that is already in
+  /etc/fstab
+- pmount-hal: Do not try mount non-fstab devices to fstab mountpoints
+- update translations from Rosetta
+
+0.9.10
+------
+- pmount-hal: fix parsing of hal's mount options
+- pmount-hal: directly call mount for devices in /etc/fstab
+- pmount-hal.1: document PMOUNT_DEBUG environment variable
+
+0.9.9
+-----
+- mention MMC devices in pmount man page
+- pmount-hal: fix crash for label-less volumes with hal 0.5.7
+- pmount-hal: fix handling of empty labels with hal 0.5.7
+
+0.9.8
+-----
+- Add reiser4 to the list of supported file systems.
+- pmount-hal: fall back to plain volume.fstype and volume.label hal properties
+  if policy does not exist; this makes pmount work with hal 0.5.7 and above
+- pmount-hal: check for PMOUNT_DEBUG environment variable to enable debugging
+- pmount: allow mounting of mmc cards
+- updated translations from Rosetta
+
+0.9.7
+-----
+- pmount: mount vfat with shortname=mixed option for better WinXP compatibility
+- fix configure check to work with libsysfs versions 1.3 and 2.0
+- pmount, pumount: do not link against dbus and hal libraries
+- pmount, pumount: support --version argument
+- pmount: automatically prepend /dev to device argument if it is missing
+
+0.9.6
+-----
+- pmount-hal: support device argument
+- pmount manpage: fix default mount options inconsistency
+- pmount-hal: full support for HAL expored mount policy (including
+  global and per-drive policy, and the "exec" option)
+- autotoolized build system, thanks to Aaron Bockover
+- pmount: fixed umask parsing, umask 000 works now
+- pmount-hal: full support for storage devices to mount floppies and similar
+  devices
+
+0.9.5
+-----
+- pmount: Fix forgotten line break in debug output
+- pmount: improve debugging of removability detection
+- add README.devel with some VCS explanations
+- pmount: atomically lock the mount point to avoid races with parallel
+  pmount instances, and thus double-mounts to the same directory
+- pmount-hal: gracefully handle pmount failures due to locked mount
+  points
+- pmount-hal: convert to use libhal-storage for better abstraction
+- pmount-hal: if volume file system does not exist, fall back to
+  storage file system
+- pmount: Make read-only encrypted devices work; thanks to Sören
+  Köpping for the patch
+- updated translations with latest Rosetta data
+
+0.9.4
+-----
+- policy.c: print out meaningful error message if compiling the
+  regular expression fails
+- policy.c: fix regular expression to work with all locales
+
+0.9.3
+-----
+- pmount: close an already opened LUKS device if mount failed
+- pmount: print a proper error message if mapped device already exists
+- pmount: do not explicitly mount with "rw" or "ro" options since the
+  default usually does the right thing
+- pmount: add -r and -w switches
+
+0.9.2
+-----
+- Switched version control to bazaar-ng (http://www.bazaar-ng.org);
+  publicly accessible branch is at
+  http://people.ubuntu.com/~pitti/bzr/pmount/
+- pmount-hal: ignore invalid file systems, autodetect in this case
+- Mark JFS and iso9660 as iocharset-capable
+- pmount-hal: read volume.policy.mount_option.umask from hal.
+- Fix "make dist" to work properly with the bazaar-ng metadata
+
+0.9.1
+-----
+- Makefile: fix "make dist" tarball generation
+- pmount: use async by default to not destroy flash memory
+
+0.9
+---
+- pmount-hal: ported to new hal 0.5 and dbus 0.32 API
+- integrate cryptsetup (with LUKS extension) if device is encrypted
+  with dmcrypt and LUKS metadata
+- pmount: mount vfat with shortname=winnt option
+- pmount-hal: use volume.policy.mount_filesystem instead of
+  volume.fstype
+- always build the POT file, delete it on "make clean"
+- Makefile: added "dist" target
+
+0.8
+---
+- unbreak locking, this created ".created_by_pmount" stamps in the
+  locking directories
+- accept pumount by label name
+- accept pmount by mount path (only in /media)
+- added --umask option
+- renamed template.pot to pmount.pot to match translation domain
+- support a whitelist in /etc/pmount.allow
+
+0.7.2
+-----
+- updated translations from Rosetta: ca, es_ES
+- added new translations from Rosetta: cs, es, fr, hr, it_IT, nb
+
+0.7.1
+-----
+- pmount-hal: consider a directory empty if it only contains a
+  .created-by-pmount file; this makes it work with unmounting using
+  umount instead of pumount
+
+0.7
+---
+- support --exec/-e option
+- rewrote pmount-hal in C, now it runs 10 times faster
+
+0.6
+---
+- pmount-hal: use hal-supplied file system type (if present) to speed up
+  mounting and to avoid bogus error messages in kernel log
+- mount vfat with 'quiet' option
+- support pmount/pumount'ing mount points
+- added Catalan translation, thanks to Eduard Duran
+- added Spanish translation, thanks to Gustavo de Lama and Jorge
+  González González
+
+0.5.1
+-----
+- pmount: do not allow empty media labels; this allowed to mount a
+  device directly under /media if /media was empty
+
+0.5
+---
+- use stamp files to mark directories created by pmount and only
+  remove a mount point directory if it contains a stamp file
+- use the given device name as default mount point name instead of the
+  symlink-resolved one
+- i18n support
+- added German translation
+
+0.4.4
+-----
+- pmount-hal: resolve symlinks before checking mount point directories
+- use umask "077" instead of "007" for VFAT and NTFS volumes; this allows e. g.
+  to use ssh keys on USB sticks
+- if a mount with given iocharset fails, try again without; there were reports
+  of failed vfat mounts when giving iocharset
+
+0.4.3
+-----
+- pmount-hal: when checking for already existing mount points, also
+  accept existing, but empty directories (if nothing is mounted at
+  them)
+
+0.4.2
+-----
+- pumount: allow to unmount any device if called as root
+
+0.4.1
+-----
+- consistently use the realpath() of devices for all operations but
+  transparent mount fallback
+
+0.4
+---
+- pmount: added --noatime option
+- Makefile: support PREFIX
+- Makefile: install manapges, too
+- Makefile: add uninstall target
+- added pmount-hal (incl. manpage)
+
+0.3
+---
+- pmount: added option -a/--async for asynchronous mounting
+- pmount: added option -t for selecting a file system
+- added NTFS support
+- pmount: added option -c/--charset for selecting the iocharset;
+  default to 'utf8' when pmount is executed in an UTF-8 locale,
+  otherwise default to mount default
+- pmount: do not fail if a device is handled in /etc/fstab, but a
+  label is supplied; merely print a warning
+
+0.2.2
+-----
+- mount CD-ROM file systems without umask parameter (this does not work)
+- added and documented dynamic debug option -d, use dynamic debug output
+  everywhere
+- pumount: now use getopt_long() for option parsing, added -d and -h
+
+0.2.1
+-----
+- version 0.2 was not published, had a major policy hole: in some cases it
+  allowed to mount partitions on fixed disks
+- policy.c: rewrote find_sysfs_device() to check minor device number, too
+
+0.2 [DO NOT USE]
+----------------
+- major refactorization to clean up the code
+- consolidated error return codes
+- pmount: added --lock/--unlock commands
+- device is regarded as removable also if /sys/block/drive/removable is 1
+- mount devices with umask=007
+
+0.1
+---
+- fixed /dev/ path checking: now use the real path of the device node, not the
+  path supplied on the command line
+- pmount: don't try to mount all file systems with the uid and gid options,
+  this does not work on ext3, ext2, reiserfs, xfs, and jfs; try two separate
+  mount commands now
+- pumount: added option -l to support lazy unmounting
+- pumount: changed policy: 
+  * device must be mounted by the same uid that attempts to pumount
+  * device node does not need to exist and be removeable any more (because the
+    device node cannot be checked any more if device was already ripped out)
+
+0.0.8
+-----
+- use root privileges also for checking that the existing mount point is empty,
+  since normal user might not be allowed to read the directory
+
+0.0.7
+-----
+- replaced all str[n]cat() and str[n]cpy() with snprintf() calls; thanks to
+  Matt Zimmerman for the patch
+
+0.0.6
+-----
+- added support for CD-ROM file systems (udf and iso9660)
+- require mount points to be empty before mount
+
+0.0.5
+-----
+- now also handle devices in /etc/fstab, transparently call mount/umount in
+  this case
+
+0.0.4
+-----
+- drop effective user id to normal user until root is really needed
+- added proper online help
+- added manpages
+
+0.0.3
+-----
+- pumount: added similar suid check 
+- pumount: delete mount point after umounting
+- determine real path of devices before checking them
+- pmount: mount with proper uid and gid options
+
+0.0.2
+-----
+- pmount: added check if really suid, print an error if not
+- pmount: set the real user id to root before executing mount (mount
+  refuses to mount a device if real uid != root)
+
+0.0.1
+-----
+- initial release

@@ -1,0 +1,434 @@
+# Bokmål, Norwegian translation for pmount
+# Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
+# This file is distributed under the same license as the pmount package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: pmount\n"
+"Report-Msgid-Bugs-To: martin.pitt@canonical.com\n"
+"POT-Creation-Date: 2006-08-15 23:38+0200\n"
+"PO-Revision-Date: 2009-08-11 21:59+0000\n"
+"Last-Translator: Sigurd Gartmann <sigurdga-launchpad@sigurdga.no>\n"
+"Language-Team: Bokmål, Norwegian <nb@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-05-04 20:48+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"X-Rosetta-Version: 0.1\n"
+
+#: ../src/pmount.c:51
+#, c-format
+msgid ""
+"Usage:\n"
+"\n"
+"%s [options] <device> [<label>]\n"
+"\n"
+"  Mount <device> to a directory below %s if policy requirements\n"
+"  are met (see pmount(1) for details). If <label> is given, the mount point\n"
+"  will be %s/<label>, otherwise it will be %s<device>.\n"
+"  If the mount point does not exist, it will be created.\n"
+"\n"
+msgstr ""
+"Bruk:\n"
+"\n"
+"%s [valg] <enhet> [<etikett>]\n"
+"  Monterer <enhet> til en katalog under %s hvis praksiskravene\n"
+"  er møtt (se pmount(1) for detaljer). Hvis <etikett> er angitt,\n"
+"  vil monteringspunktet bli %s/<etikett>, ellers vil det bli %s/<enhet>.\n"
+"  Hvis monteringspunktet ikke eksisterer, vil det bli opprettet.\n"
+"\n"
+
+#: ../src/pmount.c:58
+#, c-format
+msgid ""
+"%s --lock <device> <pid>\n"
+"  Prevent further pmounts of <device> until it is unlocked again. <pid>\n"
+"  specifies the process id the lock holds for. This allows to lock a device\n"
+"  by several independent processes and avoids indefinite locks of crashed\n"
+"  processes (nonexistant pids are cleaned before attempting a mount).\n"
+"\n"
+msgstr ""
+"%s --lock <enhet> <pid>\n"
+"  Forebygge flere pmounteringer av <enhet> inntil den er opplåst igjen. "
+"<pid>\n"
+"  spesifiserer prosess-ID-en låsen låser for. Dette tillater låsing av en\n"
+"  enhet fra flere uavhengige prosesser. Samtidig unngås ufullstendige "
+"låsinger\n"
+"  som henger igjen fra krasjede prosesser (ikke-eksisterende PID-er blir "
+"tatt\n"
+"  bort før monteringsforsøk).\n"
+"\n"
+
+#: ../src/pmount.c:65
+#, c-format
+msgid ""
+"%s --unlock <device> <pid>\n"
+"  Remove the lock on <device> for process <pid> again.\n"
+"\n"
+msgstr ""
+"%s --unlock <enhet> <pid>\n"
+"  Fjern låsen på <enhet> for prosess <pid> igjen.\n"
+"\n"
+
+#: ../src/pmount.c:68
+msgid ""
+"Options:\n"
+"  -r          : force <device> to be mounted read-only\n"
+"  -w          : force <device> to be mounted read-write\n"
+"  -s, --sync  : mount <device> with the 'sync' option (default: 'async')\n"
+"  --noatime   : mount <device> with the 'noatime' option (default: 'atime')\n"
+"  -e, --exec  : mount <device> with the 'exec' option (default: 'noexec')\n"
+"  -t <fs>     : mount as file system type <fs> (default: autodetected)\n"
+"  -c <charset>: use given I/O character set (default: 'utf8' if called\n"
+"                in an UTF-8 locale, otherwise mount default)\n"
+"  -u <umask>  : use specified umask instead of the default (only for\n"
+"                file sytems which actually support umask setting)\n"
+" --passphrase <file>\n"
+"                read passphrase from file instead of the terminal\n"
+"                (only for LUKS encrypted devices)\n"
+"  -d, --debug : enable debug output (very verbose)\n"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully"
+msgstr ""
+"Valgfrie parametere:\n"
+"  -r : tvinger <enhet> til å bli montert skrivebeskyttet\n"
+"  -w : tvinger <enhet> til å bli montert skrivbart\n"
+"  -s, --sync : monterer <enhet> med valget 'sync' (standard: 'async')\n"
+"  --noatime : montrrer <enhet> med valget 'noatime' (standard: 'atime')\n"
+"  -e, --exec : monterer <enhet> med valget 'exec' (standard: 'noexec')\n"
+"  -t <fs> : monterer med filsystemet <fs> (standard: automatisk gjenkjent)\n"
+"  -c <tegnsett> : bruker oppgitt I/O-tegnsett (standard: 'utf8' blir brukt "
+"hvis\n"
+"                tegnsettet på systemet er UTF-8, ellers brukes standard)\n"
+"  -u <umask> : bruker oppgitt umask istedet for standarden (gjelder kun\n"
+"                for filsystemer som faktisk støtter umask-innstillinger)\n"
+"  --passphrase <filnavn>\n"
+"                Leser passord fra <filnavn> istedet for fra terminalen\n"
+"                (kun for LUKS-krypterte enheter)\n"
+"  -d, --debug : aktiverer feilsøkingsinformasjon (veldig utfyllende)\n"
+"  -h, --help : skriv ut hjelpeinformasjon og avslutt\n"
+"  --version : skriv ut versjonsnummeret og avslutt"
+
+#: ../src/pmount.c:134
+#, c-format
+msgid "Error: label must not be empty\n"
+msgstr "Feil: etiketten kan ikke være tom\n"
+
+#: ../src/pmount.c:138
+#, c-format
+msgid "Error: label too long\n"
+msgstr "Feil: etiketten er for lang\n"
+
+#: ../src/pmount.c:143
+#, c-format
+msgid "Error: '/' must not occur in label name\n"
+msgstr "Feil: Etikettnavnet kan ikke inneholde '/'\n"
+
+#: ../src/pmount.c:150
+#, c-format
+msgid "Error: device name too long\n"
+msgstr "Feil: enhetsnavnet er for langt\n"
+
+#: ../src/pmount.c:181 ../src/pumount.c:100
+msgid "Error: could not drop all uid privileges"
+msgstr "Feil: kunne ikke droppe alle UID-rettigheter"
+
+#: ../src/pmount.c:186
+msgid "Error: could not execute mount"
+msgstr "Feil: kunne ikke kjøre kommandoen mount"
+
+#: ../src/pmount.c:225
+#, c-format
+msgid "Internal error: mount_attempt: given file system name is NULL\n"
+msgstr "Intern feil: mount_attempt: oppgitt filsystemnavn er NULL\n"
+
+#: ../src/pmount.c:231
+#, c-format
+msgid "Error: invalid file system name '%s'\n"
+msgstr "Feil: ugyldig filsystemnavn: '%s'\n"
+
+#: ../src/pmount.c:237
+#, c-format
+msgid "Error: invalid umask %s\n"
+msgstr "Feil: feil i umask %s\n"
+
+#: ../src/pmount.c:285
+#, c-format
+msgid "Error: invalid charset name '%s'\n"
+msgstr "Feil: ugyldig tegnsettnavn: '%s'\n"
+
+#: ../src/pmount.c:366
+#, c-format
+msgid "Error: cannot lock for pid %u, this process does not exist\n"
+msgstr "Feil: kan ikke låse for pid %u, denne prosessen eksisterer ikke\n"
+
+#: ../src/pmount.c:380
+#, c-format
+msgid "Error: could not create pid lock file %s: %s\n"
+msgstr "Feil: kunne ikke opprette pid-låsefil %s: %s\n"
+
+#: ../src/pmount.c:420
+#, c-format
+msgid "Error: could not remove pid lock file %s: %s\n"
+msgstr "Feil: Kunne ikke fjerne pid-låsfil %s: %s\n"
+
+#: ../src/pmount.c:436
+msgid "Error: do_unlock: could not remove lock directory"
+msgstr "Feil: du_unlock: Kunne ikke fjerne låskatalog"
+
+#: ../src/pmount.c:537 ../src/pumount.c:165
+msgid "Error: this program needs to be installed suid root\n"
+msgstr "Feil: dette progammet må installeres suid root.\n"
+
+#: ../src/pmount.c:580 ../src/pumount.c:187
+#, c-format
+msgid "Internal error: getopt_long() returned unknown value\n"
+msgstr "Intern feil: getopt_long() returnerte ukjent verdi.\n"
+
+#: ../src/pmount.c:618
+#, c-format
+msgid ""
+"Warning: device %s is already handled by /etc/fstab, supplied label is "
+"ignored\n"
+msgstr ""
+"Advarsel: enheten %s er allerede håndtert av /etc/fstab, oppgitt etikett "
+"ignoreres\n"
+
+#: ../src/pmount.c:632 ../src/pumount.c:232
+msgid "Error: could not determine real path of the device"
+msgstr "Feil: kunne ikke finne den virkelige stien til enheten"
+
+#: ../src/pmount.c:641 ../src/pumount.c:238
+#, c-format
+msgid "Error: invalid device %s (must be in /dev/)\n"
+msgstr "Feil: ugyldig enhet '%s' (må eksistere i /dev/)\n"
+
+#: ../src/pmount.c:679
+#, c-format
+msgid "Error: could not decrypt device (wrong passphrase?)\n"
+msgstr "Feil: kunne ikke dekryptere enheten (feil passord?)\n"
+
+#: ../src/pmount.c:682
+#, c-format
+msgid "Error: mapped device already exists\n"
+msgstr "Feil: enheten finnes allerede\n"
+
+#: ../src/pmount.c:696
+#, c-format
+msgid ""
+"Error: could not lock the mount directory. Another pmount is probably "
+"running for this mount point.\n"
+msgstr ""
+"Feil: kunne ikke låse monteringsmappen. En annen pmount-prosess prøver "
+"antageligvis eller har allerede montert det samme området.\n"
+
+#: ../src/pmount.c:720
+msgid "Error: could not delete mount point"
+msgstr "Feil: kunne ikke slette monteringspunkt"
+
+#: ../src/pmount.c:741
+#, c-format
+msgid "Internal error: mode %i not handled.\n"
+msgstr "Intern feil: modus %i er blir ikke håndtert.\n"
+
+#: ../src/pmount-hal.c:31
+msgid ""
+"pmount-hal - execute pmount with additional information from hal\n"
+"\n"
+"Usage: pmount-hal <device> [pmount options]\n"
+"\n"
+"This command mounts the device described by the given device or UDI using\n"
+"pmount. The file system type, the volume storage policy and the desired "
+"label\n"
+"will be read out from hal and passed to pmount."
+msgstr ""
+"pmount-hal - kjør kommandoen pmount med ytterligere informasjon fra hal\n"
+"\n"
+"Bruk: pmount-hal <enhet> [pmount-parametere]\n"
+"\n"
+"Denne kommandoen monterer enheten som spesifisert av gitt enhet eller UDI\n"
+"ved hjelp av pmount. Filsystemtypen, alternativer for lagringsmediet og "
+"ønsket\n"
+"etikett vil leses fra hal og sendes videre til pmount."
+
+#: ../src/pmount-hal.c:167
+msgid "Error: could not execute pmount\n"
+msgstr "Feil: kunne ikke kjøre pmount\n"
+
+#: ../src/pmount-hal.c:210
+#, c-format
+msgid "Error: could not connect to dbus: %s: %s\n"
+msgstr "Feil: fikk ikke kontakt med dbus: %s: %s\n"
+
+#: ../src/pmount-hal.c:244
+#, c-format
+msgid "Error: given UDI is not a mountable volume\n"
+msgstr "Feil: oppgitt UDI er ikke et monterbart volum.\n"
+
+#: ../src/policy.c:92
+msgid "Error: could not get status of device"
+msgstr "Feil: kunne ikke få status fra enhet"
+
+#: ../src/policy.c:103
+msgid "Error: could not get sysfs directory\n"
+msgstr "Feil: Kunne ikke hente sysfs-katalog\n"
+
+#: ../src/policy.c:110
+msgid "Error: could not open <sysfs dir>/block/"
+msgstr "Feil: kunne ikke åpne <sysfs dir>/block/"
+
+#: ../src/policy.c:141
+msgid "Error: could not open <sysfs dir>/block/<device>/"
+msgstr "Feil: kunne ikke åpne <sysfs dir>/block/<enhet>/"
+
+#: ../src/policy.c:241
+#, c-format
+msgid "Error: device %s does not exist\n"
+msgstr "Feil: enhet %s eksisterer ikke\n"
+
+#: ../src/policy.c:246
+#, c-format
+msgid "Error: %s is not a block device\n"
+msgstr "Feil: %s er ikke en blokkenhet\n"
+
+#: ../src/policy.c:264 ../src/policy.c:320
+msgid "Error: could not open fstab-type file"
+msgstr "Feil: Kunne ikke åpne fstab-fil"
+
+#: ../src/policy.c:351
+#, c-format
+msgid "Error: device %s is already mounted to %s\n"
+msgstr "Feil: enheten %s er allerede montert til %s\n"
+
+#: ../src/policy.c:353
+#, c-format
+msgid "Error: device %s is not mounted\n"
+msgstr "Feil: enheten %s er ikke montert\n"
+
+#: ../src/policy.c:355
+#, c-format
+msgid "Error: device %s was not mounted by you\n"
+msgstr "Feil: enheten %s ble ikke montert av deg\n"
+
+#: ../src/policy.c:391
+#, c-format
+msgid "Error: device %s is not removable\n"
+msgstr "Feil: enheten %s er ikke flyttbar\n"
+
+#: ../src/policy.c:454
+#, c-format
+msgid "Error: device %s is locked\n"
+msgstr "Feil: enheten %s er låst\n"
+
+#: ../src/policy.c:463
+#, c-format
+msgid "Error: mount point %s is already in /etc/fstab\n"
+msgstr "Feil: monteringspunktet %s er allerede i /etc/fstab\n"
+
+#: ../src/policy.c:476
+#, c-format
+msgid "Error: directory %s already contains a mounted file system\n"
+msgstr "Feil: katalogen %s inneholder allerede et montert filsystem\n"
+
+#: ../src/policy.c:478
+#, c-format
+msgid "Error: directory %s does not contain a mounted file system\n"
+msgstr "Feil: katalogen %s inneholder ikke et montert filsystem\n"
+
+#: ../src/pumount.c:43
+#, c-format
+msgid ""
+"Usage:\n"
+"\n"
+"%s [options] <device>\n"
+"  Umount <device> from a directory below %s if policy requirements\n"
+"  are met (see pumount(1) for details). The mount point directory is "
+"removed\n"
+"  afterwards.\n"
+"\n"
+"Options:\n"
+"  -l, --lazy  : umount lazily, see umount(8)\n"
+"  -d, --debug : enable debug output (very verbose)\n"
+"  -h, --help  : print help message and exit successfuly\n"
+"  --version   : print version number and exit successfully\n"
+msgstr ""
+"Bruk:\n"
+"\n"
+"%s [valg] <enhet>\n"
+"  Avmonter <enhet> fra en mappe under %s hvis policykrav\n"
+"  er møtt (se pumount(1) for mer informasjon). Monteringspunktmappen\n"
+"  blir fjernet etterpå.\n"
+"\n"
+"Valg:\n"
+"  -l, --lazy : slapp avmontering, se umount(8)\n"
+"  -d, --debug : slå på utskrift av (mye) ekstra statusinformasjon\n"
+"  -h, --help : skriv ut hjelpeinformasjon og avslutt\n"
+"  --version : skriv ut versjonssnummer og avslutt\n"
+
+#: ../src/pumount.c:74
+msgid "Internal error: could not determine mount point\n"
+msgstr "Intern feil: kunne ikke bestemme monteringspunkt\n"
+
+#: ../src/pumount.c:80
+#, c-format
+msgid "Error: mount point %s is not below %s\n"
+msgstr "Feil: monteringspunktet %s er ikke under %s\n"
+
+#: ../src/pumount.c:110
+msgid "Error: could not execute umount"
+msgstr "Feil: kunne ikke kjøre kommandoen umount"
+
+#: ../src/pumount.c:131
+#, c-format
+msgid "Error: umount failed\n"
+msgstr "Feil: umount feilet\n"
+
+#: ../src/utils.c:52
+#, c-format
+msgid "Error: out of memory\n"
+msgstr "Feil: tom for minne\n"
+
+#: ../src/utils.c:108
+msgid "Error: could not create directory"
+msgstr "Feil: kunne ikke opprette katalog"
+
+#: ../src/utils.c:124
+msgid "Error: could not create stamp file in directory"
+msgstr "Feil: kunne ikke opprette stempelfil i katalogen"
+
+#: ../src/utils.c:132
+#, c-format
+msgid "Error: %s is not a directory\n"
+msgstr "Feil: %s er ikke en katalog\n"
+
+#: ../src/utils.c:152
+msgid "Error: could not open directory"
+msgstr "Feil: kunne ikke åpne katalogen"
+
+#: ../src/utils.c:161
+#, c-format
+msgid "Error: directory %s is not empty\n"
+msgstr "Feil: katalogen %s er ikke tom\n"
+
+#: ../src/utils.c:213
+#, c-format
+msgid "Error: '%s' is not a valid number\n"
+msgstr "Feil: «%s» er ikke et gyldig tall\n"
+
+#: ../src/utils.c:255
+msgid "Internal error: could not change to effective uid root"
+msgstr "Intern feil: Kunne ikke endre til aktiv uid root"
+
+#: ../src/utils.c:264
+msgid "Internal error: could not change effective user uid to real user id"
+msgstr "Intern feil: kunne ikke endre aktiv bruker-uid til ekte bruker-id"
+
+#: ../src/utils.c:273
+msgid "Internal error: could not change to effective gid root"
+msgstr "Intern error: kunne ikke endre til aktiv gid root"
+
+#: ../src/utils.c:282
+msgid "Internal error: could not change effective group id to real group id"
+msgstr "Intern feil: kunne ikke endre aktiv bruker-gid til ekte gruppe-id"

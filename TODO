@@ -1,0 +1,12 @@
+- dbus API change in 0.91
+- pmount: support mounting as a different gid
+- pmount-hal: mount by device label
+- pmount-hal: read out volume.policy.mount_option.gid from hal
+- support for mounting images
+- support for mounting smb
+- add glob support to pmount.allow
+- use nls=utf8 for NTFS
+- make location of external programs configurable
+- add --with-hal configure option
+- ext3 pmount-hal: respect volume.policy.mount_option.acl,
+  volume.policy.mount_option.user_xattr
