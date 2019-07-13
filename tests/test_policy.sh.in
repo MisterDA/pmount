@@ -1,4 +1,20 @@
 #!@SHELL@
 
-cp -av -- "@srcdir@"/check_fstab "@builddir@"
+if [ -d "@builddir@"/check_fstab ]; then
+	rm -r -- "@builddir@"/check_fstab
+fi
+mkdir -p -- "@builddir@"/check_fstab
+
+echo 'check_fstab/a /foo btrfs "" 0 0' >> "@builddir@"/check_fstab/fstab
+echo 'check_fstab/e /foo btrfs "" 0 0' >> "@builddir@"/check_fstab/fstab
+
+(
+	cd "@builddir@"/check_fstab
+	touch a
+	ln -s a b
+	touch e
+	ln -s e d
+	ln -s d c
+)
+
 "@builddir@"/test_policy
