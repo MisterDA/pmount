@@ -1,6 +1,6 @@
 AC_PREREQ(2.69)
 
-AC_INIT([pmount], [0.9.23], [pmount@wolfsden.cz])
+AC_INIT([pmount], [0.9.23.1], [pmount@wolfsden.cz])
 
 AC_CONFIG_SRCDIR([src/pmount.c])
 
