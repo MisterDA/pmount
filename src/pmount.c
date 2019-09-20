@@ -778,7 +778,7 @@ main( int argc, char** argv )
 	    }
 	    break;
 
-	case 'V': puts(VERSION); return 0;
+	case 'V': puts(PMOUNT_VERSION); return 0;
 
 	default:
 	    fprintf( stderr, _("Internal error: getopt_long() returned unknown value\n") );
