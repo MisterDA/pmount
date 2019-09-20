@@ -1,3 +1,14 @@
+0.10.0
+------------
+- drop autotools build system and switch to meson;
+- fix compilation warnings and various little bugs;
+- remove pmount-hal;
+- add support for btrfs, f2fs, and exfat filesystems;
+- remove realpath.c, use libc with POSIX fixes;
+- add bash completions;
+- add --utc option to fix timestamps for some filesystems;
+- update tests.
+
 0.9.99-alpha
 ------------
 - EXPERIMENTAL RELEASE, use at your own risks !
@@ -15,7 +26,6 @@
   As noticed above, this is an experimental release. Please use with
   care: even if the parsing of configuration files should be safe, it
   has not been extensively tried.
-
 
 0.9.23
 -----------
