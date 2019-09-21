@@ -3,8 +3,8 @@
  *
  * Author: Martin Pitt <martin.pitt@canonical.com>
  * (c) 2004 Canonical Ltd.
- * 
- * This software is distributed under the terms and conditions of the 
+ *
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -12,7 +12,7 @@
 
 #include <string.h>
 
-/** 
+/**
  * List of file systems supported by pmount; terminated with a struct with
  * fsname == NULL;
  * Do not specify the 'sync' option; this will be dynamically added according

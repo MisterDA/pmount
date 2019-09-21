@@ -3,8 +3,8 @@
  *
  * @author Vincent Fourmond <fourmond@debian.org>
  *         Copyright 2009-2011 by Vincent Fourmond
- * 
- * This software is distributed under the terms and conditions of the 
+ *
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -17,7 +17,7 @@
 int conffile_allow_fsck();
 
 /**
-   Returns true if the user is allowed to use pmount/pumount even 
+   Returns true if the user is allowed to use pmount/pumount even
    if not phyiscally logged in
 */
 int conffile_allow_not_physically_logged();
@@ -55,5 +55,5 @@ int conffile_read(const char * file);
 
 int conffile_system_read();
 
-#endif 
+#endif
 

@@ -3,8 +3,8 @@
  *
  * Author: Martin Pitt <martin.pitt@canonical.com>
  * (c) 2005 Canonical Ltd.
- * 
- * This software is distributed under the terms and conditions of the 
+ *
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -46,8 +46,8 @@ int empty_dir( const char* dirname )
         return 1;
 
     while ( ( dirent = readdir( dir ) ) ) {
-        if( strcmp( dirent->d_name, "." ) && 
-            strcmp( dirent->d_name, ".created_by_pmount" ) && 
+        if( strcmp( dirent->d_name, "." ) &&
+            strcmp( dirent->d_name, ".created_by_pmount" ) &&
             strcmp( dirent->d_name, ".." ) ) {
             closedir( dir );
             return 0;
@@ -75,7 +75,7 @@ int valid_mntpt( const char* mntpt )
         if( stat( mntpt, &st ) )
             return 0; /* invalid link */
     }
-    
+
     if( !S_ISDIR( st.st_mode ) )
         return 0;
 
@@ -113,7 +113,7 @@ void get_free_label( const char* label, char* result, size_t result_size )
 
 void exec_pmount( const char* device, const char* fstype, const char* label,
         dbus_bool_t sync, dbus_bool_t noatime, dbus_bool_t exec, const char*
-        umask, const char *fmask, const char *dmask, const char* iocharset, int addargc, const char* const* addargv ) 
+        umask, const char *fmask, const char *dmask, const char* iocharset, int addargc, const char* const* addargv )
 {
     const char** argv = (const char**) calloc( sizeof( const char* ), addargc+15 );
     int argc = 0;
@@ -182,7 +182,7 @@ void exec_pmount( const char* device, const char* fstype, const char* label,
 }
 
 int
-main( int argc, const char** argv ) 
+main( int argc, const char** argv )
 {
     const char *devarg;
     LibHalContext *hal_ctx;
@@ -363,7 +363,7 @@ main( int argc, const char** argv )
                 libhal_volume_get_udi( volume ), "volume.policy.mount_option.umask", &error ) )
         umask = libhal_device_get_property_string( hal_ctx,
                 libhal_volume_get_udi( volume ), "volume.policy.mount_option.umask", &error );
-    else if( libhal_device_property_exists( hal_ctx, 
+    else if( libhal_device_property_exists( hal_ctx,
                 libhal_drive_get_udi( drive ), "storage.policy.mount_option.umask", &error ) )
         umask = libhal_device_get_property_string( hal_ctx,
                 libhal_drive_get_udi( drive ), "storage.policy.mount_option.umask", &error );
@@ -376,7 +376,7 @@ main( int argc, const char** argv )
                 libhal_volume_get_udi( volume ), "volume.policy.mount_option.fmask", &error ) )
         fmask = libhal_device_get_property_string( hal_ctx,
                 libhal_volume_get_udi( volume ), "volume.policy.mount_option.fmask", &error );
-    else if( libhal_device_property_exists( hal_ctx, 
+    else if( libhal_device_property_exists( hal_ctx,
                 libhal_drive_get_udi( drive ), "storage.policy.mount_option.fmask", &error ) )
         fmask = libhal_device_get_property_string( hal_ctx,
                 libhal_drive_get_udi( drive ), "storage.policy.mount_option.fmask", &error );
@@ -389,7 +389,7 @@ main( int argc, const char** argv )
                 libhal_volume_get_udi( volume ), "volume.policy.mount_option.dmask", &error ) )
         dmask = libhal_device_get_property_string( hal_ctx,
                 libhal_volume_get_udi( volume ), "volume.policy.mount_option.dmask", &error );
-    else if( libhal_device_property_exists( hal_ctx, 
+    else if( libhal_device_property_exists( hal_ctx,
                 libhal_drive_get_udi( drive ), "storage.policy.mount_option.dmask", &error ) )
         dmask = libhal_device_get_property_string( hal_ctx,
                 libhal_drive_get_udi( drive ), "storage.policy.mount_option.dmask", &error );

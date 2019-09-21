@@ -6,7 +6,7 @@
 .\" it under the terms of the GNU General Public License as published by
 .\" the Free Software Foundation; either version 2 of the License, or
 .\" (at your option) any later version.
-.\"  
+.\"
 .\" This program is distributed in the hope that it will be useful,
 .\" but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +16,7 @@
 
 
 .SH NAME
-pmount.conf \- configuration file for 
+pmount.conf \- configuration file for
 .B pmount
 
 
@@ -30,32 +30,32 @@ least very much acceptable on a personal computers.
 All these operations are disallowed by default; you need to explicitly
 allow them using values found in this file. It follows standard Unix
 configuration file syntax: lines beginning with a # are
-ignored. 
+ignored.
 
 Most configuration elements take several forms, one that finishes in
 .I _allow
-that allows to all users (possible values: 
+that allows to all users (possible values:
 .I yes
-or 
+or
 .IR no ),
 .I _allow_user
-and 
+and
 .I _allow_group
 that respectively take a comma-separated list of user names and group
 names and give permissions to specified users or member of groups and
 finally a
 .I _deny_user
 that denies the feature to the specified comma-separated list of users
-even if 
+even if
 .I _allow
-is 
+is
 .IR yes .
 
 
 .SH CONFIGURATION ITEMS
 
 .TP
-.BR fsck_allow, 
+.BR fsck_allow,
 .TP
 .BR fsck_allow_user,
 .TP
@@ -72,13 +72,13 @@ It is run with the option
 .I -C1
 to provide progress reports to the user. No other options are allowed,
 as those are more-or-less filesystem-dependent and too much subject to
-change. The use of 
+change. The use of
 .B fsck
 should not expose too many security problems.
 
 
 .TP
-.BR not_physically_logged_allow, 
+.BR not_physically_logged_allow,
 .TP
 .BR not_physically_logged_allow_user,
 .TP
@@ -86,9 +86,9 @@ should not expose too many security problems.
 .TP
 .BR not_physically_logged_deny_user,
 control whether a user that is not physically logged in (ie that does
-not own a real TTY) is allowed to use 
+not own a real TTY) is allowed to use
 .B pmount
-and 
+and
 .BR pumount .
 The default used to be true, but now it defaults to false. In any
 case, it is very seldom necessary to use a removable media while not
@@ -96,7 +96,7 @@ physically around the machine, so you may just as well leave it off.
 
 
 .TP
-.BR loop_allow, 
+.BR loop_allow,
 .TP
 .BR loop_allow_user,
 .TP
@@ -104,7 +104,7 @@ physically around the machine, so you may just as well leave it off.
 .TP
 .BR loop_deny_user,
 controls whether the user is allowed to mount personal FS image files
-as loopback devices. 
+as loopback devices.
 .B Warning:
 while this can come in quite handy some times, it is
 .B strongly recommended to turn this feature off
@@ -117,7 +117,7 @@ expose vulnerabilities in the kernel. You have been warned.
 
 .TP
 .B loop_devices
-To prevent loop device exhaustion, 
+To prevent loop device exhaustion,
 .B pmount
 will only use devices given in this list. A reasonable choice may be:
 
@@ -132,7 +132,7 @@ even if you used
 
 .SH "SEE ALSO"
 
-.BR pmount (1), 
+.BR pmount (1),
 .BR pumount (1),
 .BR mount (8),
 .BR umount (8),

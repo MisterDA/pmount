@@ -14,18 +14,18 @@
 #ifndef __utils_h
 #define __utils_h
 
-/** 
- * gettext abbreviation 
+/**
+ * gettext abbreviation
  */
 #define _(String) gettext(String)
 
 /**
- * global flag whether to print debug messages (false by default) 
+ * global flag whether to print debug messages (false by default)
  */
 extern int enable_debug;
 
 /**
- * printf() wrapper, only does anything if enable_debug != 0 
+ * printf() wrapper, only does anything if enable_debug != 0
  */
 int debug( const char* format, ... ) __attribute__((format(printf, 1, 2)));
 

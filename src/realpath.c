@@ -42,12 +42,12 @@
 static void *
 xmalloc (size_t size) {
   void *t;
-  
+
   if (size == 0)
     return NULL;
-  
+
   t = malloc(size);
-  if(! t) 
+  if(! t)
     {
       fprintf(stderr, _("Error: out of memory\n"));
       exit(5);			/* Memory allocation error */

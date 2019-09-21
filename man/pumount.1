@@ -14,7 +14,7 @@ pumount \- umount arbitrary hotpluggable devices as normal user
 .SH DESCRIPTION
 
 pumount is a wrapper around the standard umount program which permits normal
-users to umount removable devices without a matching /etc/fstab entry. 
+users to umount removable devices without a matching /etc/fstab entry.
 
 pumount also supports encrypted devices which use dm-crypt and have
 LUKS metadata. If a LUKS-capable
@@ -25,9 +25,9 @@ cryptsetup to close the decrypted device afterwards.
 .B pumount
 expects the
 .I device
-as its only argument. This will umount 
+as its only argument. This will umount
 .I device
-from a directory below /media if policy is met (see below). 
+from a directory below /media if policy is met (see below).
 
 Please note that, as with
 .BR pmount ,
@@ -36,9 +36,9 @@ you can use labels and uuids as described in
 (5) for devices present in
 .IR /etc/fstab .
 In this case, the device name need to match exactly the corresponding
-entry in 
+entry in
 .IR /etc/fstab ,
-including the 
+including the
 .I LABEL=
 or
 .I UUID=
@@ -53,12 +53,12 @@ Lazy unmount. Detach the filesystem from the filesystem hierarchy now,
 and cleanup all references to the filesystem as soon as it is not busy
 anymore.  (Requires kernel 2.4.11 or later.)
 .B IMPORTANT NOTES
-This option should not be used unless you 
+This option should not be used unless you
 .B really
 know what you are doing, as chances are high that it will result in
 data loss on the removable drive. Please run
 .B pumount
-manually and wait until it finishes. In addition, 
+manually and wait until it finishes. In addition,
 .B pumount
 will not
 .I luksClose
@@ -66,13 +66,13 @@ a device which was unmounted lazily.
 
 .TP
 .B \-\-luks\-force
-Normally, 
+Normally,
 .B pumount
-will not 
+will not
 .I luksClose
 (see
 .IR cryptsetup (1))
-a device 
+a device
 .B pmount
 did not open. However, you can bypass this restriction with this
 flag. You probably will need it if you did mess around with the
@@ -100,7 +100,7 @@ The umount will succeed if all of the following conditions are met:
 is a block device in /dev/ (it does not need to exist if
 .B \-l
 is supplied)
-.IP \(bu 
+.IP \(bu
 .I device
 is not in /etc/fstab (if it is, pmount executes \fB umount \fI device\fR as the
 calling user to handle this transparently)

@@ -47,31 +47,31 @@ the mapped unencrypted device instead.
 is invoked like this:
 
 .B pmount
-.I device 
+.I device
 [
 .I label
 ]
 
-This will mount 
+This will mount
 .I device
-to a directory below /media if policy is met (see below). If 
+to a directory below /media if policy is met (see below). If
 .I label
 is given, the mount point will be /media/label, otherwise it will be
 /media/device.
 
-The device will be mounted with the following flags: 
+The device will be mounted with the following flags:
 async,atime,nodev,noexec,noauto,nosuid,user,rw
 
 Some applications like CD burners modify a raw device which must not be mounted
 while the burning process is in progress. To prevent automatic mounting, pmount
 offers a locking mechanism:
-.B pmount \-\-lock 
+.B pmount \-\-lock
 .I device pid
-will prevent the pmounting of 
+will prevent the pmounting of
 .I device
-until it is unlocked again using 
-.B pmount \-\-unlock 
-.I device pid\fR. The process id 
+until it is unlocked again using
+.B pmount \-\-unlock
+.I device pid\fR. The process id
 .I pid
 assigns the lock to a particular process; this allows to lock a device by
 several processes.
@@ -83,8 +83,8 @@ locks from crashed programs.
 Running
 .B pmount
 without arguments prints the list of mounted removable devices, a bit
-in the fashion of 
-.B mount 
+in the fashion of
+.B mount
 (1).
 
 Please note that you can use labels and uuids as described in
@@ -92,9 +92,9 @@ Please note that you can use labels and uuids as described in
 (5) for devices present in
 .IR /etc/fstab .
 In this case, the device name need to match exactly the corresponding
-entry in 
+entry in
 .IR /etc/fstab ,
-including the 
+including the
 .I LABEL=
 or
 .I UUID=
@@ -108,7 +108,7 @@ The mount will succeed if all of the following conditions are met:
 .IP \(bu 2
 .I device
 is a block device in /dev/
-.IP \(bu 
+.IP \(bu
 .I device
 is not in /etc/fstab (if it is, pmount executes \fB mount \fI
 device\fR as the calling user to handle this transparently). See below
@@ -118,7 +118,7 @@ for more details.
 is not already mounted according to /etc/mtab and /proc/mounts
 .IP \(bu
 if the mount point already exists, there is no device already mounted at it
-and the directory is empty 
+and the directory is empty
 .IP \(bu
 .I device
 is removable (USB, FireWire, or MMC device, or
@@ -142,9 +142,9 @@ specified, the kernel will choose an appropriate default.
 
 .TP
 .B \-s, \-\-sync
-Mount the device with the 
+Mount the device with the
 .B sync
-option, i. e. without write caching. Default is 
+option, i. e. without write caching. Default is
 .B async
 (write-back). With this option, write operations are much slower and
 due to the massive increase of updates of inode/FAT structures, flash
@@ -154,17 +154,17 @@ unmounting.
 
 .TP
 .B \-A, \-\-noatime
-Mount the device with the 
+Mount the device with the
 .B noatime
-option. Default is 
-.B atime\fR. 
+option. Default is
+.B atime\fR.
 
 .TP
 .B \-e, \-\-exec
-Mount the device with the 
+Mount the device with the
 .B exec
-option. Default is 
-.B noexec\fR. 
+option. Default is
+.B noexec\fR.
 
 .TP
 .B \-t \fIfilesystem\fR, \fB\-\-type \fIfilesystem
@@ -174,11 +174,11 @@ of currently supported filesystems.
 
 .TP
 .B \-c \fIcharset\fR, \fB\-\-charset \fIcharset
-Use given I/O character set (default: 
-.B utf8 
+Use given I/O character set (default:
+.B utf8
 if called in an UTF-8 locale, otherwise mount default). This
 corresponds with the mount option
-.B iocharset\fR (or 
+.B iocharset\fR (or
 .B nls
 for NTFS). This option is ignored for file systems that do not
 support setting the character set (see
@@ -186,12 +186,12 @@ support setting the character set (see
 (8) for details).
 .B Important note:
 .B pmount
-will now mount VFAT filesystems with 
+will now mount VFAT filesystems with
 .I iocharset=iso8859-1
-as 
+as
 .I iocharset=utf8
 currently makes the filesystem case-sensitive (which is pretty
-bad...). 
+bad...).
 
 .TP
 .B \-u \fIumask\fR, \fB\-\-umask \fIumask\fR
@@ -206,20 +206,20 @@ anyone to read the files (but only you can write).
 .B  \fB\-\-dmask \fIdmask\fR
 .TP
 .B  \fB\-\-fmask \fIfmask\fR
-Some filesystems (essentially VFAT and HFS) supports separate 
+Some filesystems (essentially VFAT and HFS) supports separate
 .I umasks
-(see the 
+(see the
 .I -u
 option just above)
 for directories and files, to avoid the annoying effect of having all
 files executable. For these filesystems, you can specify separately
-the masks using these options. By default, 
+the masks using these options. By default,
 .I fmask
 is
 .I umask
 without all executable permissions and
 .I dmask
-is 
+is
 .IR umask .
 Most of the times, these settings should just do what you want, so
 there should be seldom any need for using directly the
@@ -245,10 +245,10 @@ Enable verbose debug messages.
 
 .TP
 .B \-F, \-\-fsck
-Runs 
+Runs
 .B fsck\fR(1)
 on the device before mounting. This operation is not allowed unless
-your system administrator explicitly allowed it in the 
+your system administrator explicitly allowed it in the
 .I /etc/pmount.conf
 configuration file. Please see
 .B pmount.conf\fR(5)
@@ -266,14 +266,14 @@ Print the current version number and exit successfully.
 List of devices (one device per line) which are additionally permitted
 for pmounting. Globs, such as
 .I /dev/sda[123]
-are permitted. See see 
+are permitted. See see
 .B glob
 (7) for a more complete syntax.
 
 .TP
 .B /etc/pmount.conf
 Configuration file for allowing potentially less secure but useful
-operations. See 
+operations. See
 .BR pmount.conf (5).
 
 .SH SEE ALSO
@@ -285,45 +285,45 @@ operations. See
 
 .SH SUPPORTED FILESYSTEMS
 
-For now, 
+For now,
 .B pmount
 supports the following filesystems:
-.IR udf , 
+.IR udf ,
 .IR iso9660 ,
-.IR vfat , 
-.IR ntfs , 
-.IR hfsplus , 
+.IR vfat ,
+.IR ntfs ,
+.IR hfsplus ,
 .IR hfs ,
-.IR ext3 , 
-.IR ext2 , 
-.IR ext4 , 
-.IR reiserfs , 
-.IR reiser4 , 
-.IR xfs , 
-.I jfs 
+.IR ext3 ,
+.IR ext2 ,
+.IR ext4 ,
+.IR reiserfs ,
+.IR reiser4 ,
+.IR xfs ,
+.I jfs
 and
 .IR omfs .
 They are tried sequentially in that exact order when the filesystem is
-not specified.  
+not specified.
 
-Additionally, 
+Additionally,
 .B pmount
 supports the filesystem types
 .I ntfs-fuse
 and
 .I ntfs-3g
-to mount NTFS volumes respectively with 
+to mount NTFS volumes respectively with
 .B ntfsmount
 (1)
 or
 .B ntfs-3g
 (1). If the file
 .I /sbin/mount.ntfs-3g
-is found, then 
+is found, then
 .B pmount
 will mount NTFS filestystems with type
 .I ntfs-3g
-rather than plain 
+rather than plain
 .IR ntfs .
 To disable this behavior, just specify
 .I -t ntfs
@@ -332,26 +332,26 @@ on the command-line, as this happens only for autodetection.
 .SH MORE ABOUT FSTAB
 
 .B pmount
-now fully resolve all symlinks both in its input and in the 
+now fully resolve all symlinks both in its input and in the
 .I /etc/fstab
 file, which means that if
 .I /dev/cdrom
-is a symlink to 
+is a symlink to
 .I /dev/hdc
-and you try to mount 
+and you try to mount
 .I /dev/hdc
-directly, 
+directly,
 .B pmount
 will delegate this to
 .BR mount (1).
 This is a feature, and it contrasts with previous unclear behavior of
 .B pmount
-about symlinks in 
+about symlinks in
 .IR /etc/fstab .
 
 .SH KNOWN ISSUES
 
-Though we believe 
+Though we believe
 .B pmount
 is pretty much free from security problems, there are quite a few
 glitches that probably will never be fixed.
@@ -359,13 +359,13 @@ glitches that probably will never be fixed.
 .IP \(bu 2
 .B pmount
 needs to try several different times to mount to get the filesystem
-right in the end; it is vital that 
+right in the end; it is vital that
 .B pmount
 does know which precise filesystem to mount in order to give it the
 right options not to cause security holes. This is rather different
-from the behaviour of 
+from the behaviour of
 .B mount
-with the 
+with the
 .I -t auto
 options, which can have a look at the device it is trying to mount
 and find out what its filesystem is.
@@ -375,9 +375,9 @@ filesystem it is, as it might open quite a few security holes.
 Moreover, the order in which the filesystems are tried are what
 we could call the most commonly used filesystems on removable
 media. This order is unlikely to change as well. In particular, that
-means that when you mount an 
+means that when you mount an
 .I ext3
-filesystem using 
+filesystem using
 .BR pmount ,
 you might get a lot of fs\-related kernel error messages. Sorry!
 .P
@@ -385,13 +385,13 @@ you might get a lot of fs\-related kernel error messages. Sorry!
 Starting from version
 .IR 0.9.17 ,
 .B pmount
-uses the same mechanism as 
+uses the same mechanism as
 .B mount
 (1) to autodetect the filesystem type, so this kind of problems should
 not happen anymore.
 
 
 .SH AUTHOR
-.B pmount 
+.B pmount
 was originally developed by Martin Pitt <martin.pitt@canonical.com>.
 It is now maintained by Vincent Fourmond <fourmond@debian.org>.

@@ -3,8 +3,8 @@
  *
  * Author: Martin Pitt <martin.pitt@canonical.com>
  * (c) 2005 Canonical Ltd.
- * 
- * This software is distributed under the terms and conditions of the 
+ *
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -34,7 +34,7 @@
 #endif
 
 enum decrypt_status
-luks_decrypt( const char* device, char* decrypted, int decrypted_size, 
+luks_decrypt( const char* device, char* decrypted, int decrypted_size,
         const char* password_file, int readonly )
 {
     int status;
@@ -43,7 +43,7 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
     struct stat st;
 
     /* check if encrypted */
-    status = spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
+    status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
             CRYPTSETUP, CRYPTSETUP, "isLuks", device, NULL );
     if( status != 0 ) {
         /* just return device */
@@ -62,20 +62,20 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
     /* open LUKS device */
     if( password_file )
         if( readonly == 1 )
-            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
+            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
                     CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
                     password_file, "--readonly", device, label, NULL );
         else
-            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
+            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
                     CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
                     password_file, device, label, NULL );
     else
         if( readonly == 1 )
-            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
+            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
                     CRYPTSETUP, CRYPTSETUP, "--readonly", "luksOpen",
                     device, label, NULL );
         else
-            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
+            status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
                     CRYPTSETUP, CRYPTSETUP, "luksOpen", device, label, NULL );
 
     if( status == 0 )
@@ -96,7 +96,7 @@ void
 luks_release( const char* device, int force )
 {
   if(force || luks_has_lockfile(device)) {
-    spawnl( CRYPTSETUP_SPAWN_OPTIONS, 
+    spawnl( CRYPTSETUP_SPAWN_OPTIONS,
 	    CRYPTSETUP, CRYPTSETUP, "luksClose", device, NULL );
     luks_remove_lockfile(device);
   }
@@ -105,8 +105,8 @@ luks_release( const char* device, int force )
 	  device);
 }
 
-int 
-luks_get_mapped_device( const char* device, char* mapped_device, 
+int
+luks_get_mapped_device( const char* device, char* mapped_device,
         size_t mapped_device_size )
 {
     char path[PATH_MAX];
@@ -166,7 +166,7 @@ int luks_has_lockfile(const char * device)
   debug("Checking luks lockfile '%s' for device '%s'\n",
 	path, device);
   get_root();
-  if(!stat(path,&st)) 
+  if(!stat(path,&st))
     ret = 1;
   drop_root();
   return ret;
@@ -181,7 +181,7 @@ void luks_remove_lockfile(const char * device)
   debug("Removing luks lockfile '%s' for device '%s'\n",
 	path, device);
   get_root();
-  if(!stat(path,&st) && !is_dir(path)) 
+  if(!stat(path,&st) && !is_dir(path))
     unlink(path);
   drop_root();
 }

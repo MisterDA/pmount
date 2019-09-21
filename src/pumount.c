@@ -6,7 +6,7 @@
  * Author: Martin Pitt <martin.pitt@canonical.com>
  * (c) 2004 Canonical Ltd.
  *
- * This software is distributed under the terms and conditions of the 
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -64,11 +64,11 @@ usage( const char* exename )
  * @return 0 on success, -1 on failure
  */
 static int
-check_umount_policy( const char* device, int ok_if_inexistant ) 
+check_umount_policy( const char* device, int ok_if_inexistant )
 {
     int devvalid;
     char mediadir[PATH_MAX];
-    
+
     devvalid = ( ok_if_inexistant || device_valid( device ) ) &&
         device_mounted( device, 1, mntpt );
 
@@ -140,12 +140,12 @@ do_umount( const char* device, int do_lazy )
     int status;
 
     if( do_lazy )
-        status = spawnl( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG, 
+        status = spawnl( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG,
 			 "-d", "-l",
                 device, NULL );
     else
         status = spawnl( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG,
-			 "-d", 
+			 "-d",
                 device, NULL );
 
     if( status != 0 ) {
@@ -165,7 +165,7 @@ main( int argc, char** argv )
 {
     char device[PATH_MAX], mntptdev[PATH_MAX], path[PATH_MAX];
     const char* fstab_device;
-    char fstab_mntpt[MEDIA_STRING_SIZE]; 
+    char fstab_mntpt[MEDIA_STRING_SIZE];
     int is_real_path = 0;
     int do_lazy = 0;
 
@@ -214,7 +214,7 @@ main( int argc, char** argv )
 	      fputs(_("WARNING: Lazy unmount are likely to jeopardize data "
 		      "integrity on removable devices.\n"
 		      "If that's what you really want, run pumount with "
-		      "--yes-I-really-want-lazy-unmount\nAborting.\n"), 
+		      "--yes-I-really-want-lazy-unmount\nAborting.\n"),
 		    stderr);
 	      return 1;
 	    case 'R':
@@ -274,17 +274,17 @@ main( int argc, char** argv )
      * device node might not exist any more */
     if( !is_real_path && !do_lazy ) {
         /* try to prepend '/dev' */
-        if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) { 
+        if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) {
             char d[PATH_MAX];
             snprintf( d, sizeof( d ), "%s%s", DEVDIR, device );
             if ( !realpath( d, device ) ) {
                 perror( _("Error: could not determine real path of the device") );
                 return E_DEVICE;
             }
-            debug( "trying to prepend '" DEVDIR 
+            debug( "trying to prepend '" DEVDIR
 		   "' to device argument, now '%s'\n", device );
 	    /* We need to lookup again in fstab: */
-	    fstab_device = fstab_has_device( "/etc/fstab", device, 
+	    fstab_device = fstab_has_device( "/etc/fstab", device,
 					     fstab_mntpt, NULL );
 	    if( fstab_device ) {
 	      do_umount_fstab( fstab_device, do_lazy, fstab_mntpt );
@@ -317,5 +317,5 @@ main( int argc, char** argv )
     /* delete mount point */
     remove_pmount_mntpt( mntpt );
 
-    return 0; 
+    return 0;
 }

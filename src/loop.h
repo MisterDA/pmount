@@ -1,10 +1,10 @@
 /**
- * @file loop.h 
+ * @file loop.h
  *
  * @author Vincent Fourmond <fourmond@debian.org>
  *         Copyright 2011 by Vincent Fourmond
- * 
- * This software is distributed under the terms and conditions of the 
+ *
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -34,10 +34,10 @@ int loopdev_associate(const char * source, char * target, size_t size);
 
    Returns 0 on success and -1 on errors.
 */
-int loopdev_dissociate(const char * dev); 
+int loopdev_dissociate(const char * dev);
 
 /**
-   Returns true if the given device is a whitelisted loop device  
+   Returns true if the given device is a whitelisted loop device
 */
 int loopdev_is_whitelisted(const char * dev);
 

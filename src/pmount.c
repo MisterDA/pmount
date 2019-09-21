@@ -5,8 +5,8 @@
  *
  * Author: Martin Pitt <martin.pitt@canonical.com>
  * (c) 2004 Canonical Ltd.
- * 
- * This software is distributed under the terms and conditions of the 
+ *
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -53,7 +53,7 @@ const int E_UNLOCK = 6;
 const int E_PID = 7;
 const int E_LOCKED = 8;
 /**
-   Something not explicitly allowed from within the system configuration file 
+   Something not explicitly allowed from within the system configuration file
 */
 const int E_DISALLOWED = 9;
 /* Something failed with loop devices */
@@ -115,23 +115,23 @@ usage( const char* exename )
 
 /**
  * Check whether the user is allowed to mount the given device to the given
- * mount point. Creates the mount point if it does not exist yet. 
+ * mount point. Creates the mount point if it does not exist yet.
  * @return 0 on success, -1 on failure
  */
-int
-check_mount_policy( const char* device, const char* mntpt, int doing_loop ) 
+static int
+check_mount_policy( const char* device, const char* mntpt, int doing_loop )
 {
     int result = device_valid( device ) &&
         !device_mounted( device, 0, NULL ) &&
-        ( doing_loop || 
+        ( doing_loop ||
 	  device_whitelisted( device ) || device_removable( device )) &&
         !device_locked( device ) &&
         mntpt_valid( mntpt ) &&
         !mntpt_mounted( mntpt, 0 );
 
-    if( result ) 
-        debug( "policy check passed\n" ); 
-    else 
+    if( result )
+        debug( "policy check passed\n" );
+    else
         debug( "policy check failed\n" );
 
     /* the policy functions deliver booleans, but we want a standard Unix
@@ -240,9 +240,9 @@ do_mount_fstab( const char* device )
  */
 static int
 do_mount( const char* device, const char* mntpt, const char* fsname, int async,
-	  int noatime, int exec, int force_write, const char* iocharset, 
-	  int utf8, 
-	  const char* umask, const char *fmask, const char *dmask, 
+	  int noatime, int exec, int force_write, const char* iocharset,
+	  int utf8,
+	  const char* umask, const char *fmask, const char *dmask,
 	  int suppress_errors )
 {
     const struct FS* fs;
@@ -304,12 +304,12 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 	    if( statbuf.st_mode & S_ISGID )
 		gid = statbuf.st_gid;
 	}
-	snprintf( ugid_opt, sizeof( ugid_opt ), ",uid=%i,gid=%i", 
+	snprintf( ugid_opt, sizeof( ugid_opt ), ",uid=%i,gid=%i",
 		  getuid(), gid );
     }
 
     if( fs->umask )
-      snprintf( umask_opt, sizeof( umask_opt ), ",umask=%s", 
+      snprintf( umask_opt, sizeof( umask_opt ), ",umask=%s",
 		umask ? umask : fs->umask );
     /* If the fs supports fdmasks, we try to make some values
        up.
@@ -331,7 +331,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 	i_dmask = parse_unsigned( dmask, E_ARGS ); /* shouldn't fail */
       else			/* make up from the umask parameter */
 	i_dmask = i_umask;	/* same as umask */
-      snprintf( fdmask_opt, sizeof( fdmask_opt ), fs->fdmask, 
+      snprintf( fdmask_opt, sizeof( fdmask_opt ), fs->fdmask,
 		i_fmask, i_dmask );
     }
 
@@ -362,16 +362,16 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 	  if(! strcmp(iocharset, "utf8")) {
 	    debug("filesystem is vfat and charset is utf-8: using iso8859-1\n"
 		  "You can change with the -c option");
-	    snprintf( iocharset_opt, sizeof( iocharset_opt ), 
+	    snprintf( iocharset_opt, sizeof( iocharset_opt ),
 		      ",utf8,iocharset=iso8859-1" );
 	  }
 	  else {
-	    snprintf( iocharset_opt, sizeof( iocharset_opt ), 
+	    snprintf( iocharset_opt, sizeof( iocharset_opt ),
 		      ",utf8,iocharset=%s", iocharset );
 
 	  }
 	} else {
-	  snprintf( iocharset_opt, sizeof( iocharset_opt ), 
+	  snprintf( iocharset_opt, sizeof( iocharset_opt ),
 		  fs->iocharset_format, iocharset );
 	}
     }
@@ -380,11 +380,11 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 	 mount will mount it with iocharset=utf8, some times without
 	 warning. So, in the absence of a specified charset, we
 	 force iocharset=iso8859-1*/
-      snprintf( iocharset_opt, sizeof( iocharset_opt ), 
+      snprintf( iocharset_opt, sizeof( iocharset_opt ),
 		fs->iocharset_format, "iso8859-1");
     }
 
-    snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s%s", 
+    snprintf( options, sizeof( options ), "%s%s%s%s%s%s%s%s%s",
             fs->options, sync_opt, atime_opt, exec_opt, access_opt, ugid_opt,
             umask_opt, fdmask_opt, iocharset_opt );
 
@@ -413,9 +413,9 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
  * @return last return value of do_mount (i. e. 0 on success, != 0 on error)
  */
 static int
-do_mount_auto( const char* device, const char* mntpt, int async, 
-	       int noatime, int exec, int force_write, const char* iocharset, 
-	       int utf8, 
+do_mount_auto( const char* device, const char* mntpt, int async,
+	       int noatime, int exec, int force_write, const char* iocharset,
+	       int utf8,
 	       const char* umask, const char *fmask, const char *dmask )
 {
     const struct FS* fs;
@@ -437,8 +437,8 @@ do_mount_auto( const char* device, const char* mntpt, int async,
 	debug("blkdid detected ntfs and ntfs-3g was found. Using ntfs-3g\n");
 	tp = "ntfs-3g";
       }
-      result = do_mount( device, mntpt, tp, async, noatime, exec, 
-			 force_write, iocharset, utf8, umask, fmask, 
+      result = do_mount( device, mntpt, tp, async, noatime, exec,
+			 force_write, iocharset, utf8, umask, fmask,
 			 dmask, nostderr );
       if(result == 0)
 	return result;
@@ -451,9 +451,9 @@ do_mount_auto( const char* device, const char* mntpt, int async,
 
     for( fs = get_supported_fs(); fs->fsname; ++fs ) {
       /* Skip fs marked as such unless it is ntfs-3g and
-	 we can stat MOUNT_NTFS_G3 
+	 we can stat MOUNT_NTFS_G3
       */
-      if(fs->skip_autodetect && 
+      if(fs->skip_autodetect &&
 	 !(! strcmp(fs->fsname, "ntfs-3g") && !stat(MOUNT_NTFS_3G, &buf)))
 	continue;		/* skip fs that are marked as such */
       /* don't suppress stderr if we try the last possible fs */
@@ -596,7 +596,7 @@ do_fsck( const char* device )
 	fputs(_("fsck returned error code above 1: "
 		"something went wrong\n"), stderr);
 	return -1;
-	      
+
     }
     /* Error code of 0 or 1 is fine. */
     return 0;
@@ -627,7 +627,7 @@ clean_lock_dir( const char* device )
     while( ( lockfile = readdir( lockdir ) ) ) {
         if( !strcmp( lockfile->d_name, "." ) || !strcmp( lockfile->d_name, "..") )
             continue;
-        
+
         debug( "  checking whether %s is alive\n", lockfile->d_name);
 
         if( !pid_exists( parse_unsigned( lockfile->d_name, E_INTERNAL ) ) ) {
@@ -663,7 +663,7 @@ main( int argc, char** argv )
     int noatime = 0;
     int exec = 0;
     int force_write = -1; /* 0: ro, 1: rw, -1: default */
-    
+
     int run_fsck = 0; 		/* Whether or not to run fsck before
 				   mounting. */
     int doing_loop_mount = 0;
@@ -721,7 +721,7 @@ main( int argc, char** argv )
         fputs( _("Error: this program needs to be installed suid root\n"), stderr );
         return E_INTERNAL;
     }
-    
+
     if( conffile_system_read() ) {
 	fputs( _("Error while reading system configuration file\n"), stderr );
 	return E_INTERNAL;
@@ -733,18 +733,18 @@ main( int argc, char** argv )
 
     /* parse command line options */
     do {
-        switch( option = getopt_long( argc, argv, "+hdelFLsArwp:t:c:u:V", 
+        switch( option = getopt_long( argc, argv, "+hdelFLsArwp:t:c:u:V",
 				      long_opts, NULL ) ) {
 	case -1:  break;          /* end of arguments */
 	case ':':
 	case '?': return E_ARGS;  /* unknown argument */
-	
+
 	case 'h': usage( argv[0] ); return 0;
-	    
+
 	case 'd': enable_debug = 1; break;
-	    
+
 	case 'l': mode = LOCK; break;
-	    
+
 	case 'L': mode = UNLOCK; break;
 
 	case 's': async = 0; break;
@@ -758,9 +758,9 @@ main( int argc, char** argv )
 	case 'c': iocharset = optarg; break;
 
 	case 'u': umask = optarg; break;
-	    
+
 	case OPT_FMASK: fmask = optarg; break;
-	    
+
 	case OPT_DMASK: dmask = optarg; break;
 
 	case 'p': passphrase = optarg; break;
@@ -769,7 +769,7 @@ main( int argc, char** argv )
 
 	case 'w': force_write = 1; break;
 
-	case 'F': 
+	case 'F':
 	    if(conffile_allow_fsck())
 		run_fsck = 1;
 	    else {
@@ -807,7 +807,7 @@ main( int argc, char** argv )
        have a block device -- this way, pmount shouldn't choke on stale
        network mounts. */
 
-    if(! is_block(devarg) && fstab_has_mntpt( "/etc/fstab", devarg, mntptdev, 
+    if(! is_block(devarg) && fstab_has_mntpt( "/etc/fstab", devarg, mntptdev,
 					      sizeof(mntptdev) ) ) {
 	debug( "resolved mount point %s to device %s\n", devarg, mntptdev );
 	devarg = mntptdev;
@@ -856,7 +856,7 @@ main( int argc, char** argv )
     /* pmounted devices really have to be a proper local device */
     if( !is_real_path ) {
         /* try to prepend '/dev' */
-        if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) { 
+        if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) {
             char d[PATH_MAX];
             snprintf( d, sizeof( d ), "%s%s", DEVDIR, device );
             if ( !realpath( d, device ) ) {
@@ -870,7 +870,7 @@ main( int argc, char** argv )
 	      if( arg2 )
 		fprintf( stderr, _("Warning: device %s is already handled by /etc/fstab,"
 				   " supplied label is ignored\n"), fstab_device );
-	      
+
 	      do_mount_fstab( fstab_device );
 	      return E_EXECMOUNT;
 	    }
@@ -878,8 +878,8 @@ main( int argc, char** argv )
     }
 
     /* does the device start with DEVDIR? */
-    if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) { 
-        fprintf( stderr, _("Error: invalid device %s (must be in /dev/)\n"), device ); 
+    if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) {
+        fprintf( stderr, _("Error: invalid device %s (must be in /dev/)\n"), device );
         return E_DEVICE;
     }
 
@@ -927,7 +927,7 @@ main( int argc, char** argv )
                 return E_POLICY;
 	    }
 
-	    /* 
+	    /*
 	       Here, we try to open the device, in order to check that
 	       for instance medium is present.
 	    */
@@ -944,7 +944,7 @@ main( int argc, char** argv )
             /* check for encrypted device */
             enum decrypt_status decrypt = luks_decrypt( device,
                     decrypted_device, sizeof( decrypted_device ), passphrase,
-                    force_write == 0 ? 1 : 0 ); 
+                    force_write == 0 ? 1 : 0 );
 
             switch (decrypt) {
                 case DECRYPT_FAILED:
@@ -964,7 +964,7 @@ main( int argc, char** argv )
                 case DECRYPT_NOTENCRYPTED:
                     break;
                 default:
-                    fprintf( stderr, "Internal error: unhandled decrypt_status %i\n", 
+                    fprintf( stderr, "Internal error: unhandled decrypt_status %i\n",
                         (int) decrypt);
                     exit( E_INTERNAL );
             }
@@ -984,25 +984,25 @@ main( int argc, char** argv )
 	    if(run_fsck) {
 		result = do_fsck( decrypted_device );
 		if(result)
-		    fputs(_("Error: fsck failed, not mounting\n"), 
+		    fputs(_("Error: fsck failed, not mounting\n"),
 			  stderr);
 	    }
-	    else 
+	    else
 		result = 0;
 
 	    /* Only mount if fsck went fine */
 	    if(! result) {
 		/* off we go */
 		if( use_fstype )
-		    result = do_mount( decrypted_device, mntpt, use_fstype, 
-				       async, noatime, exec, force_write, 
-				       iocharset, utf8, umask, 
+		    result = do_mount( decrypted_device, mntpt, use_fstype,
+				       async, noatime, exec, force_write,
+				       iocharset, utf8, umask,
 				       fmask, dmask, 0 );
 		else
-		    result = do_mount_auto( decrypted_device, mntpt, async, 
-					    noatime, exec, force_write, 
-					    iocharset, utf8, umask, 
-					    fmask, dmask ); 
+		    result = do_mount_auto( decrypted_device, mntpt, async,
+					    noatime, exec, force_write,
+					    iocharset, utf8, umask,
+					    fmask, dmask );
 	    }
 
             /* unlock the mount point again */
@@ -1012,7 +1012,7 @@ main( int argc, char** argv )
 
             if( result ) {
                 if( decrypt == DECRYPT_OK )
-                    luks_release( decrypted_device, 0 ); 
+                    luks_release( decrypted_device, 0 );
 
 		if(doing_loop_mount)
 		    loopdev_dissociate(device);
