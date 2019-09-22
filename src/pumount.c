@@ -9,6 +9,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -274,12 +275,17 @@ main( int argc, char** argv )
     if( !is_real_path && !do_lazy ) {
         /* try to prepend '/dev' */
         if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) {
-            char d[PATH_MAX];
-            snprintf( d, sizeof( d ), "%s%s", DEVDIR, device );
+            char *d;
+            if ( asprintf( &d, "%s%s", DEVDIR, device ) < 0) {
+                perror("asprintf");
+                return E_INTERNAL;
+            }
             if ( !realpath( d, device ) ) {
                 perror( _("Error: could not determine real path of the device") );
+                free(d);
                 return E_DEVICE;
             }
+            free(d);
             debug( "trying to prepend '" DEVDIR
 		   "' to device argument, now '%s'\n", device );
 	    /* We need to lookup again in fstab: */

@@ -10,6 +10,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
+#define _GNU_SOURCE
 #include "policy.h"
 #include "utils.h"
 
@@ -295,22 +296,28 @@ is_blockdev_attr_true( const char* blockdevpath, const char* attr )
 
 static const char * get_device_bus( const char* devicepath, const char **buses)
 {
+    char *path, *devfilename;
     char link[PATH_MAX];
-    char path[PATH_MAX];
-    char devfilename[PATH_MAX];
     const char *res = NULL;
     const char **i;
     DIR *busdir;
     struct dirent *busdirent;
 
     for ( i = buses; *i; i++ ) {
-      snprintf(path, sizeof(path), "/sys/bus/%s/devices", *i);
+      if ( asprintf( &path, "/sys/bus/%s/devices", *i ) < 0) {
+          perror("asprintf");
+          return NULL;
+      }
+
       if ( !(busdir = opendir(path)) ) {
         debug( "can't open bus/devicedir: %s\n", path);
         continue;
       }
       while( ( busdirent = readdir( busdir ) ) != NULL ) {
-        snprintf( devfilename, sizeof( devfilename ), "%s/%s", path, busdirent->d_name);
+        if (asprintf( &devfilename, "%s/%s", path, busdirent->d_name ) < 0) {
+          perror("asprintf");
+          return NULL;
+        }
         if(! realpath(devfilename, link)) {
           debug( "Could not read link at %s/%s\n", path, busdirent->d_name);
           continue;
@@ -325,6 +332,8 @@ static const char * get_device_bus( const char* devicepath, const char **buses)
         break;
     }
 
+    free( path );
+    free( devfilename );
     return res;
 }
 
@@ -521,7 +530,7 @@ device_mounted( const char* device, int expect, char* mntpt )
     }
 
     if( mntpt )
-        snprintf( mntpt, MEDIA_STRING_SIZE-1, "%s", mp );
+        strncpy( mntpt, mp, MEDIA_STRING_SIZE-1 );
 
     return mounted;
 }

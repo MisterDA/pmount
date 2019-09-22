@@ -9,6 +9,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -482,7 +483,7 @@ static int
 do_lock( const char* device, pid_t pid )
 {
     char lockdirpath[PATH_MAX];
-    char lockfilepath[PATH_MAX];
+    char *lockfilepath;
     int pidlock;
 
     if( assert_dir( LOCKDIR, 0 ) )
@@ -499,7 +500,10 @@ do_lock( const char* device, pid_t pid )
         return -1;
     }
 
-    snprintf( lockfilepath, sizeof( lockfilepath ), "%s/%u", lockdirpath, (unsigned) pid );
+    if ( asprintf( &lockfilepath, "%s/%u", lockdirpath, (unsigned) pid ) < 0) {
+        perror("asprintf");
+        return -1;
+    }
 
     /* we need root for creating the pid lock file */
     get_root();
@@ -511,9 +515,11 @@ do_lock( const char* device, pid_t pid )
     if( pidlock < 0 ) {
         fprintf( stderr, _("Error: could not create pid lock file %s: %s\n"),
                 lockfilepath, strerror( errno ) );
+        free( lockfilepath );
         return -1;
     }
 
+    free( lockfilepath );
     close( pidlock );
 
     return 0;
@@ -528,7 +534,7 @@ static int
 do_unlock( const char* device, pid_t pid )
 {
     char lockdirpath[PATH_MAX];
-    char lockfilepath[PATH_MAX];
+    char *lockfilepath;
     int result;
 
     make_lockdir_name( device, lockdirpath, sizeof( lockdirpath ) );
@@ -539,7 +545,10 @@ do_unlock( const char* device, pid_t pid )
 
     /* remove pid file first */
     if( pid ) {
-        snprintf( lockfilepath, sizeof( lockfilepath ), "%s/%u", lockdirpath, (unsigned) pid );
+        if (asprintf( &lockfilepath, "%s/%u", lockdirpath, (unsigned) pid ) < 0) {
+            perror("asprintf");
+            return -1;
+        }
 
         /* we need root for removing the pid lock file */
         get_root();
@@ -551,9 +560,11 @@ do_unlock( const char* device, pid_t pid )
             if( errno != ENOENT ) {
                 fprintf( stderr, _("Error: could not remove pid lock file %s: %s\n"),
                          lockfilepath, strerror( errno ) );
+                free( lockfilepath );
                 return -1;
             }
         }
+        free( lockfilepath );
     }
 
     /* Try to rmdir the dir. If there are still files (pid-locks) in it, this
@@ -608,7 +619,7 @@ static void
 clean_lock_dir( const char* device )
 {
     char lockdirpath[PATH_MAX];
-    char lockfilepath[PATH_MAX];
+    char *lockfilepath;
     DIR* lockdir;
     struct dirent* lockfile;
 
@@ -631,11 +642,15 @@ clean_lock_dir( const char* device )
 
         if( !pid_exists( parse_unsigned( lockfile->d_name, E_INTERNAL ) ) ) {
             debug( "  %s is dead, removing lock file\n", lockfile->d_name);
-            snprintf( lockfilepath, sizeof( lockfilepath ), "%s/%s",
-                    lockdirpath, lockfile->d_name );
+            if ( asprintf( &lockfilepath, "%s/%s", lockdirpath,
+			   lockfile->d_name ) < 0) {
+                perror("asprintf");
+                return;
+            }
             get_root();
             unlink( lockfilepath );
             drop_root();
+            free( lockfilepath );
         }
     }
 
@@ -856,12 +871,17 @@ main( int argc, char** argv )
     if( !is_real_path ) {
         /* try to prepend '/dev' */
         if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) {
-            char d[PATH_MAX];
-            snprintf( d, sizeof( d ), "%s%s", DEVDIR, device );
+            char *d;
+            if ( asprintf( &d, "%s%s", DEVDIR, device ) < 0) {
+                perror("asprintf");
+                return E_INTERNAL;
+            }
             if ( !realpath( d, device ) ) {
                 perror( _("Error: could not determine real path of the device") );
+                free(d);
                 return E_DEVICE;
             }
+            free(d);
             debug( "trying to prepend '" DEVDIR "' to device argument, now %s\n", device );
 	    /* We need to lookup again in fstab: */
 	    fstab_device = fstab_has_device( "/etc/fstab", device, NULL, NULL );
