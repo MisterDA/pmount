@@ -83,6 +83,7 @@ int loopdev_dissociate(const char * device)
       debug("The loop device may be busy, trying again to dissociate\n");
       sleep(1);
     }
+    ++nb_tries;
   }
   return result ? -1 : 0;
 }
