@@ -772,7 +772,7 @@ int user_physically_logged_in()
   struct passwd * pw;
   pw = getpwuid(getuid());
   if(! pw || pw->pw_uid != getuid()) {
-    fprintf(stderr, _("Impossible to find passwd record for current user\n"));
+    fputs(_("Impossible to find passwd record for current user\n"), stderr);
     exit(10);
   }
   safe_strcpy(username, pw->pw_name);
