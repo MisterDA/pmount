@@ -145,7 +145,7 @@ void ci_bool_dump(ci_bool * c, FILE * out)
     fprintf(out, "Allowed groups:");
     gid_t * g = c->allowed_groups;
     while(*g != -1) {
-      fprintf(out, " %d", *g);
+      fprintf(out, " %u", *g);
       g++;
     }
     fprintf(out, "\n");
@@ -155,7 +155,7 @@ void ci_bool_dump(ci_bool * c, FILE * out)
     fprintf(out, "Allowed users:");
     uid_t * g = c->allowed_users;
     while(*g != -1) {
-      fprintf(out, " %d", *g);
+      fprintf(out, " %u", *g);
       g++;
     }
     fprintf(out, "\n");
@@ -165,7 +165,7 @@ void ci_bool_dump(ci_bool * c, FILE * out)
     fprintf(out, "Denied users:");
     uid_t * g = c->denied_users;
     while(*g != -1) {
-      fprintf(out, " %d", *g);
+      fprintf(out, " %u", *g);
       g++;
     }
     fprintf(out, "\n");
