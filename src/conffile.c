@@ -211,6 +211,10 @@ typedef struct {
   void * info;
 } cf_key;
 
+static const long FLAG_ALLOW_USER = 1L;
+static const long FLAG_ALLOW_GROUP = 2L;
+static const long FLAG_DENY_USER = 3L;
+
 /**
    Prepares the pairs key/target for the given spec into the area
    pointed to by pairs. Enough space must have been reserved
@@ -235,21 +239,21 @@ static void cf_spec_prepare_keys(cf_spec * spec, cf_key * keys)
     keys->key = malloc(l2);
     snprintf(keys->key,l2, "%s_allow_user", spec->base);
     keys->target = spec;
-    keys->info = (void*)1L;
+    keys->info = (void *)(&FLAG_ALLOW_USER);
     keys++;
 
     l2 = l + strlen("_allow_group") +1;
     keys->key = malloc(l2);
     snprintf(keys->key,l2, "%s_allow_group", spec->base);
     keys->target = spec;
-    keys->info = (void*)2L;
+    keys->info = (void *)(&FLAG_ALLOW_GROUP);
     keys++;
 
     l2 = l + strlen("_deny_user") +1;
     keys->key = malloc(l2);
     snprintf(keys->key,l2, "%s_deny_user", spec->base);
     keys->target = spec;
-    keys->info = (void*)3L;
+    keys->info = (void *)(&FLAG_DENY_USER);
     return;
   case string_list:
     keys->key = strdup(spec->base);
@@ -655,21 +659,21 @@ static int cf_key_assign_value(cf_key * key, char * value)
   case boolean_item: {
     ci_bool * t = (ci_bool *)key->target->target;
     switch((long)key->info) {
-    case 0:			/* Normal */
+    case 0L:			/* Normal */
       if(! cf_get_boolean(value, &val)) {
 	ci_bool_set_default(t, val); /* Or directly use the internals ? */
 	return 0;
       }
       return -1;
-    case 1:			/* Allow_user */
+    case 1L:			/* Allow_user */
       if(cf_get_uidlist(value, &(t->allowed_users)))
 	return -1;
       return 0;
-    case 2:			/* Allow_group */
+    case 2L:			/* Allow_group */
       if(cf_get_gidlist(value, &(t->allowed_groups)))
 	return -1;
       return 0;
-    case 3:			/* Allow_user */
+    case 3L:			/* Deny_user */
       if(cf_get_uidlist(value, &(t->denied_users)))
 	return -1;
       return 0;
