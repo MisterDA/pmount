@@ -1,5 +1,3 @@
-option('hal', type : 'feature', value : 'disabled')
-
 option('media-dir', type : 'string', value : '/media/',
        description : 'Parent directory for mounts; MUST have trailing slash')
 option('lock-dir', type : 'string', value : '/var/lib/pmount-locks',

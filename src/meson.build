@@ -7,9 +7,3 @@ executable('pmount', src, 'pmount.c', dependencies : blkid, install : true,
            install_mode: ['rwsr-xr-x', 0, false])
 executable('pumount', src, 'pumount.c', install : true,
            install_mode: ['rwsr-xr-x', 0, false])
-
-if get_option('hal').enabled()
-  hal = dependency('hal', required : get_option('hal'))
-  executable('pmount-hal', src, 'pmount-hal.c', install : true,
-             dependencies : [hal])
-endif
