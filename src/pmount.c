@@ -1,4 +1,3 @@
-/* -*- c-basic-offset: 4; -*- */
 /**
  * pmount.c - policy wrapper around 'mount' to allow mounting removable devices
  *            for normal users

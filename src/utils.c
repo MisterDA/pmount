@@ -1,4 +1,3 @@
-/* -*- c-basic-offset: 4; -*- */
 /**
  * utils.c - helper functions for pmount
  *
@@ -9,7 +8,6 @@
  * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -502,4 +500,3 @@ unlock_dir( const char* dir ) {
     unlink( lockfile );
     drop_root();
 }
-
