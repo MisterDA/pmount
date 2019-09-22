@@ -660,6 +660,7 @@ static int cf_key_assign_value(cf_key * key, char * value)
 	ci_bool_set_default(t, val); /* Or directly use the internals ? */
 	return 0;
       }
+      return -1;
     case 1:			/* Allow_user */
       if(cf_get_uidlist(value, &(t->allowed_users)))
 	return -1;
