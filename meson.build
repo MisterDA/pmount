@@ -7,6 +7,12 @@ sysconfdir = join_paths(prefix, get_option('sysconfdir'))
 install_data(files('etc/pmount.conf', 'etc/pmount.allow'),
              install_dir : sysconfdir)
 
+if get_option('bash-completions')
+  bash_files = files('completions/bash/pmount')
+  bash_install_dir = datadir + '/bash-completion/completions'
+  install_data(bash_files, install_dir: bash_install_dir)
+endif
+
 version = '"@0@"'.format(meson.project_version())
 git = find_program('git', native: true, required: false)
 if git.found()
