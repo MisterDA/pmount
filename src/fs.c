@@ -110,6 +110,15 @@ static struct FS supported_fs[] = {
 	.skip_autodetect = 0,
     },
     {
+	.fsname = "f2fs",
+	.options = "nodev,noauto,nosuid,user,errors=remount-ro",
+	.support_ugid = 0,
+	.umask = NULL,
+	.iocharset_format = NULL,
+	.fdmask = NULL,
+	.skip_autodetect = 0,
+    },
+    {
 	.fsname = "reiserfs",
 	.options = "nodev,noauto,nosuid,user",
 	.support_ugid = 0,
