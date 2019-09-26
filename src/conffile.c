@@ -359,7 +359,6 @@ static int cf_read_line(FILE * file, char * dest, size_t nb)
 /**
    Patterns for parsing the configuration files.
 */
-static int regex_compiled = 0;
 static regex_t comment_RE, declaration_RE, uint_RE,
   blank_RE, true_RE, false_RE;
 
@@ -367,7 +366,7 @@ static regex_t comment_RE, declaration_RE, uint_RE,
    Initialize all the patterns necessary for parsing the configuration
    file.
 */
-static int cf_prepare_regexps()
+static int cf_prepare_regexps(void)
 {
   /* A regexp matching comment lines */
   if( regcomp(&comment_RE, "^[[:blank:]]*#", REG_EXTENDED)) {
@@ -415,7 +414,7 @@ static int cf_prepare_regexps()
 /**
    Frees the pattern space of the allocated regular expressions
 */
-static void cf_free_regexps()
+static void cf_free_regexps(void)
 {
   regfree(&comment_RE);
   regfree(&uint_RE);
@@ -700,8 +699,7 @@ int cf_read_file(FILE * file, cf_spec * specs)
   int retval = 0;
   cf_key * keys;
 
-  /* Compile regular expressions when necessary */
-  if(cf_prepare_regexps())
+  if(cf_prepare_regexps() < 0)
     return -1;
   keys = cf_spec_build_keys(specs);
 
@@ -739,5 +737,6 @@ int cf_read_file(FILE * file, cf_spec * specs)
   }
 
   cf_key_free_keys(keys);
+  cf_free_regexps();
   return 0;
 }
