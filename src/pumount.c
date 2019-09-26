@@ -67,7 +67,7 @@ static int
 check_umount_policy( const char* device, int ok_if_inexistant )
 {
     int devvalid;
-    char mediadir[PATH_MAX];
+    char *mediadir = NULL;
 
     devvalid = ( ok_if_inexistant || device_valid( device ) ) &&
         device_mounted( device, 1, mntpt );
@@ -82,7 +82,8 @@ check_umount_policy( const char* device, int ok_if_inexistant )
     }
 
     /* MEDIADIR may be a symlink (for read-only root systems) */
-    if( NULL == realpath( MEDIADIR, mediadir ) ) {
+    mediadir = realpath( MEDIADIR, NULL );
+    if( !mediadir ) {
         fprintf( stderr, _("Error: could not find real path of %s\n"),
                 MEDIADIR );
         exit( E_INTERNAL );
@@ -92,9 +93,11 @@ check_umount_policy( const char* device, int ok_if_inexistant )
     if( strncmp( mntpt, mediadir, strlen( mediadir ) ) ) {
         fprintf( stderr, _("Error: mount point %s is not below %s\n"), mntpt,
                 MEDIADIR );
+        free( mediadir );
         return -1;
     }
 
+    free( mediadir );
     debug( "policy check passed\n" );
     return 0;
 }
@@ -163,7 +166,7 @@ do_umount( const char* device, int do_lazy )
 int
 main( int argc, char** argv )
 {
-    char device[PATH_MAX], mntptdev[PATH_MAX], path[PATH_MAX];
+    char *device = NULL, mntptdev[PATH_MAX], path[PATH_MAX];
     const char* fstab_device, *mntptdevpath;
     char fstab_mntpt[MEDIA_STRING_SIZE];
     int is_real_path = 0;
@@ -261,12 +264,17 @@ main( int argc, char** argv )
     }
 
     /* get real path, if possible */
-    if( realpath( mntptdevpath, device ) ) {
+    device = realpath( mntptdevpath, NULL );
+    if( device ) {
         debug( "resolved %s to device %s\n", mntptdevpath, device );
         is_real_path = 1;
     } else {
         debug( "%s cannot be resolved to a proper device node\n", mntptdevpath );
-        snprintf( device, sizeof( device ), "%s", mntptdevpath );
+        device = strdup(mntptdevpath);
+        if( !device ) {
+            perror("strdup");
+            return E_INTERNAL;
+        }
     }
 
     /* is the device already handled by fstab? */
@@ -286,7 +294,8 @@ main( int argc, char** argv )
                 perror("asprintf");
                 return E_INTERNAL;
             }
-            if ( !realpath( d, device ) ) {
+            device = realpath( d, NULL );
+            if ( !device ) {
                 perror( _("Error: could not determine real path of the device") );
                 free(d);
                 return E_DEVICE;
@@ -311,7 +320,7 @@ main( int argc, char** argv )
     }
 
     /* check if we have a dmcrypt device */
-    if( luks_get_mapped_device( device, device, sizeof( device ) ) )
+    if( luks_get_mapped_device( device, device, strlen(device) ) )
         debug( "Unmounting mapped device %s instead.\n", device );
 
     /* Now, we accept when devices have gone missing */

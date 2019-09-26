@@ -34,10 +34,6 @@
 #include <pwd.h>
 #include <utmpx.h>
 
-
-/* We use our own safe version of realpath */
-#include "realpath.h"
-
 #include "configuration.h"
 
 
@@ -296,8 +292,7 @@ is_blockdev_attr_true( const char* blockdevpath, const char* attr )
 
 static const char * get_device_bus( const char* devicepath, const char **buses)
 {
-    char *path, *devfilename;
-    char link[PATH_MAX];
+    char *path, *devfilename, *link = NULL;
     const char *res = NULL;
     const char **i;
     DIR *busdir;
@@ -318,8 +313,9 @@ static const char * get_device_bus( const char* devicepath, const char **buses)
           perror("asprintf");
           return NULL;
         }
-        if(! realpath(devfilename, link)) {
-          debug( "Could not read link at %s/%s\n", path, busdirent->d_name);
+        link = realpath(devfilename, NULL);
+        if( !link ) {
+          debug( "Could not read link at %s\n", devfilename);
           continue;
         }
         if ( ! strcmp(devicepath, link) ) {
@@ -334,6 +330,7 @@ static const char * get_device_bus( const char* devicepath, const char **buses)
 
     free( path );
     free( devfilename );
+    free( link );
     return res;
 }
 
@@ -348,7 +345,7 @@ const char *
 bus_has_ancestry(const char * blockdevpath, const char** buses)
 {
   char path[1024];
-  char full_device[1024];
+  char * full_device = NULL;
   char * tmp = "";
   const char *bus;
   struct stat sb;
@@ -362,7 +359,8 @@ bus_has_ancestry(const char * blockdevpath, const char** buses)
   if ( !S_ISLNK(sb.st_mode) )
     tmp = "/device";
   snprintf(path, sizeof(path), "%s%s", blockdevpath, tmp);
-  if(! realpath(path, full_device)) {
+  full_device = realpath(path, NULL);
+  if( !full_device ) {
     debug("Realpath failed to resolve %s\n", path);
     return NULL;
   }
@@ -373,6 +371,7 @@ bus_has_ancestry(const char * blockdevpath, const char** buses)
   while(full_device[0]) {
     if((bus = get_device_bus(full_device, buses))) {
       debug("Found bus %s for device %s\n", bus, full_device);
+      free( full_device );
       return bus;
     }
     tmp = strrchr(full_device, '/');
@@ -380,6 +379,7 @@ bus_has_ancestry(const char * blockdevpath, const char** buses)
       break;
     *tmp = 0;
   }
+  free( full_device );
   return NULL;
 }
 
@@ -413,8 +413,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
 {
     FILE* f;
     struct mntent *entry;
-    char pathbuf[PATH_MAX];
-    char pathbuf_arg[PATH_MAX];
+    char *pathbuf = NULL, *pathbuf_arg = NULL;
     static char fstab_device[PATH_MAX];
     char* realdev;
     const char* realdev_arg;
@@ -427,7 +426,8 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
         exit( 100 );
     }
 
-    if( realpath( device, pathbuf_arg ) )
+    pathbuf_arg = realpath(device, NULL);
+    if( pathbuf_arg )
       realdev_arg = pathbuf_arg;
     else {
       debug("realpath failed on %s : %s\n", device, strerror(errno));
@@ -438,7 +438,8 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
         snprintf( fstab_device, sizeof( fstab_device ), "%s",
 		  entry->mnt_fsname );
 
-        if( realpath( fstab_device, pathbuf ) )
+        pathbuf = realpath( fstab_device, NULL );
+        if( pathbuf )
             realdev = pathbuf;
         else
             realdev = fstab_device;
@@ -461,6 +462,8 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
                         *uid = -1;
                 }
 		debug(" -> found as '%s'\n", fstab_device);
+                free( pathbuf );
+                free( pathbuf_arg );
                 return fstab_device;
         }
     }
@@ -471,6 +474,8 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
 
     endmntent( f );
     debug(" -> not found\n");
+    free( pathbuf );
+    free( pathbuf_arg );
     return NULL;
 }
 
@@ -479,12 +484,12 @@ fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t devi
 {
     FILE* f;
     struct mntent *entry;
-    char realmntptbuf[PATH_MAX];
-    char fstabmntptbuf[PATH_MAX];
+    char* realmntptbuf = NULL, *fstabmntptbuf = NULL;
     const char* realmntpt, *fstabmntpt;
 
     /* resolve symlinks, if possible */
-    if( realpath( mntpt, realmntptbuf ) )
+    realmntptbuf = realpath( mntpt, NULL );
+    if( realmntptbuf )
         realmntpt = realmntptbuf;
     else
         realmntpt = mntpt;
@@ -496,7 +501,8 @@ fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t devi
 
     while( ( entry = getmntent( f ) ) != NULL ) {
         /* resolve symlinks, if possible */
-        if( realpath( entry->mnt_dir, fstabmntptbuf ) )
+        fstabmntptbuf = realpath( entry->mnt_dir, NULL );
+        if( fstabmntptbuf )
             fstabmntpt = fstabmntptbuf;
         else
             fstabmntpt = entry->mnt_dir;
@@ -505,11 +511,15 @@ fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t devi
             if( device )
                 snprintf( device, device_size, "%s", entry->mnt_fsname );
             endmntent( f );
+            free( realmntptbuf );
+            free( fstabmntptbuf );
             return 1;
         }
     }
 
     endmntent( f );
+    free( realmntptbuf );
+    free( fstabmntptbuf );
     return 0;
 }
 
@@ -594,7 +604,7 @@ device_whitelisted( const char* device )
 {
     FILE* fwl;
     char line[1024];
-    char full_path[1024];
+    char *full_path = NULL;
     char *d;
     regex_t re;
     regmatch_t match[3];
@@ -636,12 +646,14 @@ device_whitelisted( const char* device )
 	   else {
 	     /* We use realpath on the specification in order to follow
 		symlinks. See bug #507038 */
-	     if( realpath(d, full_path)) {
+            full_path = realpath(d, NULL);
+            if( full_path ) {
 	       if(! strcmp(device, full_path)) {
 		 debug( "device_whitelisted(): %s matches after "
 			"realpath expansion, returning 1\n",
 			d);
 		 fclose( fwl );
+		 free( full_path );
 		 return 1;
 	       }
 	     }
@@ -650,6 +662,7 @@ device_whitelisted( const char* device )
     }
 
     fclose( fwl );
+    free( full_path );
     debug( "device_whitlisted(): nothing matched, returning 0\n" );
     return 0;
 }

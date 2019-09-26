@@ -1,5 +1,5 @@
 src = [ 'conffile.c', 'configuration.c', 'fs.c', 'loop.c', 'luks.c',
-  'policy.c', 'realpath.c', 'utils.c', ]
+  'policy.c', 'utils.c', ]
 
 configure_file(output : 'config.h', configuration : cdata)
 

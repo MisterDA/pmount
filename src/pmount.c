@@ -40,9 +40,6 @@
 #include <blkid/blkid.h>
 #endif
 
-/* Using our private realpath function */
-#include "realpath.h"
-
 /* error codes */
 const int E_ARGS = 1;
 const int E_DEVICE = 2;
@@ -680,7 +677,7 @@ main( int argc, char** argv )
 {
     char *devarg = NULL, *arg2 = NULL;
     char mntpt[MEDIA_STRING_SIZE];
-    char device[PATH_MAX], mntptdev[PATH_MAX];
+    char *device = NULL, mntptdev[PATH_MAX];
     char decrypted_device[PATH_MAX];
     const char* fstab_device;
     int is_real_path = 0;
@@ -848,12 +845,17 @@ main( int argc, char** argv )
     }
 
     /* get real path, if possible */
-    if( realpath( devarg, device ) ) {
+    device = realpath( devarg, NULL );
+    if( device ) {
         debug( "resolved %s to device %s\n", devarg, device );
         is_real_path = 1;
     } else {
         debug( "%s cannot be resolved to a proper device node\n", devarg );
-        snprintf( device, sizeof( device ), "%s", devarg );
+        device = strdup( devarg );
+        if( !device ) {
+            perror("strdup");
+            return E_INTERNAL;
+        }
     }
 
 
@@ -875,7 +877,7 @@ main( int argc, char** argv )
 			      "However, you are not allowed to use loopback mount.\n"), devarg);
 	    return E_DISALLOWED;
 	}
-	if(loopdev_associate(device, device, sizeof(device))) {
+	if(loopdev_associate(device, device, strlen(device))) {
 	    fprintf(stderr, _("Failed to setup loop device for %s, aborting\n"),
 		    devarg);
 	    return E_LOSETUP;
@@ -896,7 +898,8 @@ main( int argc, char** argv )
                 perror("asprintf");
                 return E_INTERNAL;
             }
-            if ( !realpath( d, device ) ) {
+            device = realpath( d, NULL );
+            if ( !device ) {
                 perror( _("Error: could not determine real path of the device") );
                 free(d);
                 return E_DEVICE;
