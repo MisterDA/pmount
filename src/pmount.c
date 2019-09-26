@@ -15,12 +15,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <limits.h>
-#include <unistd.h>
 #include <fcntl.h>
 #include <dirent.h>
 #include <getopt.h>
 #include <errno.h>
-#include <locale.h>
 #include <langinfo.h>
 #include <libintl.h>
 #include <sys/stat.h>
@@ -31,31 +29,14 @@
 #include "luks.h"
 #include "loop.h"
 #include "config.h"
-
 /* Configuration file handling */
 #include "configuration.h"
+#include "shared.h"
 
 /* Enable autodetection if possible */
 #ifdef HAVE_BLKID
 #include <blkid/blkid.h>
 #endif
-
-/* error codes */
-const int E_ARGS = 1;
-const int E_DEVICE = 2;
-const int E_MNTPT = 3;
-const int E_POLICY = 4;
-const int E_EXECMOUNT = 5;
-const int E_UNLOCK = 6;
-const int E_PID = 7;
-const int E_LOCKED = 8;
-/**
-   Something not explicitly allowed from within the system configuration file
-*/
-const int E_DISALLOWED = 9;
-/* Something failed with loop devices */
-const int E_LOSETUP = 10;
-const int E_INTERNAL = 100;
 
 #define OPT_FMASK 128
 #define OPT_DMASK 129
@@ -725,10 +706,7 @@ main( int argc, char** argv )
         { NULL, 0, NULL, 0}
     };
 
-    /* initialize locale */
-    setlocale( LC_ALL, "" );
-    bindtextdomain( "pmount", NULL );
-    textdomain( "pmount" );
+    shared_init();
 
     /* If pmount is run without a single argument, print out the list
        of removable devices. Does not require root privileges, just read access
@@ -740,25 +718,6 @@ main( int argc, char** argv )
       printf(_("To get a short help, run %s -h\n"), argv[0]);
       return 0;
     }
-
-    /* are we root? */
-    if( geteuid() ) {
-        fputs( _("Error: this program needs to be installed suid root\n"), stderr );
-        return E_INTERNAL;
-    }
-
-    if( conffile_system_read() ) {
-	fputs( _("Error while reading system configuration file\n"), stderr );
-	return E_INTERNAL;
-    }
-
-    /* drop root privileges until we really need them (still available as saved uid) */
-    result = seteuid( getuid() );
-    if( result == -1 ) {
-        perror("seteuid");
-        return E_INTERNAL;
-    }
-
 
     /* parse command line options */
     do {
@@ -845,19 +804,7 @@ main( int argc, char** argv )
     }
 
     /* get real path, if possible */
-    device = realpath( devarg, NULL );
-    if( device ) {
-        debug( "resolved %s to device %s\n", devarg, device );
-        is_real_path = 1;
-    } else {
-        debug( "%s cannot be resolved to a proper device node\n", devarg );
-        device = strdup( devarg );
-        if( !device ) {
-            perror("strdup");
-            return E_INTERNAL;
-        }
-    }
-
+    device = device_realpath( devarg, &is_real_path );
 
     /* is the device already handled by fstab? We allow is_real_path == 0 here
      * to transparently mount things like NFS and SMB drives */

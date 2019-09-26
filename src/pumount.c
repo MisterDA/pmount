@@ -18,21 +18,15 @@
 #include <limits.h>
 #include <getopt.h>
 #include <libintl.h>
-#include <locale.h>
 
 #include "policy.h"
 #include "utils.h"
 #include "luks.h"
 #include "config.h"
-#include "configuration.h"
 
-/* error codes */
-const int E_ARGS = 1;
-const int E_DEVICE = 2;
-const int E_POLICY = 4;
-const int E_EXECUMOUNT = 5;
-const int E_DISALLOWED = 9;
-const int E_INTERNAL = 100;
+/* Configuration file handling */
+#include "configuration.h"
+#include "shared.h"
 
 static char mntpt[MEDIA_STRING_SIZE];
 
@@ -171,7 +165,6 @@ main( int argc, char** argv )
     char fstab_mntpt[MEDIA_STRING_SIZE];
     int is_real_path = 0;
     int do_lazy = 0;
-    int result;
 
     int  option;
     static struct option long_opts[] = {
@@ -184,29 +177,7 @@ main( int argc, char** argv )
         { NULL, 0, NULL, 0}
     };
 
-    /* initialize locale */
-    setlocale( LC_ALL, "" );
-    bindtextdomain( "pmount", NULL );
-    textdomain( "pmount" );
-
-    /* are we root? */
-    if( geteuid() ) {
-        fputs( _("Error: this program needs to be installed suid root\n"), stderr );
-        return E_INTERNAL;
-    }
-
-    if( conffile_system_read() ) {
-	fputs( _("Error while reading system configuration file\n"), stderr );
-	return E_INTERNAL;
-    }
-
-
-    /* drop root privileges until we really need them (still available as saved uid) */
-    result = seteuid( getuid() );
-    if( result == -1 ) {
-        perror("seteuid");
-        return E_INTERNAL;
-    }
+    shared_init();
 
     /* parse command line options */
     do {
@@ -264,18 +235,7 @@ main( int argc, char** argv )
     }
 
     /* get real path, if possible */
-    device = realpath( mntptdevpath, NULL );
-    if( device ) {
-        debug( "resolved %s to device %s\n", mntptdevpath, device );
-        is_real_path = 1;
-    } else {
-        debug( "%s cannot be resolved to a proper device node\n", mntptdevpath );
-        device = strdup(mntptdevpath);
-        if( !device ) {
-            perror("strdup");
-            return E_INTERNAL;
-        }
-    }
+    device = device_realpath( mntptdevpath, &is_real_path );
 
     /* is the device already handled by fstab? */
     fstab_device = fstab_has_device( "/etc/fstab", device, fstab_mntpt, NULL );
