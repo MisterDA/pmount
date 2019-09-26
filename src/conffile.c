@@ -306,7 +306,7 @@ static void cf_key_free_keys(cf_key * keys)
 
 
 /**
-   Finds withing the given pairs the cf_spec corresponding to the
+   Finds within the given pairs the cf_spec corresponding to the
    given key.
 
    Yes, it's inefficient, but do we really need more efficient than
@@ -436,7 +436,7 @@ static void cf_free_regexps(void)
    * a declaration
    * beginning of a FS specification ? (later on)
 
-   When applicable, this function puts the adress of the relevant bits
+   When applicable, this function puts the address of the relevant bits
    into the pointer variables; in that case, it modifies the buffer
    in-place.
 

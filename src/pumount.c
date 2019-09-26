@@ -51,7 +51,7 @@ usage( const char* exename )
     "  -l, --lazy   : umount lazily, see umount(8)\n"
     "  --luks-force : luksClose devices pmount didn't open\n"
     "  -d, --debug  : enable debug output (very verbose)\n"
-    "  -h, --help   : print help message and exit successfuly\n"
+    "  -h, --help   : print help message and exit successfully\n"
     "  --version    : print version number and exit successfully\n"),
         exename, MEDIADIR );
 }

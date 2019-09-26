@@ -100,7 +100,7 @@ typedef struct {
 
 /**
    Reads the given file and parse it according to the specification
-   written in specs, which must be terminated by the first occurence
+   written in specs, which must be terminated by the first occurrence
    of a NULL as base.
  */
 int cf_read_file(FILE * file, cf_spec * specs);

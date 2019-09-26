@@ -48,7 +48,7 @@
 
 0.9.19
 -----------
-- drop the dependency on libsysfs and also fix failure to recognise
+- drop the dependency on libsysfs and also fix failure to recognize
   that a device is removable with newer kernels
 - do realpath expansion on devices whitelisted in /etc/pmount.allow,
   which enables the use of symlinks inside it.
@@ -133,7 +133,7 @@
 0.9.12
 ------
 - fix pmount.allow parsing regular expression (it failed in some ISO locales)
-- pmount-hal: honour iocharset mount option from hal policy
+- pmount-hal: honor iocharset mount option from hal policy
 - pmount-hal: replace slashes with underscores in label
 - pmount: mount UDF with default umask 000, so that the UDF permissions are not
   altered

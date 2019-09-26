@@ -108,7 +108,7 @@ usage( const char* exename )
     "                read passphrase from file instead of the terminal\n"
     "                (only for LUKS encrypted devices)\n"
     "  -d, --debug : enable debug output (very verbose)\n"
-    "  -h, --help  : print this help message and exit successfuly\n"
+    "  -h, --help  : print this help message and exit successfully\n"
     "  -F, --fsck  : runs fsck on the device before mounting\n"
     "  -V, --version\n"
     "                print version number and exit successfully") );
