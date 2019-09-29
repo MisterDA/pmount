@@ -82,8 +82,8 @@ static const char * block_subsystem_directories[] = {
    own experience and on Documentation/sysfs-rules.txt
  */
 
-int find_sysfs_device( const char* dev, char* blockdevpath, 
-		       size_t blockdevpathsize ) 
+int
+find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
 {
     unsigned char devmajor, devminor;
     unsigned char sysmajor, sysminor;
@@ -289,12 +289,11 @@ is_blockdev_attr_true( const char* blockdevpath, const char* attr )
    Many thanks !
  */
 
-const char * get_device_bus( const char* devicepath, const char **buses)
+static const char * get_device_bus( const char* devicepath, const char **buses)
 {
     char link[PATH_MAX];
     char path[PATH_MAX];
     char devfilename[PATH_MAX];
-    ssize_t link_size;
     const char *res = NULL;
     const char **i;
     DIR *busdir;
@@ -332,7 +331,9 @@ const char * get_device_bus( const char* devicepath, const char **buses)
  * @param buses NULL-terminated array of bus names to scan for
  * @return the name of the bus found, or NULL
  */
-const char * bus_has_ancestry(const char * blockdevpath, const char** buses) {
+const char *
+bus_has_ancestry(const char * blockdevpath, const char** buses)
+{
   char path[1024];
   char full_device[1024];
   char * tmp = "";
@@ -357,7 +358,7 @@ const char * bus_has_ancestry(const char * blockdevpath, const char** buses) {
 
   /* We loop on full_device until we are on the root directory */
   while(full_device[0]) {
-    if(bus = get_device_bus(full_device, buses)) {
+    if((bus = get_device_bus(full_device, buses))) {
       debug("Found bus %s for device %s\n", bus, full_device);
       return bus;
     }
@@ -403,7 +404,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
     char pathbuf_arg[PATH_MAX];
     static char fstab_device[PATH_MAX];
     char* realdev;
-    char* realdev_arg;
+    const char* realdev_arg;
     char* uidopt;
 
     debug("Checking for device '%s' in '%s'\n", device, fname);
@@ -522,7 +523,7 @@ device_mounted( const char* device, int expect, char* mntpt )
 }
 
 /* The silent version of the device_removable function. */
-int device_removable_silent(const char * device)
+static int device_removable_silent(const char * device)
 {
   static const char* hotplug_buses[] = { "usb", "ieee1394", "mmc", 
 					 "pcmcia", "firewire", NULL };
@@ -696,7 +697,7 @@ void make_lockdir_name( const char* device, char* name, size_t name_size )
     free( devname );
 }
 
-int
+static int
 device_valid_silent( const char* device )
 {
     struct stat st;
@@ -720,7 +721,6 @@ void print_mounted_removable_devices()
 {
   FILE* f;
   struct mntent* ent;
-  char pathbuf[PATH_MAX];
   /* We need copies, as calls to libsysfs garble the contents of
      the fields */
   char name[MEDIA_STRING_SIZE], dir[MEDIA_STRING_SIZE], 

@@ -47,7 +47,7 @@ const struct FS* get_fs_info( const char* fsname );
  * Return an array of supported file systems for iteration. The returned array
  * is terminated with an FS struct with fsname == NULL.
  */
-const struct FS* get_supported_fs();
+const struct FS* get_supported_fs(void);
 
 #endif /* !defined( __fs_h) */
 

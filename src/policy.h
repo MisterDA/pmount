@@ -102,7 +102,16 @@ make_lockdir_name( const char* device, char* name, size_t name_size );
  *
  * @todo this shouldn't probably be in the policy.h header.
  */
-void print_mounted_removable_devices();
+void print_mounted_removable_devices(void);
+
+int
+find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize);
+
+int
+is_blockdev_attr_true( const char* blockdevpath, const char* attr );
+
+const char *
+bus_has_ancestry(const char * blockdevpath, const char** buses);
 
 /**
    Checks if the user is physically logged in or allowed anyway, and
