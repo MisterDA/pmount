@@ -24,6 +24,7 @@
 #include "utils.h"
 #include "luks.h"
 #include "config.h"
+#include "configuration.h"
 
 /* error codes */
 const int E_ARGS = 1;

@@ -23,6 +23,7 @@
 #include <libintl.h>
 #include <sys/stat.h>
 #include <regex.h>
+#include <ctype.h>
 
 /* For globs in /etc/pmount.allow */
 #include <fnmatch.h>
@@ -35,6 +36,9 @@
 
 /* We use our own safe version of realpath */
 #include "realpath.h"
+
+#include "configuration.h"
+
 
 /*************************************************************************
  *
@@ -767,7 +771,7 @@ int user_physically_logged_in()
   /* Then parse the utmpx database  */
   struct utmpx * s;
   setutxent();			/* rewind */
-  while(s = getutxent()) {
+  while((s = getutxent())) {
     if(s->ut_type != USER_PROCESS)
       continue;
     if(! strcmp(s->ut_user, username)) {

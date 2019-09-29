@@ -52,6 +52,8 @@ static const char * loopdev_find_unused()
     }
     devices++;
   }
+
+  return NULL;
 }
 
 int loopdev_is_whitelisted(const char * device)

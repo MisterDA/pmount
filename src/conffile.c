@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 /* For regular expression parsing... */
 #include <regex.h>
 
@@ -681,7 +682,7 @@ static int cf_key_assign_value(cf_key * key, char * value)
     return cf_read_stringlist(value, t);
   }
   default:
-    break;
+    return -1;
   }
 }
 

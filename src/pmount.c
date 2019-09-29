@@ -29,6 +29,7 @@
 #include "policy.h"
 #include "utils.h"
 #include "luks.h"
+#include "loop.h"
 #include "config.h"
 
 /* Configuration file handling */
