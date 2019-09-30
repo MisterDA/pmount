@@ -106,4 +106,3 @@ typedef struct {
 int cf_read_file(FILE * file, cf_spec * specs);
 
 #endif
-

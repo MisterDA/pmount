@@ -2,94 +2,206 @@
    These checks include:
 
    * fstab_has_device, to check mismatches
-
 */
 
 /*
  * Copyright (c) 2008 Vincent Fourmond <fourmond@debian.org>
+ * Copyright (c) 2019 Antonin Décimo <antonin.decimo@gmail.com>
  *
  * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
+#define _GNU_SOURCE
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "policy.h"
 #include "utils.h"
-#include <stdio.h>
 
-int testsFailed = 0;
-int totalTests = 0;
+static char template[] = "pmount-XXXXXX";
 
-/* Check that two strings are equal (or not, if _equal_ == 0)*/
-void check_strings_equal(const char *name, const char *str1,
-			 const char *str2, int equal)
+static void prepare(void)
 {
-  totalTests += 1;
-  fprintf(stderr, ".");
-  if(enable_debug)
-    fprintf(stderr, "1: '%s' 2: '%s'\n", str1?str1:"(null)",
-	    str2?str2:"(null)");
-  if(!str1 && !str2) {
-    if(equal)
-      return;
-    fprintf(stderr,"%s: both are NULL and should not be identical\n", name);
-    testsFailed += 1;
-    return;
-  }
+    const char content[] =
+        "check_fstab/a /foo btrfs "" 0 0\n"
+        "check_fstab/e /foo btrfs "" 0 0\n";
+    char *dir;
+    FILE *fstab;
+    mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+    int rc;
 
-  if(!str1 || !str2) {
-    testsFailed += 1;
-    if(! equal)
-      return;
-    fprintf(stderr,"%s: only one NULL string\n", name);
-    return;
-  }
+    enable_debug = 1;
 
-  /* Now, neither str1 nor str2 are NULL*/
-  if(!strcmp(str1, str2)) {
-    /* Both strings are equal */
-    if(equal)
-      return;
+    dir = mkdtemp(template);
+    if(dir == NULL) {
+        perror("mkdtemp");
+        exit(EXIT_FAILURE);
+    }
 
-    fprintf(stderr,"%s: both are '%s' and should not be identical\n",
-	    name, str1);
-    testsFailed += 1;
-    return;
-  }
-  /* Strings are different */
-  if(equal) {
-    fprintf(stderr,"%s: '%s' is no '%s'\n",
-	    name, str1, str2);
-    testsFailed += 1;
-    return;
-  }
-  return;
+    rc = chdir(dir);
+    if(rc == -1) {
+        perror("chdir");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = mkdir("check_fstab", S_IRWXU);
+    if(rc == -1) {
+        perror("mkdir");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = chdir("check_fstab");
+    if(rc == -1) {
+        perror("chdir");
+        exit(EXIT_FAILURE);
+    }
+
+    fstab = fopen("fstab", "w+b");
+    if(fstab == NULL) {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = fwrite(content, 1, sizeof(content), fstab);
+    if(rc != sizeof(content)) {
+        perror("fwrite");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = fclose(fstab);
+    if(rc == EOF) {
+        perror("fclose");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = open("a", O_RDONLY | O_CREAT, mode);
+    if(rc == -1) {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = close(rc);
+    if(rc == -1) {
+        perror("close");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = open("e", O_RDONLY | O_CREAT, mode);
+    if(rc == -1) {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = close(rc);
+    if(rc == -1) {
+        perror("close");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = symlink("a", "b");
+    if(rc == -1) {
+        perror("symlink");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = symlink("e", "d");
+    if(rc == -1) {
+        perror("symlink");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = symlink("d", "c");
+    if(rc == -1) {
+        perror("symlink");
+        exit(EXIT_FAILURE);
+    }
+
+    rc = chdir("..");
+    if(rc == -1) {
+        perror("chdir");
+        exit(EXIT_FAILURE);
+    }
+
+    puts(dir);
 }
 
-
-
-int main()
+static void teardown(void)
 {
-  const char * value;
-  enable_debug = 0;
+    int rc;
+    rc = chdir("..");
+    if(rc == -1) {
+        perror("chdir");
+        exit(EXIT_FAILURE);
+    }
+    // FIXME: the file tree could be removed
+}
 
- /* First checks: fstab_has_device */
+/* Check that two strings are equal (or not, if _equal_ == false)*/
+static bool check_strings_equal(const char *name, const char *str1,
+                                const char *str2, bool equal)
+{
+    fprintf(stderr, "%s: 1: '%s' 2: '%s'\n", name,
+            str1?str1:"(null)", str2?str2:"(null)");
+    if(str1 == str2)
+        return equal;
+    if(!str1 || !str2)
+        return !equal;
 
-  check_strings_equal("check_fstab, simple", "check_fstab/a",
-		      fstab_has_device("check_fstab/fstab", "check_fstab/a",
-				       NULL, NULL), 1);
+    return strcmp(str1, str2) == 0 ? equal : !equal;
+}
 
-  check_strings_equal("check_fstab, argument link", "check_fstab/a",
-		      fstab_has_device("check_fstab/fstab", "check_fstab/b",
-				       NULL, NULL), 1);
+int main(void)
+{
+    bool ok;
+    prepare();
 
-  check_strings_equal("check_fstab, fstab link", "check_fstab/e",
-		      fstab_has_device("check_fstab/fstab", "check_fstab/d",
-				       NULL, NULL), 1);
+    /* First checks: fstab_has_device */
 
-  check_strings_equal("check_fstab, fstab double link", "check_fstab/e",
-		      fstab_has_device("check_fstab/fstab", "check_fstab/c",
-				       NULL, NULL), 1);
-  fprintf(stderr, "\n%d tests, %d failed\n", totalTests, testsFailed);
-  return testsFailed != 0;
+    ok = check_strings_equal("check_fstab, simple", "check_fstab/a",
+                             fstab_has_device("check_fstab/fstab",
+                                              "check_fstab/a", NULL, NULL),
+                             true);
+    if(!ok) {
+        fputs("Failing test #1.", stderr);
+        teardown();
+        exit(EXIT_FAILURE);
+    }
+
+    ok = check_strings_equal("check_fstab, argument link", "check_fstab/a",
+                             fstab_has_device("check_fstab/fstab",
+                                              "check_fstab/b", NULL, NULL),
+                             true);
+    if(!ok) {
+        fputs("Failing test #2.", stderr);
+        teardown();
+        exit(EXIT_FAILURE);
+    }
+
+    ok = check_strings_equal("check_fstab, fstab link", "check_fstab/e",
+                             fstab_has_device("check_fstab/fstab",
+                                              "check_fstab/d", NULL, NULL),
+                             true);
+    if(!ok) {
+        fputs("Failing test #3.", stderr);
+        teardown();
+        exit(EXIT_FAILURE);
+    }
+
+    ok = check_strings_equal("check_fstab, fstab double link", "check_fstab/e",
+                             fstab_has_device("check_fstab/fstab",
+                                              "check_fstab/c", NULL, NULL),
+                             true);
+    if(!ok) {
+        fputs("Failing test #4.", stderr);
+        teardown();
+        exit(EXIT_FAILURE);
+    }
+
+    exit(EXIT_SUCCESS);
 }

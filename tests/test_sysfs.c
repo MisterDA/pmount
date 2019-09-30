@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     if(bus)
       fprintf(stdout, "Found whitelisted bus: %s\n", bus);
     else
-      fprintf(stdout, "No whitelisted bus found\n", bus);
+      puts("No whitelisted bus found\n");
     return 0;
   }
   else {

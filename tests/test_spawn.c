@@ -13,10 +13,11 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 #include "utils.h"
 
 
-int main(int argc, char *argv[])
+int main(void)
 {
   int result;
 
@@ -26,7 +27,7 @@ int main(int argc, char *argv[])
     fprintf(stderr, "Failed to launch echo\n");
     return 1;
   }
-  if(strcmp(slurp_buffer, "test string\n")) {
+  if(strcmp(slurp_buffer, "test string\n") != 0) {
     fprintf(stderr, "Slurp buffer does not contain expected string, but '%s'\n",
 	    slurp_buffer);
     return 1;

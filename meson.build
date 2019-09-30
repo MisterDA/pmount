@@ -55,3 +55,4 @@ cdata = configuration_data({
 subdir('po')
 subdir('man')
 subdir('src')
+subdir('tests')

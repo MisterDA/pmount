@@ -65,7 +65,7 @@ char ** conffile_loop_devices()
 }
 
 
-cf_spec config[] = {
+static cf_spec config[] = {
   {"fsck", boolean_item, &conf_allow_fsck},
   {"not_physically_logged", boolean_item, &conf_allow_not_physically_logged},
   {"loop", boolean_item, &conf_allow_loop},
