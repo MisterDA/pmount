@@ -46,6 +46,7 @@ static struct FS supported_fs[] = {
       1 /* skip detection */
     },
     { "ntfs", "nosuid,nodev,user", 1, "077", ",nls=%s" },
+    { "btrfs", "nodev,noauto,nosuid", 0, NULL, 0 },
     { NULL, NULL, 0, NULL, 0}
 };
 
