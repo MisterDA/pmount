@@ -5,8 +5,8 @@
  *         (c) 2004 Canonical Ltd.
  *         Vincent Fourmond <fourmond@debian.org>
  *         (c) 2007-2009 by Vincent Fourmond
- * 
- * This software is distributed under the terms and conditions of the 
+ *
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -20,20 +20,20 @@ struct FS {
   /** File system name (e. g. 'ext2') */
   const char* fsname;
   /** Standard mount options (must not be empty) */
-  const char* options;   
+  const char* options;
   /** Whether the fs supports uid and gid options */
-  int support_ugid;      
+  int support_ugid;
   /** umask value (NULL if umask is not supported) */
-  const char* umask;     
+  const char* umask;
   /** The printf-like format to be used for iocharset option -- NULL means
       iocharset=%s */
-  const char* iocharset_format;	 
+  const char* iocharset_format;
   /** A printf-like format for actually implementing the fdmaskx.  If
       not null, the format should take two unsigned ints as arguments:
       fmask then dmask */
-  const char* fdmask;    
+  const char* fdmask;
   /** Whether or not to skip this fs for detection */
-  int skip_autodetect;   
+  int skip_autodetect;
 };
 
 /**

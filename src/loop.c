@@ -3,8 +3,8 @@
  *
  * Author: Vincent Fourmond <fourmond@debian.org>
  *         Copyright 2011 by Vincent Fourmond
- * 
- * This software is distributed under the terms and conditions of the 
+ *
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -33,7 +33,7 @@
 /**
    Tries all whitelisted loop devices to find one which isn't used,
    and returns it.
-   
+
    Returns NULL if no device could be found.
  */
 static const char * loopdev_find_unused()
@@ -41,7 +41,7 @@ static const char * loopdev_find_unused()
   char ** devices = conffile_loop_devices();
   if(! devices)
     return NULL;
-  
+
   while(*devices) {
     if(strlen(*devices) > 0) {
       debug("Trying loop device: %s\n", *devices);
@@ -73,7 +73,7 @@ int loopdev_dissociate(const char * device)
   int result = 1 ;
   int nb_tries = 0;
   while(result && nb_tries < 10) {
-    result = spawnl(SPAWN_EROOT, LOSETUPPROG, LOSETUPPROG, 
+    result = spawnl(SPAWN_EROOT, LOSETUPPROG, LOSETUPPROG,
 		    "-d", device, NULL);
     if(result) {
       debug("The loop device may be busy, trying again to dissociate\n");
@@ -94,31 +94,31 @@ int loopdev_associate(const char * source, char * target, size_t size)
 
   fd = open(source, O_RDWR);
   if( fd == -1 ) {
-    snprintf(buffer, sizeof(buffer), 
-	     _("Failed to open file '%s' for reading"), 
+    snprintf(buffer, sizeof(buffer),
+	     _("Failed to open file '%s' for reading"),
 	     source);
     perror(buffer);
     return -1;
   }
-  
+
   /**
      First, stat the file and check the permissions:
      owner + read/write
-     
+
      @todo Maybe the simple fact that the above open will fail if
      the user does not have read/write permissions is enough ?
-     
+
   */
   if(fstat(fd, &before)) {
-    snprintf(buffer, sizeof(buffer), 
-	     _("Failed to stat file '%s'"), 
+    snprintf(buffer, sizeof(buffer),
+	     _("Failed to stat file '%s'"),
 	     source);
     perror(buffer);
     close(fd);
     return -1;
   }
-    
-  if(! (before.st_uid == getuid() && 
+
+  if(! (before.st_uid == getuid() &&
 	(before.st_mode & S_IRUSR) && /* readable */
 	(before.st_mode & S_IWUSR)    /* writable */
 	)) {
@@ -135,13 +135,13 @@ int loopdev_associate(const char * source, char * target, size_t size)
     return -1;
   }
   debug("Found an unused loop device: %s\n", device);
-  
+
 
   /* We use /dev/fd/... to ensure that the file used is the statted
      one  */
   snprintf(buffer, sizeof(buffer), "/dev/fd/%d", fd);
 
-  result = spawnl(SPAWN_EROOT, LOSETUPPROG, LOSETUPPROG, 
+  result = spawnl(SPAWN_EROOT, LOSETUPPROG, LOSETUPPROG,
 		  device, buffer, NULL);
   close(fd); 			/* Now useless */
 

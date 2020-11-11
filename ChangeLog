@@ -57,7 +57,7 @@
 
 0.9.18
 -----------
-- clarify the position about symlinks in /etc/fstab in pmount.1 and 
+- clarify the position about symlinks in /etc/fstab in pmount.1 and
   try to provide a better error message when a mountpoint is found
   in /etc/fstab
 - vfat now uses utf8 rather than iocharset=utf8 when applicable, to
@@ -66,7 +66,7 @@
   specified, or is utf8
 - finally fix the symlinks in /etc/fstab problem.
 - pulling new translations from Rosetta.
-	
+
 0.9.17
 -----------
 - removed obnoxious symlink lookup for fstab entries.
@@ -84,9 +84,9 @@
 - added support for fmask and dmask for filesystems that support it,
   based on a patch by Suren A. Chilingaryan <csa@dside.dyndns.org>
 - NTFS now uses nls= instead of iocharset=
-- support for ntfsmount (via the ntfs-fuse fs type) and ntfs-3g 
+- support for ntfsmount (via the ntfs-fuse fs type) and ntfs-3g
   (via ntfs-3g)
-- included the patch by Dan Keder <keder@fi.muni.cz> for listing 
+- included the patch by Dan Keder <keder@fi.muni.cz> for listing
   mounted removable devices, in the fashion of mount (with some edits)
 - pumount now works with uuids/labels.
 - /etc/pmount.allow now supports fully globs (7)
@@ -103,7 +103,7 @@
 - pmount: support the 'omfs' file system
 - applied patch from Tim Phipps <tim@phipps-hutton.freeserve.co.uk> to
   fix pumount when /media is a symlink.
-- use errors=continue when applicable to prevent carefully crafted fs 
+- use errors=continue when applicable to prevent carefully crafted fs
   to cause kernel panics.
 - some typo fixes
 - -p is now a shortcut for --passphrase
@@ -111,7 +111,7 @@
 - use the realpath implementation from the mount utility for security
   reasons (man 3 realpath says 'Avoid using this function.')
 - pulling recent translations from Rosetta; adding (partial)
-  translations for: 
+  translations for:
   * Basque
   * Persian
   * Norwegian
@@ -366,7 +366,7 @@
   this does not work on ext3, ext2, reiserfs, xfs, and jfs; try two separate
   mount commands now
 - pumount: added option -l to support lazy unmounting
-- pumount: changed policy: 
+- pumount: changed policy:
   * device must be mounted by the same uid that attempts to pumount
   * device node does not need to exist and be removeable any more (because the
     device node cannot be checked any more if device was already ripped out)
@@ -399,7 +399,7 @@
 
 0.0.3
 -----
-- pumount: added similar suid check 
+- pumount: added similar suid check
 - pumount: delete mount point after umounting
 - determine real path of devices before checking them
 - pmount: mount with proper uid and gid options

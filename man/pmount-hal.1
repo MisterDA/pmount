@@ -18,7 +18,7 @@ pmount-hal \- HAL-aware wrapper around pmount
 permits normal users to mount removable devices without a matching /etc/fstab
 entry.
 
-.B pmount-hal 
+.B pmount-hal
 extends pmount by making it work together with hal (Hardware Abstration Layer).
 .B pmount-hal
 will ask hal about values for certain mount flags (like
@@ -32,11 +32,11 @@ pmount unchanged.
 
 .SH WARNING
 
-As 
+As
 .B pmount-hal
-uses 
+uses
 .BR pmount (1)
-to mount the given device, 
+to mount the given device,
 .B it is not possible to unmount it with hal !
 You need to use either
 .BR pumount (1)
@@ -44,7 +44,7 @@ or directly
 .BR umount (1)
 to unmount the devices mounted by
 .BR pmount-hal .
-This is the cause of the following error messages when unmounting with 
+This is the cause of the following error messages when unmounting with
 .IR hal\ umount :
 
 .TP 2
@@ -73,5 +73,5 @@ Setting this variable to a nonempty value will enable debug messages.
 .BR hald (8),
 
 .SH AUTHOR
-.B pmount 
+.B pmount
 is developed by Martin Pitt <martin.pitt@canonical.com>.

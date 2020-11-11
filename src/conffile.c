@@ -3,8 +3,8 @@
  *
  * Author: Vincent Fourmond <fourmond@debian.org>
  *         (c) 2009, 2011 by Vincent Fourmond
- * 
- * This software is distributed under the terms and conditions of the 
+ *
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -82,7 +82,7 @@ static int cf_gid_within_groups(gid_t gid)
     if(*grp == gid)
       return 1;
     grp++;
-  } 
+  }
   return 0;
 }
 
@@ -114,12 +114,12 @@ static int cf_user_has_groups(gid_t * gid_list)
    that represent a "value" of the configuration file.
 */
 
-void ci_bool_set_default(ci_bool * c, int val) 
+void ci_bool_set_default(ci_bool * c, int val)
 {
   c->def = val;
 }
 
-int ci_bool_allowed(ci_bool * c) 
+int ci_bool_allowed(ci_bool * c)
 {
   if(c->def) {
     /* Allowed by default, we just check the uid isn't in the
@@ -198,7 +198,7 @@ typedef struct {
      The key
   */
   char * key;
-  
+
   /**
      The target
   */
@@ -263,7 +263,7 @@ static void cf_spec_prepare_keys(cf_spec * spec, cf_key * keys)
    Takes a "null"-terminated list of cf_spec objects and returns a
    newly allocated cf_pair array.
 */
-static cf_key * cf_spec_build_keys(cf_spec * specs) 
+static cf_key * cf_spec_build_keys(cf_spec * specs)
 {
   cf_spec * s = specs;
   cf_key * keys;
@@ -273,7 +273,7 @@ static cf_key * cf_spec_build_keys(cf_spec * specs)
     nb += cf_spec_key_number(s);
     s++;
   }
-  
+
   keys = malloc(sizeof(cf_key) * (nb+1));
   k = keys;
   s = specs;
@@ -343,7 +343,7 @@ static int cf_read_line(FILE * file, char * dest, size_t nb)
     }
     if(len < 2 || dest[len-2] != '\\')
       return 0;
-    
+
     /* Multi-line, we go on. */
     dest += (len - 2);
     nb -= (len - 2);
@@ -355,8 +355,8 @@ static int cf_read_line(FILE * file, char * dest, size_t nb)
    Patterns for parsing the configuration files.
 */
 static int regex_compiled = 0;
-static regex_t comment_RE, declaration_RE, uint_RE, 
-  blank_RE, true_RE, false_RE;   
+static regex_t comment_RE, declaration_RE, uint_RE,
+  blank_RE, true_RE, false_RE;
 
 /**
    Initialize all the patterns necessary for parsing the configuration
@@ -371,7 +371,7 @@ static int cf_prepare_regexps()
   }
   /* A regexp matching a boolean value*/
 
-  if( regcomp(&declaration_RE, 
+  if( regcomp(&declaration_RE,
 	      "^[[:blank:]]*([-a-zA-Z_]+)[[:blank:]]*"
 	      "=[[:blank:]]*(.*)$",
 	      REG_EXTENDED )) {
@@ -379,19 +379,19 @@ static int cf_prepare_regexps()
     return -1;
   }
 
-  if( regcomp(&true_RE, "^[[:blank:]]*(true|yes|on)[[:blank:]]*", 
+  if( regcomp(&true_RE, "^[[:blank:]]*(true|yes|on)[[:blank:]]*",
 	      REG_EXTENDED | REG_ICASE | REG_NOSUB)) {
     perror(_("Could not compile regular expression for true values"));
     return -1;
   }
 
-  if( regcomp(&false_RE, "^[[:blank:]]*(false|no|off)[[:blank:]]*", 
+  if( regcomp(&false_RE, "^[[:blank:]]*(false|no|off)[[:blank:]]*",
 	      REG_EXTENDED | REG_ICASE | REG_NOSUB)) {
     perror(_("Could not compile regular expression for false values"));
     return -1;
   }
 
-  if( regcomp(&uint_RE, 
+  if( regcomp(&uint_RE,
 	      "^[[:blank:]]*([a-zA-Z_]+)[[:blank:]]*"
 	      "=[[:blank:]]*([0-9]+)$",
 	      REG_EXTENDED )) {
@@ -464,7 +464,7 @@ static int cf_classify_line(char * line, char ** name_ptr,
     *(line + m[2].rm_eo) = 0;	/* Make it NULL-terminated */
     if(*(line + m[2].rm_eo - 1) == '\n')
       *(line + m[2].rm_eo - 1) = 0; /* Strip trailing newline when
-				       applicable */    
+				       applicable */
     return DECLARATION_LINE;
   }
   return -1;			/* Should never be reached. */
@@ -521,7 +521,7 @@ static void cf_trim_anew(const char * source, char * dest, size_t nb)
 /**
    Copies a trimmed versino into newly allocated string
 */
-static char * cf_trim_dup(const char * source) 
+static char * cf_trim_dup(const char * source)
 {
   size_t l = strlen(source);
   char * buf = malloc(l + 1);
@@ -695,7 +695,7 @@ int cf_read_file(FILE * file, cf_spec * specs)
   cf_key * keys;
 
   /* Compile regular expressions when necessary */
-  if(cf_prepare_regexps()) 
+  if(cf_prepare_regexps())
     return -1;
   keys = cf_spec_build_keys(specs);
 
@@ -707,7 +707,7 @@ int cf_read_file(FILE * file, cf_spec * specs)
       retval = -1;
       break;
     }
-    
+
     line_type = cf_classify_line(line_buffer, &name, &value);
     switch(line_type) {
     case BLANK_LINE:
@@ -726,7 +726,7 @@ int cf_read_file(FILE * file, cf_spec * specs)
       }
       break;
     default:
-      fprintf(stderr, "Error parsing configuration file line: %s\n", 
+      fprintf(stderr, "Error parsing configuration file line: %s\n",
 	      line_buffer);
       retval = -1;
     }

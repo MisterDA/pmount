@@ -3,8 +3,8 @@
  *
  * Author: Martin Pitt <martin.pitt@canonical.com>
  * (c) 2005 Canonical Ltd.
- * 
- * This software is distributed under the terms and conditions of the 
+ *
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -26,7 +26,7 @@ enum decrypt_status {DECRYPT_OK, DECRYPT_NOTENCRYPTED, DECRYPT_FAILED,
  * @param password_file file to read the password from (NULL means prompt)
  * @param readonly 1 if device is read-only
  */
-enum decrypt_status luks_decrypt( const char* device, char* decrypted, 
+enum decrypt_status luks_decrypt( const char* device, char* decrypted,
         int decrypted_size, const char* password_file, int readonly );
 
 /**
@@ -42,7 +42,7 @@ void luks_release( const char* device, int force );
  * so, return the mapped device in mapped_device and return 1, otherwise return
  * 0.
  */
-int luks_get_mapped_device( const char* device, char* mapped_device, 
+int luks_get_mapped_device( const char* device, char* mapped_device,
         size_t mapped_device_size );
 
 /**

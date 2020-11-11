@@ -4,7 +4,7 @@
  * Author: Martin Pitt <martin.pitt@canonical.com>
  * (c) 2004 Canonical Ltd.
  *
- * This software is distributed under the terms and conditions of the 
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -116,7 +116,7 @@ bus_has_ancestry(const char * blockdevpath, const char** buses);
 /**
    Checks if the user is physically logged in or allowed anyway, and
    exit if that isn't the case.
-   
+
 */
 void ensure_user_physically_logged_in(const char * progname);
 

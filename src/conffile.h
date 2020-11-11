@@ -3,8 +3,8 @@
  *
  * @author Vincent Fourmond <fourmond@debian.org>
  *         Copyright 2009,2011 by Vincent Fourmond
- * 
- * This software is distributed under the terms and conditions of the 
+ *
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -39,7 +39,7 @@ typedef struct {
    Accessors
 */
 void ci_bool_set_default(ci_bool * c, int val);
-int ci_bool_allowed(ci_bool * c); 
+int ci_bool_allowed(ci_bool * c);
 void ci_bool_dump(ci_bool * c, FILE * out);
 
 
@@ -67,7 +67,7 @@ typedef struct {
 
 
 /**
-   The type of configuration items 
+   The type of configuration items
 */
 typedef enum {
   boolean_item,
@@ -80,7 +80,7 @@ typedef enum {
 */
 typedef struct {
   /**
-     The base name of the configuration item. 
+     The base name of the configuration item.
      NULL for an invalid item terminating the configuration file.
   */
   const char * base;

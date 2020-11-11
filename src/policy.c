@@ -6,7 +6,7 @@
  * (c) 2004 Canonical Ltd,
  *     2007, 2008, 2009 by Vincent Fourmond
  *
- * This software is distributed under the terms and conditions of the 
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -43,9 +43,9 @@
  *************************************************************************/
 
 /**
-   The directories to search for to find the block subsystem. Null-terminated. 
+   The directories to search for to find the block subsystem. Null-terminated.
  */
-static const char * block_subsystem_directories[] = { 
+static const char * block_subsystem_directories[] = {
   "/sys/subsystem/block",
   "/sys/class/block",
   "/sys/block",
@@ -77,7 +77,7 @@ static const char * block_subsystem_directories[] = {
    already better and that would drop the dependency on libsysfs
 */
 
-/* 
+/*
    The rationale of the steps found in this function are based on my
    own experience and on Documentation/sysfs-rules.txt
  */
@@ -98,7 +98,7 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
     DIR *devdir, *partdir;
     struct dirent *devdirent, *partdirent;
     struct stat devstat;
-    
+
     /* determine major and minor of dev */
     if( stat( dev, &devstat ) ) {
         perror( _("Error: could not get status of device") );
@@ -111,11 +111,11 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
                 (unsigned) devmajor, (unsigned) devminor );
 
     /* We first need to find one of
-       
+
        /sys/subsystem/block, /sys/class/block or /sys/block
 
        And then, we look for the right device number.
-       
+
     */
     while(*looking_for_block) {
       if(! stat( *looking_for_block, &devstat)) {
@@ -126,7 +126,7 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
       }
       looking_for_block++;
     }
-    
+
     if(! *looking_for_block) {
       perror( _("Error: could find the block subsystem directory") );
       exit( -1 );
@@ -160,7 +160,7 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
              * the partition */
             if( sysminor != devminor ) {
                 int found_part = 0;
-                
+
                 debug( "find_sysfs_device: minor device numbers do not match, checking partitions...\n");
 
                 partdir = opendir( devdirname );
@@ -189,7 +189,7 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
                         found_part = 1;
                         break;
                     }
-                } 
+                }
 
                 closedir( partdir );
 
@@ -203,7 +203,7 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
                             dev );
 
 
-	    /* 
+	    /*
 	       return /sys/block/<drive> if requested
 	    */
             if( blockdevpath )
@@ -280,9 +280,9 @@ is_blockdev_attr_true( const char* blockdevpath, const char* attr )
 
    Note that this function is in no way guaranteed to work, as the bus
    attribute is "fragile". But I'm not aware of anything better for
-   now. 
+   now.
 
-   This function was rewritten from scratch by 
+   This function was rewritten from scratch by
    Heinz-Ado Arnolds <arnolds@mpa-garching.mpg.de>, with a much better
    knowledge than me about the newer sysfs architecture.
 
@@ -327,7 +327,7 @@ static const char * get_device_bus( const char* devicepath, const char **buses)
 
 /**
  * Check whether a bus occurs anywhere in the ancestry of a device.
- * @param blockdevpath is a device as returned by 
+ * @param blockdevpath is a device as returned by
  * @param buses NULL-terminated array of bus names to scan for
  * @return the name of the bus found, or NULL
  */
@@ -353,7 +353,7 @@ bus_has_ancestry(const char * blockdevpath, const char** buses)
     debug("Realpath failed to resolve %s\n", path);
     return NULL;
   }
-  
+
   /* We now have a full path to the device */
 
   /* We loop on full_device until we are on the root directory */
@@ -422,7 +422,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
     }
 
     while( ( entry = getmntent( f ) ) != NULL ) {
-        snprintf( fstab_device, sizeof( fstab_device ), "%s", 
+        snprintf( fstab_device, sizeof( fstab_device ), "%s",
 		  entry->mnt_fsname );
 
         if( realpath( fstab_device, pathbuf ) )
@@ -433,7 +433,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
         if( !strcmp( realdev, realdev_arg ) ) {
                 endmntent( f );
                 if( mntpt ) {
-                    snprintf( mntpt, MEDIA_STRING_SIZE-1, "%s", 
+                    snprintf( mntpt, MEDIA_STRING_SIZE-1, "%s",
 			      entry->mnt_dir );
                 }
                 if( uid ) {
@@ -454,7 +454,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
 
     /* just for safety */
     if( mntpt )
-        *mntpt = 0; 
+        *mntpt = 0;
 
     endmntent( f );
     debug(" -> not found\n");
@@ -525,25 +525,25 @@ device_mounted( const char* device, int expect, char* mntpt )
 /* The silent version of the device_removable function. */
 static int device_removable_silent(const char * device)
 {
-  static const char* hotplug_buses[] = { "usb", "ieee1394", "mmc", 
+  static const char* hotplug_buses[] = { "usb", "ieee1394", "mmc",
 					 "pcmcia", "firewire", NULL };
   int removable;
   char blockdevpath[PATH_MAX];
   const char * whitelisted_bus;
 
   if(! find_sysfs_device(device, blockdevpath, sizeof(blockdevpath))) {
-    debug("device_removable: could not find a sysfs device for %s\n", 
+    debug("device_removable: could not find a sysfs device for %s\n",
 	  device );
-    return 0; 
+    return 0;
   }
-  
+
   debug("device_removable: corresponding block device for %s is %s\n",
 	device, blockdevpath);
-  
+
   /* check whether device has "removable" attribute with value '1' */
   removable = is_blockdev_attr_true(blockdevpath, "removable");
-  
-  /* 
+
+  /*
      If not, fall back to bus scanning (regard USB and FireWire as
      removable, see above).
   */
@@ -551,12 +551,12 @@ static int device_removable_silent(const char * device)
     whitelisted_bus = bus_has_ancestry(blockdevpath, hotplug_buses);
     if(whitelisted_bus) {
       removable = 1;
-      debug("Found that device %s belong to whitelisted bus %s\n", 
+      debug("Found that device %s belong to whitelisted bus %s\n",
 	    blockdevpath, whitelisted_bus);
     }
     else
       debug("Device %s does not belong to any whitelisted bus\n", device);
-  } 
+  }
   return removable;
 }
 
@@ -573,7 +573,7 @@ device_removable( const char* device )
 
 /**
    Checks whether a given device is whitelisted in /etc/pmount.allow
-   (or any other value the WHITELIST has). 
+   (or any other value the WHITELIST has).
    @param device : the device name
  */
 int
@@ -641,7 +641,7 @@ device_whitelisted( const char* device )
     return 0;
 }
 
-int 
+int
 device_locked( const char* device )
 {
     char lockdirname[PATH_MAX];
@@ -657,13 +657,13 @@ device_locked( const char* device )
 }
 
 int
-mntpt_valid( const char* mntpt ) 
+mntpt_valid( const char* mntpt )
 {
   char fstab_device[PATH_MAX];
-  if( fstab_has_mntpt( "/etc/fstab", mntpt, fstab_device, 
+  if( fstab_has_mntpt( "/etc/fstab", mntpt, fstab_device,
 		       sizeof(fstab_device) ) ) {
     fprintf( stderr, _("Error: mount point %s is already in /etc/fstab, "
-		       "associated to device %s\n"), 
+		       "associated to device %s\n"),
 	     mntpt, fstab_device );
     return 0;
   }
@@ -723,16 +723,16 @@ void print_mounted_removable_devices()
   struct mntent* ent;
   /* We need copies, as calls to libsysfs garble the contents of
      the fields */
-  char name[MEDIA_STRING_SIZE], dir[MEDIA_STRING_SIZE], 
+  char name[MEDIA_STRING_SIZE], dir[MEDIA_STRING_SIZE],
     type[MEDIA_STRING_SIZE], opts[MEDIA_STRING_SIZE];
 
-  
+
   if( !( f = setmntent( PROC_MOUNTS, "r" ) ) ) {
     fprintf(stderr, _("Error: could not open the %s file: %s"),
 	    PROC_MOUNTS, strerror(errno));
     exit( 100 );
   }
-    
+
   while( ( ent = getmntent( f ) ) != NULL ) {
     if(device_valid_silent(ent->mnt_fsname))  {
       /* We make copies */
@@ -792,7 +792,7 @@ void ensure_user_physically_logged_in(const char * progname)
     return;
   if(user_physically_logged_in())
     return;
-  fprintf(stderr, 
+  fprintf(stderr,
 	  _("You are not physically logged in and your "
 	    "system administrator does not "
 	    "allow remote users to run %s, aborting\n"), progname);

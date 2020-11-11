@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2011 Vincent Fourmond <fourmond@debian.org>
  *
  * This software is distributed under the terms and conditions of the
@@ -12,7 +12,7 @@
 #include "utils.h"
 #include "conffile.h"
 
-/* 
+/*
    This program checks the configuration file parsing works.
 
    It reads the parse_cf.conf configuration file.

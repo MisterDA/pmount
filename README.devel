@@ -1,7 +1,7 @@
 Notes for pmount development
 ============================
 
-After being hosted on lauchpad, the project has moved to 
+After being hosted on lauchpad, the project has moved to
 alioth.debian.org. Check the project page
 
 http://alioth.debian.org/projects/pmount/
@@ -9,7 +9,7 @@ http://alioth.debian.org/projects/pmount/
 for news and releases.
 
 pmount is developed using the "bazaar-ng" revision control system
-(http://bazaar-vcs.org). You can get the current development branch 
+(http://bazaar-vcs.org). You can get the current development branch
 using the command
 
   bzr branch http://pmount.alioth.debian.org/bzr/pmount

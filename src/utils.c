@@ -6,7 +6,7 @@
  * Copyright 2004 Canonical Ltd.
  * Copyright 2009-2011 Vincent Fourmond
  *
- * This software is distributed under the terms and conditions of the 
+ * This software is distributed under the terms and conditions of the
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
@@ -73,7 +73,7 @@ read_number_colon_number( const char* file, unsigned char* first, unsigned char*
     char buf[100];
     int bufsize;
     unsigned int n1, n2;
-    
+
     /* read a chunk from the file that is big enough to hold any two numbers */
     f = fopen( file, "r" );
     if( !f )
@@ -159,7 +159,7 @@ assert_emptydir( const char* dirname )
     }
 
     while ( ( dirent = readdir( dir ) ) ) {
-        if( strcmp( dirent->d_name, "." ) && 
+        if( strcmp( dirent->d_name, "." ) &&
             strcmp( dirent->d_name, ".." ) &&
             strcmp( dirent->d_name, CREATED_DIR_STAMP ) ) {
             closedir( dir );
@@ -196,7 +196,7 @@ is_block( const char* path )
 
 
 int
-remove_pmount_mntpt( const char *path ) 
+remove_pmount_mntpt( const char *path )
 {
     char stampfile[PATH_MAX];
     int result = 0;
@@ -243,7 +243,7 @@ pid_exists( unsigned pid )
     return (result == 0) ? 1 : 0;
 }
 
-int 
+int
 is_word_str( const char* s )
 {
     const char* i;
@@ -301,7 +301,7 @@ drop_groot()
     }
 }
 
-int 
+int
 spawnl( int options, const char* path, ... )
 {
     char* argv[1024];
@@ -331,7 +331,7 @@ size_t slurp_size = 0;
 #define DEVNULL_MASK (SPAWN_NO_STDOUT | SPAWN_NO_STDERR)
 #define SLURP_MASK (SPAWN_SLURP_STDOUT | SPAWN_SLURP_STDERR)
 
-int 
+int
 spawnv( int options, const char* path, char *const argv[] )
 {
     int devnull;
@@ -402,7 +402,7 @@ spawnv( int options, const char* path, char *const argv[] )
 	    int nb_read = 0;
 	    slurp_size = 0;
 	    do {
-		nb_read = read(fds[0], slurp_buffer + slurp_size, 
+		nb_read = read(fds[0], slurp_buffer + slurp_size,
 			    sizeof(slurp_buffer) - 1 - slurp_size);
 	    	if(nb_read < 0) {
 		    perror(_("Error while reading from child process"));
@@ -412,7 +412,7 @@ spawnv( int options, const char* path, char *const argv[] )
 		if(slurp_size == sizeof(slurp_buffer) - 1)
 		    break;
 	    } while(nb_read);
-	    
+
 	    if(nb_read) {
 		fprintf(stderr, _("Child process output has exceeded buffer size, please file a bug report"));
 	    }
