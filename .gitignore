@@ -1,18 +1,6 @@
-# -*- mode: conf; -*-
-
-# Backup files:
-*~
-
-# Tarballs
-*.tar.gz
-
-# Don't track generated files:
-*.gmo
-*.o
 *.a
-Makefile
-Makefile.in*
-/config.h*
+*.o
+*.tar.*
 .deps
 /configure
 po/POTFILES
@@ -27,23 +15,28 @@ src/pumount
 tests/test_sysfs
 tests/parse_cf
 tests/test_spawn
+Makefile
+Makefile.in
 
-# Automake-provided files:
-/COPYING
-/INSTALL
-/config.*
-/ltmain.sh
-/missing
-/compile
-/aclocal.m4
 /autom4te.cache
-/depcomp
-/install-sh
+/build-aux
+/m4
+
+/config.*
+/po/*.gmo
+/tests/*.log
+/tests/*.sh
+/tests/*.trs
+
+/aclocal.m4
+/configure
 /libtool
-/intltool-*
-
-# This one I'm not sure where it is coming from:
-/mkinstalldirs
-
-# Doxygen-generated documentation
-/doc
+/po/POTFILES
+/po/pmount.pot
+/po/stamp-it
+/src/pmount
+/src/pumount
+/stamp-h1
+/tests/check_fstab
+/tests/test_policy
+/tests/test_sysfs

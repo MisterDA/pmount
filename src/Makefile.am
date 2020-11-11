@@ -1,4 +1,23 @@
 AM_CPPFLAGS = $(HAL_CFLAGS)
+AM_CFLAGS = \
+	-Wall \
+	-Wextra \
+	-Wformat \
+	-Wmissing-declarations \
+	-Wmissing-prototypes \
+	-Wpointer-arith \
+	-Wshadow \
+	-Wsign-compare \
+	-Wstrict-prototypes \
+	-Wunused \
+	-flto \
+	$(HAL_CFLAGS)
+AM_LDFLAGS = \
+	-flto
+
+if DEVEL_MODE
+AM_CFLAGS += -Werror
+endif
 
 noinst_LIBRARIES = libpmount-util.a
 libpmount_util_a_SOURCES = \
@@ -47,4 +66,3 @@ install-data-hook:
 uninstall-hook:
 	rm -f $(INSTALL_DIR)/pmount
 	rm -f $(INSTALL_DIR)/pumount
-

@@ -27,7 +27,7 @@ extern int enable_debug;
 /**
  * printf() wrapper, only does anything if enable_debug != 0 
  */
-int debug( const char* format, ... );
+int debug( const char* format, ... ) __attribute__((format(printf, 1, 2)));
 
 /**
  * Return a copy of string s with each occurrence of char 'from'
@@ -115,25 +115,25 @@ int is_word_str( const char* s );
  * Change effective user id to root. If this fails, print an error message and
  * exit with status 100.
  */
-void get_root();
+void get_root(void);
 
 /**
  * Change effective user id back to getuid(). If this fails, print an
  * error message and exit with status 100.
  */
-void drop_root();
+void drop_root(void);
 
 /**
  * Change effective group id to root. If this fails, print an error
  * message and exit with status 100.
  */
-void get_groot();
+void get_groot(void);
 
 /**
  * Change effective group id back to getgid(). If this fails, print an
  * error message and exit with status 100.
  */
-void drop_groot();
+void drop_groot(void);
 
 /* spawn() options */
 #define SPAWN_EROOT 0x01

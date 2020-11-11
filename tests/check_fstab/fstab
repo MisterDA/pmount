@@ -1,6 +1,0 @@
-# A dummy fstab file for 
-
-# <file system> <mount point>   	<type>  <options>       <dump>  <pass>
-check_fstab/a	/test1           	ext3    defaults        0       0
-check_fstab/e	/test2           	ext3    defaults        0       0
-

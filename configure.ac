@@ -4,7 +4,8 @@ AC_INIT([pmount],[0.9.99-alpha])
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE([-Wall])
+AC_CONFIG_AUX_DIR([build-aux])
+AM_INIT_AUTOMAKE([-Wall -Werror dist-xz color-tests subdir-objects])
 
 IT_PROG_INTLTOOL([0.21])
 
@@ -16,9 +17,19 @@ LT_INIT
 AC_SEARCH_LIBS([strerror],[cposix])
 AC_HEADER_STDC
 
+AC_PROG_CC
+AC_PROG_CC_STDC
+if test "$ac_cv_prog_cc_stdc" == "no"; then
+	AC_MSG_ERROR([C compiler does not support std mode.])
+fi
+AC_PROG_CPP
+AC_PROG_CPP_WERROR
+
+AC_PROG_INTLTOOL([0.51])
+AM_PROG_LIBTOOL
+AC_PROG_INSTALL
 
 AC_DEFINE([HAVE_BLKID], [], [Description])
-
 
 AC_CHECK_HEADER(blkid/blkid.h,
 	[AC_CHECK_LIB(blkid, blkid_get_cache,
@@ -97,27 +108,42 @@ AC_CHECK_HEADER(regex.h,
 	[AC_MSG_ERROR([Cannot use POSIX regular expressions !])])	   
 
 AC_ARG_ENABLE(ruid-root-cryptsetup,
-  AS_HELP_STRING([--enable-ruid-root-cryptsetup],[Run cryptsetup with RUID = root]),
-  [AS_CASE([$enableval],
-     [yes],[CS_RUID=yes],
-     [no],[CS_RUID=no],
-     [AC_MSG_ERROR([bad value $enableval for --enable-ruid-root-cryptsetup])])],
-  [CS_RUID=yes])
-AS_IF([test x"$CS_RUID" = xyes],
-   [AC_MSG_NOTICE([Will be running cryptsetup with EUID = RUID = 0. Use --disable-ruid-root-cryptsetup])
-    AC_DEFINE(CRYPTSETUP_RUID, 1, [Define this parameter to run cryptsetup with RUID = EUID = root])])
+  AC_HELP_STRING([--enable-ruid-root-cryptsetup],[Run cryptsetup with RUID = root]),
+  [case $enableval in
+     yes) CS_RUID=yes ;;
+     no)  CS_RUID=no ;;
+     *) AC_MSG_ERROR(bad value $enableval for --enable-ruid-root-cryptsetup) ;;
+   esac],
+   [CS_RUID=yes])
+if test x"$CS_RUID" = xyes; then
+   AC_MSG_NOTICE([Will be running cryptsetup with EUID = RUID = 0. Use --disable-ruid-root-cryptsetup ])
+   AC_DEFINE(CRYPTSETUP_RUID, 1, [Define this parameter to run cryptsetup with RUID = EUID = root])
+fi
 
-AC_SUBST([GETTEXT_PACKAGE],[pmount])
-AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],"$GETTEXT_PACKAGE",[Define to the gettext package name.])
+AC_ARG_ENABLE(
+	devel,
+	[  --enable-devel   Enable development compilation flags],
+	[AM_CONDITIONAL(DEVEL_MODE, test 0 -eq 0)],
+	[AM_CONDITIONAL(DEVEL_MODE, test 0 -ne 0)],
+)
+
+
+GETTEXT_PACKAGE="pmount"
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
 AM_GLIB_GNU_GETTEXT
 
 AC_CONFIG_FILES([
-Makefile
-po/Makefile.in
-man/Makefile
-etc/Makefile
-src/Makefile
-tests/Makefile
+	Makefile
+	etc/Makefile
+	man/Makefile
+	po/Makefile.in
+	src/Makefile
+	tests/Makefile
 ])
 AC_OUTPUT
 
+AC_DEFUN([AC_CONFIG_TEST_SH], [AC_CONFIG_FILES([$1], [chmod -- +x $1])])
+AC_CONFIG_TEST_SH([tests/test_policy.sh])
+
+AC_OUTPUT
