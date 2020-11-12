@@ -18,6 +18,16 @@
    Some elements usable for configuration
 */
 
+typedef struct {
+  uid_t *u;
+  unsigned int len;
+} uid_list;
+
+typedef struct {
+  gid_t *g;
+  unsigned int len;
+} gid_list;
+
 /**
    A boolean value, possibly depending on membership to groups and
    user value.
@@ -27,22 +37,22 @@ typedef struct {
   /** Default value */
   int def;
 
-  /** List of allowed groups. NULL = none*/
-  gid_t * allowed_groups;
+  /** List of allowed groups. */
+  gid_list allowed_groups;
 
-  /** List of allowed users. NULL = none*/
-  uid_t * allowed_users;
+  /** List of allowed users. */
+  uid_list allowed_users;
 
-  /** List of denied users. NULL = none*/
-  uid_t * denied_users;
+  /** List of denied users. */
+  uid_list denied_users;
 } ci_bool;
 
 /**
    Accessors
 */
 void ci_bool_set_default(ci_bool * c, int val);
-int ci_bool_allowed(ci_bool * c);
-void ci_bool_dump(ci_bool * c, FILE * out);
+int ci_bool_allowed(const ci_bool * c);
+void ci_bool_dump(const ci_bool * c, FILE * out);
 
 
 

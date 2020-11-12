@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdbool.h>
 /* For regular expression parsing... */
 #include <regex.h>
 
@@ -31,18 +32,15 @@
 
 
 /**
-   Whether the given uid is in the -1-terminated list
+   Whether the given uid is in the list
  */
-static int cf_uid_in_list(uid_t value, uid_t * list)
+static int cf_uid_in_list(uid_t value, const uid_list * list)
 {
   if(! list)
     return 0;
-  while(*list != -1) {
-    if(*list == value)
+  for(unsigned i = 0; i < list->len; i++)
+    if(list->u[i] == value)
       return 1;
-    else
-      list++;
-  }
   return 0;
 }
 
@@ -50,21 +48,30 @@ static int cf_uid_in_list(uid_t value, uid_t * list)
    The groups the user belongs to. We use a cache to avoid querying
    too often.
 */
-static gid_t * user_groups = NULL;
+static gid_list user_groups = { .g = NULL, .len = 0 };
 
-static int cf_get_groups()
+static int cf_get_groups(void)
 {
-  int nb;
-  if(user_groups)
+  static bool cached = false;
+  int len;
+  if(cached)
     return 0;			/* Everything fine */
-  nb = getgroups(0, NULL);
-  if(nb < 0)
+  len = getgroups(0, NULL);
+  if(len < 0)
     return -1;
-  user_groups = malloc((nb + 1) * sizeof(gid_t));
-  nb = getgroups(nb, user_groups);
-  if(nb < 0)
+  user_groups.g = malloc(len * sizeof(gid_t));
+  if(! user_groups.g) {
+    perror("malloc(user_groups)");
     return -1;
-  user_groups[nb] = -1;		/* -1 -terminated string */
+  }
+  len = getgroups(len, user_groups.g);
+  if(len < 0) {
+    free(user_groups.g);
+    user_groups.g = NULL;
+    return -1;
+  }
+  user_groups.len = len;
+  cached = true;
   return 0;
 }
 
@@ -74,37 +81,31 @@ static int cf_get_groups()
  */
 static int cf_gid_within_groups(gid_t gid)
 {
-  gid_t * grp;
   if(cf_get_groups() < 0) {
     perror("Failed to get group information");
     exit(1);			/* Violent, but, well... */
   }
-  grp = user_groups;
-  while(*grp != -1) {
-    if(*grp == gid)
+  for(unsigned i = 0; i < user_groups.len; i++)
+    if(user_groups.g[i] == gid)
       return 1;
-    grp++;
-  }
   return 0;
 }
 
 /**
    Whether the user's group contain at least one of those listed in
-   the -1 -terminated list of gids.
+   the list of gids.
 
    Yes, I know that this function is inefficient, and that sorting
    both lists beforehand would do miracles. On the other hand, unless
    both group lists are huge, the time spent here isn't very large.
  */
-static int cf_user_has_groups(gid_t * gid_list)
+static int cf_user_has_groups(const gid_list * list)
 {
-  if(! gid_list)
+  if(! list)
     return 0;
-  while(*gid_list != -1) {
-    if(cf_gid_within_groups(*gid_list))
+  for(unsigned i = 0; i < list->len; i++)
+    if(cf_gid_within_groups(list->g[i]))
       return 1;
-    gid_list++;
-  }
   return 0;
 }
 
@@ -121,54 +122,45 @@ void ci_bool_set_default(ci_bool * c, int val)
   c->def = val;
 }
 
-int ci_bool_allowed(ci_bool * c)
+int ci_bool_allowed(const ci_bool * c)
 {
   if(c->def) {
     /* Allowed by default, we just check the uid isn't in the
        denied user list */
-    if(cf_uid_in_list(getuid(), c->denied_users))
+    if(cf_uid_in_list(getuid(), &c->denied_users))
       return 0;			/* Denied.. */
     return 1;
   }
   else {
-    if(cf_uid_in_list(getuid(), c->allowed_users))
+    if(cf_uid_in_list(getuid(), &c->allowed_users))
       return 1;
-    if(cf_user_has_groups(c->allowed_groups))
+    if(cf_user_has_groups(&c->allowed_groups))
       return 1;
     return 0;
   }
 }
 
-void ci_bool_dump(ci_bool * c, FILE * out)
+void ci_bool_dump(const ci_bool * c, FILE * out)
 {
   fprintf(out, "Default: %s\n", (c->def ? "allowed" : "denied"));
-  if(c->allowed_groups) {
+  if(c->allowed_groups.len > 0) {
     fprintf(out, "Allowed groups:");
-    gid_t * g = c->allowed_groups;
-    while(*g != -1) {
-      fprintf(out, " %d", *g);
-      g++;
-    }
+    for(unsigned i = 0; i < c->allowed_groups.len; i++)
+      fprintf(out, " %u", c->allowed_groups.g[i]);
     fprintf(out, "\n");
   }
 
-  if(c->allowed_users) {
+  if(c->allowed_users.len > 0) {
     fprintf(out, "Allowed users:");
-    uid_t * g = c->allowed_users;
-    while(*g != -1) {
-      fprintf(out, " %d", *g);
-      g++;
-    }
+    for(unsigned i = 0; i < c->allowed_users.len; i++)
+      fprintf(out, " %u", c->allowed_users.u[i]);
     fprintf(out, "\n");
   }
 
-  if(c->denied_users) {
+  if(c->denied_users.len > 0) {
     fprintf(out, "Denied users:");
-    uid_t * g = c->denied_users;
-    while(*g != -1) {
-      fprintf(out, " %d", *g);
-      g++;
-    }
+    for(unsigned i = 0; i < c->denied_users.len; i++)
+      fprintf(out, " %u", c->denied_users.u[i]);
     fprintf(out, "\n");
   }
   fprintf(out, "-> result: %s\n", (ci_bool_allowed(c) ? "allowed" : "denied"));
@@ -533,25 +525,29 @@ static char * cf_trim_dup(const char * source)
   return buf;
 }
 
-static uid_t cf_get_uid(const char * uid)
+static int cf_get_uid(const char * uid, uid_t * uid_r)
 {
   char buffer[1024];		/* To trim the string */
   cf_trim_anew(uid, buffer, sizeof(buffer));
   struct passwd * pwd = getpwnam(buffer);
-  if(pwd)
-    return pwd->pw_uid;
+  if(pwd) {
+    *uid_r = pwd->pw_uid;
+    return 0;
+  }
 
   fprintf(stderr, _("Could not find user named '%s'\n"), buffer);
   return -1;
 }
 
-static gid_t cf_get_gid(const char * gid)
+static int cf_get_gid(const char * gid, gid_t * gid_r)
 {
   char buffer[1024];		/* To trim the string */
   cf_trim_anew(gid, buffer, sizeof(buffer));
   struct group * group = getgrnam(buffer);
-  if(group)
-    return group->gr_gid;
+  if(group) {
+    *gid_r = group->gr_gid;
+    return 0;
+  }
 
   fprintf(stderr, _("Could not find group named '%s'\n"), buffer);
   return -1;
@@ -559,60 +555,64 @@ static gid_t cf_get_gid(const char * gid)
 
 /**
    Reads a comma-separated list of uid and store it into the pointer
-   pointed to by target
+   pointed to by list
  */
-static int cf_get_uidlist(char * value, uid_t ** target)
+static int cf_get_uidlist(char * value, uid_list * list)
 {
   /* First, compute the number of commas in the list. */
-  size_t nb = cf_count_chars(value, ",");
-  char * end;
-  uid_t * vals = malloc(sizeof(uid_t) * (nb+2));
-  *target = vals;
-
-  while(1) {
-    end = strchr(value, ',');
-    if(end)
-      *end = 0;
-    *vals = cf_get_uid(value);
-    if(*vals == -1)
-      return -1;		/* Something went wrong */
-
-    vals++;
-    if(! end)
-      break;
-    value = end+1;
+  list->len = cf_count_chars(value, ",") + 1;
+  list->u = malloc(list->len * sizeof(uid_t));
+  if(! list->u) {
+    perror("malloc(uid_list)");
+    list->len = 0;
+    return -1;
   }
-  *vals = -1;
+
+  for(unsigned i = 0; i < list->len; i++) {
+    char * start = value, * end = strchr(value, ',');
+    if(end) {
+      value = end + 1;
+      *end = 0;
+    }
+    if(cf_get_uid(start, list->u + i)) {
+        free(list->u);
+        list->u = NULL;
+        list->len = 0;
+        return -1;		/* Something went wrong */
+    }
+  }
   return 0;
 }
 
 
 /**
    Reads a comma-separated list of gids and store it into the pointer
-   pointed to by target
+   pointed to by list
  */
-static int cf_get_gidlist(char * value, gid_t ** target)
+static int cf_get_gidlist(char * value, gid_list * list)
 {
   /* First, compute the number of commas in the list. */
-  size_t nb = cf_count_chars(value, ",");
-  char * end;
-  gid_t * vals = malloc(sizeof(gid_t) * (nb+2));
-  *target = vals;
-
-  while(1) {
-    end = strchr(value, ',');
-    if(end)
-      *end = 0;
-    *vals = cf_get_gid(value);
-    if(*vals == -1)
-      return -1;		/* Something went wrong */
-
-    vals++;
-    if(! end)
-      break;
-    value = end+1;
+  list->len = cf_count_chars(value, ",") + 1;
+  list->g = malloc(list->len * sizeof(gid_t));
+  if(! list->g) {
+    perror("malloc(gid_list)");
+    list->len = 0;
+    return -1;
   }
-  *vals = -1;
+
+  for(unsigned i = 0; i < list->len; i++) {
+    char * start = value, * end = strchr(value, ',');
+    if(end) {
+      value = end + 1;
+      *end = 0;
+    }
+    if(cf_get_gid(start, list->g + i)) {
+      free(list->g);
+      list->g = NULL;
+      list->len = 0;
+      return -1;		/* Something went wrong */
+    }
+  }
   return 0;
 }
 
