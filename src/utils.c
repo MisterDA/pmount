@@ -1,4 +1,3 @@
-/* -*- c-basic-offset: 4; -*- */
 /**
  * utils.c - helper functions for pmount
  *
