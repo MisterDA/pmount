@@ -24,6 +24,7 @@
 #include <libintl.h>
 #include <sys/stat.h>
 #include <regex.h>
+#include <ctype.h>
 
 /* For globs in /etc/pmount.allow */
 #include <fnmatch.h>
@@ -33,6 +34,7 @@
 #include <pwd.h>
 #include <utmpx.h>
 
+#include "configuration.h"
 
 /* We use our own safe version of realpath */
 #include "realpath.h"

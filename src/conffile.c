@@ -8,10 +8,12 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
+#define _POSIX_C_SOURCE 200809L
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 /* For regular expression parsing... */
 #include <regex.h>
 
