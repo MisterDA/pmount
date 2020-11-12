@@ -12,6 +12,8 @@
 #define __conffile_h
 
 
+#include <sys/types.h>
+
 /**
    Some elements usable for configuration
 */
@@ -106,4 +108,3 @@ typedef struct {
 int cf_read_file(FILE * file, cf_spec * specs);
 
 #endif
-

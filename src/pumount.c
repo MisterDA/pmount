@@ -10,6 +10,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -23,7 +24,9 @@
 #include "policy.h"
 #include "utils.h"
 #include "luks.h"
-#include "config.h"
+#include "realpath.h"
+
+extern const char* VERSION;
 
 /* error codes */
 const int E_ARGS = 1;

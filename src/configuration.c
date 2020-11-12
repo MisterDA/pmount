@@ -8,6 +8,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
+#include "config.h"
 #include <stdio.h>
 #include <stdio.h>
 #include <string.h>
@@ -17,7 +18,6 @@
 
 #include "conffile.h"
 #include "configuration.h"
-#include "config.h"
 #include "utils.h"
 
 

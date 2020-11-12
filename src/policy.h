@@ -11,7 +11,7 @@
 #ifndef __policy_h
 #define __policy_h
 
-#include <config.h>
+#include "config.h"
 #include <stdlib.h> /* for size_t */
 
 #define MAX_LABEL_SIZE 255
@@ -122,4 +122,3 @@ void ensure_user_physically_logged_in(const char * progname);
 
 
 #endif /* __policy_h */
-

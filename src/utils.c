@@ -10,7 +10,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
-
+#define _DEFAULT_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -502,4 +502,3 @@ unlock_dir( const char* dir ) {
     unlink( lockfile );
     drop_root();
 }
-
