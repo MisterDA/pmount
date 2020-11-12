@@ -1,7 +1,0 @@
-This directory is meant to contain informal, usually more-or-less
-interactive tests for pmount and relatives. This is not a real test
-suite, rather a big help for development and most especially bugfixes.
-
-A check_fstab subdirectory is included in the git repository but not
-in the tarball, mostly because symlinks are not handled gracefully by
-automake (for good reasons too).
