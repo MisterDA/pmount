@@ -530,7 +530,7 @@ static int device_removable_silent(const char * device)
 					 "pcmcia", "firewire", NULL };
   int removable;
   char blockdevpath[PATH_MAX];
-  const char * whitelisted_bus;
+  const char * allowlisted_bus;
 
   if(! find_sysfs_device(device, blockdevpath, sizeof(blockdevpath))) {
     debug("device_removable: could not find a sysfs device for %s\n",
@@ -549,14 +549,14 @@ static int device_removable_silent(const char * device)
      removable, see above).
   */
   if(! removable) {
-    whitelisted_bus = bus_has_ancestry(blockdevpath, hotplug_buses);
-    if(whitelisted_bus) {
+    allowlisted_bus = bus_has_ancestry(blockdevpath, hotplug_buses);
+    if(allowlisted_bus) {
       removable = 1;
-      debug("Found that device %s belong to whitelisted bus %s\n",
-	    blockdevpath, whitelisted_bus);
+      debug("Found that device %s belong to allowlisted bus %s\n",
+	    blockdevpath, allowlisted_bus);
     }
     else
-      debug("Device %s does not belong to any whitelisted bus\n", device);
+      debug("Device %s does not belong to any allowlisted bus\n", device);
   }
   return removable;
 }
@@ -573,12 +573,12 @@ device_removable( const char* device )
 }
 
 /**
-   Checks whether a given device is whitelisted in /etc/pmount.allow
-   (or any other value the WHITELIST has).
+   Checks whether a given device is allowlisted in /etc/pmount.allow
+   (or any other value the ALLOWLIST has).
    @param device : the device name
  */
 int
-device_whitelisted( const char* device )
+device_allowlisted( const char* device )
 {
     FILE* fwl;
     char line[1024];
@@ -589,20 +589,20 @@ device_whitelisted( const char* device )
     int result;
     /* (Vincent Fourmond 6/1/2009): Adding :, as it comes in often in
        device names */
-    const char* whitelist_regex = "^[[:space:]]*([][:alnum:]/:_+.[*?-]+)[[:space:]]*(#.*)?$";
+    const char* allowlist_regex = "^[[:space:]]*([][:alnum:]/:_+.[*?-]+)[[:space:]]*(#.*)?$";
 
-    fwl = fopen( WHITELIST, "r" );
+    fwl = fopen( ALLOWLIST, "r" );
     if( !fwl )
         return 0;
 
-    result = regcomp( &re, whitelist_regex, REG_EXTENDED );
+    result = regcomp( &re, allowlist_regex, REG_EXTENDED );
     if( result ) {
         regerror( result, &re, line, sizeof( line ) );
-        fprintf( stderr, "Internal error: device_whitelisted(): could not compile regex: %s\n", line );
+        fprintf( stderr, "Internal error: device_allowlisted(): could not compile regex: %s\n", line );
         exit( -1 );
     }
 
-    debug( "device_whitelist: checking " WHITELIST "...\n" );
+    debug( "device_allowlist: checking " ALLOWLIST "...\n" );
 
     while( fgets( line, sizeof( line ), fwl ) ) {
         /* ignore lines which are too long */
@@ -614,9 +614,9 @@ device_whitelisted( const char* device )
        if (!regexec (&re, line, 3, match, 0)) {
            line[match[1].rm_eo] = 0;
            d = line+match[1].rm_so;
-           debug( "comparing %s against whitelisted '%s'\n", device, d);
+           debug( "comparing %s against allowlisted '%s'\n", device, d);
 	   if( !fnmatch(d, device, FNM_PATHNAME) ) {
-	     debug( "device_whitelisted(): %s matches, returning 1\n",
+	     debug( "device_allowlisted(): %s matches, returning 1\n",
 		    d);
 	     fclose( fwl );
 	     return 1;
@@ -626,7 +626,7 @@ device_whitelisted( const char* device )
 		symlinks. See bug #507038 */
 	     if( realpath(d, full_path)) {
 	       if(! strcmp(device, full_path)) {
-		 debug( "device_whitelisted(): %s matches after "
+		 debug( "device_allowlisted(): %s matches after "
 			"realpath expansion, returning 1\n",
 			d);
 		 fclose( fwl );

@@ -66,9 +66,9 @@ int main(int argc, char *argv[])
 	    "yes" :"no");
     bus = bus_has_ancestry(device_path, hotplug_buses);
     if(bus)
-      fprintf(stdout, "Found whitelisted bus: %s\n", bus);
+      fprintf(stdout, "Found allowlisted bus: %s\n", bus);
     else
-      fprintf(stdout, "No whitelisted bus found\n", bus);
+      fprintf(stdout, "No allowlisted bus found\n", bus);
     return 0;
   }
   else {

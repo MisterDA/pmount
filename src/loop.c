@@ -31,7 +31,7 @@
 
 
 /**
-   Tries all whitelisted loop devices to find one which isn't used,
+   Tries all allowlisted loop devices to find one which isn't used,
    and returns it.
 
    Returns NULL if no device could be found.
@@ -54,7 +54,7 @@ static const char * loopdev_find_unused()
   }
 }
 
-int loopdev_is_whitelisted(const char * device)
+int loopdev_is_allowlisted(const char * device)
 {
   char ** devices = conffile_loop_devices();
   if(! devices)
@@ -130,7 +130,7 @@ int loopdev_associate(const char * source, char * target, size_t size)
 
   device = loopdev_find_unused();
   if(! device) {
-    fprintf(stderr, _("No whitelisted loop device available\n"));
+    fprintf(stderr, _("No allowlisted loop device available\n"));
     close(fd);
     return -1;
   }

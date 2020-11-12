@@ -46,7 +46,7 @@ else
 endif
 cdata.set_quoted('LOCKDIR',  sharedstatedir / 'pmount-locks')
 
-cdata.set_quoted('WHITELIST', sysconfdir / 'pmount.allow')
+cdata.set_quoted('ALLOWLIST', sysconfdir / 'pmount.allow')
 cdata.set_quoted('SYSTEM_CONFFILE', sysconfdir / 'pmount.conf')
 
 cdata.set_quoted('MOUNTPROG', get_option('mount-prog'))

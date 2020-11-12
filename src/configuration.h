@@ -29,7 +29,7 @@ int conffile_allow_not_physically_logged();
 int conffile_allow_loop();
 
 /**
-   Return the NULL-terminated list of whitelisted loop devices. Can
+   Return the NULL-terminated list of allowlisted loop devices. Can
    return NULL if the list is empty.
 */
 char ** conffile_loop_devices();
