@@ -348,7 +348,6 @@ static int cf_read_line(FILE * file, char * dest, size_t nb)
 /**
    Patterns for parsing the configuration files.
 */
-static int regex_compiled = 0;
 static regex_t comment_RE, declaration_RE, uint_RE,
   blank_RE, true_RE, false_RE;
 
@@ -356,7 +355,7 @@ static regex_t comment_RE, declaration_RE, uint_RE,
    Initialize all the patterns necessary for parsing the configuration
    file.
 */
-static int cf_prepare_regexps()
+static int cf_prepare_regexps(void)
 {
   /* A regexp matching comment lines */
   if( regcomp(&comment_RE, "^[[:blank:]]*#", REG_EXTENDED)) {
@@ -404,7 +403,7 @@ static int cf_prepare_regexps()
 /**
    Frees the pattern space of the allocated regular expressions
 */
-static void cf_free_regexps()
+static void cf_free_regexps(void)
 {
   regfree(&comment_RE);
   regfree(&uint_RE);
@@ -661,6 +660,7 @@ static int cf_key_assign_value(cf_key * key, char * value)
 	ci_bool_set_default(t, val); /* Or directly use the internals ? */
 	return 0;
       }
+      return -1;
     case 1:			/* Allow_user */
       if(cf_get_uidlist(value, &(t->allowed_users)))
 	return -1;
@@ -676,14 +676,13 @@ static int cf_key_assign_value(cf_key * key, char * value)
     default:
       return -1;
     }
-    return -1;
   }
   case string_list:  {
     ci_string_list * t = (ci_string_list *) key->target->target;
     return cf_read_stringlist(value, t);
   }
   default:
-    break;
+    return -1;
   }
 }
 
@@ -735,5 +734,6 @@ int cf_read_file(FILE * file, cf_spec * specs)
   }
 
   cf_key_free_keys(keys);
+  cf_free_regexps();
   return 0;
 }
