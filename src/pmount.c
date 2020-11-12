@@ -9,6 +9,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
+#define _POSIX_C_SOURCE 200809L
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,6 +30,7 @@
 #include "policy.h"
 #include "utils.h"
 #include "luks.h"
+#include "loop.h"
 
 /* Configuration file handling */
 #include "configuration.h"

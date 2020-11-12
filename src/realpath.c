@@ -24,12 +24,14 @@
   This file was taken from the source code for mount.
 */
 
+#define _POSIX_C_SOURCE 200809L
 #include <limits.h>		/* for PATH_MAX */
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "realpath.h"
 #include <libintl.h>
 #include "utils.h"
