@@ -10,7 +10,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
-#define _DEFAULT_SOURCE
+#define _GNU_SOURCE
 #include "policy.h"
 #include "utils.h"
 
@@ -289,41 +289,50 @@ is_blockdev_attr_true( const char* blockdevpath, const char* attr )
    Many thanks !
  */
 
-static const char * get_device_bus( const char* devicepath, const char **buses)
+static const char * get_device_bus(const char* devicepath, const char **buses)
 {
-    char *link;
-    char path[PATH_MAX];
-    char devfilename[PATH_MAX];
-    const char *res = NULL;
-    const char **i;
-    DIR *busdir;
-    struct dirent *busdirent;
+  const char *res = NULL;
+  const char **i;
 
-    for ( i = buses; *i; i++ ) {
-      snprintf(path, sizeof(path), "/sys/bus/%s/devices", *i);
-      if ( !(busdir = opendir(path)) ) {
-        debug( "can't open bus/devicedir: %s\n", path);
-        continue;
-      }
-      while( ( busdirent = readdir( busdir ) ) != NULL ) {
-        snprintf( devfilename, sizeof( devfilename ), "%s/%s", path, busdirent->d_name);
-        if(! (link = realpath(devfilename, NULL))) {
-          debug( "realpath(%s): %s\n", devfilename, strerror( errno ));
-          continue;
-        }
-        if ( ! strcmp(devicepath, link) ) {
-          res = *i;
-          free(link);
-          break;
-        }
-        free(link);
-      }
-      closedir(busdir);
-      if ( res )
-        break;
+  for (i = buses; *i; i++) {
+    struct dirent *busdirent;
+    DIR *busdir;
+    char *path;
+
+    if (asprintf(&path, "/sys/bus/%s/devices", *i) == -1) {
+      debug("asprintf: %s\n", strerror(errno));
+      continue;
+    }
+    if (!(busdir = opendir(path))) {
+      debug("opendir(%s): %s\n", path, strerror(errno));
+      free(path);
+      continue;
     }
 
-    return res;
+    while (!res && (busdirent = readdir(busdir))) {
+      char *devfilename, *link;
+      if (asprintf(&devfilename, "%s/%s", path, busdirent->d_name) == -1) {
+          debug("asprintf: %s\n", strerror(errno));
+          continue;
+      }
+      if (!(link = realpath(devfilename, NULL))) {
+        debug("realpath(%s): %s\n", devfilename, strerror(errno));
+        free(devfilename);
+        continue;
+      }
+      if (strcmp(devicepath, link) == 0)
+        res = *i;
+      free(devfilename);
+      free(link);
+    }
+
+    closedir(busdir);
+    free(path);
+    if (res)
+      return res;
+  }
+
+  return NULL;
 }
 
 
@@ -336,36 +345,43 @@ static const char * get_device_bus( const char* devicepath, const char **buses)
 const char *
 bus_has_ancestry(const char * blockdevpath, const char** buses)
 {
-  char path[1024];
-  char *full_device;
-  char * tmp = "";
+  char *path, *full_device, *tmp;
   const char *bus;
   struct stat sb;
+  int rc;
 
-  // The sysfs structure has changed:
-  // in former times /sys/block/<dev> was a directory and
-  // /sys/block/<dev>/device a link to the real device dir.
-  // Now (linux-2.6.27.9) /sys/block/<dev> is a link to the
-  // real device dir.
-  lstat(blockdevpath, &sb);
-  if ( !S_ISLNK(sb.st_mode) )
-    tmp = "/device";
-  snprintf(path, sizeof(path), "%s%s", blockdevpath, tmp);
-  if(! (full_device = realpath(path, NULL))) {
-    debug("realpath(%s): %s\n", path, strerror( errno ));
+  /* The sysfs structure has changed: in former times /sys/block/<dev>
+   * was a directory and /sys/block/<dev>/device a link to the real
+   * device dir. Now (linux-2.6.27.9) /sys/block/<dev> is a link to
+   * the real device dir. */
+  rc = lstat(blockdevpath, &sb);
+  if (rc == -1) {
+    debug("lstat(%s): %s\n", blockdevpath, strerror(errno));
     return NULL;
   }
+  tmp = S_ISLNK(sb.st_mode) ? "" : "/device";
+  if (asprintf(&path, "%s%s", blockdevpath, tmp) == -1) {
+    debug("asprintf: %s\n", strerror(errno));
+    return NULL;
+  }
+  if (!(full_device = realpath(path, NULL))) {
+    debug("realpath(%s): %s\n", path, strerror(errno));
+    free(path);
+    return NULL;
+  }
+  free(path);
 
   /* We now have a full path to the device */
 
   /* We loop on full_device until we are on the root directory */
-  while(full_device[0]) {
-    if((bus = get_device_bus(full_device, buses))) {
+  while (full_device[0]) {
+    if ((bus = get_device_bus(full_device, buses))) {
       debug("Found bus %s for device %s\n", bus, full_device);
+      free(full_device);
       return bus;
     }
     tmp = strrchr(full_device, '/');
-    if(! tmp)
+    if (!tmp)
       break;
     *tmp = 0;
   }
@@ -528,7 +544,7 @@ device_mounted( const char* device, int expect, char* mntpt )
     }
 
     if( mntpt )
-        snprintf( mntpt, MEDIA_STRING_SIZE-1, "%s", mp );
+        strncpy(mntpt, mp, MEDIA_STRING_SIZE);
 
     return mounted;
 }
@@ -783,7 +799,7 @@ int user_physically_logged_in()
   while((s = getutxent())) {
     if(s->ut_type != USER_PROCESS)
       continue;
-    if(! strcmp(s->ut_user, username)) {
+    if(! strncmp(s->ut_user, username, sizeof(s->ut_user))) {
       if(! strncmp(s->ut_line, "tty", 3) && isdigit(s->ut_line[3])) {
 	/* Logged to a tty ! */
 	retval = 1;
