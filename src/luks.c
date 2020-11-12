@@ -8,7 +8,9 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
+#define _DEFAULT_SOURCE
 #include "config.h"
+#include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
 #include <sys/stat.h>
@@ -19,7 +21,6 @@
 #include "luks.h"
 #include "utils.h"
 #include "policy.h"
-#include "realpath.h"
 
 /* If CRYPTSETUP_RUID is set, we run cryptsetup with ruid = euid = 0.
    This is due to a recent *feature* in libgcrypt, dropping privileges
