@@ -126,7 +126,7 @@ check_mount_policy( const char* device, const char* mntpt, int doing_loop )
     int result = device_valid( device ) &&
         !device_mounted( device, 0, NULL ) &&
         ( doing_loop ||
-	  device_whitelisted( device ) || device_removable( device )) &&
+	  device_allowlisted( device ) || device_removable( device )) &&
         !device_locked( device ) &&
         mntpt_valid( mntpt ) &&
         !mntpt_mounted( mntpt, 0 );

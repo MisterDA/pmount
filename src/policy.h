@@ -65,9 +65,9 @@ int device_mounted( const char* device, int expect, char* mntpt );
 int device_removable( const char* device );
 
 /**
- * Check whether device is whitelisted in /etc/pmount.allow
+ * Check whether device is allowlisted in /etc/pmount.allow
  */
-int device_whitelisted( const char* device );
+int device_allowlisted( const char* device );
 
 /**
  * Check whether device is locked.
