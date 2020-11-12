@@ -1,0 +1,21 @@
+option('media-dir', type: 'string', value: '/media',
+       description: 'Parent directory for mounts')
+
+option('mount-prog', type: 'string', value: '/bin/mount',
+       description: 'Path to mount program')
+option('umount-prog', type: 'string', value: '/bin/umount',
+       description: 'Path to unmount program')
+option('cryptsetup-prog', type: 'string', value: '/sbin/cryptsetup',
+       description: 'Path to cryptsetup program')
+option('mount-ntfs-3g', type: 'string', value: '/sbin/mount.ntfs-3g',
+       description: 'Path to mount.ntfs-3g program')
+option('fsck-prog', type: 'string', value: '/sbin/fsck',
+       description: 'Path to fsck program')
+option('losetup-prog', type: 'string', value: '/sbin/losetup',
+       description: 'Path to losetup program')
+
+option('ruid-root-cryptsetup', type: 'boolean', value: true,
+       description: 'Run cryptsetup with RUID = EUID = root')
+
+option('bash-completions', type: 'boolean', value: true,
+       description: 'Install Bash completions.')

@@ -8,10 +8,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
-#include "luks.h"
 #include "config.h"
-#include "utils.h"
-#include "policy.h"
 #include <stdio.h>
 #include <limits.h>
 #include <sys/stat.h>
@@ -19,6 +16,10 @@
 #include <unistd.h>
 #include <libintl.h>
 
+#include "luks.h"
+#include "utils.h"
+#include "policy.h"
+#include "realpath.h"
 
 /* If CRYPTSETUP_RUID is set, we run cryptsetup with ruid = euid = 0.
    This is due to a recent *feature* in libgcrypt, dropping privileges
@@ -44,7 +45,7 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
 
     /* check if encrypted */
     status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
-            CRYPTSETUP, CRYPTSETUP, "isLuks", device, NULL );
+            CRYPTSETUPPROG, CRYPTSETUPPROG, "isLuks", device, NULL );
     if( status != 0 ) {
         /* just return device */
         debug( "device is not LUKS encrypted, or cryptsetup with LUKS support is not installed\n" );
@@ -63,20 +64,20 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
     if( password_file )
         if( readonly == 1 )
             status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
-                    CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
+                    CRYPTSETUPPROG, CRYPTSETUPPROG, "luksOpen", "--key-file",
                     password_file, "--readonly", device, label, NULL );
         else
             status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
-                    CRYPTSETUP, CRYPTSETUP, "luksOpen", "--key-file",
+                    CRYPTSETUPPROG, CRYPTSETUPPROG, "luksOpen", "--key-file",
                     password_file, device, label, NULL );
     else
         if( readonly == 1 )
             status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
-                    CRYPTSETUP, CRYPTSETUP, "--readonly", "luksOpen",
+                    CRYPTSETUPPROG, CRYPTSETUPPROG, "--readonly", "luksOpen",
                     device, label, NULL );
         else
             status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
-                    CRYPTSETUP, CRYPTSETUP, "luksOpen", device, label, NULL );
+                    CRYPTSETUPPROG, CRYPTSETUPPROG, "luksOpen", device, label, NULL );
 
     if( status == 0 )
         /* yes, we have a LUKS device */
@@ -97,7 +98,7 @@ luks_release( const char* device, int force )
 {
   if(force || luks_has_lockfile(device)) {
     spawnl( CRYPTSETUP_SPAWN_OPTIONS,
-	    CRYPTSETUP, CRYPTSETUP, "luksClose", device, NULL );
+	    CRYPTSETUPPROG, CRYPTSETUPPROG, "luksClose", device, NULL );
     luks_remove_lockfile(device);
   }
   else

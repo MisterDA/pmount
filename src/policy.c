@@ -10,6 +10,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
+#define _DEFAULT_SOURCE
 #include "policy.h"
 #include "utils.h"
 
