@@ -1,4 +1,3 @@
-/* -*- c-basic-offset: 4; -*- */
 /**
  * pumount.c - policy wrapper around 'umount' to allow mounting removable
  *             devices for normal users
