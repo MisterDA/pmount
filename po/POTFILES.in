@@ -6,5 +6,4 @@ src/policy.c
 src/pumount.c
 src/utils.c
 src/luks.c
-src/realpath.c
 

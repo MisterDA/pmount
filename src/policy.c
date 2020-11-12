@@ -36,9 +36,6 @@
 
 #include "configuration.h"
 
-/* We use our own safe version of realpath */
-#include "realpath.h"
-
 /*************************************************************************
  *
  * Sysfs query functions for determining if a device is removable

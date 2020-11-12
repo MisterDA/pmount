@@ -9,7 +9,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
-#define _POSIX_C_SOURCE 200809L
+#define _DEFAULT_SOURCE
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,9 +39,6 @@
 #ifdef HAVE_BLKID
 #include <blkid/blkid.h>
 #endif
-
-/* Using our private realpath function */
-#include "realpath.h"
 
 extern const char* VERSION;
 

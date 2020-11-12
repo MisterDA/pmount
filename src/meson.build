@@ -6,7 +6,6 @@ shared = [
   'conffile.c',
   'luks.c',
   'policy.c',
-  'realpath.c',
   'utils.c',
 ]
 libpmount = static_library('pmount', shared)

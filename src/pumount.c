@@ -9,7 +9,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
-#define _POSIX_C_SOURCE 200809L
+#define _DEFAULT_SOURCE
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +25,6 @@
 #include "policy.h"
 #include "utils.h"
 #include "luks.h"
-#include "realpath.h"
 #include "configuration.h"
 
 extern const char* VERSION;
