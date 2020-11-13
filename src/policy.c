@@ -25,6 +25,7 @@
 #include <sys/stat.h>
 #include <regex.h>
 #include <ctype.h>
+#include <sys/sysmacros.h>
 
 /* For globs in /etc/pmount.allow */
 #include <fnmatch.h>
@@ -85,7 +86,7 @@ static const char * block_subsystem_directories[] = {
 int
 find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
 {
-    unsigned char devmajor, devminor;
+    unsigned int devmajor, devminor;
     unsigned char sysmajor, sysminor;
     char blockdirname[255];
     char devdirname[512]; // < 255 chars blockdir + max. 255 chars subdir
@@ -104,11 +105,11 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
         perror( _("Error: could not get status of device") );
         exit( E_INTERNAL );
     }
-    devmajor = (unsigned char) ( devstat.st_rdev >> 8 );
-    devminor = (unsigned char) ( devstat.st_rdev & 255 );
+    devmajor = major(devstat.st_rdev);
+    devminor = minor(devstat.st_rdev);
 
     debug( "find_sysfs_device: looking for sysfs directory for device %u:%u\n",
-                (unsigned) devmajor, (unsigned) devminor );
+           devmajor, devminor );
 
     /* We first need to find one of
 
