@@ -295,7 +295,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     *ugid_opt = *umask_opt = *fdmask_opt = *iocharset_opt = 0;
     if( fs->support_ugid ) {
 	struct stat statbuf;
-	int gid = getgid();
+	gid_t gid = getgid();
 	int result;
 
 	/* if pmount is installed setgid, use that group, otherwise use the
@@ -309,7 +309,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 	    if( statbuf.st_mode & S_ISGID )
 		gid = statbuf.st_gid;
 	}
-	snprintf( ugid_opt, sizeof( ugid_opt ), ",uid=%i,gid=%i",
+	snprintf( ugid_opt, sizeof( ugid_opt ), ",uid=%u,gid=%u",
 		  getuid(), gid );
     }
 
