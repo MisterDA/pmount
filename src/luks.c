@@ -8,7 +8,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
-#define _DEFAULT_SOURCE
+#define _GNU_SOURCE
 #include "config.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <libintl.h>
+#include <string.h>
 
 #include "luks.h"
 #include "utils.h"
@@ -108,19 +109,21 @@ luks_release( const char* device, int force )
 }
 
 int
-luks_get_mapped_device( const char* device, char* mapped_device,
-        size_t mapped_device_size )
+luks_get_mapped_device( const char* device, char** mapped_device )
 {
-    char path[PATH_MAX];
     char* dmlabel = strreplace( device, '/', '_' );
     struct stat st;
-    snprintf( path, sizeof( path ), "/dev/mapper/%s", dmlabel );
-    free( dmlabel );
-    if( !stat( path, &st ) ) {
-        snprintf( mapped_device, mapped_device_size, "%s", path );
-        return 1;
-    } else
+    if ( asprintf( mapped_device, "/dev/mapper/%s", dmlabel ) == -1 ) {
+        perror("asprintf");
         return 0;
+    }
+    free( dmlabel );
+    if( stat( *mapped_device, &st ) == -1) {
+        free(*mapped_device);
+        *mapped_device = NULL;
+        return 0;
+    }
+    return 1;
 }
 
 #define LUKS_LOCKDIR LOCKDIR "_luks"

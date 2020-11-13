@@ -291,7 +291,7 @@ is_blockdev_attr_true( const char* blockdevpath, const char* attr )
 
 static const char * get_device_bus( const char* devicepath, const char **buses)
 {
-    char link[PATH_MAX];
+    char *link;
     char path[PATH_MAX];
     char devfilename[PATH_MAX];
     const char *res = NULL;
@@ -307,14 +307,16 @@ static const char * get_device_bus( const char* devicepath, const char **buses)
       }
       while( ( busdirent = readdir( busdir ) ) != NULL ) {
         snprintf( devfilename, sizeof( devfilename ), "%s/%s", path, busdirent->d_name);
-        if(! realpath(devfilename, link)) {
-          debug( "Could not read link at %s/%s\n", path, busdirent->d_name);
+        if(! (link = realpath(devfilename, NULL))) {
+          debug( "realpath(%s): %s\n", devfilename, strerror( errno ));
           continue;
         }
         if ( ! strcmp(devicepath, link) ) {
           res = *i;
+          free(link);
           break;
         }
+        free(link);
       }
       closedir(busdir);
       if ( res )
@@ -335,7 +337,7 @@ const char *
 bus_has_ancestry(const char * blockdevpath, const char** buses)
 {
   char path[1024];
-  char full_device[1024];
+  char *full_device;
   char * tmp = "";
   const char *bus;
   struct stat sb;
@@ -349,8 +351,8 @@ bus_has_ancestry(const char * blockdevpath, const char** buses)
   if ( !S_ISLNK(sb.st_mode) )
     tmp = "/device";
   snprintf(path, sizeof(path), "%s%s", blockdevpath, tmp);
-  if(! realpath(path, full_device)) {
-    debug("Realpath failed to resolve %s\n", path);
+  if(! (full_device = realpath(path, NULL))) {
+    debug("realpath(%s): %s\n", path, strerror( errno ));
     return NULL;
   }
 
@@ -367,6 +369,7 @@ bus_has_ancestry(const char * blockdevpath, const char** buses)
       break;
     *tmp = 0;
   }
+  free(full_device);
   return NULL;
 }
 
@@ -400,12 +403,9 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
 {
     FILE* f;
     struct mntent *entry;
-    char pathbuf[PATH_MAX];
-    char pathbuf_arg[PATH_MAX];
+    char *pathbuf_arg;
     static char fstab_device[PATH_MAX];
-    char* realdev;
     const char* realdev_arg;
-    char* uidopt;
 
     debug("Checking for device '%s' in '%s'\n", device, fname);
 
@@ -414,42 +414,47 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
         exit( 100 );
     }
 
-    if( realpath( device, pathbuf_arg ) )
+    if( (pathbuf_arg = realpath( device, NULL ) )) {
       realdev_arg = pathbuf_arg;
-    else {
-      debug("realpath failed on %s : %s\n", device, strerror(errno));
+    } else {
+      debug("realpath(%s): %s\n", device, strerror(errno));
       realdev_arg = device;
     }
 
     while( ( entry = getmntent( f ) ) != NULL ) {
+        char *pathbuf, *realdev;
         snprintf( fstab_device, sizeof( fstab_device ), "%s",
 		  entry->mnt_fsname );
 
-        if( realpath( fstab_device, pathbuf ) )
+        if( (pathbuf = realpath( fstab_device, NULL ) ) )
             realdev = pathbuf;
         else
             realdev = fstab_device;
 
         if( !strcmp( realdev, realdev_arg ) ) {
-                endmntent( f );
-                if( mntpt ) {
-                    snprintf( mntpt, MEDIA_STRING_SIZE-1, "%s",
-			      entry->mnt_dir );
-                }
-                if( uid ) {
-                    uidopt = hasmntopt( entry, "uid" );
-                    if( uidopt )
-                        uidopt = strchr( uidopt, '=' );
-                    if( uidopt ) {
-                        ++uidopt; /* skip the '=' */
-                        /* FIXME: this probably needs more checking */
-                        *uid = atoi( uidopt );
-                    } else
-                        *uid = -1;
-                }
-		debug(" -> found as '%s'\n", fstab_device);
-                return fstab_device;
+            if( mntpt ) {
+                snprintf( mntpt, MEDIA_STRING_SIZE-1, "%s",
+                          entry->mnt_dir );
+            }
+            if( uid ) {
+                char *uidopt = hasmntopt( entry, "uid" );
+                if( uidopt )
+                    uidopt = strchr( uidopt, '=' );
+                if( uidopt ) {
+                    ++uidopt; /* skip the '=' */
+                    /* FIXME: this probably needs more checking */
+                    *uid = atoi( uidopt );
+                } else
+                    *uid = -1;
+            }
+
+            endmntent( f );
+            free( pathbuf );
+            free( pathbuf_arg );
+            debug(" -> found as '%s'\n", fstab_device);
+            return fstab_device;
         }
+        free( pathbuf );
     }
 
     /* just for safety */
@@ -457,6 +462,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
         *mntpt = 0;
 
     endmntent( f );
+    free( pathbuf_arg );
     debug(" -> not found\n");
     return NULL;
 }
@@ -466,12 +472,12 @@ fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t devi
 {
     FILE* f;
     struct mntent *entry;
-    char realmntptbuf[PATH_MAX];
-    char fstabmntptbuf[PATH_MAX];
+    char *realmntptbuf;
     const char* realmntpt, *fstabmntpt;
+    int rc = 0;
 
     /* resolve symlinks, if possible */
-    if( realpath( mntpt, realmntptbuf ) )
+    if( (realmntptbuf = realpath( mntpt, NULL ) ) )
         realmntpt = realmntptbuf;
     else
         realmntpt = mntpt;
@@ -482,8 +488,9 @@ fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t devi
     }
 
     while( ( entry = getmntent( f ) ) != NULL ) {
+        char *fstabmntptbuf;
         /* resolve symlinks, if possible */
-        if( realpath( entry->mnt_dir, fstabmntptbuf ) )
+        if( ( fstabmntptbuf = realpath( entry->mnt_dir, NULL ) ) )
             fstabmntpt = fstabmntptbuf;
         else
             fstabmntpt = entry->mnt_dir;
@@ -491,13 +498,17 @@ fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t devi
         if( !strcmp( fstabmntpt, realmntpt ) ) {
             if( device )
                 snprintf( device, device_size, "%s", entry->mnt_fsname );
-            endmntent( f );
-            return 1;
+            rc = 1;
+            free( fstabmntptbuf );
+            goto done;
         }
+        free( fstabmntptbuf );
     }
 
+done:
+    free( realmntptbuf );
     endmntent( f );
-    return 0;
+    return rc;
 }
 
 int
@@ -581,7 +592,6 @@ device_allowlisted( const char* device )
 {
     FILE* fwl;
     char line[1024];
-    char full_path[1024];
     char *d;
     regex_t re;
     regmatch_t match[3];
@@ -621,16 +631,19 @@ device_allowlisted( const char* device )
 	     return 1;
            }
 	   else {
+             char *full_path;
 	     /* We use realpath on the specification in order to follow
 		symlinks. See bug #507038 */
-	     if( realpath(d, full_path)) {
+             if( (full_path = realpath(d, NULL))) {
 	       if(! strcmp(device, full_path)) {
 		 debug( "device_allowlisted(): %s matches after "
 			"realpath expansion, returning 1\n",
 			d);
 		 fclose( fwl );
+                 free( full_path );
 		 return 1;
 	       }
+               free( full_path );
 	     }
 	   }
        }
