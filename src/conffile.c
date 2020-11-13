@@ -276,6 +276,10 @@ static cf_key * cf_spec_build_keys(cf_spec * specs)
   }
 
   keys = malloc(sizeof(cf_key) * (nb+1));
+  if(!keys) {
+      perror("malloc(keys)");
+      return NULL;
+  }
   k = keys;
   s = specs;
   while(s->base) {
@@ -705,7 +709,10 @@ int cf_read_file(FILE * file, cf_spec * specs)
   if(cf_prepare_regexps())
     return -1;
   keys = cf_spec_build_keys(specs);
-
+  if(keys == NULL) {
+      cf_free_regexps();
+      return -1;
+  }
 
   while(! feof(file) && !retval) {
     int line_type;
