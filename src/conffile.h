@@ -106,7 +106,10 @@ typedef struct {
      The target of the configuration item. Actual type depends on
      the item type
   */
-  void * target;
+  union {
+      ci_bool *boolean_item;
+      ci_string_list *string_list;
+  };
 } cf_spec;
 
 
