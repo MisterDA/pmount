@@ -102,7 +102,7 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
     /* determine major and minor of dev */
     if( stat( dev, &devstat ) ) {
         perror( _("Error: could not get status of device") );
-        exit( -1 );
+        exit( E_INTERNAL );
     }
     devmajor = (unsigned char) ( devstat.st_rdev >> 8 );
     devminor = (unsigned char) ( devstat.st_rdev & 255 );
@@ -129,13 +129,13 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
 
     if(! *looking_for_block) {
       perror( _("Error: could find the block subsystem directory") );
-      exit( -1 );
+      exit( E_INTERNAL );
     }
 
     devdir = opendir( blockdirname );
     if( !devdir ) {
         perror( _("Error: could not open <sysfs dir>/block/") );
-        exit( -1 );
+        exit( E_INTERNAL );
     }
 
     /* open each subdirectory and see whether major device matches */
@@ -166,7 +166,7 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
                 partdir = opendir( devdirname );
                 if( !partdir ) {
                     perror( _("Error: could not open <sysfs dir>/block/<device>/") );
-                    exit( -1 );
+                    exit( E_INTERNAL );
                 }
                 while( ( partdirent = readdir( partdir ) ) != NULL ) {
                     if( partdirent->d_type != DT_DIR )
@@ -427,7 +427,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
 
     if( !( f = fopen( fname, "r" ) ) ) {
         perror( _("Error: could not open fstab-type file") );
-        exit( 100 );
+        exit( E_INTERNAL );
     }
 
     if( (pathbuf_arg = realpath( device, NULL ) )) {
@@ -500,7 +500,7 @@ fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t devi
 
     if( !( f = fopen( fname, "r" ) ) ) {
         perror( _("Error: could not open fstab-type file") );
-        exit( 100 );
+        exit( E_INTERNAL );
     }
 
     while( ( entry = getmntent( f ) ) != NULL ) {
@@ -624,7 +624,7 @@ device_allowlisted( const char* device )
     if( result ) {
         regerror( result, &re, line, sizeof( line ) );
         fprintf( stderr, "Internal error: device_allowlisted(): could not compile regex: %s\n", line );
-        exit( -1 );
+        exit( E_INTERNAL );
     }
 
     debug( "device_allowlist: checking " ALLOWLIST "...\n" );
@@ -759,7 +759,7 @@ void print_mounted_removable_devices()
   if( !( f = setmntent( PROC_MOUNTS, "r" ) ) ) {
     fprintf(stderr, _("Error: could not open the %s file: %s"),
 	    PROC_MOUNTS, strerror(errno));
-    exit( 100 );
+    exit( E_INTERNAL );
   }
 
   while( ( ent = getmntent( f ) ) != NULL ) {
@@ -789,7 +789,7 @@ int user_physically_logged_in()
   pw = getpwuid(getuid());
   if(! pw || pw->pw_uid != getuid()) {
     fputs( _("Impossible to find passwd record for current user\n"), stderr);
-    exit(10);
+    exit( E_INTERNAL );
   }
   safe_strcpy(username, pw->pw_name);
 
@@ -810,9 +810,6 @@ int user_physically_logged_in()
   endutxent();
   return retval;
 }
-
-#define E_DISALLOWED 9
-
 
 void ensure_user_physically_logged_in(const char * progname)
 {

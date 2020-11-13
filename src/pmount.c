@@ -42,23 +42,6 @@
 
 extern const char* VERSION;
 
-/* error codes */
-const int E_ARGS = 1;
-const int E_DEVICE = 2;
-const int E_MNTPT = 3;
-const int E_POLICY = 4;
-const int E_EXECMOUNT = 5;
-const int E_UNLOCK = 6;
-const int E_PID = 7;
-const int E_LOCKED = 8;
-/**
-   Something not explicitly allowed from within the system configuration file
-*/
-const int E_DISALLOWED = 9;
-/* Something failed with loop devices */
-const int E_LOSETUP = 10;
-const int E_INTERNAL = 100;
-
 #define OPT_FMASK 128
 #define OPT_DMASK 129
 #define OPT_UTC   130
@@ -761,7 +744,7 @@ main( int argc, char** argv )
     /* drop root privileges until we really need them (still available as saved uid) */
     if( seteuid( getuid() ) ) {
         perror( _("Error: could not drop all effective uid privileges") );
-        exit(1);
+        return E_INTERNAL;
     }
 
 
@@ -995,12 +978,12 @@ main( int argc, char** argv )
                     fputs( _("Error: could not decrypt device (wrong passphrase?)\n"), stderr );
 		    if(doing_loop_mount)
 			loopdev_dissociate(device);
-                    exit( E_POLICY );
+                    return E_POLICY;
                 case DECRYPT_EXISTS:
                     fputs( _("Error: mapped device already exists\n"), stderr );
 		    if(doing_loop_mount)
 			loopdev_dissociate(device);
-                    exit( E_POLICY );
+                    return E_POLICY;
                 case DECRYPT_OK:
 		  /* We create a luks lockfile _on the decrypted device !_*/
 		  if(! luks_create_lockfile(decrypted_device))
@@ -1010,7 +993,7 @@ main( int argc, char** argv )
                 default:
                     fprintf( stderr, "Internal error: unhandled decrypt_status %i\n",
                         (int) decrypt);
-                    exit( E_INTERNAL );
+                    return E_INTERNAL;
             }
 
             /* lock the mount directory */
@@ -1019,8 +1002,7 @@ main( int argc, char** argv )
                 fputs( _("Error: could not lock the mount directory. Another pmount is probably running for this mount point.\n"), stderr );
 		if(doing_loop_mount)
 		    loopdev_dissociate(device);
-
-                exit( E_LOCKED );
+                return E_LOCKED;
             }
             debug( "mount point directory locked\n" );
 

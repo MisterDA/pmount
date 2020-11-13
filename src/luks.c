@@ -88,7 +88,7 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
         result = DECRYPT_FAILED;
     else {
         fprintf( stderr, "Internal error: cryptsetup luksOpen failed\n" );
-        exit( 100 );
+        exit( E_INTERNAL );
     }
 
     free( label );

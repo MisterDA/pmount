@@ -14,6 +14,23 @@
 #ifndef __utils_h
 #define __utils_h
 
+/* Error codes */
+extern const int E_ARGS;
+extern const int E_DEVICE;
+extern const int E_MNTPT;
+extern const int E_POLICY;
+extern const int E_EXECMOUNT;
+extern const int E_EXECUMOUNT;
+extern const int E_UNLOCK;
+extern const int E_PID;
+extern const int E_LOCKED;
+/** Something not explicitly allowed from within the system
+ * configuration file */
+extern const int E_DISALLOWED;
+/** Something failed with loop devices */
+extern const int E_LOSETUP;
+extern const int E_INTERNAL;
+
 /**
  * gettext abbreviation
  */
@@ -178,4 +195,3 @@ int spawnl( int options, const char* path, ... );
 int spawnv( int options, const char* path, char *const argv[] );
 
 #endif /* __utils_h */
-

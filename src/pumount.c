@@ -30,14 +30,6 @@
 
 extern const char* VERSION;
 
-/* error codes */
-const int E_ARGS = 1;
-const int E_DEVICE = 2;
-const int E_POLICY = 4;
-const int E_EXECUMOUNT = 5;
-const int E_DISALLOWED = 9;
-const int E_INTERNAL = 100;
-
 static char mntpt[MEDIA_STRING_SIZE];
 
 /**
@@ -206,7 +198,7 @@ main( int argc, char** argv )
     /* drop root privileges until we really need them (still available as saved uid) */
     if( seteuid( getuid() ) ) {
         perror( _("Error: could not drop all effective uid privileges") );
-        exit(1);
+        return E_INTERNAL;
     }
 
     /* parse command line options */

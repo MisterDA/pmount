@@ -27,6 +27,21 @@
 
 #include "utils.h"
 
+/* Error codes */
+const int E_ARGS = 1;
+const int E_DEVICE = 2;
+const int E_MNTPT = 3;
+const int E_POLICY = 4;
+const int E_EXECMOUNT = 5;
+const int E_EXECUMOUNT = 5;
+const int E_UNLOCK = 6;
+const int E_PID = 7;
+const int E_LOCKED = 8;
+const int E_DISALLOWED = 9;
+const int E_LOSETUP = 10;
+const int E_INTERNAL = 100;
+
+
 /* File name used to tag directories created by pmount */
 #define CREATED_DIR_STAMP ".created_by_pmount"
 
@@ -54,7 +69,7 @@ strreplace( const char* s, char from, char to )
 
     if( !result ) {
         fputs( _("Error: out of memory\n"), stderr );
-        exit( 100 );
+        exit( E_INTERNAL );
     }
 
     char* i;
@@ -269,7 +284,7 @@ get_root()
 {
     if( setreuid( -1, 0 ) ) {
         perror( _("Internal error: could not change to effective uid root") );
-        exit( 100 );
+        exit( E_INTERNAL );
     }
 }
 
@@ -278,7 +293,7 @@ drop_root()
 {
     if( setreuid( -1, getuid() ) ) {
         perror( _("Internal error: could not change effective user uid to real user id") );
-        exit( 100 );
+        exit( E_INTERNAL );
     }
 }
 
@@ -287,7 +302,7 @@ get_groot()
 {
     if( setregid( -1, 0 ) ) {
         perror( _("Internal error: could not change to effective gid root") );
-        exit( 100 );
+        exit( E_INTERNAL );
     }
 }
 
@@ -296,7 +311,7 @@ drop_groot()
 {
     if( setregid( -1, getgid() ) ) {
         perror( _("Internal error: could not change effective group id to real group id") );
-        exit( 100 );
+        exit( E_INTERNAL );
     }
 }
 
@@ -312,7 +327,7 @@ spawnl( int options, const char* path, ... )
     for(;;) {
         if( argv_size >= sizeof( argv ) ) {
             fprintf( stderr, "Internal error: spawnl(): too many arguments\n" );
-            exit( 100 );
+            exit( E_INTERNAL );
         }
 
         if( ( argv[argv_size++] = va_arg( args, char* ) ) == NULL )
@@ -341,7 +356,7 @@ spawnv( int options, const char* path, char *const argv[] )
 
     if( (options & SLURP_MASK) && pipe(fds) ) {
 	perror(_("Impossible to setup pipes for subprocess communication"));
-	exit( 100 );
+	exit( E_INTERNAL );
     }
 
     if( enable_debug ) {
@@ -354,7 +369,7 @@ spawnv( int options, const char* path, char *const argv[] )
     new_pid = fork();
     if(new_pid == -1) {
 	perror(_("Impossible to fork"));
-	exit( 100 );
+	exit( E_INTERNAL );
     }
 
     if( ! new_pid ) {
@@ -363,7 +378,7 @@ spawnv( int options, const char* path, char *const argv[] )
         if( options & SPAWN_RROOT )
             if( setreuid( 0, -1 ) ) {
                 perror( _("Error: could not raise to full root uid privileges") );
-                exit( 100 );
+                exit( E_INTERNAL );
             }
 
 	/* Performing redirections */
@@ -392,7 +407,7 @@ spawnv( int options, const char* path, char *const argv[] )
             execvp( path, argv );
         else
             execv( path, argv );
-        exit( -1 );
+        exit( E_INTERNAL );
     } else {
 
 	/* First, slurp all data */
@@ -405,7 +420,7 @@ spawnv( int options, const char* path, char *const argv[] )
 			    sizeof(slurp_buffer) - 1 - slurp_size);
 	    	if(nb_read < 0) {
 		    perror(_("Error while reading from child process"));
-		    exit( 100 );
+		    exit( E_INTERNAL );
 		}
 		slurp_size += nb_read;
 		if(slurp_size == sizeof(slurp_buffer) - 1)
@@ -421,13 +436,13 @@ spawnv( int options, const char* path, char *const argv[] )
 
         if( wait( &status ) < 0 ) {
             perror( "Error: could not wait for executed subprocess" );
-            exit( 100 );
+            exit( E_INTERNAL );
         }
     }
 
     if( !WIFEXITED( status ) ) {
         fprintf( stderr, "Internal error: spawn(): process did not return a status" );
-        exit( 100 );
+        exit( E_INTERNAL );
     }
 
     status = WEXITSTATUS( status );
