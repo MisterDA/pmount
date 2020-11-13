@@ -83,7 +83,7 @@ static int cf_gid_within_groups(gid_t gid)
 {
   if(cf_get_groups() < 0) {
     perror("Failed to get group information");
-    exit(1);			/* Violent, but, well... */
+    exit( E_INTERNAL );			/* Violent, but, well... */
   }
   for(unsigned i = 0; i < user_groups.len; i++)
     if(user_groups.g[i] == gid)
