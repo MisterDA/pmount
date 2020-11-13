@@ -183,6 +183,13 @@ static size_t cf_spec_key_number(const cf_spec * spec)
   };
 }
 
+typedef enum {
+    CF_KEY_INFO_NONE,
+    CF_KEY_INFO_ALLOW_USER,
+    CF_KEY_INFO_ALLOW_GROUP,
+    CF_KEY_INFO_DENY_USER,
+} cf_key_info;
+
 /**
    A structure used to associate a configuration key to the target
    configuration item
@@ -199,9 +206,9 @@ typedef struct {
   cf_spec * target;
 
   /**
-     Additional info, in the form of a void pointer
+     Additional info
   */
-  void * info;
+  cf_key_info info;
 } cf_key;
 
 /**
@@ -221,33 +228,33 @@ static void cf_spec_prepare_keys(cf_spec * spec, cf_key * keys)
     keys->key = malloc(l2);
     snprintf(keys->key,l2, "%s_allow", spec->base);
     keys->target = spec;
-    keys->info = NULL;
+    keys->info = CF_KEY_INFO_NONE;
     keys++;
 
     l2 = l + strlen("_allow_user") +1;
     keys->key = malloc(l2);
     snprintf(keys->key,l2, "%s_allow_user", spec->base);
     keys->target = spec;
-    keys->info = (void*)1L;
+    keys->info = CF_KEY_INFO_ALLOW_USER;
     keys++;
 
     l2 = l + strlen("_allow_group") +1;
     keys->key = malloc(l2);
     snprintf(keys->key,l2, "%s_allow_group", spec->base);
     keys->target = spec;
-    keys->info = (void*)2L;
+    keys->info = CF_KEY_INFO_ALLOW_GROUP;
     keys++;
 
     l2 = l + strlen("_deny_user") +1;
     keys->key = malloc(l2);
     snprintf(keys->key,l2, "%s_deny_user", spec->base);
     keys->target = spec;
-    keys->info = (void*)3L;
+    keys->info = CF_KEY_INFO_DENY_USER;
     return;
   case string_list:
     keys->key = strdup(spec->base);
     keys->target = spec;
-    keys->info = NULL;
+    keys->info = CF_KEY_INFO_NONE;
   default:
     return;
   };
@@ -653,8 +660,8 @@ static int cf_key_assign_value(cf_key * key, char * value)
   switch(key->target->type) {
   case boolean_item: {
     ci_bool * t = key->target->boolean_item;
-    switch((long)key->info) {
-    case 0: {			/* Normal */
+    switch(key->info) {
+    case CF_KEY_INFO_NONE: {			/* Normal */
       int val;
       if(! cf_get_boolean(value, &val)) {
 	ci_bool_set_default(t, val); /* Or directly use the internals ? */
@@ -662,15 +669,15 @@ static int cf_key_assign_value(cf_key * key, char * value)
       }
       return -1;
     }
-    case 1:			/* Allow_user */
+    case CF_KEY_INFO_ALLOW_USER:			/* Allow_user */
       if(cf_get_uidlist(value, &(t->allowed_users)))
 	return -1;
       return 0;
-    case 2:			/* Allow_group */
+    case CF_KEY_INFO_ALLOW_GROUP:			/* Allow_group */
       if(cf_get_gidlist(value, &(t->allowed_groups)))
 	return -1;
       return 0;
-    case 3:			/* Allow_user */
+    case CF_KEY_INFO_DENY_USER:			/* Allow_user */
       if(cf_get_uidlist(value, &(t->denied_users)))
 	return -1;
       return 0;
