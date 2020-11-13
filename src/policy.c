@@ -26,6 +26,7 @@
 #include <regex.h>
 #include <ctype.h>
 #include <sys/sysmacros.h>
+#include <stdbool.h>
 
 /* For globs in /etc/pmount.allow */
 #include <fnmatch.h>
@@ -56,13 +57,12 @@ static const char * block_subsystem_directories[] = {
 
 
 /**
- * Find sysfs node that matches the major and minor device number of the given
- * device. Exit the process immediately on errors.
- * @param dev device node to search for (e. g. /dev/sda1)
- * @param blockdevpath if not NULL, the corresponding /sys/block/<drive>/ path
- *        is written into this buffer; this can be used to query additional
- *        attributes
- * @param blockdevpathsize size of blockdevpath buffer (if not NULL)
+ * Find sysfs node that matches the major and minor device number of
+ * the given device. Exit the process immediately on errors.
+ * @param dev device node to search for (e.g., /dev/sda1)
+ * @param blockdevpath if not NULL, the corresponding /<sysfs>/<drive>/
+ *        path is written into this buffer; this can be used to query
+ *        additional attributes
  * @return 0 if device was found and -1 if it was not.
  */
 
@@ -84,21 +84,15 @@ static const char * block_subsystem_directories[] = {
  */
 
 int
-find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
+find_sysfs_device(const char *dev, char **blockdevpath)
 {
     unsigned int devmajor, devminor;
-    unsigned char sysmajor, sysminor;
-    char blockdirname[255];
-    char devdirname[512]; // < 255 chars blockdir + max. 255 chars subdir
-    char devfilename[PATH_MAX];
-
-    int ret_val = 0; 		/* Failing by default. */
-
-    const char ** looking_for_block = block_subsystem_directories;
-
-    DIR *devdir, *partdir;
-    struct dirent *devdirent, *partdirent;
+    const char ** block;
+    char *blockdirname;
+    DIR *devdir;
+    struct dirent *devdirent;
     struct stat devstat;
+    int rc = 0;			/* Failing by default. */
 
     /* determine major and minor of dev */
     if( stat( dev, &devstat ) ) {
@@ -111,28 +105,23 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
     debug( "find_sysfs_device: looking for sysfs directory for device %u:%u\n",
            devmajor, devminor );
 
-    /* We first need to find one of
-
-       /sys/subsystem/block, /sys/class/block or /sys/block
-
-       And then, we look for the right device number.
-
-    */
-    while(*looking_for_block) {
-      if(! stat( *looking_for_block, &devstat)) {
-	debug( "found block subsystem at: %s\n", *looking_for_block);
-	snprintf( blockdirname, sizeof( blockdirname ),
-		  "%s/", *looking_for_block);
+    /* We first need to find one of /sys/subsystem/block,
+     * /sys/class/block or /sys/block. And then, we look for the right
+     * device number. */
+    for(block = block_subsystem_directories; *block; block++) {
+      if(! stat( *block, &devstat)) {
+	debug( "found block subsystem at: %s\n", *block);
 	break;
       }
-      looking_for_block++;
     }
-
-    if(! *looking_for_block) {
+    if(! *block) {
       perror( _("Error: could find the block subsystem directory") );
       exit( E_INTERNAL );
     }
-
+    if( asprintf(&blockdirname, "%s/", *block) == -1) {
+      perror("asprintf");
+      exit( E_INTERNAL );
+    }
     devdir = opendir( blockdirname );
     if( !devdir ) {
         perror( _("Error: could not open <sysfs dir>/block/") );
@@ -141,28 +130,38 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
 
     /* open each subdirectory and see whether major device matches */
     while( ( devdirent = readdir( devdir ) ) != NULL ) {
-        /* construct /sys/block/<device> */
-        snprintf( devdirname, sizeof( devdirname ), "%s%s", blockdirname, devdirent->d_name );
+        unsigned char sysmajor, sysminor;
+        char *devdirname, *devfilename;
 
-        /* construct /sys/block/<device>/dev */
-        snprintf( devfilename, sizeof( devfilename ), "%s%s", devdirname, "/dev" );
+        if( asprintf( &devdirname, "%s%s", blockdirname, devdirent->d_name ) == -1
+            || asprintf( &devfilename, "%s/dev", devdirname ) == -1) {
+            perror("asprintf");
+            exit( E_INTERNAL );
+        }
 
         /* read the block device major:minor */
-        if( read_number_colon_number( devfilename, &sysmajor, &sysminor ) == -1 )
+        if( read_number_colon_number( devfilename, &sysmajor, &sysminor ) == -1 ) {
+            free( devdirname );
+            free( devfilename );
             continue;
+        }
+        free(devfilename);
 
         debug( "find_sysfs_device: checking whether %s is on %s (%u:%u)\n",
-                    dev, devdirname, (unsigned) sysmajor, (unsigned) sysminor );
+               dev, devdirname, (unsigned) sysmajor, (unsigned) sysminor );
 
         if( sysmajor == devmajor ) {
             debug( "find_sysfs_device: major device numbers match\n");
 
-            /* if dev is a partition, check that there is a subdir that matches
-             * the partition */
+            /* if dev is a partition, check that there is a subdir
+             * that matches the partition */
             if( sysminor != devminor ) {
-                int found_part = 0;
+                DIR *partdir;
+                struct dirent *partdirent;
+                bool found_part = false;
 
-                debug( "find_sysfs_device: minor device numbers do not match, checking partitions...\n");
+                debug( "find_sysfs_device: minor device numbers do not match, "
+                       "checking partitions...\n");
 
                 partdir = opendir( devdirname );
                 if( !partdir ) {
@@ -173,25 +172,32 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
                     if( partdirent->d_type != DT_DIR )
                         continue;
 
-                    /* construct /sys/block/<device>/<partition>/dev */
-                    snprintf( devfilename, sizeof( devfilename ), "%s/%s/%s",
-                            devdirname, partdirent->d_name, "dev" );
+                    if( asprintf( &devfilename, "%s/%s/%s", devdirname,
+                                  partdirent->d_name, "dev") == -1) {
+                        perror("asprintf");
+                        exit( E_INTERNAL );
+                    }
 
                     /* read the block device major:minor */
-                    if( read_number_colon_number( devfilename, &sysmajor, &sysminor ) == -1 )
+                    if( read_number_colon_number( devfilename, &sysmajor, &sysminor ) == -1 ) {
+                        free( devfilename );
                         continue;
+                    }
 
-                    debug( "find_sysfs_device: checking whether device %s matches partition %u:%u\n",
-                                dev, (unsigned) sysmajor, (unsigned) sysminor );
+                    debug( "find_sysfs_device: checking whether device %s "
+                           "matches partition %u:%u\n",
+                           dev, (unsigned)sysmajor, (unsigned)sysminor );
 
                     if( sysmajor == devmajor && sysminor == devminor ) {
-                        debug( "find_sysfs_device: -> partition matches, belongs to block device %s\n",
-                                    devdirname );
-                        found_part = 1;
+                        debug( "find_sysfs_device: -> partition matches, "
+                               "belongs to block device %s\n",
+                               devdirname );
+                        found_part = true;
+                        free( devfilename );
                         break;
                     }
+                    free(devfilename);
                 }
-
                 closedir( partdir );
 
                 if( !found_part ) {
@@ -199,27 +205,25 @@ find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize)
                      * currently examined device; skip to next device */
                     continue;
                 }
-            } else
-                debug( "find_sysfs_device: minor device numbers also match, %s is a raw device\n",
-                            dev );
+            } else {
+                debug( "find_sysfs_device: minor device numbers also match, %s "
+                       "is a raw device\n", dev );
+            }
 
-
-	    /*
-	       return /sys/block/<drive> if requested
-	    */
-            if( blockdevpath )
-	      snprintf( blockdevpath, blockdevpathsize, "%s", devdirname );
-	    else
+            if( blockdevpath ) {
+              *blockdevpath = devdirname;
+	    } else {
 	      debug( "WARNING: find_sysfs_device is called without blockdevpath argument\n");
-
-	    ret_val = 1; 	/* We found it ! */
+              free( devdirname );
+            }
+	    rc = 1; 	/* We found it ! */
             break;
         }
     }
 
     closedir( devdir );
-
-    return ret_val;
+    free( blockdirname );
+    return rc;
 }
 
 /**
@@ -556,10 +560,10 @@ static int device_removable_silent(const char * device)
   static const char* hotplug_buses[] = { "usb", "ieee1394", "mmc",
 					 "pcmcia", "firewire", NULL };
   int removable;
-  char blockdevpath[PATH_MAX];
+  char *blockdevpath;
   const char * allowlisted_bus;
 
-  if(! find_sysfs_device(device, blockdevpath, sizeof(blockdevpath))) {
+  if(! find_sysfs_device(device, &blockdevpath)) {
     debug("device_removable: could not find a sysfs device for %s\n",
 	  device );
     return 0;
@@ -585,6 +589,7 @@ static int device_removable_silent(const char * device)
     else
       debug("Device %s does not belong to any allowlisted bus\n", device);
   }
+  free(blockdevpath);
   return removable;
 }
 

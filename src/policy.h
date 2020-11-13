@@ -105,7 +105,7 @@ make_lockdir_name( const char* device, char* name, size_t name_size );
 void print_mounted_removable_devices(void);
 
 int
-find_sysfs_device(const char *dev, char *blockdevpath, size_t blockdevpathsize);
+find_sysfs_device(const char *dev, char **blockdevpath);
 
 int
 is_blockdev_attr_true( const char* blockdevpath, const char* attr );
