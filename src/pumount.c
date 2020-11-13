@@ -84,7 +84,7 @@ check_umount_policy( const char* device, int ok_if_inexistant )
     }
 
     /* mount point must be below MEDIADIR */
-    if( strncmp( mntpt, mediadir, strlen( mediadir ) ) ) {
+    if( strncmp( mntpt, mediadir, strlen( mediadir ) ) != 0 ) {
         fprintf( stderr, _("Error: mount point %s is not below %s\n"), mntpt,
                 MEDIADIR );
         free( mediadir );
@@ -281,7 +281,7 @@ main( int argc, char** argv )
      * device node might not exist any more */
     if( !is_real_path && !do_lazy ) {
         /* try to prepend '/dev' */
-        if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) {
+        if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) != 0) {
             char *dev_device, *realpath_dev_device;
             if( asprintf(&dev_device, "%s%s", DEVDIR, device ) ) {
                 perror("asprintf");
@@ -306,7 +306,7 @@ main( int argc, char** argv )
     }
 
     /* does the device start with DEVDIR? */
-    if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) {
+    if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) != 0) {
         fprintf( stderr, _("Error: invalid device %s (must be in /dev/)\n"), device );
         return E_DEVICE;
     }

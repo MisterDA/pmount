@@ -173,9 +173,9 @@ assert_emptydir( const char* dirname )
     }
 
     while ( ( dirent = readdir( dir ) ) ) {
-        if( strcmp( dirent->d_name, "." ) &&
-            strcmp( dirent->d_name, ".." ) &&
-            strcmp( dirent->d_name, CREATED_DIR_STAMP ) ) {
+        if( strcmp( dirent->d_name, "." ) != 0 &&
+            strcmp( dirent->d_name, ".." ) != 0 &&
+            strcmp( dirent->d_name, CREATED_DIR_STAMP ) != 0) {
             closedir( dir );
             fprintf( stderr, _("Error: directory %s is not empty\n"), dirname );
             return -1;
