@@ -66,11 +66,28 @@ char ** conffile_loop_devices()
 
 
 cf_spec config[] = {
-  {"fsck", boolean_item, &conf_allow_fsck},
-  {"not_physically_logged", boolean_item, &conf_allow_not_physically_logged},
-  {"loop", boolean_item, &conf_allow_loop},
-  {"loop_devices", string_list, &conf_loop_devices},
-  {NULL}
+  {
+      .base = "fsck",
+      .type = boolean_item,
+      .boolean_item = &conf_allow_fsck
+  },
+  {
+      .base = "not_physically_logged",
+      .type = boolean_item,
+      .boolean_item = &conf_allow_not_physically_logged},
+  {
+      .base = "loop",
+      .type = boolean_item,
+      .boolean_item = &conf_allow_loop
+  },
+  {
+      .base = "loop_devices",
+      .type = string_list,
+      .string_list = &conf_loop_devices
+  },
+  {
+      .base = NULL
+  }
 };
 
 

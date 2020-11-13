@@ -651,16 +651,17 @@ static int cf_read_stringlist(char * value, ci_string_list * target)
 static int cf_key_assign_value(cf_key * key, char * value)
 {
   switch(key->target->type) {
-    int val;
   case boolean_item: {
-    ci_bool * t = (ci_bool *)key->target->target;
+    ci_bool * t = key->target->boolean_item;
     switch((long)key->info) {
-    case 0:			/* Normal */
+    case 0: {			/* Normal */
+      int val;
       if(! cf_get_boolean(value, &val)) {
 	ci_bool_set_default(t, val); /* Or directly use the internals ? */
 	return 0;
       }
       return -1;
+    }
     case 1:			/* Allow_user */
       if(cf_get_uidlist(value, &(t->allowed_users)))
 	return -1;
@@ -677,10 +678,8 @@ static int cf_key_assign_value(cf_key * key, char * value)
       return -1;
     }
   }
-  case string_list:  {
-    ci_string_list * t = (ci_string_list *) key->target->target;
-    return cf_read_stringlist(value, t);
-  }
+  case string_list:
+    return cf_read_stringlist(value, key->target->string_list);
   default:
     return -1;
   }
