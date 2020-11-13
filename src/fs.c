@@ -101,6 +101,33 @@ static struct FS supported_fs[] = {
 	.skip_autodetect = 0,
     },
     {
+	.fsname = "btrfs",
+	.options = "nodev,noauto,nosuid,user,errors=remount-ro",
+	.support_ugid = 0,
+	.umask = NULL,
+	.iocharset_format = NULL,
+	.fdmask = NULL,
+	.skip_autodetect = 0,
+    },
+    {
+	.fsname = "f2fs",
+	.options = "nodev,noauto,nosuid,user,errors=remount-ro",
+	.support_ugid = 0,
+	.umask = NULL,
+	.iocharset_format = NULL,
+	.fdmask = NULL,
+	.skip_autodetect = 0,
+    },
+    {
+	.fsname = "nilfs2",
+	.options = "nodev,noauto,nosuid,user,errors=remount-ro",
+	.support_ugid = 0,
+	.umask = NULL,
+	.iocharset_format = NULL,
+	.fdmask = NULL,
+	.skip_autodetect = 0,
+    },
+    {
 	.fsname = "reiserfs",
 	.options = "nodev,noauto,nosuid,user",
 	.support_ugid = 0,
@@ -146,13 +173,13 @@ static struct FS supported_fs[] = {
 	.skip_autodetect = 0,
     },
     {
-	.fsname = "ntfs-fuse",
+	.fsname = "ntfs",
 	.options = "nosuid,nodev,user",
 	.support_ugid = 1,
 	.umask = "077",
-	.iocharset_format = NULL, /* no nls support, it seems*/
-	.fdmask = ",fmask=%04o,dmask=%04o",
-	.skip_autodetect = 1, /* skip detection */
+	.iocharset_format = ",nls=%s",
+	.fdmask = NULL,
+	.skip_autodetect = 0,
     },
     {
 	.fsname = "ntfs-3g",
@@ -164,22 +191,13 @@ static struct FS supported_fs[] = {
 	.skip_autodetect = 1, /* skip detection */
     },
     {
-	.fsname = "ntfs",
+	.fsname = "ntfs-fuse",
 	.options = "nosuid,nodev,user",
 	.support_ugid = 1,
 	.umask = "077",
-	.iocharset_format = ",nls=%s",
-	.fdmask = NULL,
-	.skip_autodetect = 0,
-    },
-    {
-        .fsname = "btrfs",
-        .options = "nodev,noauto,nosuid",
-        .support_ugid = 0,
-        .umask = NULL,
-        .iocharset_format = NULL,
-        .fdmask = NULL,
-        .skip_autodetect = 0
+	.iocharset_format = NULL, /* no nls support, it seems*/
+	.fdmask = ",fmask=%04o,dmask=%04o",
+	.skip_autodetect = 1, /* skip detection */
     },
     {
 	.fsname = NULL,
