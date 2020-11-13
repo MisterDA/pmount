@@ -499,7 +499,7 @@ static int
 do_lock( const char* device, pid_t pid )
 {
     char lockdirpath[PATH_MAX];
-    char lockfilepath[PATH_MAX];
+    char *lockfilepath;
     int pidlock;
 
     if( assert_dir( LOCKDIR, 0 ) )
@@ -516,7 +516,10 @@ do_lock( const char* device, pid_t pid )
         return -1;
     }
 
-    snprintf( lockfilepath, sizeof( lockfilepath ), "%s/%u", lockdirpath, (unsigned) pid );
+    if( asprintf( &lockfilepath, "%s/%d", lockdirpath, pid ) == -1) {
+        perror("asprintf");
+        return -1;
+    }
 
     /* we need root for creating the pid lock file */
     get_root();
@@ -528,11 +531,12 @@ do_lock( const char* device, pid_t pid )
     if( pidlock < 0 ) {
         fprintf( stderr, _("Error: could not create pid lock file %s: %s\n"),
                 lockfilepath, strerror( errno ) );
+        free( lockfilepath );
         return -1;
     }
 
     close( pidlock );
-
+    free( lockfilepath );
     return 0;
 }
 
@@ -545,7 +549,6 @@ static int
 do_unlock( const char* device, pid_t pid )
 {
     char lockdirpath[PATH_MAX];
-    char lockfilepath[PATH_MAX];
     int result;
 
     make_lockdir_name( device, lockdirpath, sizeof( lockdirpath ) );
@@ -556,7 +559,11 @@ do_unlock( const char* device, pid_t pid )
 
     /* remove pid file first */
     if( pid ) {
-        snprintf( lockfilepath, sizeof( lockfilepath ), "%s/%u", lockdirpath, (unsigned) pid );
+        char *lockfilepath;
+        if( asprintf(&lockfilepath, "%s/%d", lockdirpath, pid ) == -1) {
+            perror("asprintf");
+            return -1;
+        }
 
         /* we need root for removing the pid lock file */
         get_root();
@@ -568,9 +575,11 @@ do_unlock( const char* device, pid_t pid )
             if( errno != ENOENT ) {
                 fprintf( stderr, _("Error: could not remove pid lock file %s: %s\n"),
                          lockfilepath, strerror( errno ) );
+                free( lockfilepath );
                 return -1;
             }
         }
+        free( lockfilepath );
     }
 
     /* Try to rmdir the dir. If there are still files (pid-locks) in it, this
@@ -625,7 +634,6 @@ static void
 clean_lock_dir( const char* device )
 {
     char lockdirpath[PATH_MAX];
-    char lockfilepath[PATH_MAX];
     DIR* lockdir;
     struct dirent* lockfile;
 
@@ -647,12 +655,16 @@ clean_lock_dir( const char* device )
         debug( "  checking whether %s is alive\n", lockfile->d_name);
 
         if( !pid_exists( parse_unsigned( lockfile->d_name, E_INTERNAL ) ) ) {
+            char *lockfilepath;
             debug( "  %s is dead, removing lock file\n", lockfile->d_name);
-            snprintf( lockfilepath, sizeof( lockfilepath ), "%s/%s",
-                    lockdirpath, lockfile->d_name );
+            if( asprintf( &lockfilepath, "%s/%s", lockdirpath, lockfile->d_name ) == -1) {
+                perror("asprintf");
+                continue;
+            }
             get_root();
             unlink( lockfilepath );
             drop_root();
+            free( lockfilepath );
         }
     }
 
