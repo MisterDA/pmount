@@ -465,7 +465,7 @@ do_mount_auto( const char* device, const char* mntpt, int async,
 
     for( fs = get_supported_fs(); fs->fsname; ++fs ) {
       /* Skip fs marked as such unless it is ntfs-3g and
-	 we can stat MOUNT_NTFS_G3
+	 we can stat MOUNT_NTFS_3G
       */
       if(fs->skip_autodetect &&
 	 !(! strcmp(fs->fsname, "ntfs-3g") && !stat(MOUNT_NTFS_3G, &buf)))
