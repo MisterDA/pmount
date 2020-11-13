@@ -128,7 +128,7 @@ int loopdev_associate(const char * source, char ** target)
 
   device = loopdev_find_unused();
   if(! device) {
-    fprintf(stderr, _("No allowlisted loop device available\n"));
+    fputs(_("No allowlisted loop device available\n"), stderr);
     close(fd);
     return -1;
   }
@@ -143,7 +143,7 @@ int loopdev_associate(const char * source, char ** target)
   close(fd); 			/* Now useless */
 
   if(result) {
-    fprintf(stderr, _("Failed to setup loopback device\n"));
+    fputs(_("Failed to setup loopback device\n"), stderr);
     return -1;
   }
 

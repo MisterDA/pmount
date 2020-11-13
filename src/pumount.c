@@ -154,7 +154,7 @@ do_umount( const char* device, int do_lazy )
                 device, NULL );
 
     if( status != 0 ) {
-        fprintf( stderr, _("Error: umount failed\n") );
+        fputs( _("Error: umount failed\n"), stderr );
         return -1;
     }
 
@@ -234,7 +234,7 @@ main( int argc, char** argv )
             case 'V': puts(VERSION); return 0;
 
             default:
-                fprintf( stderr, _("Internal error: getopt_long() returned unknown value\n") );
+                fputs( _("Internal error: getopt_long() returned unknown value\n"), stderr );
                 return E_INTERNAL;
         }
     } while( option != -1 );
