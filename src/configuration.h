@@ -18,7 +18,7 @@ int conffile_allow_fsck();
 
 /**
    Returns true if the user is allowed to use pmount/pumount even
-   if not phyiscally logged in
+   if not physically logged in
 */
 int conffile_allow_not_physically_logged();
 
