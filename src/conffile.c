@@ -56,7 +56,7 @@ static int cf_get_groups(void)
   int len;
   if(cached)
     return 0;			/* Everything fine */
-  len = getgroups(0, NULL);
+  len = getgroups(0, user_groups.g);
   if(len < 0)
     return -1;
   user_groups.g = malloc(len * sizeof(gid_t));
