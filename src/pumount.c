@@ -167,6 +167,7 @@ do_umount( const char* device, int do_lazy )
 int
 main( int argc, char** argv )
 {
+    char *devarg = NULL;
     char device[PATH_MAX], mntptdev[PATH_MAX], path[PATH_MAX];
     const char* fstab_device;
     char fstab_mntpt[MEDIA_STRING_SIZE];
@@ -243,31 +244,33 @@ main( int argc, char** argv )
         return E_ARGS;
     }
 
+    devarg = argv[optind];
+
     /* Check if the user is physically logged in */
     ensure_user_physically_logged_in(argv[0]);
 
     /* if we got a mount point, convert it to a device */
-    debug ("checking whether %s is a mounted directory\n", argv[optind]);
-    if( fstab_has_mntpt( "/proc/mounts", argv[optind], mntptdev, sizeof(mntptdev) ) ) {
-        debug( "resolved mount point %s to device %s\n", argv[optind], mntptdev );
-        argv[optind] = mntptdev;
-    } else if( !strchr( argv[optind], '/' ) ) {
+    debug ("checking whether %s is a mounted directory\n", devarg);
+    if( fstab_has_mntpt( "/proc/mounts", devarg, mntptdev, sizeof(mntptdev) ) ) {
+        debug( "resolved mount point %s to device %s\n", devarg, mntptdev );
+        devarg = mntptdev;
+    } else if( !strchr( devarg, '/' ) ) {
         /* try to prepend MEDIADIR */
-        snprintf( path, sizeof( path ), "%s%s", MEDIADIR, argv[optind] );
+        snprintf( path, sizeof( path ), "%s%s", MEDIADIR, devarg );
         debug ("checking whether %s is a mounted directory\n", path);
         if( fstab_has_mntpt( "/proc/mounts", path, mntptdev, sizeof(mntptdev) ) ) {
             debug( "resolved mount point %s to device %s\n", path, mntptdev );
-            argv[optind] = mntptdev;
+            devarg = mntptdev;
         }
     }
 
     /* get real path, if possible */
-    if( realpath( argv[optind], device ) ) {
-        debug( "resolved %s to device %s\n", argv[optind], device );
+    if( realpath( devarg, device ) ) {
+        debug( "resolved %s to device %s\n", devarg, device );
         is_real_path = 1;
     } else {
-        debug( "%s cannot be resolved to a proper device node\n", argv[optind] );
-        snprintf( device, sizeof( device ), "%s", argv[optind] );
+        debug( "%s cannot be resolved to a proper device node\n", devarg );
+        snprintf( device, sizeof( device ), "%s", devarg );
     }
 
     /* is the device already handled by fstab? */
