@@ -884,7 +884,7 @@ main( int argc, char** argv )
     /* pmounted devices really have to be a proper local device */
     if( !is_real_path ) {
         /* try to prepend '/dev' */
-        if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) {
+        if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) != 0) {
             char *dev_device, *realpath_dev_device;
             if( asprintf(&dev_device, "%s%s", DEVDIR, device ) ) {
                 perror("asprintf");
@@ -911,7 +911,7 @@ main( int argc, char** argv )
     }
 
     /* does the device start with DEVDIR? */
-    if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) {
+    if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) != 0) {
         fprintf( stderr, _("Error: invalid device %s (must be in /dev/)\n"), device );
         return E_DEVICE;
     }
