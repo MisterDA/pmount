@@ -162,23 +162,23 @@ make_mountpoint_name( const char* device, const char* label, char* mntpt,
             label += media_dir_len;
 
         if( !*label ) {
-            fprintf( stderr, _("Error: label must not be empty\n") );
+            fputs( _("Error: label must not be empty\n"), stderr );
             return -1;
         }
         if( strlen( label ) > MAX_LABEL_SIZE ) {
-            fprintf( stderr, _("Error: label too long\n") );
+            fputs( _("Error: label too long\n"), stderr );
             return -1;
         }
 
         if( strchr( label, '/' ) ) {
-            fprintf( stderr, _("Error: '/' must not occur in label name\n") );
+            fputs( _("Error: '/' must not occur in label name\n"), stderr );
             return -1;
         }
 
         snprintf( mntpt, mntpt_size, "%s%s", MEDIADIR, label );
     } else {
         if( strlen( device ) > MAX_LABEL_SIZE ) {
-            fprintf( stderr, _("Error: device name too long\n") );
+            fputs( _("Error: device name too long\n"), stderr );
             return -1;
         }
 
@@ -265,7 +265,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
 
     /* check and retrieve option information for requested file system */
     if( !fsname) {
-        fprintf( stderr, _("Internal error: mount_attempt: given file system name is NULL\n") );
+        fputs( _("Internal error: mount_attempt: given file system name is NULL\n"), stderr );
         return -1;
     }
 
@@ -741,7 +741,7 @@ main( int argc, char** argv )
        to the /proc/mounts file.
     */
     if( argc == 1 ) {
-      printf(_("Printing mounted removable devices:\n"));
+      puts(_("Printing mounted removable devices:\n"));
       print_mounted_removable_devices();
       printf(_("To get a short help, run %s -h\n"), argv[0]);
       return 0;
@@ -820,7 +820,7 @@ main( int argc, char** argv )
 	case 'V': puts(VERSION); return 0;
 
 	default:
-	    fprintf( stderr, _("Internal error: getopt_long() returned unknown value\n") );
+	    fputs( _("Internal error: getopt_long() returned unknown value\n"), stderr );
 	    return E_INTERNAL;
         }
     } while( option != -1 );
@@ -992,19 +992,19 @@ main( int argc, char** argv )
 
             switch (decrypt) {
                 case DECRYPT_FAILED:
-                    fprintf( stderr, _("Error: could not decrypt device (wrong passphrase?)\n") );
+                    fputs( _("Error: could not decrypt device (wrong passphrase?)\n"), stderr );
 		    if(doing_loop_mount)
 			loopdev_dissociate(device);
                     exit( E_POLICY );
                 case DECRYPT_EXISTS:
-                    fprintf( stderr, _("Error: mapped device already exists\n") );
+                    fputs( _("Error: mapped device already exists\n"), stderr );
 		    if(doing_loop_mount)
 			loopdev_dissociate(device);
                     exit( E_POLICY );
                 case DECRYPT_OK:
 		  /* We create a luks lockfile _on the decrypted device !_*/
 		  if(! luks_create_lockfile(decrypted_device))
-		    fprintf(stderr, _("Warning: could not create luks lockfile\n"));
+                    fputs( _("Warning: could not create luks lockfile\n"), stderr );
                 case DECRYPT_NOTENCRYPTED:
                     break;
                 default:
@@ -1016,7 +1016,7 @@ main( int argc, char** argv )
             /* lock the mount directory */
             debug( "locking mount point directory\n" );
             if( lock_dir( mntpt ) < 0) {
-                fprintf( stderr, _("Error: could not lock the mount directory. Another pmount is probably running for this mount point.\n"));
+                fputs( _("Error: could not lock the mount directory. Another pmount is probably running for this mount point.\n"), stderr );
 		if(doing_loop_mount)
 		    loopdev_dissociate(device);
 

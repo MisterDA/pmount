@@ -53,7 +53,7 @@ strreplace( const char* s, char from, char to )
     char* result = strdup( s );
 
     if( !result ) {
-        fprintf( stderr, _("Error: out of memory\n") );
+        fputs( _("Error: out of memory\n"), stderr );
         exit( 100 );
     }
 
@@ -413,7 +413,7 @@ spawnv( int options, const char* path, char *const argv[] )
 	    } while(nb_read);
 
 	    if(nb_read) {
-		fprintf(stderr, _("Child process output has exceeded buffer size, please file a bug report"));
+		fputs( _("Child process output has exceeded buffer size, please file a bug report"), stderr);
 	    }
 	    close( fds[0] );	/* We close the reading end of the pipe */
 	    slurp_buffer[slurp_size] = 0; /* Make it nul-terminated */
