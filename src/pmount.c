@@ -730,24 +730,6 @@ main( int argc, char** argv )
       return 0;
     }
 
-    /* are we root? */
-    if( geteuid() ) {
-        fputs( _("Error: this program needs to be installed suid root\n"), stderr );
-        return E_INTERNAL;
-    }
-
-    if( conffile_system_read() ) {
-	fputs( _("Error while reading system configuration file\n"), stderr );
-	return E_INTERNAL;
-    }
-
-    /* drop root privileges until we really need them (still available as saved uid) */
-    if( seteuid( getuid() ) ) {
-        perror( _("Error: could not drop all effective uid privileges") );
-        return E_INTERNAL;
-    }
-
-
     /* parse command line options */
     do {
         switch( option = getopt_long( argc, argv, "+hdelFLsArwop:t:c:u:V",
@@ -819,6 +801,23 @@ main( int argc, char** argv )
     if( !devarg || ( mode != MOUNT && !arg2 ) || argc > optind+2 ) {
         usage( argv[0] );
         return E_ARGS;
+    }
+
+    if( conffile_system_read() ) {
+	fputs( _("Error while reading system configuration file\n"), stderr );
+	return E_INTERNAL;
+    }
+
+    /* are we root? */
+    if( geteuid() ) {
+        fputs( _("Error: this program needs to be installed suid root\n"), stderr );
+        return E_INTERNAL;
+    }
+
+    /* drop root privileges until we really need them (still available as saved uid) */
+    if( seteuid( getuid() ) ) {
+        perror( _("Error: could not drop all effective uid privileges") );
+        return E_INTERNAL;
     }
 
     /* Check if the user is physically logged in */
