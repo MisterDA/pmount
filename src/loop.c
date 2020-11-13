@@ -8,10 +8,12 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
+#define _POSIX_C_SOURCE 200809L
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 /* We unfortunately need regular expressions... */
 #include <regex.h>
@@ -86,7 +88,7 @@ int loopdev_dissociate(const char * device)
 }
 
 
-int loopdev_associate(const char * source, char * target, size_t size)
+int loopdev_associate(const char * source, char ** target)
 {
   struct stat before;
   const char * device;
@@ -96,10 +98,7 @@ int loopdev_associate(const char * source, char * target, size_t size)
 
   fd = open(source, O_RDWR);
   if( fd == -1 ) {
-    snprintf(buffer, sizeof(buffer),
-	     _("Failed to open file '%s' for reading"),
-	     source);
-    perror(buffer);
+    fprintf(stderr, "open(%s): %s\n", source, strerror(errno));
     return -1;
   }
 
@@ -109,13 +108,9 @@ int loopdev_associate(const char * source, char * target, size_t size)
 
      @todo Maybe the simple fact that the above open will fail if
      the user does not have read/write permissions is enough ?
-
   */
   if(fstat(fd, &before)) {
-    snprintf(buffer, sizeof(buffer),
-	     _("Failed to stat file '%s'"),
-	     source);
-    perror(buffer);
+    fprintf(stderr, "fstat(%s): %s\n", source, strerror(errno));
     close(fd);
     return -1;
   }
@@ -138,8 +133,7 @@ int loopdev_associate(const char * source, char * target, size_t size)
   }
   debug("Found an unused loop device: %s\n", device);
 
-
-  /* We use /dev/fd/... to ensure that the file used is the statted
+  /* We use /dev/fd/... to ensure that the file used is the stat-ed
      one  */
   snprintf(buffer, sizeof(buffer), "/dev/fd/%d", fd);
 
@@ -152,9 +146,11 @@ int loopdev_associate(const char * source, char * target, size_t size)
     return -1;
   }
 
-
   /* Copy the device to the target */
-  snprintf(target, size, "%s", device);
+  *target = strdup(device);
+  if(! *target) {
+      perror("strdup(device)");
+      return -1;
+  }
   return 0;			/* Everything went fine ! */
-
 }

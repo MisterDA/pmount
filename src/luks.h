@@ -42,8 +42,7 @@ void luks_release( const char* device, int force );
  * so, return the mapped device in mapped_device and return 1, otherwise return
  * 0.
  */
-int luks_get_mapped_device( const char* device, char* mapped_device,
-        size_t mapped_device_size );
+int luks_get_mapped_device( const char* device, char** mapped_device);
 
 /**
  * Creates a 'lockfile' to remember that the given luks device was

@@ -26,7 +26,7 @@
 
    Returns 0 on success and -1 on errors.
  */
-int loopdev_associate(const char * source, char * target, size_t size);
+int loopdev_associate(const char * source, char ** target);
 
 
 /**
@@ -43,4 +43,3 @@ int loopdev_is_allowlisted(const char * dev);
 
 
 #endif
-

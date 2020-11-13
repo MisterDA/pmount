@@ -9,7 +9,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
-#define _DEFAULT_SOURCE
+#define _GNU_SOURCE
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,6 +21,7 @@
 #include <libintl.h>
 #include <locale.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "policy.h"
 #include "utils.h"
@@ -70,7 +71,7 @@ static int
 check_umount_policy( const char* device, int ok_if_inexistant )
 {
     int devvalid;
-    char mediadir[PATH_MAX];
+    char *mediadir;
 
     devvalid = ( ok_if_inexistant || device_valid( device ) ) &&
         device_mounted( device, 1, mntpt );
@@ -85,9 +86,8 @@ check_umount_policy( const char* device, int ok_if_inexistant )
     }
 
     /* MEDIADIR may be a symlink (for read-only root systems) */
-    if( NULL == realpath( MEDIADIR, mediadir ) ) {
-        fprintf( stderr, _("Error: could not find real path of %s\n"),
-                MEDIADIR );
+    if( ! (mediadir = realpath( MEDIADIR, NULL ) ) ) {
+        fprintf( stderr, "realpath(%s): %s\n", MEDIADIR, strerror( errno ) );
         exit( E_INTERNAL );
     }
 
@@ -95,10 +95,12 @@ check_umount_policy( const char* device, int ok_if_inexistant )
     if( strncmp( mntpt, mediadir, strlen( mediadir ) ) ) {
         fprintf( stderr, _("Error: mount point %s is not below %s\n"), mntpt,
                 MEDIADIR );
+        free( mediadir );
         return -1;
     }
 
     debug( "policy check passed\n" );
+    free( mediadir );
     return 0;
 }
 
@@ -166,8 +168,8 @@ do_umount( const char* device, int do_lazy )
 int
 main( int argc, char** argv )
 {
-    char *devarg = NULL;
-    char device[PATH_MAX], mntptdev[PATH_MAX], path[PATH_MAX];
+    char *devarg = NULL, *device;
+    char mntptdev[PATH_MAX], path[PATH_MAX];
     const char* fstab_device;
     char fstab_mntpt[MEDIA_STRING_SIZE];
     int is_real_path = 0;
@@ -264,12 +266,16 @@ main( int argc, char** argv )
     }
 
     /* get real path, if possible */
-    if( realpath( devarg, device ) ) {
+    if( ( device = realpath( devarg, NULL ) ) ) {
         debug( "resolved %s to device %s\n", devarg, device );
         is_real_path = 1;
     } else {
-        debug( "%s cannot be resolved to a proper device node\n", devarg );
-        snprintf( device, sizeof( device ), "%s", devarg );
+        debug( "realpath(%s): %s\n", devarg, strerror( errno ) );
+        device = strdup( devarg );
+        if(! device ) {
+            perror("strdup(devarg)");
+            return E_INTERNAL;
+        }
     }
 
     /* is the device already handled by fstab? */
@@ -284,12 +290,17 @@ main( int argc, char** argv )
     if( !is_real_path && !do_lazy ) {
         /* try to prepend '/dev' */
         if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) {
-            char d[PATH_MAX];
-            snprintf( d, sizeof( d ), "%s%s", DEVDIR, device );
-            if ( !realpath( d, device ) ) {
-                perror( _("Error: could not determine real path of the device") );
+            char *dev_device, *realpath_dev_device;
+            if( asprintf(&dev_device, "%s%s", DEVDIR, device ) ) {
+                perror("asprintf");
+                return E_INTERNAL;
+            }
+            if ( !(realpath_dev_device = realpath( dev_device, NULL ) ) ) {
+                fprintf( stderr, "realpath(%s): %s\n", dev_device, strerror( errno ) );
                 return E_DEVICE;
             }
+            free(device);
+            device = realpath_dev_device;
             debug( "trying to prepend '" DEVDIR
 		   "' to device argument, now '%s'\n", device );
 	    /* We need to lookup again in fstab: */
@@ -309,8 +320,12 @@ main( int argc, char** argv )
     }
 
     /* check if we have a dmcrypt device */
-    if( luks_get_mapped_device( device, device, sizeof( device ) ) )
+    char *mapped_device;
+    if( luks_get_mapped_device( device, &mapped_device ) ) {
+        free(device);
+        device = mapped_device;
         debug( "Unmounting mapped device %s instead.\n", device );
+    }
 
     /* Now, we accept when devices have gone missing */
     if( check_umount_policy( device, 1 ) )

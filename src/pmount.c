@@ -9,7 +9,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
-#define _DEFAULT_SOURCE
+#define _GNU_SOURCE
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -671,8 +671,8 @@ main( int argc, char** argv )
 {
     char *devarg = NULL, *arg2 = NULL;
     char mntpt[MEDIA_STRING_SIZE];
-    char device[PATH_MAX], mntptdev[PATH_MAX];
-    char decrypted_device[PATH_MAX];
+    char *device;
+    char mntptdev[PATH_MAX], decrypted_device[PATH_MAX];
     const char* fstab_device;
     int is_real_path = 0;
     int async = 1;
@@ -840,12 +840,16 @@ main( int argc, char** argv )
     }
 
     /* get real path, if possible */
-    if( realpath( devarg, device ) ) {
+    if( ( device = realpath( devarg, NULL ) ) ) {
         debug( "resolved %s to device %s\n", devarg, device );
         is_real_path = 1;
     } else {
-        debug( "%s cannot be resolved to a proper device node\n", devarg );
-        snprintf( device, sizeof( device ), "%s", devarg );
+        debug( "realpath(%s): %s\n", devarg, strerror( errno ) );
+        device = strdup( devarg );
+        if(! device ) {
+            perror("strdup(devarg)");
+            return E_INTERNAL;
+        }
     }
 
 
@@ -862,16 +866,19 @@ main( int argc, char** argv )
     }
 
     if( is_real_path && (! is_block(device))) {
+        char * loop_device;
 	if(! conffile_allow_loop()) {
 	    fprintf(stderr, _("You are trying to mount %s as a loopback device. \n"
 			      "However, you are not allowed to use loopback mount.\n"), devarg);
 	    return E_DISALLOWED;
 	}
-	if(loopdev_associate(device, device, sizeof(device))) {
+	if(loopdev_associate(device, &loop_device)) {
 	    fprintf(stderr, _("Failed to setup loop device for %s, aborting\n"),
 		    devarg);
 	    return E_LOSETUP;
 	}
+        free(device);
+        device = loop_device;
 	/* For bypassing policy check afterwards, we've done
 	   everything already.
 	*/
@@ -883,12 +890,17 @@ main( int argc, char** argv )
     if( !is_real_path ) {
         /* try to prepend '/dev' */
         if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) ) {
-            char d[PATH_MAX];
-            snprintf( d, sizeof( d ), "%s%s", DEVDIR, device );
-            if ( !realpath( d, device ) ) {
-                perror( _("Error: could not determine real path of the device") );
+            char *dev_device, *realpath_dev_device;
+            if( asprintf(&dev_device, "%s%s", DEVDIR, device ) ) {
+                perror("asprintf");
+                return E_INTERNAL;
+            }
+            if ( !(realpath_dev_device = realpath( dev_device, NULL ) ) ) {
+                fprintf( stderr, "realpath(%s): %s\n", dev_device, strerror( errno ) );
                 return E_DEVICE;
             }
+            free(device);
+            device = realpath_dev_device;
             debug( "trying to prepend '" DEVDIR "' to device argument, now %s\n", device );
 	    /* We need to lookup again in fstab: */
 	    fstab_device = fstab_has_device( "/etc/fstab", device, NULL, NULL );
