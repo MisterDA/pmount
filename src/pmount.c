@@ -701,7 +701,7 @@ main( int argc, char** argv )
     const char* fmask = NULL;
     const char* dmask = NULL;
     const char* passphrase = NULL;
-    int utf8 = -1; 		/* Whether we live in a UTF-8 world or not */
+    int utf8;
     int utc = 0; /* Whether the timestamps are stored in UTC rather than local time */
     int result;
 
@@ -954,19 +954,13 @@ main( int argc, char** argv )
                 if( codeset && !strcmp( codeset, "UTF-8" ) ) {
                     debug( "locale encoding uses UTF-8, setting iocharset to 'utf8'\n" );
                     iocharset = "utf8";
+                    utf8 = 1;
+                } else {
+                    utf8 = 0;
                 }
+            } else {
+                utf8 = strcmp(iocharset, "utf8") == 0;
             }
-	    /* If user did not choose explicitly for or against utf8 */
-	    if( utf8 == -1 ) {
-	      const char* codeset;
-	      codeset = nl_langinfo( CODESET );
-	      if( codeset && !strcmp( codeset, "UTF-8" ) ) {
-		debug( "locale encoding uses UTF-8: will mount FAT with utf8 option" );
-		utf8 = 1;
-	      } else {
-		utf8 = 0;
-	      }
-	    }
 
             /* clean stale locks */
             clean_lock_dir( device );
