@@ -554,11 +554,12 @@ device_mounted( const char* device, int expect, char* mntpt )
     return mounted;
 }
 
+const char* hotplug_buses[] =
+    { "usb", "ieee1394", "mmc", "pcmcia", "firewire", NULL };
+
 /* The silent version of the device_removable function. */
 static int device_removable_silent(const char * device)
 {
-  static const char* hotplug_buses[] = { "usb", "ieee1394", "mmc",
-					 "pcmcia", "firewire", NULL };
   int removable;
   char *blockdevpath;
   const char * allowlisted_bus;

@@ -59,6 +59,8 @@ int device_valid( const char* device );
  */
 int device_mounted( const char* device, int expect, char* mntpt );
 
+extern const char* hotplug_buses[];
+
 /**
  * Check whether device is removable.
  */
