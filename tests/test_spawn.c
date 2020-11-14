@@ -10,13 +10,14 @@
    properly.
  */
 
-
+#include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 #include "utils.h"
 
 
-int main(int argc, char *argv[])
+int main(void)
 {
   int result;
 
@@ -24,12 +25,12 @@ int main(int argc, char *argv[])
 		  "test string", NULL);
   if(result) {
     fprintf(stderr, "Failed to launch echo\n");
-    return 1;
+    return EXIT_FAILURE;
   }
-  if(strcmp(slurp_buffer, "test string\n")) {
+  if(strcmp(slurp_buffer, "test string\n") != 0) {
     fprintf(stderr, "Slurp buffer does not contain expected string, but '%s'\n",
 	    slurp_buffer);
-    return 1;
+    return EXIT_FAILURE;
   }
   fprintf(stderr, "Everything went fine, got %s", slurp_buffer);
 
@@ -40,7 +41,7 @@ int main(int argc, char *argv[])
 
   if(! result) {
     fprintf(stderr, "Execution should have failed, but did not");
-    return 1;
+    return EXIT_FAILURE;
   }
-  return 0;
+  return EXIT_SUCCESS;
 }

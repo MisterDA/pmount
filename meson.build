@@ -62,4 +62,4 @@ install_man('man' / 'pmount.1', 'man' / 'pmount.conf.5', 'man' / 'pumount.1')
 
 subdir('po')
 subdir('src')
-# subdir('tests')
+subdir('tests')
