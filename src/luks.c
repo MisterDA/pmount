@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <libintl.h>
 #include <string.h>
+#include <errno.h>
 
 #include "luks.h"
 #include "utils.h"
@@ -37,8 +38,8 @@
 #endif
 
 enum decrypt_status
-luks_decrypt( const char* device, char* decrypted, int decrypted_size,
-        const char* password_file, int readonly )
+luks_decrypt( const char* device, char** decrypted, const char* password_file,
+              int readonly )
 {
     int status;
     char* label;
@@ -51,15 +52,22 @@ luks_decrypt( const char* device, char* decrypted, int decrypted_size,
     if( status != 0 ) {
         /* just return device */
         debug( "device is not LUKS encrypted, or cryptsetup with LUKS support is not installed\n" );
-        snprintf( decrypted, decrypted_size, "%s", device );
+        *decrypted = strdup(device);
+        if(!*decrypted) {
+            perror("strdup(device)");
+            exit(E_INTERNAL);
+        }
         return DECRYPT_NOTENCRYPTED;
     }
 
     /* generate device label */
     label = strreplace( device, '/', '_' );
-    snprintf( decrypted, decrypted_size, "/dev/mapper/%s", label );
+    if( asprintf(decrypted, "/dev/mapper/%s", label ) == -1) {
+        perror("asprintf");
+        exit(E_INTERNAL);
+    }
 
-    if( !stat( decrypted, &st) )
+    if( !stat( *decrypted, &st) )
         return DECRYPT_EXISTS;
 
     /* open LUKS device */
@@ -128,11 +136,15 @@ luks_get_mapped_device( const char* device, char** mapped_device )
 
 #define LUKS_LOCKDIR LOCKDIR "_luks"
 
-static void luks_lockfile_name(const char *device, char * target, size_t t_s)
+static int luks_lockfile_name(const char *device, char ** target)
 {
   char* dmlabel = strreplace( device, '/', '_' );
-  snprintf(target, t_s, "%s/%s", LUKS_LOCKDIR, dmlabel);
+  if(asprintf(target, "%s/%s", LUKS_LOCKDIR, dmlabel) == -1) {
+      perror("asprintf");
+      return 0;
+  }
   free(dmlabel);
+  return 1;
 }
 
 /**
@@ -142,47 +154,55 @@ static void luks_lockfile_name(const char *device, char * target, size_t t_s)
  */
 int luks_create_lockfile(const char * device)
 {
-  char path[PATH_MAX];
-  int f;
+  char *path;
+  int f, rc;
   if(assert_dir(LUKS_LOCKDIR, 0))
     return 0;			/* Failed for some reason */
-  luks_lockfile_name(device, path, sizeof(path));
+  rc = luks_lockfile_name(device, &path);
+  if(rc)
+      return 0;
 
-  debug("Creating luks lockfile '%s' for device '%s'",
-	path, device);
+  debug("Creating luks lockfile '%s' for device '%s'", path, device);
   get_root();
-  f = creat( path, 0600);
+  f = open( path, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR | S_IWUSR );
   drop_root();
-  if (f < 0) {
-    perror( _("luks_create_lockfile(): creat") );
+  if (f == -1) {
+    fprintf(stderr, "open(%s): %s\n", path, strerror( errno ) );
+    free(path);
     return 0;
   }
   close(f);
+  free(path);
   return 1;
 }
 
 int luks_has_lockfile(const char * device)
 {
-  char path[PATH_MAX];
+  char *path;
   struct stat st;
-  int ret = 0;
+  int rc;
 
-  luks_lockfile_name(device, path, sizeof(path));
+  rc = luks_lockfile_name(device, &path);
+  if(rc)
+      exit(E_INTERNAL);
   debug("Checking luks lockfile '%s' for device '%s'\n",
 	path, device);
   get_root();
   if(!stat(path,&st))
-    ret = 1;
+    rc = 1;
   drop_root();
-  return ret;
+  return rc;
 }
 
 void luks_remove_lockfile(const char * device)
 {
-  char path[PATH_MAX];
+  char *path;
   struct stat st;
+  int rc;
 
-  luks_lockfile_name(device, path, sizeof(path));
+  rc = luks_lockfile_name(device, &path);
+  if(rc)
+      exit(E_INTERNAL);
   debug("Removing luks lockfile '%s' for device '%s'\n",
 	path, device);
   get_root();

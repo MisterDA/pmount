@@ -235,16 +235,20 @@ find_sysfs_device(const char *dev, char **blockdevpath)
 int
 is_blockdev_attr_true( const char* blockdevpath, const char* attr )
 {
-    char path[PATH_MAX];
+    char *path;
     FILE* f;
     int result;
     char value;
 
-    snprintf( path, sizeof( path ), "%s/%s", blockdevpath, attr );
+    if( asprintf(&path, "%s/%s", blockdevpath, attr) == -1) {
+        perror("asprintf");
+        exit( E_INTERNAL );
+    }
 
     f = fopen( path, "r" );
     if( !f ) {
         debug( "is_blockdev_attr_true: could not open %s\n", path );
+        free( path );
         return 0;
     }
 
@@ -253,11 +257,12 @@ is_blockdev_attr_true( const char* blockdevpath, const char* attr )
 
     if( result != 1 ) {
         debug( "is_blockdev_attr_true: could not read %s\n", path );
+        free( path );
         return 0;
     }
 
     debug( "is_blockdev_attr_true: value of %s == %c\n", path, value );
-
+    free( path );
     return value == '1';
 }
 
@@ -445,7 +450,7 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
     while( ( entry = getmntent( f ) ) != NULL ) {
         char *pathbuf, *realdev;
         snprintf( fstab_device, sizeof( fstab_device ), "%s",
-		  entry->mnt_fsname );
+                  entry->mnt_fsname );
 
         if( (pathbuf = realpath( fstab_device, NULL ) ) )
             realdev = pathbuf;
@@ -489,13 +494,14 @@ fstab_has_device( const char* fname, const char* device, char* mntpt, int *uid )
 }
 
 int
-fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t device_size )
+fstab_has_mntpt( const char* fname, const char* mntpt, char** device )
 {
     FILE* f;
     struct mntent *entry;
     char *realmntptbuf;
     const char* realmntpt, *fstabmntpt;
     int rc = 0;
+    *device = NULL;
 
     /* resolve symlinks, if possible */
     if( (realmntptbuf = realpath( mntpt, NULL ) ) )
@@ -517,8 +523,13 @@ fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t devi
             fstabmntpt = entry->mnt_dir;
 
         if( !strcmp( fstabmntpt, realmntpt ) ) {
-            if( device )
-                snprintf( device, device_size, "%s", entry->mnt_fsname );
+            if( device ) {
+                *device = strdup(entry->mnt_fsname);
+                if (!*device) {
+                    perror("strdup");
+                    exit( E_INTERNAL ) ;
+                }
+            }
             rc = 1;
             free( fstabmntptbuf );
             goto done;
@@ -680,37 +691,40 @@ device_allowlisted( const char* device )
 int
 device_locked( const char* device )
 {
-    char lockdirname[PATH_MAX];
+    char *lockdirname;
     int locked;
-
-    make_lockdir_name( device, lockdirname, sizeof( lockdirname ) );
+    make_lockdir_name( device, &lockdirname );
     locked = is_dir( lockdirname );
 
     if( locked )
         fprintf( stderr, _("Error: device %s is locked\n"), device );
-
+    free( lockdirname );
     return locked;
 }
 
 int
 mntpt_valid( const char* mntpt )
 {
-  char fstab_device[PATH_MAX];
-  if( fstab_has_mntpt( "/etc/fstab", mntpt, fstab_device,
-		       sizeof(fstab_device) ) ) {
+  char *fstab_device;
+  int rc;
+  if( fstab_has_mntpt( "/etc/fstab", mntpt, &fstab_device ) ) {
     fprintf( stderr, _("Error: mount point %s is already in /etc/fstab, "
 		       "associated to device %s\n"),
 	     mntpt, fstab_device );
-    return 0;
+    free( fstab_device );
+    rc = 0;
+  } else {
+      rc = !assert_dir( mntpt, 1 ) && !assert_emptydir( mntpt );
   }
-  return !assert_dir( mntpt, 1 ) && !assert_emptydir( mntpt );
+
+  return rc;
 }
 
 int
 mntpt_mounted( const char* mntpt, int expect )
 {
-    int mounted = fstab_has_mntpt( "/etc/mtab", mntpt, NULL, 0 ) ||
-                  fstab_has_mntpt( "/proc/mounts", mntpt, NULL, 0 );
+    int mounted = fstab_has_mntpt( "/etc/mtab", mntpt, NULL ) ||
+                  fstab_has_mntpt( "/proc/mounts", mntpt, NULL );
 
     if( mounted && !expect )
         fprintf( stderr, _("Error: directory %s already contains a mounted file system\n"), mntpt );
@@ -720,16 +734,19 @@ mntpt_mounted( const char* mntpt, int expect )
     return mounted;
 }
 
-void make_lockdir_name( const char* device, char* name, size_t name_size )
+void make_lockdir_name( const char* device, char** name )
 {
     char* devname;
     /* Strip an initial whitespace in device, will look better */
-    if(*device == '/')
+    if(device[0] == '/')
       device++;
 
     devname = strreplace( device, '/', '_' );
     /* Make the lockdir a subdirectory of LOCKDIR ! */
-    snprintf( name, name_size, "%s/%s", LOCKDIR, devname );
+    if(asprintf(name, "%s/%s", LOCKDIR, devname) == -1) {
+        perror("asprintf");
+        exit( E_INTERNAL );
+    }
     free( devname );
 }
 
