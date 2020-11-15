@@ -65,7 +65,7 @@ char ** conffile_loop_devices()
 }
 
 
-cf_spec config[] = {
+static cf_spec config[] = {
   {
       .base = "fsck",
       .type = boolean_item,
