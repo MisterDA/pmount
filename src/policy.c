@@ -65,24 +65,6 @@ static const char * block_subsystem_directories[] = {
  *        additional attributes
  * @return 0 if device was found and -1 if it was not.
  */
-
-/* This function needs a major rewrite to get rid of the
-   libsysfs dependencies...
-
-   Proposal:
-   - browse /sys/block or /sys/class/block for devices whose dev matches
-     the major/minor of the device we're interested in
-   - get the removable property
-
-   Problem: assumes too much about the directory structure, but is
-   already better and that would drop the dependency on libsysfs
-*/
-
-/*
-   The rationale of the steps found in this function are based on my
-   own experience and on Documentation/sysfs-rules.txt
- */
-
 int
 find_sysfs_device(const char *dev, char **blockdevpath)
 {
@@ -774,11 +756,6 @@ void print_mounted_removable_devices()
 {
   FILE* f;
   struct mntent* ent;
-  /* We need copies, as calls to libsysfs garble the contents of
-     the fields */
-  char name[MEDIA_STRING_SIZE], dir[MEDIA_STRING_SIZE],
-    type[MEDIA_STRING_SIZE], opts[MEDIA_STRING_SIZE];
-
 
   if( !( f = setmntent( PROC_MOUNTS, "r" ) ) ) {
     fprintf(stderr, _("Error: could not open the %s file: %s"),
@@ -787,15 +764,10 @@ void print_mounted_removable_devices()
   }
 
   while( ( ent = getmntent( f ) ) != NULL ) {
-    if(device_valid_silent(ent->mnt_fsname))  {
-      /* We make copies */
-      safe_strcpy(name, ent->mnt_fsname);
-      safe_strcpy(dir, ent->mnt_dir);
-      safe_strcpy(type, ent->mnt_type);
-      safe_strcpy(opts, ent->mnt_opts);
-      if(device_removable_silent(name))
-	printf("%s on %s type %s (%s)\n", name, dir, type, opts);
-    }
+    if(device_valid_silent(ent->mnt_fsname) &&
+       device_removable_silent(ent->mnt_fsname))
+	printf("%s on %s type %s (%s)\n",
+	       ent->mnt_fsname, ent->mnt_dir, ent->mnt_type, ent->mnt_opts);
   }
   endmntent(f);
 }
