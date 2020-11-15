@@ -382,7 +382,7 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     /* go for it */
     return spawnl( SPAWN_EROOT | SPAWN_RROOT | (suppress_errors ? SPAWN_NO_STDERR : 0 ),
              MOUNTPROG, MOUNTPROG, "-t", fsname, "-o", options, device, mntpt,
-             NULL );
+             (char *)NULL );
 }
 
 /**
@@ -602,7 +602,7 @@ do_fsck( const char* device )
     debug( "running fsck on %s\n", device );
 
     result = spawnl( SPAWN_EROOT | SPAWN_RROOT,
-		     FSCKPROG, FSCKPROG, "-C1", device, NULL );
+		     FSCKPROG, FSCKPROG, "-C1", device, (char *)NULL );
     if( result < -1 ) {
 	perror(_("Error: could not execute fsck"));
 	return -1;

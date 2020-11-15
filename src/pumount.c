@@ -139,11 +139,11 @@ do_umount( const char* device, int do_lazy )
     if( do_lazy )
         status = spawnl( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG,
 			 "-d", "-l",
-                device, NULL );
+                device, (char *)NULL );
     else
         status = spawnl( SPAWN_EROOT|SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG,
 			 "-d",
-                device, NULL );
+                device, (char *)NULL );
 
     if( status != 0 ) {
         fputs( _("Error: umount failed\n"), stderr );
