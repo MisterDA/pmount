@@ -98,7 +98,7 @@ usage( const char* exename )
  * mount point. Creates the mount point if it does not exist yet.
  * @return 0 on success, -1 on failure
  */
-int
+static int
 check_mount_policy( const char* device, const char* mntpt, int doing_loop )
 {
     int result = device_valid( device ) &&
@@ -595,7 +595,7 @@ do_unlock( const char* device, pid_t pid )
  *
  * @return 0 on success, -1 on error.
  */
-int
+static int
 do_fsck( const char* device )
 {
     int result;
