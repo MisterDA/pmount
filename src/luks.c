@@ -48,7 +48,7 @@ luks_decrypt( const char* device, char** decrypted, const char* password_file,
 
     /* check if encrypted */
     status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
-            CRYPTSETUPPROG, CRYPTSETUPPROG, "isLuks", device, NULL );
+            CRYPTSETUPPROG, CRYPTSETUPPROG, "isLuks", device, (char *)NULL );
     if( status != 0 ) {
         /* just return device */
         debug( "device is not LUKS encrypted, or cryptsetup with LUKS support is not installed\n" );
@@ -75,19 +75,19 @@ luks_decrypt( const char* device, char** decrypted, const char* password_file,
         if( readonly == 1 )
             status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
                     CRYPTSETUPPROG, CRYPTSETUPPROG, "luksOpen", "--key-file",
-                    password_file, "--readonly", device, label, NULL );
+                    password_file, "--readonly", device, label, (char *)NULL );
         else
             status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
                     CRYPTSETUPPROG, CRYPTSETUPPROG, "luksOpen", "--key-file",
-                    password_file, device, label, NULL );
+                    password_file, device, label, (char *)NULL );
     else
         if( readonly == 1 )
             status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
                     CRYPTSETUPPROG, CRYPTSETUPPROG, "--readonly", "luksOpen",
-                    device, label, NULL );
+                    device, label, (char *)NULL );
         else
             status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
-                    CRYPTSETUPPROG, CRYPTSETUPPROG, "luksOpen", device, label, NULL );
+                    CRYPTSETUPPROG, CRYPTSETUPPROG, "luksOpen", device, label, (char *)NULL );
 
     if( status == 0 )
         /* yes, we have a LUKS device */
@@ -108,7 +108,7 @@ luks_release( const char* device, int force )
 {
   if(force || luks_has_lockfile(device)) {
     spawnl( CRYPTSETUP_SPAWN_OPTIONS,
-	    CRYPTSETUPPROG, CRYPTSETUPPROG, "luksClose", device, NULL );
+	    CRYPTSETUPPROG, CRYPTSETUPPROG, "luksClose", device, (char *)NULL );
     luks_remove_lockfile(device);
   }
   else

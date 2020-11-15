@@ -48,7 +48,7 @@ static const char * loopdev_find_unused()
     if(strlen(*devices) > 0) {
       debug("Trying loop device: %s\n", *devices);
       int result = spawnl(SPAWN_EROOT | SPAWN_NO_STDOUT | SPAWN_NO_STDERR,
-			  LOSETUPPROG, LOSETUPPROG, *devices, NULL);
+			  LOSETUPPROG, LOSETUPPROG, *devices, (char *)NULL);
       if(result == 1)		/* Device is not configured, see losetup(8) */
 	return *devices;
     }
@@ -78,7 +78,7 @@ int loopdev_dissociate(const char * device)
   int nb_tries = 0;
   while(result && nb_tries < 10) {
     result = spawnl(SPAWN_EROOT, LOSETUPPROG, LOSETUPPROG,
-		    "-d", device, NULL);
+		    "-d", device, (char *)NULL);
     if(result) {
       debug("The loop device may be busy, trying again to dissociate\n");
       sleep(1);
@@ -139,7 +139,7 @@ int loopdev_associate(const char * source, char ** target)
   snprintf(buffer, sizeof(buffer), "/dev/fd/%d", fd);
 
   result = spawnl(SPAWN_EROOT, LOSETUPPROG, LOSETUPPROG,
-		  device, buffer, NULL);
+		  device, buffer, (char *)NULL);
   close(fd); 			/* Now useless */
 
   if(result) {
