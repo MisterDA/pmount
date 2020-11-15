@@ -132,7 +132,6 @@ static int
 make_mountpoint_name( const char* device, const char* label, char* mntpt,
         size_t mntpt_size )
 {
-    char* d;
     int media_dir_len = strlen( MEDIADIR );
 
     if( label ) {
@@ -156,6 +155,7 @@ make_mountpoint_name( const char* device, const char* label, char* mntpt,
 
         snprintf( mntpt, mntpt_size, "%s%s", MEDIADIR, label );
     } else {
+        char* d;
         if( strlen( device ) > MAX_LABEL_SIZE ) {
             fputs( _("Error: device name too long\n"), stderr );
             return -1;
@@ -239,8 +239,6 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
     const char* access_opt = NULL;
     const char* selinux_context_opt = "";
     char options[1000];
-    /* We deal with masks in another way now: */
-    unsigned i_umask, i_dmask, i_fmask;
 
     /* check and retrieve option information for requested file system */
     if( !fsname) {
@@ -299,6 +297,9 @@ do_mount( const char* device, const char* mntpt, const char* fsname, int async,
        up.
     */
     if( fs->umask && fs->fdmask ) {
+      /* We deal with masks in another way now: */
+      unsigned i_umask, i_dmask, i_fmask;
+
       /* We first get the umask value */
       if(umask)
 	i_umask = parse_unsigned( umask, E_ARGS ); /* shouldn't fail */

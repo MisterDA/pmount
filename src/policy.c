@@ -338,7 +338,6 @@ const char *
 bus_has_ancestry(const char * blockdevpath, const char** buses)
 {
   char *path, *full_device, *tmp;
-  const char *bus;
   struct stat sb;
   int rc;
 
@@ -367,7 +366,8 @@ bus_has_ancestry(const char * blockdevpath, const char** buses)
 
   /* We loop on full_device until we are on the root directory */
   while (full_device[0]) {
-    if ((bus = get_device_bus(full_device, buses))) {
+    const char *bus = get_device_bus(full_device, buses);
+    if (bus) {
       debug("Found bus %s for device %s\n", bus, full_device);
       free(full_device);
       return bus;
@@ -555,7 +555,6 @@ static int device_removable_silent(const char * device)
 {
   int removable;
   char *blockdevpath;
-  const char * allowlisted_bus;
 
   if(! find_sysfs_device(device, &blockdevpath)) {
     debug("device_removable: could not find a sysfs device for %s\n",
@@ -574,7 +573,7 @@ static int device_removable_silent(const char * device)
      removable, see above).
   */
   if(! removable) {
-    allowlisted_bus = bus_has_ancestry(blockdevpath, hotplug_buses);
+    const char *allowlisted_bus = bus_has_ancestry(blockdevpath, hotplug_buses);
     if(allowlisted_bus) {
       removable = 1;
       debug("Found that device %s belong to allowlisted bus %s\n",
