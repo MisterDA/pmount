@@ -9,7 +9,7 @@
  * GNU General Public License. See file GPL for the full text of the license.
  */
 
-#define _DEFAULT_SOURCE
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -111,12 +111,10 @@ read_number_colon_number( const char* file, unsigned char* first, unsigned char*
 int
 assert_dir( const char* dir, int create_stamp )
 {
-    int result;
     struct stat st;
-    int stampfile;
-    char stampfname[PATH_MAX];
 
     if( stat( dir, &st ) ) {
+        int result;
         /* does not exist, create as root:root */
         get_root();
         get_groot();
@@ -129,9 +127,14 @@ assert_dir( const char* dir, int create_stamp )
         }
 
         if( create_stamp ) {
+            char *stampfname;
+            int stampfile;
             /* create stamp file to indicate that the directory should be removed
              * again at unmounting */
-            snprintf( stampfname, sizeof( stampfname ), "%s/%s", dir, CREATED_DIR_STAMP );
+            if( asprintf(&stampfname, "%s/" CREATED_DIR_STAMP, dir) == -1) {
+                perror("asprintf");
+                return -1;
+            }
 
             get_root();
             get_groot();
@@ -144,6 +147,7 @@ assert_dir( const char* dir, int create_stamp )
                 return -1;
             }
             close( stampfile );
+            free( stampfname );
         }
     } else {
         /* exists, check that it is a directory */
@@ -212,17 +216,19 @@ is_block( const char* path )
 int
 remove_pmount_mntpt( const char *path )
 {
-    char stampfile[PATH_MAX];
+    char *stampfile;
     int result = 0;
 
-    result = snprintf( stampfile, sizeof( stampfile ), "%s/%s", path, CREATED_DIR_STAMP );
-    if( result >= (int) sizeof( stampfile ) )
+    if( asprintf( &stampfile, "%s/" CREATED_DIR_STAMP, path) == -1) {
+        perror("asprintf");
         return -1;
+    }
 
     get_root();
     if( !unlink( stampfile ) )
       result = rmdir( path );
     drop_root();
+    free(stampfile);
     return result;
 }
 
@@ -451,22 +457,16 @@ spawnv( int options, const char* path, char *const argv[] )
 }
 
 /**
- * Internal function to determine lock file path for a given directory. The
- * returned string points to static memory and must not be free()'d.
+ * Internal function to determine lock file path for a given directory.
  */
-static
-char*
+static char*
 get_dir_lockfile( const char* dir )
 {
-    static char name[PATH_MAX];
-    static const char template[] = "/var/lock/pmount_%s";
-    char *dir_fname;
-
-    if( strlen( dir ) >= sizeof( name ) - sizeof( template ))
-        return NULL;
+    char *name = NULL, *dir_fname;
     dir_fname = strreplace( dir, '/', '_' );
-    snprintf( name, sizeof( name ), template, dir_fname );
-    free (dir_fname );
+    if( asprintf(&name, "/var/lock/pmount_%s", dir_fname) == -1 )
+        perror("asprintf");
+    free( dir_fname );
     return name;
 }
 
@@ -480,6 +480,7 @@ lock_dir( const char* dir ) {
     get_root();
     f = creat( lockfile, 0600);
     drop_root();
+    free(lockfile);
     if (f < 0) {
         perror( "lock_dir(): creat" );
         return -1;

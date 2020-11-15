@@ -161,7 +161,7 @@ int
 main( int argc, char * const argv[] )
 {
     char *devarg = NULL, *device;
-    char mntptdev[PATH_MAX], path[PATH_MAX];
+    char *mntptdev = NULL;
     const char* fstab_device;
     char fstab_mntpt[MEDIA_STRING_SIZE];
     int is_real_path = 0;
@@ -236,17 +236,22 @@ main( int argc, char * const argv[] )
 
     /* if we got a mount point, convert it to a device */
     debug ("checking whether %s is a mounted directory\n", devarg);
-    if( fstab_has_mntpt( "/proc/mounts", devarg, mntptdev, sizeof(mntptdev) ) ) {
+    if( fstab_has_mntpt( "/proc/mounts", devarg, &mntptdev ) ) {
         debug( "resolved mount point %s to device %s\n", devarg, mntptdev );
         devarg = mntptdev;
     } else if( !strchr( devarg, '/' ) ) {
+        char *path;
         /* try to prepend MEDIADIR */
-        snprintf( path, sizeof( path ), "%s%s", MEDIADIR, devarg );
+        if (asprintf(&path, "%s%s", MEDIADIR, devarg) == -1) {
+            perror("asprintf");
+            return E_INTERNAL;
+        }
         debug ("checking whether %s is a mounted directory\n", path);
-        if( fstab_has_mntpt( "/proc/mounts", path, mntptdev, sizeof(mntptdev) ) ) {
+        if( fstab_has_mntpt( "/proc/mounts", path, &mntptdev ) ) {
             debug( "resolved mount point %s to device %s\n", path, mntptdev );
             devarg = mntptdev;
         }
+        free( path );
     }
 
     /* get real path, if possible */
@@ -266,6 +271,7 @@ main( int argc, char * const argv[] )
     fstab_device = fstab_has_device( "/etc/fstab", device, fstab_mntpt, NULL );
     if( fstab_device ) {
         do_umount_fstab( fstab_device, do_lazy, fstab_mntpt );
+        free( device );
         return E_EXECUMOUNT;
     }
 
@@ -277,10 +283,12 @@ main( int argc, char * const argv[] )
             char *dev_device, *realpath_dev_device;
             if( asprintf(&dev_device, "%s%s", DEVDIR, device ) ) {
                 perror("asprintf");
+                free( device );
                 return E_INTERNAL;
             }
             if ( !(realpath_dev_device = realpath( dev_device, NULL ) ) ) {
                 fprintf( stderr, "realpath(%s): %s\n", dev_device, strerror( errno ) );
+                free( device );
                 return E_DEVICE;
             }
             free(device);
@@ -292,6 +300,7 @@ main( int argc, char * const argv[] )
 					     fstab_mntpt, NULL );
 	    if( fstab_device ) {
 	      do_umount_fstab( fstab_device, do_lazy, fstab_mntpt );
+              free( device );
 	      return E_EXECUMOUNT;
 	    }
 	}
@@ -300,6 +309,7 @@ main( int argc, char * const argv[] )
     /* does the device start with DEVDIR? */
     if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) != 0) {
         fprintf( stderr, _("Error: invalid device %s (must be in /dev/)\n"), device );
+        free( device );
         return E_DEVICE;
     }
 
@@ -312,15 +322,20 @@ main( int argc, char * const argv[] )
     }
 
     /* Now, we accept when devices have gone missing */
-    if( check_umount_policy( device, 1 ) )
+    if( check_umount_policy( device, 1 ) ) {
+        free( device );
         return E_POLICY;
+    }
 
     /* go for it */
-    if( do_umount( device, do_lazy ) )
+    if( do_umount( device, do_lazy ) ) {
+        free( device );
         return E_EXECUMOUNT;
+    }
 
     /* release LUKS device, if appropriate */
     luks_release( device, 1 );
+    free( device );
 
     /* delete mount point */
     remove_pmount_mntpt( mntpt );

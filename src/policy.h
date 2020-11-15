@@ -39,10 +39,9 @@ const char* fstab_has_device( const char* fname, const char* device, char* mntpt
  * @param mntpt mount point path to scan for (this gets symlink-resolved)
  * @param device if not NULL and returning 1, this will be filled with the
  *        corresponding device
- * @param device_size size of the device buffer
  * @return 1 if mount point was found, 0 if not found
  */
-int fstab_has_mntpt( const char* fname, const char* mntpt, char* device, size_t device_size );
+int fstab_has_mntpt( const char* fname, const char* mntpt, char** device );
 
 /**
  * Check whether given device is valid: it must exist and be a block device.
@@ -93,10 +92,9 @@ int mntpt_mounted( const char* mntpt, int expect );
  * Construct a lock directory name.
  * @param device lock directory is created for this device
  * @param name string buffer for the created lock directory
- * @param name_size size of buffer name
  */
 void
-make_lockdir_name( const char* device, char* name, size_t name_size );
+make_lockdir_name( const char* device, char** name );
 
 /**
  * Prints the removable devices that are currently mounted.

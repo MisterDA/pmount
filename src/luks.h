@@ -22,12 +22,11 @@ enum decrypt_status {DECRYPT_OK, DECRYPT_NOTENCRYPTED, DECRYPT_FAILED,
  * @param device raw device name
  * @param decrypted buffer for decrypted device; if device is unencrypted,
  *        this will be set to device
- * @param decrypted_size size of the "decrypted" buffer
  * @param password_file file to read the password from (NULL means prompt)
  * @param readonly 1 if device is read-only
  */
-enum decrypt_status luks_decrypt( const char* device, char* decrypted,
-        int decrypted_size, const char* password_file, int readonly );
+enum decrypt_status luks_decrypt( const char* device, char** decrypted,
+                                  const char* password_file, int readonly );
 
 /**
  * Check whether device is mapped through cryptsetup, and release it if

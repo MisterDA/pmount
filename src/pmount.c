@@ -477,27 +477,31 @@ do_mount_auto( const char* device, const char* mntpt, int async,
 static int
 do_lock( const char* device, pid_t pid )
 {
-    char lockdirpath[PATH_MAX];
-    char *lockfilepath;
+    char *lockdirpath, *lockfilepath;
     int pidlock;
+    int rc;
 
     if( assert_dir( LOCKDIR, 0 ) )
         return -1;
 
-    make_lockdir_name( device, lockdirpath, sizeof( lockdirpath ) );
+    make_lockdir_name( device, &lockdirpath );
 
-    if( assert_dir( lockdirpath, 0 ) )
-        return -1;
+    if( assert_dir( lockdirpath, 0 ) ) {
+        rc = -1;
+        goto free_lockdirpath;
+    }
 
     /* only allow to create locks for existing pids, to prevent DOS attacks */
     if( !pid_exists( pid ) ) {
         fprintf( stderr, _("Error: cannot lock for pid %u, this process does not exist\n"), pid );
-        return -1;
+        rc = -1;
+        goto free_lockdirpath;
     }
 
     if( asprintf( &lockfilepath, "%s/%d", lockdirpath, pid ) == -1) {
         perror("asprintf");
-        return -1;
+        rc = -1;
+        goto free_lockdirpath;
     }
 
     /* we need root for creating the pid lock file */
@@ -510,13 +514,17 @@ do_lock( const char* device, pid_t pid )
     if( pidlock < 0 ) {
         fprintf( stderr, _("Error: could not create pid lock file %s: %s\n"),
                 lockfilepath, strerror( errno ) );
-        free( lockfilepath );
-        return -1;
+        rc = -1;
+        goto free_lockfilepath;
     }
 
+    rc = 0;
     close( pidlock );
+ free_lockfilepath:
     free( lockfilepath );
-    return 0;
+ free_lockdirpath:
+    free( lockdirpath );
+    return rc;
 }
 
 /**
@@ -527,10 +535,10 @@ do_lock( const char* device, pid_t pid )
 static int
 do_unlock( const char* device, pid_t pid )
 {
-    char lockdirpath[PATH_MAX];
+    char *lockdirpath;
     int result;
 
-    make_lockdir_name( device, lockdirpath, sizeof( lockdirpath ) );
+    make_lockdir_name( device, &lockdirpath );
 
     /* if no lock dir exists, device is not locked */
     if( !is_dir( lockdirpath ) )
@@ -566,6 +574,8 @@ do_unlock( const char* device, pid_t pid )
     get_root();
     result = rmdir( lockdirpath );
     drop_root();
+
+    free( lockdirpath );
 
     if( result ) {
         if( errno == ENOTEMPTY )
@@ -612,11 +622,11 @@ do_fsck( const char* device )
 static void
 clean_lock_dir( const char* device )
 {
-    char lockdirpath[PATH_MAX];
+    char *lockdirpath;
     DIR* lockdir;
     struct dirent* lockfile;
 
-    make_lockdir_name( device, lockdirpath, sizeof( lockdirpath ) );
+    make_lockdir_name( device, &lockdirpath );
 
     debug( "Cleaning lock directory %s\n", lockdirpath );
 
@@ -652,6 +662,7 @@ clean_lock_dir( const char* device )
     rmdir( lockdirpath );
     drop_root();
     closedir( lockdir );
+    free( lockdirpath );
 }
 
 /**
@@ -662,8 +673,7 @@ main( int argc, char * const argv[] )
 {
     char *devarg = NULL, *arg2 = NULL;
     char mntpt[MEDIA_STRING_SIZE];
-    char *device;
-    char mntptdev[PATH_MAX], decrypted_device[PATH_MAX];
+    char *device, *mntptdev, *decrypted_device;
     const char* fstab_device;
     int is_real_path = 0;
     int async = 1;
@@ -806,8 +816,7 @@ main( int argc, char * const argv[] )
        have a block device -- this way, pmount shouldn't choke on stale
        network mounts. */
 
-    if(! is_block(devarg) && fstab_has_mntpt( "/etc/fstab", devarg, mntptdev,
-					      sizeof(mntptdev) ) ) {
+    if(! is_block(devarg) && fstab_has_mntpt( "/etc/fstab", devarg, &mntptdev ) ) {
 	debug( "resolved mount point %s to device %s\n", devarg, mntptdev );
 	devarg = mntptdev;
     }
@@ -835,6 +844,7 @@ main( int argc, char * const argv[] )
                     " supplied label is ignored\n"), fstab_device );
 
         do_mount_fstab( fstab_device );
+        free( device );
         return E_EXECMOUNT;
     }
 
@@ -843,11 +853,13 @@ main( int argc, char * const argv[] )
 	if(! conffile_allow_loop()) {
 	    fprintf(stderr, _("You are trying to mount %s as a loopback device. \n"
 			      "However, you are not allowed to use loopback mount.\n"), devarg);
+            free( device );
 	    return E_DISALLOWED;
 	}
 	if(loopdev_associate(device, &loop_device)) {
 	    fprintf(stderr, _("Failed to setup loop device for %s, aborting\n"),
 		    devarg);
+            free( device );
 	    return E_LOSETUP;
 	}
         free(device);
@@ -866,10 +878,12 @@ main( int argc, char * const argv[] )
             char *dev_device, *realpath_dev_device;
             if( asprintf(&dev_device, "%s%s", DEVDIR, device ) ) {
                 perror("asprintf");
+                free( device );
                 return E_INTERNAL;
             }
             if ( !(realpath_dev_device = realpath( dev_device, NULL ) ) ) {
                 fprintf( stderr, "realpath(%s): %s\n", dev_device, strerror( errno ) );
+                free( device );
                 return E_DEVICE;
             }
             free(device);
@@ -883,6 +897,7 @@ main( int argc, char * const argv[] )
 				   " supplied label is ignored\n"), fstab_device );
 
 	      do_mount_fstab( fstab_device );
+              free( device );
 	      return E_EXECMOUNT;
 	    }
         }
@@ -891,6 +906,7 @@ main( int argc, char * const argv[] )
     /* does the device start with DEVDIR? */
     if( strncmp( device, DEVDIR, sizeof( DEVDIR )-1 ) != 0) {
         fprintf( stderr, _("Error: invalid device %s (must be in /dev/)\n"), device );
+        free( device );
         return E_DEVICE;
     }
 
@@ -902,6 +918,7 @@ main( int argc, char * const argv[] )
             if( make_mountpoint_name( devarg, arg2, mntpt, sizeof( mntpt ) ) ) {
 		if(doing_loop_mount)
 		    loopdev_dissociate(device);
+                free( device );
                 return E_MNTPT;
 	    }
 
@@ -929,6 +946,7 @@ main( int argc, char * const argv[] )
             if( check_mount_policy( device, mntpt, doing_loop_mount ) ) {
 		if(doing_loop_mount)
 		    loopdev_dissociate(device);
+                free( device );
                 return E_POLICY;
 	    }
 
@@ -941,26 +959,29 @@ main( int argc, char * const argv[] )
 	    int fd = open(device, O_RDONLY);
 	    if( fd == -1) {
 		perror(_("Could not open device"));
+                free( device );
 		return E_DEVICE;
 	    }
 	    drop_root();
 #endif
 
             /* check for encrypted device */
-            enum decrypt_status decrypt = luks_decrypt( device,
-                    decrypted_device, sizeof( decrypted_device ), passphrase,
-                    force_write == 0 ? 1 : 0 );
+            enum decrypt_status decrypt =
+                luks_decrypt( device, &decrypted_device,  passphrase,
+                              force_write == 0 ? 1 : 0 );
 
             switch (decrypt) {
                 case DECRYPT_FAILED:
                     fputs( _("Error: could not decrypt device (wrong passphrase?)\n"), stderr );
 		    if(doing_loop_mount)
 			loopdev_dissociate(device);
+                    free( device );
                     return E_POLICY;
                 case DECRYPT_EXISTS:
                     fputs( _("Error: mapped device already exists\n"), stderr );
 		    if(doing_loop_mount)
 			loopdev_dissociate(device);
+                    free( device );
                     return E_POLICY;
                 case DECRYPT_OK:
 		  /* We create a luks lockfile _on the decrypted device !_*/
@@ -971,6 +992,7 @@ main( int argc, char * const argv[] )
                 default:
                     fprintf( stderr, "Internal error: unhandled decrypt_status %i\n",
                         (int) decrypt);
+                    free( device );
                     return E_INTERNAL;
             }
 
@@ -980,6 +1002,7 @@ main( int argc, char * const argv[] )
                 fputs( _("Error: could not lock the mount directory. Another pmount is probably running for this mount point.\n"), stderr );
 		if(doing_loop_mount)
 		    loopdev_dissociate(device);
+                free( device );
                 return E_LOCKED;
             }
             debug( "mount point directory locked\n" );
@@ -1020,30 +1043,40 @@ main( int argc, char * const argv[] )
 
 		if(doing_loop_mount)
 		    loopdev_dissociate(device);
+                free( device );
 
                 /* mount failed, delete the mount point again */
                 if( remove_pmount_mntpt( mntpt ) ) {
                     perror( _("Error: could not delete mount point") );
-                    return -1;
+                    return EXIT_FAILURE;
                 }
                 return E_EXECMOUNT;
             }
-
-            return 0;
+            free( device );
+            return EXIT_SUCCESS;
 
         case LOCK:
-            if( device_valid( device ) )
-                if( do_lock( device, parse_unsigned( arg2, E_PID ) ) )
+            if( device_valid( device ) ) {
+                if( do_lock( device, parse_unsigned( arg2, E_PID ) ) ) {
+                    free( device );
                     return E_INTERNAL;
+                }
+            }
+            free( device );
             return 0;
 
         case UNLOCK:
-            if( device_valid( device ) )
-                if( do_unlock( device, parse_unsigned( arg2, E_PID ) ) )
+            if( device_valid( device ) ) {
+                if( do_unlock( device, parse_unsigned( arg2, E_PID ) ) ) {
+                    free( device );
                     return E_UNLOCK;
+                }
+            }
+            free( device );
             return 0;
     }
 
     fprintf( stderr, _("Internal error: mode %i not handled.\n"), (int) mode );
+    free( device );
     return E_INTERNAL;
 }
