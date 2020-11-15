@@ -42,10 +42,6 @@
 
 extern const char* VERSION;
 
-#define OPT_FMASK 128
-#define OPT_DMASK 129
-#define OPT_UTC   130
-
 /**
  * Print some help.
  * @param exename Name of the executable (argv[0]).
@@ -662,7 +658,7 @@ clean_lock_dir( const char* device )
  * Entry point.
  */
 int
-main( int argc, char** argv )
+main( int argc, char * const argv[] )
 {
     char *devarg = NULL, *arg2 = NULL;
     char mntpt[MEDIA_STRING_SIZE];
@@ -674,8 +670,7 @@ main( int argc, char** argv )
     int noatime = 0;
     int exec = 0;
     int force_write = -1; /* 0: ro, 1: rw, -1: default */
-    int run_fsck = 0; 		/* Whether or not to run fsck before
-				   mounting. */
+    int run_fsck = 0; /* Whether or not to run fsck before mounting. */
     int doing_loop_mount = 0;
     int use_selinux_context = 0;
     const char* use_fstype = NULL;
@@ -690,28 +685,27 @@ main( int argc, char** argv )
 
     enum { MOUNT, LOCK, UNLOCK } mode = MOUNT;
 
-    int  option;
-    static struct option long_opts[] = {
-        { "help", 0, NULL, 'h'},
-        { "debug", 0, NULL, 'd'},
-        { "lock", 0, NULL, 'l'},
-        { "unlock", 0, NULL, 'L'},
-        { "sync", 0, NULL, 's' },
-        { "noatime", 0, NULL, 'A' },
-        { "exec", 0, NULL, 'e' },
-        { "type", 1, NULL, 't' },
+    const struct option long_opts[] = {
         { "charset", 1, NULL, 'c' },
-        { "utc", 0, NULL, OPT_UTC },
-        { "umask", 1, NULL, 'u' },
-        { "fmask", 1, NULL, OPT_FMASK },
-        { "dmask", 1, NULL, OPT_DMASK },
+        { "debug", 0, NULL, 'd' },
+        { "dmask", 1, NULL, 0 },
+        { "exec", 0, NULL, 'e' },
+        { "fmask", 1, NULL, 0 },
+        { "fsck", 0, NULL, 'F' },
+        { "help", 0, NULL, 'h' },
+        { "lock", 0, NULL, 'l' },
+        { "noatime", 0, NULL, 'A' },
         { "passphrase", 1, NULL, 'p' },
         { "read-only", 0, NULL, 'r' },
         { "read-write", 0, NULL, 'w' },
-        { "selinux-context", 0, NULL, 'o' },
+        { "selinux-context", 0, &use_selinux_context, 1 },
+        { "sync", 0, NULL, 's' },
+        { "type", 1, NULL, 't' },
+        { "umask", 1, NULL, 'u' },
+        { "unlock", 0, NULL, 'L' },
+        { "utc", 0, &utc, 1 },
         { "version", 0, NULL, 'V' },
-        { "fsck", 0, NULL, 'F' },
-        { NULL, 0, NULL, 0}
+        { NULL, 0, NULL, 0 }
     };
 
     /* initialize locale */
@@ -731,64 +725,49 @@ main( int argc, char** argv )
     }
 
     /* parse command line options */
-    do {
-        switch( option = getopt_long( argc, argv, "+hdelFLsArwop:t:c:u:V",
-				      long_opts, NULL ) ) {
-	case -1:  break;          /* end of arguments */
-	case ':':
-	case '?': return E_ARGS;  /* unknown argument */
-
-	case 'h': usage( argv[0] ); return 0;
-
-	case 'd': enable_debug = 1; break;
-
-	case 'l': mode = LOCK; break;
-
-	case 'L': mode = UNLOCK; break;
-
-	case 's': async = 0; break;
-
-	case 'A': noatime = 1; break;
-
-	case 'e': exec = 1; break;
-
-	case 't': use_fstype = optarg; break;
-
-	case 'c': iocharset = optarg; break;
-
-	case OPT_UTC: utc = 1; break;
-
-	case 'u': umask = optarg; break;
-
-	case OPT_FMASK: fmask = optarg; break;
-
-	case OPT_DMASK: dmask = optarg; break;
-
-	case 'p': passphrase = optarg; break;
-
-	case 'r': force_write = 0; break;
-
-	case 'w': force_write = 1; break;
-
-	case 'F':
-	    if(conffile_allow_fsck())
-		run_fsck = 1;
-	    else {
-		fputs(_("Your system administrator does not "
-			"allow users to run fsck, aborting\n"), stderr);
-		return E_DISALLOWED;
-	    }
-	    break;
-
-        case 'o': use_selinux_context = 1; break;
-
-	case 'V': puts(VERSION); return 0;
-
-	default:
-	    fputs( _("Internal error: getopt_long() returned unknown value\n"), stderr );
-	    return E_INTERNAL;
+    while(1) {
+        int option_index = 0,
+            option = getopt_long( argc, argv, "+c:deFhlAp:rwst:u:LV",
+                                  long_opts, &option_index );
+        if( option == -1) /* end of arguments */
+            break;
+        switch( option ) {
+        case '?': return E_ARGS; /* unknown argument */
+        case 0:
+            if(strcmp(long_opts[option_index].name, "dmask") == 0)
+                dmask = optarg;
+            else if(strcmp(long_opts[option_index].name, "fmask") == 0)
+                fmask = optarg;
+            break;
+        case 'A': noatime = 1; break;
+        case 'c': iocharset = optarg; break;
+        case 'd': enable_debug = 1; break;
+        case 'e': exec = 1; break;
+        case 'F':
+            if(conffile_allow_fsck()) {
+                run_fsck = 1;
+            } else {
+                fputs(_("Your system administrator does not "
+                        "allow users to run fsck, aborting\n"), stderr);
+                return E_DISALLOWED;
+            }
+            break;
+        case 'h': usage( argv[0] ); return EXIT_SUCCESS;
+        case 'l': mode = LOCK; break;
+        case 'L': mode = UNLOCK; break;
+        case 'p': passphrase = optarg; break;
+        case 'r': force_write = 0; break;
+        case 's': async = 0; break;
+        case 't': use_fstype = optarg; break;
+        case 'u': umask = optarg; break;
+        case 'V': puts(VERSION); return EXIT_SUCCESS;
+        case 'w': force_write = 1; break;
+        default:
+            fputs( _("Internal error: getopt_long() returned unknown value\n"),
+                   stderr );
+            return E_INTERNAL;
         }
-    } while( option != -1 );
+    }
 
     /* determine device and second (label/pid) argument */
     if( optind < argc )

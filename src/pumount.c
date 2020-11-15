@@ -158,7 +158,7 @@ do_umount( const char* device, int do_lazy )
  *
  */
 int
-main( int argc, char** argv )
+main( int argc, char * const argv[] )
 {
     char *devarg = NULL, *device;
     char mntptdev[PATH_MAX], path[PATH_MAX];
@@ -167,15 +167,14 @@ main( int argc, char** argv )
     int is_real_path = 0;
     int do_lazy = 0;
 
-    int  option;
-    static struct option long_opts[] = {
-        { "help", 0, NULL, 'h'},
-        { "debug", 0, NULL, 'd'},
-        { "lazy", 0, NULL, 'l'},
-        { "yes-I-really-want-lazy-unmount", 0, NULL, 'R'},
-        { "luks-force", 0, NULL, 'L'},
+    struct option long_opts[] = {
+        { "debug", 0, NULL, 'd' },
+        { "help", 0, NULL, 'h' },
+        { "lazy", 0, NULL, 'l' },
+        { "luks-force", 0, NULL, 'L' },
         { "version", 0, NULL, 'V' },
-        { NULL, 0, NULL, 0}
+        { "yes-I-really-want-lazy-unmount", 0, &do_lazy, 1 },
+        { NULL, 0, NULL, 0 }
     };
 
     /* initialize locale */
@@ -184,34 +183,28 @@ main( int argc, char** argv )
     textdomain( "pmount" );
 
     /* parse command line options */
-    do {
-        switch( option = getopt_long( argc, argv, "+hdluV", long_opts, NULL ) ) {
-            case -1:        break;          /* end of arguments */
-            case '?':        return E_ARGS;  /* unknown argument */
-
-            case 'h':        usage( argv[0] ); return 0;
-
-            case 'd':   enable_debug = 1; break;
-
-            case 'l':
-	      fputs(_("WARNING: Lazy unmount are likely to jeopardize data "
-		      "integrity on removable devices.\n"
-		      "If that's what you really want, run pumount with "
-		      "--yes-I-really-want-lazy-unmount\nAborting.\n"),
-		    stderr);
-	      return 1;
-	    case 'R':
-	      do_lazy = 1; break;
-
-            case 'L': /* was not used, keep the option as NOP */; break;
-
-            case 'V': puts(VERSION); return 0;
-
-            default:
-                fputs( _("Internal error: getopt_long() returned unknown value\n"), stderr );
-                return E_INTERNAL;
+    while(1) {
+        int option = getopt_long( argc, argv, "+dhlV", long_opts, NULL );
+        if( option == -1 ) /* end of arguments */
+            break;
+        switch( option ) {
+        case '?': return E_ARGS;  /* unknown argument */
+        case 'd': enable_debug = 1; break;
+        case 'h': usage( argv[0] ); return EXIT_SUCCESS;
+        case 'l':
+            fputs(_("WARNING: Lazy unmount are likely to jeopardize data "
+                    "integrity on removable devices.\n"
+                    "If that's what you really want, run pumount with "
+                    "--yes-I-really-want-lazy-unmount\nAborting.\n"),
+                  stderr);
+            return EXIT_FAILURE;
+        case 'V': puts(VERSION); return EXIT_SUCCESS;
+        default:
+            fputs( _("Internal error: getopt_long() returned unknown value\n"),
+                   stderr );
+            return E_INTERNAL;
         }
-    } while( option != -1 );
+    }
 
     /* invalid number of args? */
     if( optind + 1 != argc ) {
