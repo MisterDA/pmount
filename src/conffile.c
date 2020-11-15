@@ -329,8 +329,8 @@ static cf_key * cf_key_find(const char * key, cf_key * keys)
 */
 static int cf_read_line(FILE * file, char * dest, size_t nb)
 {
-  int len;
   while(1) {
+    int len;
     if( ! fgets(dest, nb, file)) {
       if(feof(file)) {
 	*dest = 0;
@@ -718,7 +718,6 @@ int cf_read_file(FILE * file, cf_spec * specs)
     int line_type;
     cf_key * key;
     if(cf_read_line(file, line_buffer, sizeof(line_buffer))) {
-      retval = -1;
       break;
     }
 

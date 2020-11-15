@@ -354,9 +354,7 @@ size_t slurp_size = 0;
 int
 spawnv( int options, const char* path, char *const argv[] )
 {
-    int devnull;
     int status;
-    int i;
     pid_t new_pid;
     int fds[2];
 
@@ -367,7 +365,7 @@ spawnv( int options, const char* path, char *const argv[] )
 
     if( enable_debug ) {
         printf( "spawnv(): executing %s", path );
-        for( i = 0; argv[i]; ++i )
+        for(int i = 0; argv[i]; ++i )
             printf( " '%s'", argv[i] );
         printf( "\n" );
     }
@@ -390,7 +388,7 @@ spawnv( int options, const char* path, char *const argv[] )
 	/* Performing redirections */
 
 	if( options & DEVNULL_MASK ) {
-	    devnull = open( "/dev/null", O_WRONLY );
+	    int devnull = open( "/dev/null", O_WRONLY );
 	    if( devnull > 0 ) {
 		if( options & SPAWN_NO_STDOUT )
 		    dup2( devnull, 1 );
