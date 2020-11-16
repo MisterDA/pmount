@@ -27,6 +27,8 @@
 #include <ctype.h>
 #include <sys/sysmacros.h>
 #include <stdbool.h>
+#include <unistd.h>
+#include <limits.h>
 
 /* For globs in /etc/pmount.allow */
 #include <fnmatch.h>

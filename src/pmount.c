@@ -37,7 +37,7 @@
 
 /* Enable autodetection if possible */
 #ifdef HAVE_BLKID
-#include <blkid/blkid.h>
+#include <blkid.h>
 #endif
 
 extern const char* VERSION;
