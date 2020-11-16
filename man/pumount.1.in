@@ -27,7 +27,8 @@ expects the
 .I device
 as its only argument. This will umount
 .I device
-from a directory below /media if policy is met (see below).
+from a directory below
+.R @MEDIADIR@ if policy is met (see below).
 
 Please note that, as with
 .BR pmount ,
@@ -76,7 +77,7 @@ a device
 .B pmount
 did not open. However, you can bypass this restriction with this
 flag. You probably will need it if you did mess around with the
-.I /var/lock/pmount_luks
+.I @LOCKDIR@
 directory.
 
 .TP
@@ -108,7 +109,8 @@ calling user to handle this transparently)
 .I device
 is mounted according to /etc/mtab and /proc/mounts with the calling user's uid
 .IP \(bu
-mount point is in /media
+mount point is in
+.R @MEDIADIR@
 
 .SH PUMOUNT AND MISSING DEVICES
 

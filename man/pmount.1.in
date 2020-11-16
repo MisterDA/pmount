@@ -54,10 +54,13 @@ is invoked like this:
 
 This will mount
 .I device
-to a directory below /media if policy is met (see below). If
+to a directory below
+.R @MEDIADIR@ if policy is met (see below). If
 .I label
-is given, the mount point will be /media/label, otherwise it will be
-/media/device.
+is given, the mount point will be
+.RI @MEDIADIR@ label ,
+otherwise it will be
+.RI @MEDIADIR@ device .
 
 The device will be mounted with the following flags:
 async,atime,nodev,noexec,noauto,nosuid,user,rw
@@ -123,7 +126,7 @@ and the directory is empty
 .I device
 is removable (USB, FireWire, or MMC device, or
 \fB/sys/block/\fIdrive\fB/removable\fR is 1) or allowlisted in
-.B /etc/pmount.allow\fR.
+.BR @ALLOWLIST@ .
 .IP \(bu
 .I device
 is not locked
@@ -257,7 +260,7 @@ Runs
 .B fsck\fR(1)
 on the device before mounting. This operation is not allowed unless
 your system administrator explicitly allowed it in the
-.I /etc/pmount.conf
+.I @SYSTEM_CONFFILE@
 configuration file. Please see
 .B pmount.conf\fR(5)
 for more information.
@@ -275,7 +278,7 @@ Print the current version number and exit successfully.
 .SH FILES
 
 .TP
-.B /etc/pmount.allow
+.B @ALLOWLIST@
 List of devices (one device per line) which are additionally permitted
 for pmounting. Globs, such as
 .I /dev/sda[123]
@@ -284,7 +287,7 @@ are permitted. See see
 (7) for a more complete syntax.
 
 .TP
-.B /etc/pmount.conf
+.B @SYSTEM_CONFFILE@
 Configuration file for allowing potentially less secure but useful
 operations. See
 .BR pmount.conf (5).
@@ -335,7 +338,7 @@ to mount NTFS volumes respectively with
 or
 .B ntfs-3g
 (1). If the file
-.I /sbin/mount.ntfs-3g
+.I @MOUNT_NTFS_3G@
 is found, then
 .B pmount
 will mount NTFS filestystems with type

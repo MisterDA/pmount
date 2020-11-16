@@ -58,7 +58,13 @@ install_data(
   files('etc' / 'pmount.conf', 'etc' / 'pmount.allow'),
   install_dir: sysconfdir)
 
-install_man('man' / 'pmount.1', 'man' / 'pmount.conf.5', 'man' / 'pumount.1')
+pmount1 = configure_file(configuration: cdata,
+                         input: 'man' / 'pmount.1.in',
+                         output: 'pmount.1')
+pumount1 = configure_file(configuration: cdata,
+                         input: 'man' / 'pumount.1.in',
+                         output: 'pumount.1')
+install_man(pmount1, pumount1, 'man' / 'pmount.conf.5')
 
 subdir('po')
 subdir('src')
