@@ -22,7 +22,8 @@ sysconfdir = prefix / get_option('sysconfdir')
 sharedstatedir = prefix / get_option('sharedstatedir')
 
 if get_option('bash-completions')
-  bash_files = files('completions' / 'bash' / 'pmount')
+  bash_files = files('completions' / 'bash' / 'pmount',
+                     'completions' / 'bash' / 'pumount')
   if bash_comp.found()
     bash_install_dir = bash_comp.get_pkgconfig_variable(
       'completionsdir', define_variable: ['datadir', datadir])
