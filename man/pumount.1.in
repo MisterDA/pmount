@@ -128,4 +128,6 @@ problem. Just specify the mount point as argument for
 
 .SH AUTHOR
 .B pmount
-is developed by Martin Pitt <martin.pitt@canonical.com>.
+was originally developed by Martin Pitt <martin.pitt@canonical.com>,
+then maintained by Vincent Fourmond <fourmond@debian.org>, and now by
+Antonin Décimo <antonin.decimo@gmail.com>.

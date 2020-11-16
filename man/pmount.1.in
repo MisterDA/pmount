@@ -413,5 +413,6 @@ not happen anymore.
 
 .SH AUTHOR
 .B pmount
-was originally developed by Martin Pitt <martin.pitt@canonical.com>.
-It is now maintained by Vincent Fourmond <fourmond@debian.org>.
+was originally developed by Martin Pitt <martin.pitt@canonical.com>,
+then maintained by Vincent Fourmond <fourmond@debian.org>, and now by
+Antonin Décimo <antonin.decimo@gmail.com>.
