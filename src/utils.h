@@ -14,6 +14,8 @@
 #ifndef __utils_h
 #define __utils_h
 
+#include <stddef.h>
+
 /* Error codes */
 extern const int E_ARGS;
 extern const int E_DEVICE;

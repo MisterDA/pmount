@@ -11,7 +11,7 @@
 #ifndef __conffile_h
 #define __conffile_h
 
-
+#include <stdio.h>
 #include <sys/types.h>
 
 /**
