@@ -1,3 +1,28 @@
+0.10.0
+------------
+
+Old patches were included, great care was taken to preserve the
+development history until this release, and a lot of internal
+cleanups and improvements were merged.
+
+The user-visible changes include:
+- support btrfs, nilfs2, f2fs, exfat (via fuse), ntfs.
+- fix Bash completion
+- add --utc option
+- support tz=UTC
+- add --selinux-context option to specify a SELinux context
+- remove pmount-hal, as HAL is deprecated
+- fix UTF-8 detection
+- switch from Autotools to Meson+Ninja build system
+
+Internally, some notable changes include:
+- switch from the realpath(3) custom implementation to libc
+- remove occurrences of PATH_MAX to favor allocations on heap and
+  remove path length limitation
+- fix compilation errors and warning
+- fix bugs reported by PVS-Studio, clang-static-analyzer, and Coverity
+- reformat of the code for readability and consistency
+
 0.9.99-alpha
 ------------
 - EXPERIMENTAL RELEASE, use at your own risks !
@@ -15,7 +40,6 @@
   As noticed above, this is an experimental release. Please use with
   care: even if the parsing of configuration files should be safe, it
   has not been extensively tried.
-
 
 0.9.23
 -----------
