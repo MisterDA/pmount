@@ -667,7 +667,7 @@ device_allowlisted( const char* device )
     }
 
     fclose( fwl );
-    debug( "device_whitlisted(): nothing matched, returning 0\n" );
+    debug( "device_allowlisted(): nothing matched, returning 0\n" );
     return 0;
 }
 
