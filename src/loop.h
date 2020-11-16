@@ -36,10 +36,4 @@ int loopdev_associate(const char * source, char ** target);
 */
 int loopdev_dissociate(const char * dev);
 
-/**
-   Returns true if the given device is a allowlisted loop device
-*/
-int loopdev_is_allowlisted(const char * dev);
-
-
 #endif
