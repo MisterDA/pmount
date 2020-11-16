@@ -757,7 +757,7 @@ device_valid_silent(const char *device)
 #define safe_strcpy(dest, src) snprintf(dest, sizeof(dest), "%s", src);
 
 void
-print_mounted_removable_devices()
+print_mounted_removable_devices(void)
 {
     FILE *f;
     struct mntent *ent;
@@ -790,8 +790,8 @@ print_mounted_removable_devices()
    Checks if the user is physically logged in, by looking for an utmp
    record pointing to a real tty.
 */
-int
-user_physically_logged_in()
+static int
+user_physically_logged_in(void)
 {
     /* First, get the user name */
     char username[100];

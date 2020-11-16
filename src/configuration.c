@@ -29,7 +29,7 @@
 static ci_bool conf_allow_fsck = { .def = 0 };
 
 int
-conffile_allow_fsck()
+conffile_allow_fsck(void)
 {
     return ci_bool_allowed(&conf_allow_fsck);
 }
@@ -37,7 +37,7 @@ conffile_allow_fsck()
 static ci_bool conf_allow_not_physically_logged = { .def = 0 };
 
 int
-conffile_allow_not_physically_logged()
+conffile_allow_not_physically_logged(void)
 {
     return ci_bool_allowed(&conf_allow_not_physically_logged);
 }
@@ -45,7 +45,7 @@ conffile_allow_not_physically_logged()
 static ci_bool conf_allow_loop = { .def = 0 };
 
 int
-conffile_allow_loop()
+conffile_allow_loop(void)
 {
     return ci_bool_allowed(&conf_allow_loop);
 }
@@ -53,7 +53,7 @@ conffile_allow_loop()
 static ci_string_list conf_loop_devices = { .strings = NULL };
 
 char **
-conffile_loop_devices()
+conffile_loop_devices(void)
 {
     return conf_loop_devices.strings;
 }
@@ -87,7 +87,7 @@ conffile_read(const char *file)
 }
 
 int
-conffile_system_read()
+conffile_system_read(void)
 {
     struct stat st;
     /* If the system configuration file does not exist, we don't
