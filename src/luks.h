@@ -13,8 +13,12 @@
 
 #include <stdlib.h>
 
-enum decrypt_status {DECRYPT_OK, DECRYPT_NOTENCRYPTED, DECRYPT_FAILED,
-    DECRYPT_EXISTS};
+enum decrypt_status {
+    DECRYPT_OK,
+    DECRYPT_NOTENCRYPTED,
+    DECRYPT_FAILED,
+    DECRYPT_EXISTS
+};
 
 /**
  * Check whether the given device is encrypted using dmcrypt with LUKS
@@ -25,8 +29,8 @@ enum decrypt_status {DECRYPT_OK, DECRYPT_NOTENCRYPTED, DECRYPT_FAILED,
  * @param password_file file to read the password from (NULL means prompt)
  * @param readonly 1 if device is read-only
  */
-enum decrypt_status luks_decrypt( const char* device, char** decrypted,
-                                  const char* password_file, int readonly );
+enum decrypt_status luks_decrypt(const char *device, char **decrypted,
+                                 const char *password_file, int readonly);
 
 /**
  * Check whether device is mapped through cryptsetup, and release it if
@@ -34,31 +38,31 @@ enum decrypt_status luks_decrypt( const char* device, char** decrypted,
  * - if force is true
  * - if the corresponding lockfile exists.
  */
-void luks_release( const char* device, int force );
+void luks_release(const char *device, int force);
 
 /**
  * Check whether the given real device has been mapped to a dmcrypt device. If
  * so, return the mapped device in mapped_device and return 1, otherwise return
  * 0.
  */
-int luks_get_mapped_device( const char* device, char** mapped_device);
+int luks_get_mapped_device(const char *device, char **mapped_device);
 
 /**
  * Creates a 'lockfile' to remember that the given luks device was
  * luksOpened by pmount. Returns 1 on success, 0 on error.
  */
-int luks_create_lockfile(const char * device);
+int luks_create_lockfile(const char *device);
 
 /**
  * Checks the presence of the luks 'lockfile' for a given device.
  * Returns 1 if the lockfile is present.
  */
-int luks_has_lockfile(const char * device);
+int luks_has_lockfile(const char *device);
 
 /**
  * Removes the luks 'lockfile' corresponding to the given device.
  * Never fails. But might not really remove it if it is a directory.
  */
-void luks_remove_lockfile(const char * device);
+void luks_remove_lockfile(const char *device);
 
 #endif /* !defined( __luks_h) */

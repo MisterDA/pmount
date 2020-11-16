@@ -19,13 +19,13 @@
 */
 
 typedef struct {
-  uid_t *u;
-  unsigned int len;
+    uid_t *u;
+    unsigned int len;
 } uid_list;
 
 typedef struct {
-  gid_t *g;
-  unsigned int len;
+    gid_t *g;
+    unsigned int len;
 } gid_list;
 
 /**
@@ -34,41 +34,37 @@ typedef struct {
 */
 
 typedef struct {
-  /** Default value */
-  int def;
+    /** Default value */
+    int def;
 
-  /** List of allowed groups. */
-  gid_list allowed_groups;
+    /** List of allowed groups. */
+    gid_list allowed_groups;
 
-  /** List of allowed users. */
-  uid_list allowed_users;
+    /** List of allowed users. */
+    uid_list allowed_users;
 
-  /** List of denied users. */
-  uid_list denied_users;
+    /** List of denied users. */
+    uid_list denied_users;
 } ci_bool;
 
 /**
    Accessors
 */
-void ci_bool_set_default(ci_bool * c, int val);
-int ci_bool_allowed(const ci_bool * c);
-void ci_bool_dump(const ci_bool * c, FILE * out);
-
-
+void ci_bool_set_default(ci_bool *c, int val);
+int ci_bool_allowed(const ci_bool *c);
+void ci_bool_dump(const ci_bool *c, FILE *out);
 
 /**
    A list of strings
 */
 
 typedef struct {
-  /**
-     A NULL-terminated list of pointers to newly allocated strings, or
-     NULL if there are no elements.
-  */
-  char ** strings;
+    /**
+       A NULL-terminated list of pointers to newly allocated strings, or
+       NULL if there are no elements.
+    */
+    char **strings;
 } ci_string_list;
-
-
 
 /**
    @todo provide macros for the initialization/declaration of the
@@ -77,47 +73,41 @@ typedef struct {
 
 /**********************************************************************/
 
-
 /**
    The type of configuration items
 */
-typedef enum {
-  boolean_item,
-  string_list
-} ci_type;
-
+typedef enum { boolean_item, string_list } ci_type;
 
 /**
    Specification of a configuration item.
 */
 typedef struct {
-  /**
-     The base name of the configuration item.
-     NULL for an invalid item terminating the configuration file.
-  */
-  const char * base;
+    /**
+       The base name of the configuration item.
+       NULL for an invalid item terminating the configuration file.
+    */
+    const char *base;
 
-  /**
-     The type of the configuration item.
-  */
-  ci_type type;
+    /**
+       The type of the configuration item.
+    */
+    ci_type type;
 
-  /**
-     The target of the configuration item. Actual type depends on
-     the item type
-  */
-  union {
-      ci_bool *boolean_item;
-      ci_string_list *string_list;
-  };
+    /**
+       The target of the configuration item. Actual type depends on
+       the item type
+    */
+    union {
+        ci_bool *boolean_item;
+        ci_string_list *string_list;
+    };
 } cf_spec;
-
 
 /**
    Reads the given file and parse it according to the specification
    written in specs, which must be terminated by the first occurrence
    of a NULL as base.
  */
-int cf_read_file(FILE * file, cf_spec * specs);
+int cf_read_file(FILE *file, cf_spec *specs);
 
 #endif

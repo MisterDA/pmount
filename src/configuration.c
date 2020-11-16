@@ -10,7 +10,6 @@
 
 #include "config.h"
 #include <stdio.h>
-#include <stdio.h>
 #include <string.h>
 
 #include <libintl.h>
@@ -20,7 +19,6 @@
 #include "configuration.h"
 #include "utils.h"
 
-
 /**********************************************************************/
 /* Configuration items  */
 
@@ -28,92 +26,73 @@
    Whether or not the user is allowed to run fsck or not.
 */
 
-static ci_bool conf_allow_fsck = {
-  .def = 0
-};
+static ci_bool conf_allow_fsck = { .def = 0 };
 
-int conffile_allow_fsck()
+int
+conffile_allow_fsck()
 {
-  return ci_bool_allowed(&conf_allow_fsck);
+    return ci_bool_allowed(&conf_allow_fsck);
 }
 
-static ci_bool conf_allow_not_physically_logged = {
-  .def = 0
-};
+static ci_bool conf_allow_not_physically_logged = { .def = 0 };
 
-int conffile_allow_not_physically_logged()
+int
+conffile_allow_not_physically_logged()
 {
-  return ci_bool_allowed(&conf_allow_not_physically_logged);
+    return ci_bool_allowed(&conf_allow_not_physically_logged);
 }
 
-static ci_bool conf_allow_loop = {
-  .def = 0
-};
+static ci_bool conf_allow_loop = { .def = 0 };
 
-int conffile_allow_loop()
+int
+conffile_allow_loop()
 {
-  return ci_bool_allowed(&conf_allow_loop);
+    return ci_bool_allowed(&conf_allow_loop);
 }
 
-static ci_string_list conf_loop_devices = {
-  .strings = NULL
-};
+static ci_string_list conf_loop_devices = { .strings = NULL };
 
-char ** conffile_loop_devices()
+char **
+conffile_loop_devices()
 {
-  return conf_loop_devices.strings;
+    return conf_loop_devices.strings;
 }
-
 
 static cf_spec config[] = {
-  {
-      .base = "fsck",
+    { .base = "fsck", .type = boolean_item, .boolean_item = &conf_allow_fsck },
+    { .base = "not_physically_logged",
       .type = boolean_item,
-      .boolean_item = &conf_allow_fsck
-  },
-  {
-      .base = "not_physically_logged",
-      .type = boolean_item,
-      .boolean_item = &conf_allow_not_physically_logged},
-  {
-      .base = "loop",
-      .type = boolean_item,
-      .boolean_item = &conf_allow_loop
-  },
-  {
-      .base = "loop_devices",
+      .boolean_item = &conf_allow_not_physically_logged },
+    { .base = "loop", .type = boolean_item, .boolean_item = &conf_allow_loop },
+    { .base = "loop_devices",
       .type = string_list,
-      .string_list = &conf_loop_devices
-  },
-  {
-      .base = NULL
-  }
+      .string_list = &conf_loop_devices },
+    { .base = NULL }
 };
 
-
-
-
-int conffile_read(const char * file)
+int
+conffile_read(const char *file)
 {
-  FILE * f;
-  int ret;
-  f = fopen(file,"r");
-  if(! f) {
-    perror(_("Failed to open configuration file"));
-    return -2;
-  }
-  ret = cf_read_file(f, config);
-  fclose(f);
+    FILE *f;
+    int ret;
+    f = fopen(file, "r");
+    if(!f) {
+        perror(_("Failed to open configuration file"));
+        return -2;
+    }
+    ret = cf_read_file(f, config);
+    fclose(f);
 
-  return ret;
+    return ret;
 }
 
-int conffile_system_read()
+int
+conffile_system_read()
 {
-  struct stat st;
-  /* If the system configuration file does not exist, we don't
-     complain... */
-  if( stat( SYSTEM_CONFFILE, &st) )
-    return 0;
-  return conffile_read(SYSTEM_CONFFILE);
+    struct stat st;
+    /* If the system configuration file does not exist, we don't
+       complain... */
+    if(stat(SYSTEM_CONFFILE, &st))
+        return 0;
+    return conffile_read(SYSTEM_CONFFILE);
 }
