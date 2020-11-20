@@ -389,13 +389,16 @@ spawnv( int options, const char* path, char *const argv[] )
 
 	if( options & DEVNULL_MASK ) {
 	    int devnull = open( "/dev/null", O_WRONLY );
-	    if( devnull > 0 ) {
+	    if( devnull != -1 ) {
 		if( options & SPAWN_NO_STDOUT )
 		    dup2( devnull, 1 );
 		if( options & SPAWN_NO_STDERR )
 		    dup2( devnull, 2 );
-	    }
-	    close( devnull );	/* Now useless */
+                close( devnull );	/* Now useless */
+	    } else {
+                perror("open(\"/dev/null\")");
+                exit( E_INTERNAL );
+            }
 	}
 	if( options & SLURP_MASK ) {
 	    close( fds[0] );	/* Close the read end of the pipe */
