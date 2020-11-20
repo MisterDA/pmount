@@ -26,14 +26,13 @@
 
    Returns 0 on success and -1 on errors.
  */
-int loopdev_associate(const char * source, char ** target);
-
+int loopdev_associate(const char *source, char **target);
 
 /**
    Dissociates the given loop device
 
    Returns 0 on success and -1 on errors.
 */
-int loopdev_dissociate(const char * dev);
+int loopdev_dissociate(const char *dev);
 
 #endif

@@ -32,8 +32,7 @@ int conffile_allow_loop(void);
    Return the NULL-terminated list of allowlisted loop devices. Can
    return NULL if the list is empty.
 */
-char ** conffile_loop_devices(void);
-
+char **conffile_loop_devices(void);
 
 /**
    Reads configuration information from the given file into the
@@ -42,7 +41,7 @@ char ** conffile_loop_devices(void);
    @return 0 if everything went fine
 */
 
-int conffile_read(const char * file);
+int conffile_read(const char *file);
 
 /**
    Reads the system configuration file into system_configuration. It

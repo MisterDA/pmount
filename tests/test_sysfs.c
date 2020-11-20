@@ -17,49 +17,51 @@
  */
 
 #define _DEFAULT_SOURCE
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* For stat: */
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include "policy.h"
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
-  char *device_path = NULL;
-  struct stat devstat;
-  if(argc != 2) {
-    fprintf(stderr, "Usage: %s device\n", argv[0]);
-    return EXIT_FAILURE;
-  }
-  if(stat(argv[1], &devstat)) {
-    fprintf(stderr, "stat(%s): %s\n", argv[1], strerror(errno));
-    return EXIT_FAILURE;
-  }
-  if(! (devstat.st_mode & S_IFBLK)) {
-    fprintf(stderr, "Sorry, `%s' is not a block device.\n", argv[1]);
-    return EXIT_FAILURE;
-  }
+    char *device_path = NULL;
+    struct stat devstat;
+    if(argc != 2) {
+        fprintf(stderr, "Usage: %s device\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+    if(stat(argv[1], &devstat)) {
+        fprintf(stderr, "stat(%s): %s\n", argv[1], strerror(errno));
+        return EXIT_FAILURE;
+    }
+    if(!(devstat.st_mode & S_IFBLK)) {
+        fprintf(stderr, "Sorry, `%s' is not a block device.\n", argv[1]);
+        return EXIT_FAILURE;
+    }
 
-  if(find_sysfs_device(argv[1], &device_path)) {
-    const char * bus;
-    fprintf(stdout, "Found sysfs device for %s: %s\n", argv[1], device_path);
-    fprintf(stdout, "Device %s is removable: %s\n", argv[1],
-            is_blockdev_attr_true(device_path,"removable") ? "yes" :"no");
-    bus = bus_has_ancestry(device_path, hotplug_buses);
-    if(bus)
-     fprintf(stdout, "Found allowlisted bus: %s\n", bus);
-    else
-      fprintf(stdout, "No allowlisted bus found\n");
-    free(device_path);
-    return EXIT_SUCCESS;
-  } else {
-    fprintf(stderr, "find_sysfs_device failed for %s\n", argv[1]);
-    return EXIT_FAILURE;
-  }
+    if(find_sysfs_device(argv[1], &device_path)) {
+        const char *bus;
+        fprintf(stdout, "Found sysfs device for %s: %s\n", argv[1],
+                device_path);
+        fprintf(stdout, "Device %s is removable: %s\n", argv[1],
+                is_blockdev_attr_true(device_path, "removable") ? "yes" : "no");
+        bus = bus_has_ancestry(device_path, hotplug_buses);
+        if(bus)
+            fprintf(stdout, "Found allowlisted bus: %s\n", bus);
+        else
+            fprintf(stdout, "No allowlisted bus found\n");
+        free(device_path);
+        return EXIT_SUCCESS;
+    } else {
+        fprintf(stderr, "find_sysfs_device failed for %s\n", argv[1]);
+        return EXIT_FAILURE;
+    }
 }
