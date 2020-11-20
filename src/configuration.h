@@ -14,25 +14,25 @@
 /**
    Returns true if the user is allowed to run fsck
 */
-int conffile_allow_fsck();
+int conffile_allow_fsck(void);
 
 /**
    Returns true if the user is allowed to use pmount/pumount even
    if not physically logged in
 */
-int conffile_allow_not_physically_logged();
+int conffile_allow_not_physically_logged(void);
 
 /**
    Returns true if the user is allowed to use pmount/pumount to setup
    loopback devices.
 */
-int conffile_allow_loop();
+int conffile_allow_loop(void);
 
 /**
    Return the NULL-terminated list of allowlisted loop devices. Can
    return NULL if the list is empty.
 */
-char ** conffile_loop_devices();
+char ** conffile_loop_devices(void);
 
 
 /**
@@ -53,7 +53,6 @@ int conffile_read(const char * file);
    @return 0 if everything went fine.
  */
 
-int conffile_system_read();
+int conffile_system_read(void);
 
 #endif
-

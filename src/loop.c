@@ -38,7 +38,7 @@
 
    Returns NULL if no device could be found.
  */
-static const char * loopdev_find_unused()
+static const char * loopdev_find_unused(void)
 {
   char ** devices = conffile_loop_devices();
   if(! devices)

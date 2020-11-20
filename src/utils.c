@@ -286,7 +286,7 @@ is_word_str( const char* s )
 }
 
 void
-get_root()
+get_root(void)
 {
     if( setreuid( -1, 0 ) ) {
         perror( _("Internal error: could not change to effective uid root") );
@@ -295,7 +295,7 @@ get_root()
 }
 
 void
-drop_root()
+drop_root(void)
 {
     if( setreuid( -1, getuid() ) ) {
         perror( _("Internal error: could not change effective user uid to real user id") );
@@ -304,7 +304,7 @@ drop_root()
 }
 
 void
-get_groot()
+get_groot(void)
 {
     if( setregid( -1, 0 ) ) {
         perror( _("Internal error: could not change to effective gid root") );
@@ -313,7 +313,7 @@ get_groot()
 }
 
 void
-drop_groot()
+drop_groot(void)
 {
     if( setregid( -1, getgid() ) ) {
         perror( _("Internal error: could not change effective group id to real group id") );

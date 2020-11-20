@@ -205,7 +205,7 @@ static struct FS supported_fs[] = {
 };
 
 const struct FS*
-get_supported_fs() {
+get_supported_fs(void) {
     return supported_fs;
 }
 
