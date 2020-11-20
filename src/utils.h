@@ -15,6 +15,7 @@
 #define __utils_h
 
 #include <stddef.h>
+#include <stdbool.h>
 
 /* Error codes */
 extern const int E_ARGS;
@@ -131,6 +132,11 @@ int pid_exists(unsigned pid);
 int is_word_str(const char *s);
 
 /**
+ * Test if the effective user id is root.
+ */
+bool check_root(void);
+
+/**
  * Change effective user id to root. If this fails, print an error message and
  * exit with status 100.
  */
@@ -153,6 +159,13 @@ void get_groot(void);
  * error message and exit with status 100.
  */
 void drop_groot(void);
+
+/**
+ * Change effective and saved user ids (respectively group ids) to
+ * real user id (respectively group id). If this fails, print an error
+ * message and exit with status 100.
+ */
+void drop_root_permanently(void);
 
 /* spawn() options */
 #define SPAWN_EROOT 0x01

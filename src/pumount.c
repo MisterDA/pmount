@@ -107,10 +107,8 @@ do_umount_fstab(const char *device, int lazy, const char *fstab_mntpt)
 {
     /* drop all privileges */
     get_root();
-    if(setuid(getuid())) {
-        perror(_("Error: could not drop all uid privileges"));
-        return;
-    }
+    get_groot();
+    drop_root_permanently();
 
     debug("device %s handled by fstab, calling umount\n", device);
     if(!strncmp(device, "LABEL=", 6) || !strncmp(device, "UUID=", 5)) {
@@ -221,7 +219,7 @@ main(int argc, char *const argv[])
     devarg = argv[optind];
 
     /* are we root? */
-    if(geteuid()) {
+    if(!check_root()) {
         fputs(_("Error: this program needs to be installed suid root\n"),
               stderr);
         return E_INTERNAL;
@@ -234,10 +232,8 @@ main(int argc, char *const argv[])
 
     /* drop root privileges until we really need them (still available as saved
      * uid) */
-    if(seteuid(getuid())) {
-        perror(_("Error: could not drop all effective uid privileges"));
-        return E_INTERNAL;
-    }
+    drop_root();
+    drop_groot();
 
     /* Check if the user is physically logged in */
     ensure_user_physically_logged_in(argv[0]);

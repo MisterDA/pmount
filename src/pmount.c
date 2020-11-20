@@ -196,10 +196,8 @@ do_mount_fstab(const char *device)
 
     /* drop all privileges and transparently call mount */
     get_root();
-    if(setuid(getuid())) {
-        perror(_("Error: could not drop all uid privileges"));
-        return;
-    }
+    get_groot();
+    drop_root_permanently();
 
     execl(MOUNTPROG, MOUNTPROG, device, NULL);
     perror(_("Error: could not execute mount"));
@@ -841,7 +839,7 @@ main(int argc, char *const argv[])
     }
 
     /* are we root? */
-    if(geteuid()) {
+    if(!check_root()) {
         fputs(_("Error: this program needs to be installed suid root\n"),
               stderr);
         return E_INTERNAL;
@@ -849,10 +847,8 @@ main(int argc, char *const argv[])
 
     /* drop root privileges until we really need them (still available as saved
      * uid) */
-    if(seteuid(getuid())) {
-        perror(_("Error: could not drop all effective uid privileges"));
-        return E_INTERNAL;
-    }
+    drop_root();
+    drop_groot();
 
     /* Check if the user is physically logged in */
     ensure_user_physically_logged_in(argv[0]);

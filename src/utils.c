@@ -282,11 +282,27 @@ is_word_str(const char *s)
     return 1;
 }
 
+bool
+check_root(void)
+{
+    return geteuid() == 0;
+}
+
 void
 get_root(void)
 {
-    if(setreuid(-1, 0)) {
-        perror(_("Internal error: could not change to effective uid root"));
+    uid_t ruid, euid, suid;
+    if(getresuid(&ruid, &euid, &suid) < 0) {
+        perror("getresuid");
+        exit(E_INTERNAL);
+    }
+    if(setresuid(-1, suid, -1) < 0) {
+        perror("setresuid");
+        exit(E_INTERNAL);
+    }
+    if(geteuid() != suid) {
+        fputs(_("Internal error: could not change to effective uid root.\n"),
+              stderr);
         exit(E_INTERNAL);
     }
 }
@@ -294,9 +310,51 @@ get_root(void)
 void
 drop_root(void)
 {
-    if(setreuid(-1, getuid())) {
-        perror(_("Internal error: could not change effective user uid to real "
-                 "user id"));
+    uid_t ruid = getuid();
+    if(setresuid(-1, ruid, -1) < 0) {
+        perror("setresuid");
+        exit(E_INTERNAL);
+    }
+    if(geteuid() != ruid) {
+        fputs(_("Internal error: could not change effective user id to real "
+                "user id.\n"), stderr);
+        exit(E_INTERNAL);
+    }
+}
+
+void
+drop_root_permanently(void)
+{
+    uid_t new_uid = getuid();
+    uid_t ruid, euid, suid;
+    gid_t new_gid = getgid();
+    gid_t rgid, egid, sgid;
+
+    if(setresuid(-1, new_uid, new_uid) < 0) {
+        perror("setresuid");
+        exit(E_INTERNAL);
+    }
+    if(getresuid(&ruid, &euid, &suid) < 0) {
+        perror("getresuid");
+        exit(E_INTERNAL);
+    }
+    if(ruid != new_uid || euid != new_uid || suid != new_uid) {
+        fputs(_("Internal error: could not change effective user id to real "
+                "user id.\n"), stderr);
+        exit(E_INTERNAL);
+    }
+
+    if(setresgid(-1, new_gid, new_gid) < 0) {
+        perror("setresgid");
+        exit(E_INTERNAL);
+    }
+    if(getresgid(&rgid, &egid, &sgid) < 0) {
+        perror("getresgid");
+        exit(E_INTERNAL);
+    }
+    if(rgid != new_gid || egid != new_gid || sgid != new_gid) {
+        fputs(_("Internal error: could not change effective group id to real "
+                "group id.\n"), stderr);
         exit(E_INTERNAL);
     }
 }
@@ -304,8 +362,18 @@ drop_root(void)
 void
 get_groot(void)
 {
-    if(setregid(-1, 0)) {
-        perror(_("Internal error: could not change to effective gid root"));
+    gid_t rgid, egid, sgid;
+    if(getresgid(&rgid, &egid, &sgid) < 0) {
+        perror("getresgid");
+        exit(E_INTERNAL);
+    }
+    if(setresgid(-1, sgid, -1) < 0) {
+        perror("setresgid");
+        exit(E_INTERNAL);
+    }
+    if(getegid() != sgid) {
+        fputs(_("Internal error: could not change to effective gid root.\n"),
+              stderr);
         exit(E_INTERNAL);
     }
 }
@@ -313,9 +381,14 @@ get_groot(void)
 void
 drop_groot(void)
 {
-    if(setregid(-1, getgid())) {
-        perror(_("Internal error: could not change effective group id to real "
-                 "group id"));
+    gid_t rgid = getgid();
+    if(setresgid(-1, rgid, -1) < 0) {
+        perror("setresgid");
+        exit(E_INTERNAL);
+    }
+    if(getegid() != rgid) {
+        fputs(_("Internal error: could not change effective group id to real "
+                "group id.\n"), stderr);
         exit(E_INTERNAL);
     }
 }
