@@ -160,8 +160,7 @@ do_umount( const char* device, int do_lazy )
 int
 main( int argc, char * const argv[] )
 {
-    char *devarg = NULL, *device;
-    char *mntptdev = NULL;
+    char *devarg = NULL, *mntptdev = NULL, *device = NULL;
     const char* fstab_device;
     char fstab_mntpt[MEDIA_STRING_SIZE];
     int is_real_path = 0;
@@ -241,13 +240,15 @@ main( int argc, char * const argv[] )
         devarg = mntptdev;
     } else if( !strchr( devarg, '/' ) ) {
         char *path;
+        int rc;
         /* try to prepend MEDIADIR */
         if (asprintf(&path, "%s%s", MEDIADIR, devarg) == -1) {
             perror("asprintf");
             return E_INTERNAL;
         }
         debug ("checking whether %s is a mounted directory\n", path);
-        if( fstab_has_mntpt( "/proc/mounts", path, &mntptdev ) ) {
+        rc = fstab_has_mntpt( "/proc/mounts", path, &mntptdev);
+        if( rc ) {
             debug( "resolved mount point %s to device %s\n", path, mntptdev );
             devarg = mntptdev;
         }
@@ -266,6 +267,8 @@ main( int argc, char * const argv[] )
             return E_INTERNAL;
         }
     }
+    free( mntptdev );
+    devarg = mntptdev = NULL;
 
     /* is the device already handled by fstab? */
     fstab_device = fstab_has_device( "/etc/fstab", device, fstab_mntpt, NULL );
