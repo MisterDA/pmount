@@ -177,6 +177,12 @@ extern char slurp_buffer[];
 extern size_t slurp_size;
 
 /**
+ * Maximum number of arguments to pass to spawnl(), including the
+ * terminating NULL.
+ */
+#define SPAWNL_ARG_MAX 1024U
+
+/**
  * Synchronously spawn a subprocess and return its exit status.
  * @param options Combination of SPAWN_* flags
  * @param path Path to program to be executed

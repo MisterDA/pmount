@@ -324,14 +324,14 @@ drop_groot(void)
 int
 spawnl( int options, const char* path, ... )
 {
-    char* argv[1024];
+    char* argv[SPAWNL_ARG_MAX];
     unsigned argv_size = 0;
     va_list args;
 
     /* copy varargs to array */
     va_start( args, path );
     for(;;) {
-        if( argv_size >= sizeof( argv ) ) {
+        if( argv_size >= SPAWNL_ARG_MAX ) {
             fprintf( stderr, "Internal error: spawnl(): too many arguments\n" );
             exit( E_INTERNAL );
         }
