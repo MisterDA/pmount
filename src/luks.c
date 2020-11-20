@@ -107,8 +107,12 @@ void
 luks_release( const char* device, int force )
 {
   if(force || luks_has_lockfile(device)) {
-    spawnl( CRYPTSETUP_SPAWN_OPTIONS,
-	    CRYPTSETUPPROG, CRYPTSETUPPROG, "luksClose", device, (char *)NULL );
+    int status = spawnl( CRYPTSETUP_SPAWN_OPTIONS,
+                CRYPTSETUPPROG, CRYPTSETUPPROG, "luksClose", device, (char *)NULL );
+    if(status != 0) {
+      fprintf( stderr, "Internal error: cryptsetup luksOpen failed\n" );
+      exit( E_INTERNAL );
+    }
     luks_remove_lockfile(device);
   }
   else
