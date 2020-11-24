@@ -677,14 +677,11 @@ device_allowlisted(const char *device)
 int
 device_locked(const char *device)
 {
-    char *lockdirname;
-    int locked;
-    make_lockdir_name(device, &lockdirname);
-    locked = is_dir(lockdirname);
-
+    char *lockdirpath = make_lock_path(LOCKDIR, device);
+    int locked = is_dir(lockdirpath);
     if(locked)
         fprintf(stderr, _("Error: device %s is locked\n"), device);
-    free(lockdirname);
+    free(lockdirpath);
     return locked;
 }
 
@@ -692,16 +689,19 @@ int
 mntpt_valid(const char *mntpt)
 {
     char *fstab_device;
-    int rc;
+    int rc = 0;
     if(fstab_has_mntpt("/etc/fstab", mntpt, &fstab_device)) {
         fprintf(stderr,
                 _("Error: mount point %s is already in /etc/fstab, "
                   "associated to device %s\n"),
                 mntpt, fstab_device);
         free(fstab_device);
-        rc = 0;
     } else {
-        rc = !assert_dir(mntpt, 1) && !assert_emptydir(mntpt);
+        int fd = assert_dir(mntpt, 1);
+        if(fd >= 0) {
+            rc = assert_emptydir(fd);
+            close(fd);
+        }
     }
 
     return rc;
@@ -725,23 +725,6 @@ mntpt_mounted(const char *mntpt, int expect)
             mntpt);
 
     return mounted;
-}
-
-void
-make_lockdir_name(const char *device, char **name)
-{
-    char *devname;
-    /* Strip an initial whitespace in device, will look better */
-    if(device[0] == '/')
-        device++;
-
-    devname = strreplace(device, '/', '_');
-    /* Make the lockdir a subdirectory of LOCKDIR ! */
-    if(asprintf(name, "%s/%s", LOCKDIR, devname) == -1) {
-        perror("asprintf");
-        exit(E_INTERNAL);
-    }
-    free(devname);
 }
 
 static int

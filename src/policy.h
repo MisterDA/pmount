@@ -93,13 +93,6 @@ int mntpt_valid(const char *mntpt);
 int mntpt_mounted(const char *mntpt, int expect);
 
 /**
- * Construct a lock directory name.
- * @param device lock directory is created for this device
- * @param name string buffer for the created lock directory
- */
-void make_lockdir_name(const char *device, char **name);
-
-/**
  * Prints the removable devices that are currently mounted.
  * Takes no arguments. Based on a patch from Dan Keder <keder@fi.muni.cz>
  *

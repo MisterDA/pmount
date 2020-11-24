@@ -486,19 +486,19 @@ do_mount_auto(const char *device, const char *mntpt, int utf8)
 static int
 do_lock(const char *device, pid_t pid)
 {
-    char *lockdirpath, *lockfilepath;
-    int pidlock;
-    int rc;
+    int lockdir_fd, lockdir_device_fd, pidlock_fd;
+    char *lockdir_device_name, *pidlock_name;
+    int rc = -1;
 
-    if(assert_dir(LOCKDIR, 0))
-        return -1;
-
-    make_lockdir_name(device, &lockdirpath);
-
-    if(assert_dir(lockdirpath, 0)) {
-        rc = -1;
-        goto free_lockdirpath;
-    }
+    lockdir_fd = assert_dir(LOCKDIR, 0);
+    if(lockdir_fd < 0)
+        return rc;
+    lockdir_device_name = make_lock_name(device);
+    if(lockdir_device_name == NULL)
+        goto lockdir_fd;
+    lockdir_device_fd = assert_dir_at(lockdir_fd, lockdir_device_name, 0);
+    if(lockdir_device_fd < 0)
+        goto lockdir_device_name;
 
     /* only allow to create locks for existing pids, to prevent DOS attacks */
     if(!pid_exists(pid)) {
@@ -506,36 +506,38 @@ do_lock(const char *device, pid_t pid)
             stderr,
             _("Error: cannot lock for pid %u, this process does not exist\n"),
             pid);
-        rc = -1;
-        goto free_lockdirpath;
+        goto lockdir_device_fd;
     }
 
-    if(asprintf(&lockfilepath, "%s/%d", lockdirpath, pid) == -1) {
+    if(asprintf(&pidlock_name, "%d", pid) == -1) {
         perror("asprintf");
-        rc = -1;
-        goto free_lockdirpath;
+        goto lockdir_device_fd;
     }
 
     /* we need root for creating the pid lock file */
     get_root();
     get_groot();
-    pidlock = open(lockfilepath, O_WRONLY | O_CREAT, 0644);
+    pidlock_fd =
+        openat(lockdir_device_fd, pidlock_name, O_WRONLY | O_CREAT, 0644);
     drop_groot();
     drop_root();
 
-    if(pidlock < 0) {
+    if(pidlock_fd < 0) {
         fprintf(stderr, _("Error: could not create pid lock file %s: %s\n"),
-                lockfilepath, strerror(errno));
-        rc = -1;
-        goto free_lockfilepath;
+                pidlock_name, strerror(errno));
+        goto pidlock_name;
     }
 
     rc = 0;
-    close(pidlock);
-free_lockfilepath:
-    free(lockfilepath);
-free_lockdirpath:
-    free(lockdirpath);
+    close(pidlock_fd);
+pidlock_name:
+    free(pidlock_name);
+lockdir_device_fd:
+    close(lockdir_device_fd);
+lockdir_device_name:
+    free(lockdir_device_name);
+lockdir_fd:
+    close(lockdir_fd);
     return rc;
 }
 
@@ -547,57 +549,52 @@ free_lockdirpath:
 static int
 do_unlock(const char *device, pid_t pid)
 {
-    char *lockdirpath;
-    int result;
-
-    make_lockdir_name(device, &lockdirpath);
+    char *lockdir_device_path = make_lock_path(LOCKDIR, device);
+    int rc = -1;
 
     /* if no lock dir exists, device is not locked */
-    if(!is_dir(lockdirpath))
+    if(!is_dir(lockdir_device_path))
         return 0;
 
     /* remove pid file first */
     if(pid) {
-        char *lockfilepath;
-        if(asprintf(&lockfilepath, "%s/%d", lockdirpath, pid) == -1) {
+        char *pidlock_path;
+        if(asprintf(&pidlock_path, "%s/%d", lockdir_device_path, pid) == -1) {
             perror("asprintf");
-            return -1;
+            goto lockdir_device_path;
         }
 
         /* we need root for removing the pid lock file */
         get_root();
-        result = unlink(lockfilepath);
+        rc = unlink(lockdir_device_path);
         drop_root();
 
-        if(result) {
-            /* ignore nonexistent lock files, but report other errors */
-            if(errno != ENOENT) {
-                fprintf(stderr,
-                        _("Error: could not remove pid lock file %s: %s\n"),
-                        lockfilepath, strerror(errno));
-                free(lockfilepath);
-                return -1;
-            }
+        /* ignore nonexistent lock files, but report other errors */
+        if(rc && errno != ENOENT) {
+            fprintf(stderr, _("Error: could not remove pid lock file %s: %s\n"),
+                    pidlock_path, strerror(errno));
+            free(pidlock_path);
+            goto lockdir_device_path;
         }
-        free(lockfilepath);
+        free(pidlock_path);
     }
 
     /* Try to rmdir the dir. If there are still files (pid-locks) in it, this
      * will fail. */
     get_root();
-    result = rmdir(lockdirpath);
+    rc = rmdir(lockdir_device_path);
     drop_root();
 
-    free(lockdirpath);
-
-    if(result) {
+    if(rc) {
         if(errno == ENOTEMPTY)
-            return 0;
-        perror(_("Error: do_unlock: could not remove lock directory"));
-        return -1;
+            rc = 0;
+        else
+            perror(_("Error: do_unlock: could not remove lock directory"));
     }
 
-    return 0;
+lockdir_device_path:
+    free(lockdir_device_path);
+    return rc;
 }
 
 /**
@@ -634,11 +631,9 @@ do_fsck(const char *device)
 static void
 clean_lock_dir(const char *device)
 {
-    char *lockdirpath;
+    char *lockdirpath = make_lock_path(LOCKDIR, device);
     DIR *lockdir;
     struct dirent *lockfile;
-
-    make_lockdir_name(device, &lockdirpath);
 
     debug("Cleaning lock directory %s\n", lockdirpath);
 

@@ -10,6 +10,7 @@
  */
 
 #define _GNU_SOURCE
+#include "config.h"
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -112,66 +113,73 @@ read_number_colon_number(const char *file, unsigned char *first,
 int
 assert_dir(const char *dir, int create_stamp)
 {
-    struct stat st;
-
-    if(stat(dir, &st)) {
-        int result;
-        /* does not exist, create as root:root */
-        get_root();
-        get_groot();
-        result = mkdir(dir, 0755);
-        drop_groot();
-        drop_root();
-        if(result) {
-            perror(_("Error: could not create directory"));
-            return -1;
-        }
-
-        if(create_stamp) {
-            char *stampfname;
-            int stampfile;
-            /* create stamp file to indicate that the directory should be
-             * removed again at unmounting */
-            if(asprintf(&stampfname, "%s/" CREATED_DIR_STAMP, dir) == -1) {
-                perror("asprintf");
-                return -1;
-            }
-
-            get_root();
-            get_groot();
-            stampfile = open(stampfname, O_CREAT | O_WRONLY | O_EXCL, 0600);
-            drop_groot();
-            drop_root();
-
-            if(stampfile < 0) {
-                perror(_("Error: could not create stamp file in directory"));
-                return -1;
-            }
-            close(stampfile);
-            free(stampfname);
-        }
-    } else {
-        /* exists, check that it is a directory */
-        if(!S_ISDIR(st.st_mode)) {
-            fprintf(stderr, _("Error: %s is not a directory\n"), dir);
-            return -1;
-        }
-    }
-
-    return 0;
+    return assert_dir_at(AT_FDCWD, dir, create_stamp);
 }
 
 int
-assert_emptydir(const char *dirname)
+assert_dir_at(int fd, const char *dir, int create_stamp)
 {
+    /* if dir does not exist, create as root:root */
+    get_root();
+    get_groot();
+    int rc = mkdirat(fd, dir, 0755);
+    if(rc < 0 && errno == EEXIST)
+        rc = 0;
+    drop_groot();
+    drop_root();
+
+    if(rc < 0) {
+        fprintf(stderr, _("Error: could not create directory %s: %s.\n"), dir,
+                strerror(errno));
+        return -1;
+    }
+
+    int dirfd = openat(fd, dir, O_DIRECTORY | O_RDONLY, 0);
+    if(dirfd < 0) {
+        fprintf(stderr, _("Error: could not open directory %s: %s\n"), dir,
+                strerror(errno));
+        return -1;
+    }
+
+    if(create_stamp) {
+        int stampfile;
+        /* create stamp file to indicate that the directory should be
+         * removed again at unmounting */
+        get_root();
+        get_groot();
+        stampfile =
+            openat(dirfd, CREATED_DIR_STAMP, O_CREAT | O_WRONLY | O_EXCL, 0600);
+        drop_groot();
+        drop_root();
+
+        if(stampfile < 0) {
+            fprintf(stderr,
+                    _("Error: could not create stamp file in directory "
+                      "%s: %s.\n"),
+                    dir, strerror(errno));
+            close(dirfd);
+            return -1;
+        }
+        close(stampfile);
+    }
+
+    return dirfd;
+}
+
+int
+assert_emptydir(int dirfd)
+{
+    int fd;
     DIR *dir;
     struct dirent *dirent;
 
-    /* we might need root for reading the dir */
-    get_root();
-    dir = opendir(dirname);
-    drop_root();
+    fd = dup(dirfd);
+    if(fd < 0) {
+        perror(_("Error: could not duplicate file descriptor"));
+        return -1;
+    }
 
+    dir = fdopendir(fd);
     if(!dir) {
         perror(_("Error: could not open directory"));
         return -1;
@@ -182,7 +190,7 @@ assert_emptydir(const char *dirname)
            strcmp(dirent->d_name, "..") != 0 &&
            strcmp(dirent->d_name, CREATED_DIR_STAMP) != 0) {
             closedir(dir);
-            fprintf(stderr, _("Error: directory %s is not empty\n"), dirname);
+            fputs(_("Error: directory is not empty\n"), stderr);
             return -1;
         }
     }
@@ -317,7 +325,8 @@ drop_root(void)
     }
     if(geteuid() != ruid) {
         fputs(_("Internal error: could not change effective user id to real "
-                "user id.\n"), stderr);
+                "user id.\n"),
+              stderr);
         exit(E_INTERNAL);
     }
 }
@@ -340,7 +349,8 @@ drop_root_permanently(void)
     }
     if(ruid != new_uid || euid != new_uid || suid != new_uid) {
         fputs(_("Internal error: could not change effective user id to real "
-                "user id.\n"), stderr);
+                "user id.\n"),
+              stderr);
         exit(E_INTERNAL);
     }
 
@@ -354,7 +364,8 @@ drop_root_permanently(void)
     }
     if(rgid != new_gid || egid != new_gid || sgid != new_gid) {
         fputs(_("Internal error: could not change effective group id to real "
-                "group id.\n"), stderr);
+                "group id.\n"),
+              stderr);
         exit(E_INTERNAL);
     }
 }
@@ -388,7 +399,8 @@ drop_groot(void)
     }
     if(getegid() != rgid) {
         fputs(_("Internal error: could not change effective group id to real "
-                "group id.\n"), stderr);
+                "group id.\n"),
+              stderr);
         exit(E_INTERNAL);
     }
 }
@@ -533,25 +545,11 @@ spawnv(int options, const char *path, char *const argv[])
     return status;
 }
 
-/**
- * Internal function to determine lock file path for a given directory.
- */
-static char *
-get_dir_lockfile(const char *dir)
-{
-    char *name = NULL, *dir_fname;
-    dir_fname = strreplace(dir, '/', '_');
-    if(asprintf(&name, "/var/lock/pmount_%s", dir_fname) == -1)
-        perror("asprintf");
-    free(dir_fname);
-    return name;
-}
-
 int
 lock_dir(const char *dir)
 {
     int f;
-    char *lockfile = get_dir_lockfile(dir);
+    char *lockfile = make_lock_path(LOCKDIR, dir);
     if(!lockfile)
         return -1; /* name too long */
 
@@ -576,7 +574,7 @@ void
 unlock_dir(const char *dir)
 {
     int f;
-    char *lockfile = get_dir_lockfile(dir);
+    char *lockfile = make_lock_path(LOCKDIR, dir);
     if(!lockfile)
         return; /* name too long */
 
@@ -595,4 +593,23 @@ unlock_dir(const char *dir)
     get_root();
     unlink(lockfile);
     drop_root();
+}
+
+char *
+make_lock_name(const char *device)
+{
+    /* Strip an initial whitespace in device, will look better */
+    return strreplace(device + (device[0] == '/' ? 1 : 0), '/', '_');
+}
+
+char *
+make_lock_path(const char *prefix, const char *device)
+{
+    char *path, *name = make_lock_name(device);
+    if(asprintf(&path, "%s/%s", prefix, name) == -1) {
+        perror("asprintf");
+        exit(E_INTERNAL);
+    }
+    free(name);
+    return path;
 }

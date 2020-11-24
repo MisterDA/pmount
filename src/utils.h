@@ -14,8 +14,8 @@
 #ifndef __utils_h
 #define __utils_h
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 /* Error codes */
 extern const int E_ARGS;
@@ -56,18 +56,36 @@ int debug(const char *format, ...) __attribute__((format(printf, 1, 2)));
 char *strreplace(const char *s, char from, char to);
 
 /**
+ * Construct a lock directory name.
+ * @param device lock directory is created for this device
+ * @return string buffer for the created lock directory
+ */
+char *make_lock_name(const char *device);
+
+/**
+ * Construct a lock directory path.
+ * @param prefix where to construct the lock dir
+ * @param device lock directory is created for this device
+ * @return path string buffer for the created lock directory
+ */
+char *make_lock_path(const char *prefix, const char *device);
+
+/**
  * If dir already exists, check that it is a directory; if it does not exist,
  * create it. If create_stamp is true, put a stamp file into it (so that it
  * will be removed again on unmounting).
- * @return 0 on success, -1 on error (message is printed in this case)
+ * Returns a directory descriptor associated with the dir path. Needs to be
+ * closed by the caller.
+ * @return the dirfd or -1 on error (message is printed in this case)
  */
 int assert_dir(const char *dir, int create_stamp);
+int assert_dir_at(int fd, const char *dir, int create_stamp);
 
 /**
  * Assert that given directory is empty.
  * @return 0 on success, -1 on error (message is printed in this case)
  */
-int assert_emptydir(const char *dirname);
+int assert_emptydir(int dirfd);
 
 /**
  * Return whether given path is a directory.
