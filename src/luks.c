@@ -207,15 +207,18 @@ void
 luks_remove_lockfile(const char *device)
 {
     char *path;
-    struct stat st;
-    int rc;
+    int rc, saved_errno;
 
     rc = luks_lockfile_name(device, &path);
     if(rc)
         exit(E_INTERNAL);
+
     debug("Removing luks lockfile '%s' for device '%s'\n", path, device);
     get_root();
-    if(!stat(path, &st) && !is_dir(path))
-        unlink(path);
+    rc = unlink(path);
+    if(rc < 0)
+        saved_errno = errno;
     drop_root();
+    if(rc < 0)
+        fprintf(stderr, "unlink(%s): %s\n", path, strerror(saved_errno));
 }
