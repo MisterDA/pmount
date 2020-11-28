@@ -52,6 +52,12 @@ usage(const char *exename)
         exename, MEDIADIR);
 }
 
+static struct {
+    bool lazy;
+} options = {
+    .lazy = false,
+};
+
 /**
  * Check whether the user is allowed to umount the given device.
  * @param ok_if_inexistant whether it is allowed for the device to not
@@ -99,10 +105,9 @@ check_umount_policy(const char *device, int ok_if_inexistant)
 /**
  * Drop all privileges and exec 'umount device'. Does not return on success, if
  * it returns, UMOUNTPROG could not be executed.
- * @param lazy 0 for normal umount, 1 for lazy umount
  */
 static void
-do_umount_fstab(const char *device, int lazy, const char *fstab_mntpt)
+do_umount_fstab(const char *device, const char *fstab_mntpt)
 {
     /* drop all privileges */
     get_root();
@@ -117,7 +122,7 @@ do_umount_fstab(const char *device, int lazy, const char *fstab_mntpt)
         device = fstab_mntpt; /* device is now the mount point */
     }
 
-    if(lazy)
+    if(options.lazy)
         execl(UMOUNTPROG, UMOUNTPROG, "-l", device, NULL);
     else
         execl(UMOUNTPROG, UMOUNTPROG, device, NULL);
@@ -127,15 +132,14 @@ do_umount_fstab(const char *device, int lazy, const char *fstab_mntpt)
 /**
  * Raise to full privileges and mounts device to mntpt.
  * @param device full device name
- * @param do_lazy 0 for normal umount, 1 for lazy umount
  * @return 0 on success, -1 if UMOUNTPROG could not be executed.
  */
 static int
-do_umount(const char *device, int do_lazy)
+do_umount(const char *device)
 {
     int status;
 
-    if(do_lazy)
+    if(options.lazy)
         status = spawnl(SPAWN_EROOT | SPAWN_RROOT, UMOUNTPROG, UMOUNTPROG, "-d",
                         "-l", device, (char *)NULL);
     else
@@ -161,14 +165,13 @@ main(int argc, char *const argv[])
     const char *fstab_device;
     char fstab_mntpt[MEDIA_STRING_SIZE];
     int is_real_path = 0;
-    int do_lazy = 0;
 
     struct option long_opts[] = {
         { "debug", 0, NULL, 'd' },
         { "help", 0, NULL, 'h' },
         { "lazy", 0, NULL, 'l' },
         { "version", 0, NULL, 'V' },
-        { "yes-I-really-want-lazy-unmount", 0, &do_lazy, 1 },
+        { "yes-I-really-want-lazy-unmount", 0, (int *)&options.lazy, true },
         { NULL, 0, NULL, 0 },
     };
 
@@ -276,14 +279,14 @@ main(int argc, char *const argv[])
     /* is the device already handled by fstab? */
     fstab_device = fstab_has_device("/etc/fstab", device, fstab_mntpt, NULL);
     if(fstab_device) {
-        do_umount_fstab(fstab_device, do_lazy, fstab_mntpt);
+        do_umount_fstab(fstab_device, fstab_mntpt);
         free(device);
         return E_EXECUMOUNT;
     }
 
     /* we cannot really check the real path when unmounting lazily since the
      * device node might not exist any more */
-    if(!is_real_path && !do_lazy) {
+    if(!is_real_path && !options.lazy) {
         /* try to prepend '/dev' */
         if(strncmp(device, DEVDIR, sizeof(DEVDIR) - 1) != 0) {
             char *dev_device, *realpath_dev_device;
@@ -307,7 +310,7 @@ main(int argc, char *const argv[])
             fstab_device =
                 fstab_has_device("/etc/fstab", device, fstab_mntpt, NULL);
             if(fstab_device) {
-                do_umount_fstab(fstab_device, do_lazy, fstab_mntpt);
+                do_umount_fstab(fstab_device, fstab_mntpt);
                 free(device);
                 return E_EXECUMOUNT;
             }
@@ -337,7 +340,7 @@ main(int argc, char *const argv[])
     }
 
     /* go for it */
-    if(do_umount(device, do_lazy)) {
+    if(do_umount(device)) {
         free(device);
         return E_EXECUMOUNT;
     }

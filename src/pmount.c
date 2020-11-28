@@ -19,6 +19,7 @@
 #include <libintl.h>
 #include <limits.h>
 #include <locale.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,7 +31,6 @@
 #include "luks.h"
 #include "policy.h"
 #include "utils.h"
-
 /* Configuration file handling */
 #include "configuration.h"
 
@@ -103,6 +103,37 @@ usage(const char *exename)
         "  -V, --version\n"
         "                print version number and exit successfully"));
 }
+
+static struct {
+    enum { MOUNT, LOCK, UNLOCK } mode;
+    char *iocharset;
+    char *umask, *fmask, *dmask;
+    char *passphrase;
+    char *use_fstype;
+    bool exec;
+    bool noatime;
+    bool run_fsck; /* Whether or not to run fsck before mounting. */
+    bool async;
+    bool use_selinux_context;
+    /* Whether the timestamps are stored in UTC rather than local time */
+    bool utc;
+    enum { FW_DEFAULT, FW_RO, FW_RW } force_write;
+} options = {
+    .mode = MOUNT,
+    .iocharset = NULL,
+    .umask = NULL,
+    .fmask = NULL,
+    .dmask = NULL,
+    .passphrase = NULL,
+    .use_fstype = NULL,
+    .exec = false,
+    .noatime = false,
+    .run_fsck = false,
+    .async = true,
+    .use_selinux_context = false,
+    .utc = false,
+    .force_write = FW_DEFAULT,
+};
 
 /**
  * Check whether the user is allowed to mount the given device to the given
@@ -211,27 +242,13 @@ do_mount_fstab(const char *device)
  * @param device device node to mount
  * @param mntpt desired mount point
  * @param fsname file system name (mount option -t)
- * @param async if not 0, the device will be mounted with 'async' (i. e. write
- *        caching)
- * @param noatime if not 0, the device will be mounted with 'noatime'
- * @param exec if not 0, the device will be mounted with 'exec'
- * @param force_write 1 for forced r/w, 0 for forced r/o, -1 for kernel default
- * @param iocharset charset to use for file name conversion; NULL for mount
- *        default
  * @param utf8 is true if the option utf8 should be used for VFAT
- * @param umask User specified umask (NULL for default)
- * @param fmask User specified fmask (NULL for umask)
- * @param dmask User specified dmask (NULL for umask)
  * @param suppress_errors: if true, stderr is redirected to /dev/null
- * @param use_selinux_context if true, mount with
- *        context="system_u:object_r:removable_t:s0"
  * @return exit status of mount, or -1 on failure.
  */
 static int
-do_mount(const char *device, const char *mntpt, const char *fsname, int async,
-         int noatime, int exec, int force_write, const char *iocharset,
-         int utf8, int utc, const char *umask, const char *fmask,
-         const char *dmask, int suppress_errors, int use_selinux_context)
+do_mount(const char *device, const char *mntpt, const char *fsname, int utf8,
+         int suppress_errors)
 {
     const struct FS *fs;
     char ugid_opt[100];
@@ -244,7 +261,7 @@ do_mount(const char *device, const char *mntpt, const char *fsname, int async,
     const char *exec_opt = ",noexec";
     const char *access_opt = NULL;
     const char *selinux_context_opt = "";
-    char options[1000];
+    char mount_opts[1000];
 
     /* check and retrieve option information for requested file system */
     if(!fsname) {
@@ -261,18 +278,18 @@ do_mount(const char *device, const char *mntpt, const char *fsname, int async,
     }
 
     /* validate user specified masks */
-    if(umask && parse_unsigned(umask, E_ARGS) > 0777) {
-        fprintf(stderr, _("Error: invalid umask %s\n"), umask);
+    if(options.umask && parse_unsigned(options.umask, E_ARGS) > 0777) {
+        fprintf(stderr, _("Error: invalid umask %s\n"), options.umask);
         return -1;
     }
 
-    if(fmask && parse_unsigned(fmask, E_ARGS) > 0777) {
-        fprintf(stderr, _("Error: invalid fmask %s\n"), fmask);
+    if(options.fmask && parse_unsigned(options.fmask, E_ARGS) > 0777) {
+        fprintf(stderr, _("Error: invalid fmask %s\n"), options.fmask);
         return -1;
     }
 
-    if(dmask && parse_unsigned(dmask, E_ARGS) > 0777) {
-        fprintf(stderr, _("Error: invalid dmask %s\n"), dmask);
+    if(options.dmask && parse_unsigned(options.dmask, E_ARGS) > 0777) {
+        fprintf(stderr, _("Error: invalid dmask %s\n"), options.dmask);
         return -1;
     }
 
@@ -299,7 +316,7 @@ do_mount(const char *device, const char *mntpt, const char *fsname, int async,
 
     if(fs->umask)
         snprintf(umask_opt, sizeof(umask_opt), ",umask=%s",
-                 umask ? umask : fs->umask);
+                 options.umask ? options.umask : fs->umask);
     /* If the fs supports fdmasks, we try to make some values
        up.
     */
@@ -308,55 +325,59 @@ do_mount(const char *device, const char *mntpt, const char *fsname, int async,
         unsigned i_umask, i_dmask, i_fmask;
 
         /* We first get the umask value */
-        if(umask)
-            i_umask = parse_unsigned(umask, E_ARGS); /* shouldn't fail */
+        if(options.umask)
+            i_umask =
+                parse_unsigned(options.umask, E_ARGS); /* shouldn't fail */
         else
             i_umask = parse_unsigned(fs->umask, E_ARGS); /* shouldn't fail */
 
         /* Now the fmask */
-        if(fmask)
-            i_fmask = parse_unsigned(fmask, E_ARGS); /* shouldn't fail */
+        if(options.fmask)
+            i_fmask =
+                parse_unsigned(options.fmask, E_ARGS); /* shouldn't fail */
         else                          /* make up from the umask parameter */
             i_fmask = i_umask | 0111; /* remove exec permissions */
         /* And the dmask */
-        if(dmask)
-            i_dmask = parse_unsigned(dmask, E_ARGS); /* shouldn't fail */
+        if(options.dmask)
+            i_dmask =
+                parse_unsigned(options.dmask, E_ARGS); /* shouldn't fail */
         else                   /* make up from the umask parameter */
             i_dmask = i_umask; /* same as umask */
         snprintf(fdmask_opt, sizeof(fdmask_opt), fs->fdmask, i_fmask, i_dmask);
     }
 
-    if(async)
+    if(options.async)
         sync_opt = ",async";
 
-    if(noatime)
+    if(options.noatime)
         atime_opt = ",noatime";
 
-    if(exec)
+    if(options.exec)
         exec_opt = ",exec";
 
-    if(force_write == 0)
+    if(options.force_write == FW_RO)
         access_opt = ",ro";
-    else if(force_write == 1)
+    else if(options.force_write == FW_RW)
         access_opt = ",rw";
     else
         access_opt = "";
 
-    if(use_selinux_context)
+    if(options.use_selinux_context)
         selinux_context_opt = ",context=system_u:object_r:removable_t:s0";
 
-    if(!strcmp(fsname, "vfat") && utc)
+    if(!strcmp(fsname, "vfat") && options.utc)
         utc_opt = ",tz=UTC";
 
-    if(iocharset && fs->iocharset_format) {
-        if(!is_word_str(iocharset)) {
-            fprintf(stderr, _("Error: invalid charset name '%s'\n"), iocharset);
+    if(options.iocharset && fs->iocharset_format) {
+        if(!is_word_str(options.iocharset)) {
+            fprintf(stderr, _("Error: invalid charset name '%s'\n"),
+                    options.iocharset);
             return -1;
         }
         /* VFAT and UTF-8 need special care, see bug #443514 and mount(1) */
         if(!strcmp(fsname, "vfat") && utf8) {
             debug("VFAT in a UTF-8 locale: using option utf8\n");
-            if(!strcmp(iocharset, "utf8")) {
+            if(!strcmp(options.iocharset, "utf8")) {
                 debug(
                     "filesystem is vfat and charset is utf-8: using iso8859-1\n"
                     "You can change with the -c option");
@@ -364,11 +385,11 @@ do_mount(const char *device, const char *mntpt, const char *fsname, int async,
                          ",utf8,iocharset=iso8859-1");
             } else {
                 snprintf(iocharset_opt, sizeof(iocharset_opt),
-                         ",utf8,iocharset=%s", iocharset);
+                         ",utf8,iocharset=%s", options.iocharset);
             }
         } else {
             snprintf(iocharset_opt, sizeof(iocharset_opt), fs->iocharset_format,
-                     iocharset);
+                     options.iocharset);
         }
     } else if(!strcmp(fsname, "vfat") && fs->iocharset_format) {
         /* We still make a special case for vfat, as in certain cases,
@@ -379,14 +400,15 @@ do_mount(const char *device, const char *mntpt, const char *fsname, int async,
                  "iso8859-1");
     }
 
-    snprintf(options, sizeof(options), "%s%s%s%s%s%s%s%s%s%s%s", fs->options,
-             sync_opt, atime_opt, exec_opt, access_opt, ugid_opt, umask_opt,
-             fdmask_opt, iocharset_opt, utc_opt, selinux_context_opt);
+    snprintf(mount_opts, sizeof(mount_opts), "%s%s%s%s%s%s%s%s%s%s%s",
+             fs->options, sync_opt, atime_opt, exec_opt, access_opt, ugid_opt,
+             umask_opt, fdmask_opt, iocharset_opt, utc_opt,
+             selinux_context_opt);
 
     /* go for it */
     return spawnl(SPAWN_EROOT | SPAWN_RROOT |
                       (suppress_errors ? SPAWN_NO_STDERR : 0),
-                  MOUNTPROG, MOUNTPROG, "-t", fsname, "-o", options, device,
+                  MOUNTPROG, MOUNTPROG, "-t", fsname, "-o", mount_opts, device,
                   mntpt, (char *)NULL);
 }
 
@@ -395,26 +417,11 @@ do_mount(const char *device, const char *mntpt, const char *fsname, int async,
  * succeeds.
  * @param device device node to mount
  * @param mntpt desired mount point
- * @param async if not 0, the device will be mounted with 'async' (i. e. write
- *        caching)
- * @param noatime if not 0, the device will be mounted with 'noatime'
- * @param exec if not 0, the device will be mounted with 'exec'
- * @param force_write 1 for forced r/w, 0 for forced r/o, -1 for kernel default
- * @param iocharset charset to use for file name conversion; NULL for mount
- *        default
  * @param utf8 is true if the option utf8 should be used for VFAT
- * @param umask User specified umask (NULL for default)
- * @param fmask User specified fmask (NULL for umask)
- * @param dmask User specified dmask (NULL for umask)
- * @param use_selinux_context if true, mount with
- *        context="system_u:object_r:removable_t:s0"
  * @return last return value of do_mount (i. e. 0 on success, != 0 on error)
  */
 static int
-do_mount_auto(const char *device, const char *mntpt, int async, int noatime,
-              int exec, int force_write, const char *iocharset, int utf8,
-              int utc, const char *umask, const char *fmask, const char *dmask,
-              int use_selinux_context)
+do_mount_auto(const char *device, const char *mntpt, int utf8)
 {
     const struct FS *fs;
     int nostderr = 1;
@@ -436,9 +443,7 @@ do_mount_auto(const char *device, const char *mntpt, int async, int noatime,
                 "blkdid detected ntfs and ntfs-3g was found. Using ntfs-3g\n");
             tp = "ntfs-3g";
         }
-        result = do_mount(device, mntpt, tp, async, noatime, exec, force_write,
-                          iocharset, utf8, utc, umask, fmask, dmask, nostderr,
-                          use_selinux_context);
+        result = do_mount(device, mntpt, tp, utf8, nostderr);
         if(result == 0)
             return result;
         debug("blkid-detected FS failed, trying manually \n");
@@ -458,17 +463,13 @@ do_mount_auto(const char *device, const char *mntpt, int async, int noatime,
         /* don't suppress stderr if we try the last possible fs */
         if((fs + 1)->fsname == NULL)
             nostderr = 0;
-        result = do_mount(device, mntpt, fs->fsname, async, noatime, exec,
-                          force_write, iocharset, utf8, utc, umask, fmask,
-                          dmask, nostderr, use_selinux_context);
+        result = do_mount(device, mntpt, fs->fsname, utf8, nostderr);
         if(result == 0)
             break;
 
         /* sometimes VFAT fails when using iocharset; try again without */
-        if(iocharset)
-            result = do_mount(device, mntpt, fs->fsname, async, noatime, exec,
-                              force_write, NULL, utf8, utc, umask, fmask, dmask,
-                              nostderr, use_selinux_context);
+        if(options.iocharset)
+            result = do_mount(device, mntpt, fs->fsname, utf8, nostderr);
         if(result <= 0)
             break;
     }
@@ -679,32 +680,16 @@ clean_lock_dir(const char *device)
  * Entry point.
  */
 int
-main(int argc, char *const argv[])
+main(int argc, char *argv[])
 {
     char *devarg = NULL, *arg2 = NULL;
     char mntpt[MEDIA_STRING_SIZE];
     char *device, *mntptdev, *decrypted_device;
     const char *fstab_device;
     int is_real_path = 0;
-    int async = 1;
-    int noatime = 0;
-    int exec = 0;
-    int force_write = -1; /* 0: ro, 1: rw, -1: default */
-    int run_fsck = 0;     /* Whether or not to run fsck before mounting. */
     int doing_loop_mount = 0;
-    int use_selinux_context = 0;
-    const char *use_fstype = NULL;
-    const char *iocharset = NULL;
-    const char *umask = NULL;
-    const char *fmask = NULL;
-    const char *dmask = NULL;
-    const char *passphrase = NULL;
     int utf8;
-    int utc =
-        0; /* Whether the timestamps are stored in UTC rather than local time */
     int result;
-
-    enum { MOUNT, LOCK, UNLOCK } mode = MOUNT;
 
     const struct option long_opts[] = {
         { "charset", 1, NULL, 'c' },
@@ -719,12 +704,12 @@ main(int argc, char *const argv[])
         { "passphrase", 1, NULL, 'p' },
         { "read-only", 0, NULL, 'r' },
         { "read-write", 0, NULL, 'w' },
-        { "selinux-context", 0, &use_selinux_context, 1 },
+        { "selinux-context", 0, (int *)&options.use_selinux_context, true },
         { "sync", 0, NULL, 's' },
         { "type", 1, NULL, 't' },
         { "umask", 1, NULL, 'u' },
         { "unlock", 0, NULL, 'L' },
-        { "utc", 0, &utc, 1 },
+        { "utc", 0, (int *)&options.utc, true },
         { "version", 0, NULL, 'V' },
         { NULL, 0, NULL, 0 },
     };
@@ -757,25 +742,25 @@ main(int argc, char *const argv[])
             return E_ARGS; /* unknown argument */
         case 0:
             if(strcmp(long_opts[option_index].name, "dmask") == 0)
-                dmask = optarg;
+                options.dmask = optarg;
             else if(strcmp(long_opts[option_index].name, "fmask") == 0)
-                fmask = optarg;
+                options.fmask = optarg;
             break;
         case 'A':
-            noatime = 1;
+            options.noatime = true;
             break;
         case 'c':
-            iocharset = optarg;
+            options.iocharset = optarg;
             break;
         case 'd':
             enable_debug = 1;
             break;
         case 'e':
-            exec = 1;
+            options.exec = true;
             break;
         case 'F':
             if(conffile_allow_fsck()) {
-                run_fsck = 1;
+                options.run_fsck = true;
             } else {
                 fputs(_("Your system administrator does not "
                         "allow users to run fsck, aborting\n"),
@@ -787,31 +772,31 @@ main(int argc, char *const argv[])
             usage(argv[0]);
             return EXIT_SUCCESS;
         case 'l':
-            mode = LOCK;
+            options.mode = LOCK;
             break;
         case 'L':
-            mode = UNLOCK;
+            options.mode = UNLOCK;
             break;
         case 'p':
-            passphrase = optarg;
+            options.passphrase = optarg;
             break;
         case 'r':
-            force_write = 0;
+            options.force_write = FW_RO;
             break;
         case 's':
-            async = 0;
+            options.async = false;
             break;
         case 't':
-            use_fstype = optarg;
+            options.use_fstype = optarg;
             break;
         case 'u':
-            umask = optarg;
+            options.umask = optarg;
             break;
         case 'V':
             puts(VERSION);
             return EXIT_SUCCESS;
         case 'w':
-            force_write = 1;
+            options.force_write = FW_RW;
             break;
         default:
             fputs(_("Internal error: getopt_long() returned unknown value\n"),
@@ -828,7 +813,7 @@ main(int argc, char *const argv[])
         arg2 = argv[optind + 1];
 
     /* check number of arguments */
-    if(!devarg || (mode != MOUNT && !arg2) || argc > optind + 2) {
+    if(!devarg || (options.mode != MOUNT && !arg2) || argc > optind + 2) {
         usage(argv[0]);
         return E_ARGS;
     }
@@ -878,7 +863,7 @@ main(int argc, char *const argv[])
     /* is the device already handled by fstab? We allow is_real_path == 0 here
      * to transparently mount things like NFS and SMB drives */
     fstab_device = fstab_has_device("/etc/fstab", device, NULL, NULL);
-    if(mode == MOUNT && fstab_device) {
+    if(options.mode == MOUNT && fstab_device) {
         if(arg2)
             fprintf(stderr,
                     _("Warning: device %s is already handled by /etc/fstab,"
@@ -936,7 +921,7 @@ main(int argc, char *const argv[])
                   device);
             /* We need to lookup again in fstab: */
             fstab_device = fstab_has_device("/etc/fstab", device, NULL, NULL);
-            if(mode == MOUNT && fstab_device) {
+            if(options.mode == MOUNT && fstab_device) {
                 if(arg2)
                     fprintf(
                         stderr,
@@ -959,7 +944,7 @@ main(int argc, char *const argv[])
         return E_DEVICE;
     }
 
-    switch(mode) {
+    switch(options.mode) {
     case MOUNT:
         /* determine mount point name; note that we use devarg instead of
          * device to preserve symlink names (like '/dev/usbflash' instead
@@ -972,7 +957,7 @@ main(int argc, char *const argv[])
         }
 
         /* if no charset was set explicitly, autodetect UTF-8 */
-        if(!iocharset) {
+        if(!options.iocharset) {
             const char *codeset;
             codeset = nl_langinfo(CODESET);
 
@@ -982,13 +967,13 @@ main(int argc, char *const argv[])
             if(codeset && !strcmp(codeset, "UTF-8")) {
                 debug("locale encoding uses UTF-8, setting iocharset to "
                       "'utf8'\n");
-                iocharset = "utf8";
+                options.iocharset = "utf8";
                 utf8 = 1;
             } else {
                 utf8 = 0;
             }
         } else {
-            utf8 = strcmp(iocharset, "utf8") == 0;
+            utf8 = strcmp(options.iocharset, "utf8") == 0;
         }
 
         /* clean stale locks */
@@ -1017,8 +1002,9 @@ main(int argc, char *const argv[])
 #endif
 
         /* check for encrypted device */
-        enum decrypt_status decrypt = luks_decrypt(
-            device, &decrypted_device, passphrase, force_write == 0 ? 1 : 0);
+        enum decrypt_status decrypt =
+            luks_decrypt(device, &decrypted_device, options.passphrase,
+                         options.force_write == FW_RO ? 1 : 0);
 
         switch(decrypt) {
         case DECRYPT_FAILED:
@@ -1061,7 +1047,7 @@ main(int argc, char *const argv[])
         debug("mount point directory locked\n");
 
         /* Now starting fsck if requested. */
-        if(run_fsck) {
+        if(options.run_fsck) {
             result = do_fsck(decrypted_device);
             if(result)
                 fputs(_("Error: fsck failed, not mounting\n"), stderr);
@@ -1071,16 +1057,11 @@ main(int argc, char *const argv[])
         /* Only mount if fsck went fine */
         if(!result) {
             /* off we go */
-            if(use_fstype)
-                result =
-                    do_mount(decrypted_device, mntpt, use_fstype, async,
-                             noatime, exec, force_write, iocharset, utf8, utc,
-                             umask, fmask, dmask, 0, use_selinux_context);
+            if(options.use_fstype)
+                result = do_mount(decrypted_device, mntpt, options.use_fstype,
+                                  utf8, 0);
             else
-                result =
-                    do_mount_auto(decrypted_device, mntpt, async, noatime, exec,
-                                  force_write, iocharset, utf8, utc, umask,
-                                  fmask, dmask, use_selinux_context);
+                result = do_mount_auto(decrypted_device, mntpt, utf8);
         }
 
         /* unlock the mount point again */
@@ -1127,7 +1108,10 @@ main(int argc, char *const argv[])
         return 0;
     }
 
-    fprintf(stderr, _("Internal error: mode %i not handled.\n"), (int)mode);
+    fprintf(stderr, _("Internal error: mode %s not handled.\n"),
+            options.mode == MOUNT  ? "MOUNT"
+            : options.mode == LOCK ? "LOCK"
+                                   : "UNLOCK");
     free(device);
     return E_INTERNAL;
 }
