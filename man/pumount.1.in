@@ -66,21 +66,6 @@ will not
 a device which was unmounted lazily.
 
 .TP
-.B \-\-luks\-force
-Normally,
-.B pumount
-will not
-.I luksClose
-(see
-.IR cryptsetup (1))
-a device
-.B pmount
-did not open. However, you can bypass this restriction with this
-flag. You probably will need it if you did mess around with the
-.I @LOCKDIR@
-directory.
-
-.TP
 .B \-h, \-\-help
 Print a help message and exit successfully.
 

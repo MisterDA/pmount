@@ -46,7 +46,6 @@ usage(const char *exename)
           "  afterwards.\n\n"
           "Options:\n"
           "  -l, --lazy   : umount lazily, see umount(8)\n"
-          "  --luks-force : luksClose devices pmount didn't open\n"
           "  -d, --debug  : enable debug output (very verbose)\n"
           "  -h, --help   : print help message and exit successfully\n"
           "  --version    : print version number and exit successfully\n"),
@@ -168,7 +167,6 @@ main(int argc, char *const argv[])
         { "debug", 0, NULL, 'd' },
         { "help", 0, NULL, 'h' },
         { "lazy", 0, NULL, 'l' },
-        { "luks-force", 0, NULL, 'L' },
         { "version", 0, NULL, 'V' },
         { "yes-I-really-want-lazy-unmount", 0, &do_lazy, 1 },
         { NULL, 0, NULL, 0 },
