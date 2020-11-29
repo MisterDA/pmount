@@ -164,41 +164,40 @@ check_mount_policy(const char *device, const char *mntpt, int doing_loop)
  * @param device device for which a moint point is created
  * @param label if NULL, the mount point will be MEDIADIR/device, otherwise
  *        MEDIADIR/label
- * @param mntpt buffer to write the mount point pathname to
- * @param mntpt_size size of mntpt in characters
- * @return 0 on success, -1 on failure
+ * @return the mount point pathname on success, NULL on failure
  */
-static int
-make_mountpoint_name(const char *device, const char *label, char *mntpt,
-                     size_t mntpt_size)
+static char *
+make_mountpoint_name(const char *device, const char *label)
 {
-    int media_dir_len = strlen(MEDIADIR);
-
+    char *mntpt = NULL;
     if(label) {
         /* ignore a leading MEDIADIR */
-        if(!strncmp(label, MEDIADIR, media_dir_len))
-            label += media_dir_len;
+        if(!strncmp(label, MEDIADIR, sizeof(MEDIADIR) - 1))
+            label += sizeof(MEDIADIR) - 1;
 
         if(!*label) {
             fputs(_("Error: label must not be empty\n"), stderr);
-            return -1;
+            return NULL;
         }
         if(strlen(label) > MAX_LABEL_SIZE) {
             fputs(_("Error: label too long\n"), stderr);
-            return -1;
+            return NULL;
         }
 
         if(strchr(label, '/')) {
             fputs(_("Error: '/' must not occur in label name\n"), stderr);
-            return -1;
+            return NULL;
         }
 
-        snprintf(mntpt, mntpt_size, "%s%s", MEDIADIR, label);
+        if(asprintf(&mntpt, "%s%s", MEDIADIR, label) == -1) {
+            perror("asprintf");
+            return NULL;
+        }
     } else {
         char *d;
         if(strlen(device) > MAX_LABEL_SIZE) {
             fputs(_("Error: device name too long\n"), stderr);
-            return -1;
+            return NULL;
         }
 
         /* chop the DEVDIR prefix */
@@ -207,13 +206,16 @@ make_mountpoint_name(const char *device, const char *label, char *mntpt,
 
         /* get rid of slashes */
         d = strreplace(device, '/', '_');
-
-        snprintf(mntpt, mntpt_size, "%s%s", MEDIADIR, d);
+        if(asprintf(&mntpt, "%s%s", MEDIADIR, d) == -1) {
+            perror("asprintf");
+            mntpt = NULL;
+        }
         free(d);
     }
 
-    debug("mount point to be used: %s\n", mntpt);
-    return 0;
+    if(mntpt != NULL)
+        debug("mount point to be used: %s\n", mntpt);
+    return mntpt;
 }
 
 /**
@@ -683,7 +685,6 @@ int
 main(int argc, char *argv[])
 {
     char *devarg = NULL, *arg2 = NULL;
-    char mntpt[MEDIA_STRING_SIZE];
     char *device, *mntptdev, *decrypted_device;
     const char *fstab_device;
     int is_real_path = 0;
@@ -945,11 +946,12 @@ main(int argc, char *argv[])
     }
 
     switch(options.mode) {
-    case MOUNT:
+    case MOUNT: {
         /* determine mount point name; note that we use devarg instead of
          * device to preserve symlink names (like '/dev/usbflash' instead
          * of '/dev/sda1') */
-        if(make_mountpoint_name(devarg, arg2, mntpt, sizeof(mntpt))) {
+        char *mntpt = make_mountpoint_name(devarg, arg2);
+        if(mntpt == NULL) {
             if(doing_loop_mount)
                 loopdev_dissociate(device);
             free(device);
@@ -983,6 +985,7 @@ main(int argc, char *argv[])
             if(doing_loop_mount)
                 loopdev_dissociate(device);
             free(device);
+            free(mntpt);
             return E_POLICY;
         }
 
@@ -996,6 +999,7 @@ main(int argc, char *argv[])
         if(fd == -1) {
             perror(_("Could not open device"));
             free(device);
+            free(mntpt);
             return E_DEVICE;
         }
         drop_root();
@@ -1013,12 +1017,14 @@ main(int argc, char *argv[])
             if(doing_loop_mount)
                 loopdev_dissociate(device);
             free(device);
+            free(mntpt);
             return E_POLICY;
         case DECRYPT_EXISTS:
             fputs(_("Error: mapped device already exists\n"), stderr);
             if(doing_loop_mount)
                 loopdev_dissociate(device);
             free(device);
+            free(mntpt);
             return E_POLICY;
         case DECRYPT_OK:
             /* We create a luks lockfile _on the decrypted device !_*/
@@ -1030,6 +1036,7 @@ main(int argc, char *argv[])
             fprintf(stderr, "Internal error: unhandled decrypt_status %i\n",
                     (int)decrypt);
             free(device);
+            free(mntpt);
             return E_INTERNAL;
         }
 
@@ -1042,6 +1049,7 @@ main(int argc, char *argv[])
             if(doing_loop_mount)
                 loopdev_dissociate(device);
             free(device);
+            free(mntpt);
             return E_LOCKED;
         }
         debug("mount point directory locked\n");
@@ -1080,13 +1088,16 @@ main(int argc, char *argv[])
             /* mount failed, delete the mount point again */
             if(remove_pmount_mntpt(mntpt)) {
                 perror(_("Error: could not delete mount point"));
+                free(mntpt);
                 return EXIT_FAILURE;
             }
+            free(mntpt);
             return E_EXECMOUNT;
         }
         free(device);
+        free(mntpt);
         return EXIT_SUCCESS;
-
+    }
     case LOCK:
         if(device_valid(device)) {
             if(do_lock(device, parse_unsigned(arg2, E_PID))) {
