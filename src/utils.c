@@ -405,7 +405,7 @@ spawnl(int options, const char *path, ...)
     for(;;) {
         if(argv_size >= SPAWNL_ARG_MAX) {
             fprintf(stderr, "Internal error: spawnl(): too many arguments\n");
-            exit(E_INTERNAL);
+            return -1;
         }
 
         if((argv[argv_size++] = va_arg(args, char *)) == NULL)
@@ -432,7 +432,7 @@ spawnv(int options, const char *path, char *const argv[])
 
     if((options & SLURP_MASK) && pipe(fds)) {
         perror(_("Impossible to setup pipes for subprocess communication"));
-        exit(E_INTERNAL);
+        return -1;
     }
 
     if(enable_debug) {
@@ -445,10 +445,10 @@ spawnv(int options, const char *path, char *const argv[])
     new_pid = fork();
     if(new_pid == -1) {
         perror(_("Impossible to fork"));
-        exit(E_INTERNAL);
+        return -1;
     }
 
-    if(!new_pid) {
+    if(new_pid == 0) {
         if(options & SPAWN_EROOT)
             get_root();
         if(options & SPAWN_RROOT)
@@ -486,6 +486,7 @@ spawnv(int options, const char *path, char *const argv[])
             execvp(path, argv);
         else
             execv(path, argv);
+        perror("exec");
         exit(E_INTERNAL);
     } else {
 
@@ -499,7 +500,7 @@ spawnv(int options, const char *path, char *const argv[])
                                sizeof(slurp_buffer) - 1 - slurp_size);
                 if(nb_read < 0) {
                     perror(_("Error while reading from child process"));
-                    exit(E_INTERNAL);
+                    return -1;
                 }
                 slurp_size += nb_read;
                 if(slurp_size == sizeof(slurp_buffer) - 1)
@@ -517,14 +518,14 @@ spawnv(int options, const char *path, char *const argv[])
 
         if(wait(&status) < 0) {
             perror("Error: could not wait for executed subprocess");
-            exit(E_INTERNAL);
+            return -1;
         }
     }
 
     if(!WIFEXITED(status)) {
         fprintf(stderr,
                 "Internal error: spawn(): process did not return a status");
-        exit(E_INTERNAL);
+        return -1;
     }
 
     status = WEXITSTATUS(status);
