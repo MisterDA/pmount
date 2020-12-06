@@ -162,8 +162,8 @@ check_mount_policy(const char *device, const char *mntpt, int doing_loop)
 /**
  * Create a mount point pathname.
  * @param device device for which a moint point is created
- * @param label if NULL, the mount point will be MEDIADIR/device, otherwise
- *        MEDIADIR/label
+ * @param label if NULL, the mount point will be MEDIADIR/device/, otherwise
+ *        MEDIADIR/label/
  * @return the mount point pathname on success, NULL on failure
  */
 static char *
@@ -189,7 +189,7 @@ make_mountpoint_name(const char *device, const char *label)
             return NULL;
         }
 
-        if(asprintf(&mntpt, "%s%s", MEDIADIR, label) == -1) {
+        if(asprintf(&mntpt, "%s%s/", MEDIADIR, label) == -1) {
             perror("asprintf");
             return NULL;
         }
@@ -206,7 +206,7 @@ make_mountpoint_name(const char *device, const char *label)
 
         /* get rid of slashes */
         d = strreplace(device, '/', '_');
-        if(asprintf(&mntpt, "%s%s", MEDIADIR, d) == -1) {
+        if(asprintf(&mntpt, "%s%s/", MEDIADIR, d) == -1) {
             perror("asprintf");
             mntpt = NULL;
         }
